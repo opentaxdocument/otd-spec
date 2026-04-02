@@ -1,0 +1,124 @@
+========================================================================
+Open Tax Document (OTD) — Round-Trip Proof of Concept
+========================================================================
+
+PHASE 1: EMIT
+----------------------------------------
+  Emitted: D:\SecondWind\Artifacts\20260402-k1-standard\proof-emitted.otd.yaml
+  Size: 13,313 bytes
+  Redacted fields: ['body.part_i.partnership_ein', 'body.part_ii.partner_ssn']
+
+PHASE 2: PARSE
+----------------------------------------
+  Envelope version: 0.1
+  Taxonomy: irs-k1-1065-2025
+  Total indexed nodes: 53
+  Statements found: 2
+  References found: 1
+
+PHASE 3: VALIDATE
+----------------------------------------
+  ✓ [ERROR] box_4c_equals_4a_plus_4b: Box 4c (100000.0) == Box 4a (75000.0) + Box 4b (25000.0) = 100000.0
+  ✓ [ERROR] box_6b_lte_6a: Qualified dividends (28000.0) <= Ordinary dividends (32000.0)
+  ✓ [WARNING] capital_account_continuity: Ending (1300000.0) == computed (1300000.0) [tol=$1]
+  ✓ [ERROR] percentages_valid_range: All share percentages in [0,1]: True
+  ✓ [ERROR] box_20_zz_requires_classification: Box 20 Code ZZ classification present: True
+
+  Validation: ALL PASSED
+
+PHASE 4: QUERY DEMO
+----------------------------------------
+  4a. Semantic lookup: 'ordinary_business_income'
+      → TaxNode(scalar, id=ordinary_business_income, value=150000.0)
+      Value: $150,000.00
+
+  4b. Value shortcut: 'guaranteed_payments_total'
+      → $100,000.00
+
+  4c. Statement enumeration (flattened):
+      → stmt_section_199a [section_199a]
+      → stmt_irs_form_926 [irs_form_926]
+
+  4d. Reference enumeration:
+      → international_transactions → {'document_type': 'otd', 'taxonomy_id': 'irs-k3-1065-2025', 'node_path': '/'}
+
+  4e. Type filter: all 'coded' nodes:
+      → other_income (2 entries)
+      → other_deductions (3 entries)
+      → credits (2 entries)
+      → amt_items (1 entries)
+      → tax_exempt_nondeductible (2 entries)
+      → distributions (1 entries)
+      → other_information (6 entries)
+
+  4f. All 53 indexed semantic IDs:
+      • amt.a
+      • amt_items
+      • at_risk_activities
+      • credits
+      • credits.aw
+      • credits.m
+      • distributions
+      • distributions.a
+      • foreign_taxes_paid_accrued
+      • guaranteed_payments_capital
+      • guaranteed_payments_services
+      • guaranteed_payments_total
+      • interest_income
+      • international_transactions
+      • net_long_term_capital_gain
+      • net_rental_real_estate_income
+      • net_section_1231_gain
+      • net_short_term_capital_gain
+      • ordinary_business_income
+      • ordinary_dividends
+      • other_deductions
+      • other_deductions.a
+      • other_deductions.h
+      • other_deductions.k
+      • other_income
+      • other_income.a
+      • other_income.f
+      • other_information
+      • other_information.a
+      • other_information.b
+      • other_information.n
+      • other_information.y
+      • other_information.z
+      • other_information.zz
+      • partner.capital_account_analysis
+      • partner.entity_type
+      • partner.general_or_limited
+      • partner.identifying_number
+      • partner.name_address
+      • partner.share_of_liabilities
+      • partner.share_percentages
+      • partnership.ein
+      • partnership.irs_center
+      • partnership.name_address
+      • partnership.publicly_traded
+      • passive_activities
+      • qualified_dividends
+      • royalties
+      • section_179_deduction
+      • tax_exempt.a
+      • tax_exempt.c
+      • tax_exempt_nondeductible
+      • unrecaptured_section_1250_gain
+
+PHASE 5: ROUND-TRIP
+----------------------------------------
+  PASS — Byte-identical after normalization
+  Re-emitted: D:\SecondWind\Artifacts\20260402-k1-standard\proof-re-emitted.otd.yaml
+  SHA256 (original, normalized):   1dccfde23ab112db
+  SHA256 (re-emitted, normalized): 1dccfde23ab112db
+  Match: True
+
+========================================================================
+SUMMARY
+========================================================================
+  Emit:       ✓ (13,313 bytes)
+  Parse:      ✓ (53 nodes indexed)
+  Validate:   ✓ All passed
+  Query:      ✓ (semantic, value, type, statement, reference)
+  Round-trip: ✓ Byte-identical

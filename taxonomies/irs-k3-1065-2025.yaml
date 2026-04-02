@@ -1,0 +1,935 @@
+# ════════════════════════════════════════════════════════════════════════════
+# Tax Year: 2025
+# OPEN TAX DOCUMENT — SCHEDULE K-3 (FORM 1065) TAXONOMY
+# Version: 2025.1.0
+# Derived From: Partner's Instructions for Schedule K-3 (Form 1065) (2025)
+# License: CC BY 4.0
+# Authors: Tom O'Sullivan, Second Wind
+# Date: 2026-04-02
+# ════════════════════════════════════════════════════════════════════════════
+#
+# This taxonomy defines the complete structural blueprint for Schedule K-3
+# (Form 1065) — the international supplement to Schedule K-1.
+#
+# K-3 is the most structurally complex form in the U.S. partnership tax
+# system. It contains 13 Parts spanning:
+#   - Coded scalar boxes (Part I)
+#   - Multi-dimensional grids with country-code iteration (Parts II, X)
+#   - Apportionment factor tables (Parts III, IV)
+#   - Variable-length entity recordsets (Parts V, VI, VII)
+#   - Deemed-paid credit grids (Part VIII)
+#   - BEAT payment matrices (Part IX)
+#   - Covered partnership and QDD data (Parts XI, XII)
+#   - Deemed sale character tables (Part XIII)
+#
+# OTD Primitives Exercised:
+#   scalar    → Part I boxes, Part IV DEI lines, Part IX applicability
+#   coded     → Part I (boxes with attachments and code qualifiers)
+#   grid      → Parts II, III, IV, VIII, IX, X, XIII
+#   recordset → Parts V, VI, VII, XI, XII
+#   statement → Attachments to Part I boxes (splitter arrangements, etc.)
+#   reference → Cross-references to Forms 5471, 8865, 1116, 1118, 8993, 8991
+#
+# DESIGN NOTE: Country Code Dimension
+#   Parts II and X feature a "country code" dimension that creates
+#   effectively 3D grids (line × source category × country). In OTD,
+#   this is modeled as a grid where each cell may be a scalar OR an
+#   array of {country_code, amount} pairs. See the GRID CELL TYPED-
+#   OBJECT RULE in the core spec (otd-spec-v0.2.yaml §2.4).
+# ════════════════════════════════════════════════════════════════════════════
+
+taxonomy:
+  id: "irs-k3-1065-2025"
+  version: "2025.1.0"
+  form_id: "k3-1065"
+  title: "Schedule K-3 (Form 1065) — Partner's Share of Income, Deductions, Credits, etc. — International"
+  source: "Partner's Instructions for Schedule K-3 (Form 1065), 2025"
+  tax_year: 2025
+  issuing_authority: "Internal Revenue Service"
+  parent_form: "k1-1065"
+  cross_reference_from: "k1-1065 Part III Box 16"
+
+  change_log:
+    - version: "2025.1.0"
+      date: "2026-04-02"
+      changes:
+        - "Initial derivation from 2025 IRS instructions"
+        - "P.L. 119-21 (One Big Beautiful Bill Act): §250 exclusion for intangible property dispositions (Part IV, Section 1)"
+        - "Part X, Section 1: Lines 15-16, 19-20 revised for other gain/income types"
+
+  # ════════════════════════════════════════════════════════════════════════
+  # IDENTIFYING INFORMATION
+  # ════════════════════════════════════════════════════════════════════════
+
+  identifying_information:
+    title: "Schedule K-3 Identifying Information"
+    children:
+      partnership_name:
+        type: scalar
+        semantic_id: "k3.partnership.name"
+        label: "Partnership's name"
+        value_type: string
+        form_location: "Header"
+      partnership_ein:
+        type: scalar
+        semantic_id: "k3.partnership.ein"
+        label: "Partnership's EIN"
+        value_type: string
+        form_location: "Header, Item A"
+      partner_name:
+        type: scalar
+        semantic_id: "k3.partner.name"
+        label: "Partner's name"
+        value_type: string
+        form_location: "Header"
+      partner_ssn_tin:
+        type: scalar
+        semantic_id: "k3.partner.ssn_tin"
+        label: "Partner's SSN or TIN"
+        value_type: string
+        form_location: "Header, Item C"
+      part_applicability:
+        type: scalar
+        semantic_id: "k3.part_applicability"
+        label: "Item E — Part applicability"
+        description: "Yes/No indicator for each of the 13 Parts"
+        value_type: object
+        form_location: "Item E"
+        fields:
+          part_i: { type: boolean, label: "Part I applicable" }
+          part_ii: { type: boolean, label: "Part II applicable" }
+          part_iii: { type: boolean, label: "Part III applicable" }
+          part_iv: { type: boolean, label: "Part IV applicable" }
+          part_v: { type: boolean, label: "Part V applicable" }
+          part_vi: { type: boolean, label: "Part VI applicable" }
+          part_vii: { type: boolean, label: "Part VII applicable" }
+          part_viii: { type: boolean, label: "Part VIII applicable" }
+          part_ix: { type: boolean, label: "Part IX applicable" }
+          part_x: { type: boolean, label: "Part X applicable" }
+          part_xi: { type: boolean, label: "Part XI applicable" }
+          part_xii: { type: boolean, label: "Part XII applicable" }
+          part_xiii: { type: boolean, label: "Part XIII applicable" }
+
+  # ════════════════════════════════════════════════════════════════════════
+  # PART I — Other Current Year International Information
+  # OTD Primitive: CODED (boxes with statement attachments)
+  # ════════════════════════════════════════════════════════════════════════
+
+  part_i:
+    title: "Part I — Partner's Share of Partnership's Other Current Year International Information"
+    type: coded
+    semantic_id: "k3.part_i"
+    form_location: "Part I"
+    description: "International tax items not reported elsewhere on K-3"
+    children:
+      box_1:
+        type: scalar
+        semantic_id: "k3.part_i.gain_personal_property_sale"
+        label: "Gain on personal property sale"
+        value_type: decimal
+        form_location: "Part I, Box 1"
+        box: 1
+        description: "Income from sale of nondepreciable personal property — partner determines source under §865"
+        may_have_statement: true
+      box_2:
+        type: scalar
+        semantic_id: "k3.part_i.foreign_oil_gas_taxes"
+        label: "Foreign oil and gas taxes"
+        value_type: decimal
+        form_location: "Part I, Box 2"
+        box: 2
+        description: "Separate FTC limitation under §907(a)"
+        may_have_statement: true
+        cross_references: ["Form 1118, Schedule I"]
+      box_3:
+        type: scalar
+        semantic_id: "k3.part_i.splitter_arrangements"
+        label: "Splitter arrangements"
+        value_type: boolean
+        form_location: "Part I, Box 3"
+        box: 3
+        description: "§909 suspended taxes from foreign tax credit splitting events"
+        may_have_statement: true
+      box_4:
+        type: scalar
+        semantic_id: "k3.part_i.foreign_tax_translation"
+        label: "Foreign tax translation"
+        value_type: boolean
+        form_location: "Part I, Box 4"
+        box: 4
+        may_have_statement: true
+      box_5:
+        type: scalar
+        semantic_id: "k3.part_i.high_taxed_income"
+        label: "High-taxed income"
+        value_type: boolean
+        form_location: "Part I, Box 5"
+        box: 5
+        description: "§904(d)(2)(B)(iii) passive income reclassification"
+        may_have_statement: true
+      box_6:
+        type: scalar
+        semantic_id: "k3.part_i.section_267a_disallowed"
+        label: "Section 267A disallowed deduction"
+        value_type: boolean
+        form_location: "Part I, Box 6"
+        box: 6
+        may_have_statement: true
+      box_8:
+        type: scalar
+        semantic_id: "k3.part_i.form_5471_information"
+        label: "Form 5471 information"
+        value_type: boolean
+        form_location: "Part I, Box 8"
+        box: 8
+        cross_references: ["Form 5471"]
+      box_9:
+        type: scalar
+        semantic_id: "k3.part_i.other_forms"
+        label: "Other forms information"
+        value_type: boolean
+        form_location: "Part I, Box 9"
+        box: 9
+      box_10:
+        type: scalar
+        semantic_id: "k3.part_i.partner_loan_transactions"
+        label: "Partner loan transactions"
+        value_type: boolean
+        form_location: "Part I, Box 10"
+        box: 10
+      box_11:
+        type: scalar
+        semantic_id: "k3.part_i.dual_consolidated_loss"
+        label: "Dual consolidated loss"
+        value_type: boolean
+        form_location: "Part I, Box 11"
+        box: 11
+      box_12:
+        type: scalar
+        semantic_id: "k3.part_i.form_8865_information"
+        label: "Form 8865 information"
+        value_type: boolean
+        form_location: "Part I, Box 12"
+        box: 12
+        cross_references: ["Form 8865"]
+      box_13:
+        type: scalar
+        semantic_id: "k3.part_i.other_international_items"
+        label: "Other international items"
+        value_type: boolean
+        form_location: "Part I, Box 13"
+        box: 13
+        may_have_statement: true
+
+  # ════════════════════════════════════════════════════════════════════════
+  # PART II — Foreign Tax Credit Limitation
+  # OTD Primitive: GRID (the most complex grid in U.S. tax)
+  # Dimensions: ~54 lines × 6 source columns × N country codes
+  # ════════════════════════════════════════════════════════════════════════
+
+  part_ii:
+    title: "Part II — Foreign Tax Credit Limitation"
+    type: grid
+    semantic_id: "k3.part_ii"
+    form_location: "Part II"
+    description: "Partner's distributive share of income/loss by source and separate category for FTC limitation"
+    cross_references: ["Form 1116", "Form 1118"]
+
+    axes:
+      columns:
+        - id: "us_source"
+          label: "U.S. source"
+          form_ref: "Column (a)"
+        - id: "foreign_branch"
+          label: "Foreign branch category"
+          form_ref: "Column (b)"
+        - id: "passive"
+          label: "Passive category"
+          form_ref: "Column (c)"
+        - id: "general"
+          label: "General category"
+          form_ref: "Column (d)"
+        - id: "other"
+          label: "Other (category code ___)"
+          form_ref: "Column (e)"
+          note: "Separate category specified by code"
+        - id: "sourced_by_partner"
+          label: "Sourced by partner"
+          form_ref: "Column (f)"
+          description: "Partner determines source — e.g., personal property gain under §865"
+
+    country_code_dimension:
+      applies_to: ["foreign_branch", "passive", "general", "other"]
+      description: >
+        Each foreign-source column may contain amounts broken out by
+        country code (2-letter ISO 3166-1). This creates a 3D structure:
+        line × column × country. In OTD, cells in these columns may be
+        either a single decimal (aggregate) or an array of
+        {country_code, amount} objects.
+
+    sections:
+
+      section_1_gross_income:
+        title: "Section 1 — Gross Income (Lines 1 Through 24)"
+        rows:
+          - { line: 1,  semantic_id: "k3.ftc.gross.sales", label: "Sales" }
+          - { line: 2,  semantic_id: "k3.ftc.gross.services", label: "Gross income from performance of services" }
+          - { line: 3,  semantic_id: "k3.ftc.gross.rental_income", label: "Rental income" }
+          - { line: 4,  semantic_id: "k3.ftc.gross.royalties", label: "Royalties" }
+          - { line: 5,  semantic_id: "k3.ftc.gross.guaranteed_payments", label: "Guaranteed payments" }
+          - { line: 6,  semantic_id: "k3.ftc.gross.interest_income", label: "Interest income" }
+          - { line: 7,  semantic_id: "k3.ftc.gross.ordinary_dividends", label: "Ordinary dividends" }
+          - { line: 8,  semantic_id: "k3.ftc.gross.qualified_dividends", label: "Qualified dividends" }
+          - { line: 9,  semantic_id: "k3.ftc.gross.reserved_9", label: "Reserved", reserved: true }
+          - { line: 10, semantic_id: "k3.ftc.gross.license_fees", label: "License fees" }
+          - { line: 11, semantic_id: "k3.ftc.gross.net_stcg", label: "Net short-term capital gain" }
+          - { line: 12, semantic_id: "k3.ftc.gross.net_ltcg", label: "Net long-term capital gain" }
+          - { line: 13, semantic_id: "k3.ftc.gross.collectibles_gain", label: "Collectibles (28%) gain" }
+          - { line: 14, semantic_id: "k3.ftc.gross.unrecaptured_1250", label: "Unrecaptured section 1250 gain" }
+          - { line: 15, semantic_id: "k3.ftc.gross.net_1231_gain", label: "Net section 1231 gain" }
+          - { line: 16, semantic_id: "k3.ftc.gross.section_986c", label: "Section 986(c) gain" }
+          - { line: 17, semantic_id: "k3.ftc.gross.section_987", label: "Section 987 gain" }
+          - { line: 18, semantic_id: "k3.ftc.gross.section_988", label: "Section 988 gain" }
+          - { line: 19, semantic_id: "k3.ftc.gross.reserved_19", label: "Reserved", reserved: true }
+          - { line: 20, semantic_id: "k3.ftc.gross.other_income", label: "Other income" }
+          - { line: 21, semantic_id: "k3.ftc.gross.reserved_21", label: "Reserved", reserved: true }
+          - { line: 22, semantic_id: "k3.ftc.gross.reserved_22", label: "Reserved", reserved: true }
+          - { line: 23, semantic_id: "k3.ftc.gross.reserved_23", label: "Reserved", reserved: true }
+          - { line: 24, semantic_id: "k3.ftc.gross.total", label: "Total gross income", is_total: true }
+
+      section_2_deductions:
+        title: "Section 2 — Deductions (Lines 25 Through 54)"
+        rows:
+          - { line: 25, semantic_id: "k3.ftc.ded.sales_expenses", label: "Expenses allocable to sales income" }
+          - { line: 26, semantic_id: "k3.ftc.ded.services_expenses", label: "Expenses allocable to services income" }
+          - { line: 27, semantic_id: "k3.ftc.ded.net_stcl", label: "Net short-term capital loss" }
+          - { line: 28, semantic_id: "k3.ftc.ded.net_ltcl", label: "Net long-term capital loss" }
+          - { line: 29, semantic_id: "k3.ftc.ded.collectibles_loss", label: "Collectibles (28%) loss" }
+          - { line: 30, semantic_id: "k3.ftc.ded.net_1231_loss", label: "Net section 1231 loss" }
+          - { line: 31, semantic_id: "k3.ftc.ded.other_deductions_1", label: "Other deductions — allocable" }
+          - { line: 32, semantic_id: "k3.ftc.ded.re_expenses", label: "Research & experimental (R&E) expenses", cross_references: ["Part III, Section 1"] }
+          - { line: 33, semantic_id: "k3.ftc.ded.rental_royalty_dda", label: "Rental/royalty/licensing — depreciation, depletion, amortization" }
+          - { line: 34, semantic_id: "k3.ftc.ded.rental_royalty_other", label: "Rental/royalty/licensing — other" }
+          - { line: 35, semantic_id: "k3.ftc.ded.license_dda", label: "Licensing — depreciation, depletion, amortization" }
+          - { line: 36, semantic_id: "k3.ftc.ded.license_other", label: "Licensing — other" }
+          - { line: 37, semantic_id: "k3.ftc.ded.other_deductions_2", label: "Other deductions — apportioned" }
+          - { line: 38, semantic_id: "k3.ftc.ded.charitable", label: "Charitable contributions" }
+          - { line: 39, semantic_id: "k3.ftc.ded.interest_861_10e", label: "Interest expense — Reg §1.861-10(e)" }
+          - { line: 40, semantic_id: "k3.ftc.ded.interest_861_10t", label: "Interest expense — Temp Reg §1.861-10T" }
+          - { line: 41, semantic_id: "k3.ftc.ded.interest_asset_method", label: "Other interest expense — asset method" }
+          - { line: 42, semantic_id: "k3.ftc.ded.interest_modified_gross", label: "Other interest expense — modified gross income method" }
+          - { line: 43, semantic_id: "k3.ftc.ded.interest_other", label: "Other interest expense — other" }
+          - { line: 44, semantic_id: "k3.ftc.ded.other_deductions_3", label: "Other deductions — other" }
+          - { line: 45, semantic_id: "k3.ftc.ded.foreign_taxes_deductible", label: "Foreign taxes — not creditable but deductible" }
+          - { line: 46, semantic_id: "k3.ftc.ded.section_986c_loss", label: "Section 986(c) loss" }
+          - { line: 47, semantic_id: "k3.ftc.ded.section_987_loss", label: "Section 987 loss" }
+          - { line: 48, semantic_id: "k3.ftc.ded.section_988_loss", label: "Section 988 loss" }
+          - { line: 49, semantic_id: "k3.ftc.ded.other_allocable", label: "Other allocable deductions" }
+          - { line: 50, semantic_id: "k3.ftc.ded.other_apportioned", label: "Other apportioned share of deductions" }
+          - { line: 51, semantic_id: "k3.ftc.ded.reserved_51", label: "Reserved", reserved: true }
+          - { line: 52, semantic_id: "k3.ftc.ded.reserved_52", label: "Reserved", reserved: true }
+          - { line: 53, semantic_id: "k3.ftc.ded.reserved_53", label: "Reserved", reserved: true }
+          - { line: 54, semantic_id: "k3.ftc.ded.total", label: "Total deductions", is_total: true }
+
+  # ════════════════════════════════════════════════════════════════════════
+  # PART III — Other Information for Form 1116 or 1118
+  # OTD Primitive: HYBRID (5 sections mixing grid and scalar)
+  # ════════════════════════════════════════════════════════════════════════
+
+  part_iii:
+    title: "Part III — Other Information for Preparation of Form 1116 or 1118"
+    semantic_id: "k3.part_iii"
+    form_location: "Part III"
+    cross_references: ["Form 1116", "Form 1118"]
+
+    sections:
+
+      section_1_re_apportionment:
+        title: "Section 1 — R&E Expenses Apportionment Factors"
+        type: grid
+        semantic_id: "k3.part_iii.s1"
+        rows:
+          - { line: 1, semantic_id: "k3.re_apportionment.gross_receipts_by_sic", label: "Gross receipts by SIC code", note: "SIC code as row key" }
+          - { line: 2, semantic_id: "k3.re_apportionment.exclusive_apportionment", label: "Exclusive apportionment — total R&E on Part II line 32" }
+
+      section_2_interest_apportionment:
+        title: "Section 2 — Interest Expense Apportionment Factors"
+        type: grid
+        semantic_id: "k3.part_iii.s2"
+        rows:
+          - { line: 3, semantic_id: "k3.interest_apportionment.directly_allocable_861_10e", label: "Assets — directly allocable interest under Reg §1.861-10(e)" }
+          - { line: 4, semantic_id: "k3.interest_apportionment.directly_allocable_861_10t", label: "Assets — directly allocable interest under Temp Reg §1.861-10T" }
+          - { line: 5, semantic_id: "k3.interest_apportionment.excluded_assets", label: "Assets excluded from apportionment formula" }
+          - { line: 6, semantic_id: "k3.interest_apportionment.total_assets", label: "Total assets used for apportionment" }
+          - { line: 7, semantic_id: "k3.interest_apportionment.stock_10pct_noncontrolled", label: "Basis in stock of 10%-owned noncontrolled foreign corps" }
+          - { line: 8, semantic_id: "k3.interest_apportionment.stock_cfcs", label: "Basis in stock of CFCs" }
+
+      section_3_fdii_apportionment:
+        title: "Section 3 — FDII Deduction Apportionment Factors"
+        type: scalar
+        semantic_id: "k3.part_iii.s3"
+        description: "Factors for §250 FDII deduction apportionment"
+
+      section_4_foreign_taxes:
+        title: "Section 4 — Foreign Taxes"
+        type: grid
+        semantic_id: "k3.part_iii.s4"
+        description: "Direct foreign taxes, reductions, and redeterminations"
+        rows:
+          - { line: 1, semantic_id: "k3.foreign_taxes.direct_901_903", label: "Direct (§901 or §903) foreign taxes" }
+          - { line: 2, semantic_id: "k3.foreign_taxes.reduction_total", label: "Reduction of taxes (total)" }
+          - { line: 3, semantic_id: "k3.foreign_taxes.redeterminations", label: "Foreign tax redeterminations" }
+        sub_lines_for_line_2:
+          - { sub: "A", semantic_id: "k3.foreign_taxes.reduction.taxes_on_excluded_income", label: "Taxes on excluded income" }
+          - { sub: "B", semantic_id: "k3.foreign_taxes.reduction.taxes_on_section_901j", label: "Taxes on §901(j) income" }
+          - { sub: "C", semantic_id: "k3.foreign_taxes.reduction.taxes_on_section_901k", label: "Taxes on §901(k) distributions" }
+          - { sub: "D", semantic_id: "k3.foreign_taxes.reduction.taxes_on_section_901l", label: "Taxes on §901(l) income" }
+          - { sub: "E", semantic_id: "k3.foreign_taxes.reduction.taxes_suspended_section_909", label: "Taxes suspended under §909" }
+          - { sub: "F", semantic_id: "k3.foreign_taxes.reduction.other_reductions", label: "Other reductions" }
+
+      section_5_other_tax_info:
+        title: "Section 5 — Other Tax Information"
+        type: scalar
+        semantic_id: "k3.part_iii.s5"
+        description: "Section 743(b) adjustments by source and separate category"
+
+  # ════════════════════════════════════════════════════════════════════════
+  # PART IV — §250 FDII Deduction
+  # OTD Primitive: HYBRID (3 sections: scalar + grid)
+  # ════════════════════════════════════════════════════════════════════════
+
+  part_iv:
+    title: "Part IV — Information on Partner's Section 250 Deduction With Respect to FDII"
+    semantic_id: "k3.part_iv"
+    form_location: "Part IV"
+    cross_references: ["Form 8993"]
+
+    sections:
+
+      section_1_dei_qbai:
+        title: "Section 1 — DEI and QBAI on Form 8993"
+        type: grid
+        semantic_id: "k3.part_iv.s1"
+        note: "P.L. 119-21 added lines 3a/3b for intangible property dispositions after 6/16/2025"
+        rows:
+          - { line: 1, semantic_id: "k3.fdii.gross_dei", label: "Gross DEI" }
+          - { line: 2, semantic_id: "k3.fdii.gross_fddei", label: "Gross FDDEI" }
+          - { line: "3a", semantic_id: "k3.fdii.intangible_property_exclusion", label: "Income from disposition of intangible property — §250(b)(3)(A)(i)(VII)(aa)" }
+          - { line: "3b", semantic_id: "k3.fdii.other_depreciable_exclusion", label: "Income from disposition of other depreciable property — §250(b)(3)(A)(i)(VII)(bb)" }
+          - { line: 4, semantic_id: "k3.fdii.allocable_deductions", label: "Allocable deductions" }
+          - { line: 5, semantic_id: "k3.fdii.interest_deductions", label: "Interest deductions" }
+          - { line: 6, semantic_id: "k3.fdii.re_deductions", label: "R&E deductions" }
+          - { line: 7, semantic_id: "k3.fdii.other_deductions", label: "Other deductions" }
+          - { line: 8, semantic_id: "k3.fdii.partnership_qbai", label: "Partnership QBAI" }
+
+      section_2_fddei:
+        title: "Section 2 — FDDEI on Form 8993"
+        type: grid
+        semantic_id: "k3.part_iv.s2"
+        rows:
+          - { line: 9, semantic_id: "k3.fddei.gross_receipts", label: "Gross receipts" }
+          - { line: 10, semantic_id: "k3.fddei.cogs", label: "COGS" }
+          - { line: 11, semantic_id: "k3.fddei.allocable_deductions", label: "Allocable deductions" }
+          - { line: 12, semantic_id: "k3.fddei.other_apportioned", label: "Other apportioned deductions" }
+
+      section_3_other_8993:
+        title: "Section 3 — Other Information for Form 8993"
+        semantic_id: "k3.part_iv.s3"
+        subsections:
+          interest_expense:
+            rows:
+              - { line: "13A", semantic_id: "k3.fdii_interest.directly_allocable_861_10e", label: "Interest — Reg §1.861-10(e)" }
+              - { line: "13B", semantic_id: "k3.fdii_interest.directly_allocable_861_10t", label: "Interest — Temp Reg §1.861-10T" }
+              - { line: "13C", semantic_id: "k3.fdii_interest.other", label: "Other interest expense" }
+            apportionment:
+              - { line: 14, semantic_id: "k3.fdii_interest.apportionment_factors", label: "Interest expense apportionment factors" }
+          re_expenses:
+            rows:
+              - { line: 15, semantic_id: "k3.fdii_re.gross_receipts_by_sic", label: "Gross receipts by SIC code" }
+              - { line: 16, semantic_id: "k3.fdii_re.re_expenses_by_sic", label: "R&E expenses by SIC code" }
+
+  # ════════════════════════════════════════════════════════════════════════
+  # PART V — Distributions From Foreign Corporations to Partnership
+  # OTD Primitive: RECORDSET (one row per CFC distribution)
+  # ════════════════════════════════════════════════════════════════════════
+
+  part_v:
+    title: "Part V — Distributions From Foreign Corporations to Partnership"
+    type: recordset
+    semantic_id: "k3.part_v"
+    form_location: "Part V"
+    description: "Partner's share of distributions from foreign corps — PTEP and non-PTEP"
+    primary_key: ["entity_name", "entity_ein"]
+    cross_references: ["Schedule P (Form 5471)", "Form 1040", "Form 1120"]
+
+    record_schema:
+      entity_name: { type: string, label: "Name of distributing foreign corporation" }
+      entity_ein: { type: string, label: "EIN or reference ID" }
+      country_of_incorporation: { type: string, label: "Country of incorporation (ISO 3166-1)" }
+      date_of_distribution: { type: date, label: "Date of distribution" }
+      functional_currency: { type: string, label: "Functional currency (ISO 4217)" }
+      total_distribution_functional: { type: decimal, label: "Total distribution in functional currency" }
+      total_distribution_usd: { type: decimal, label: "Total distribution in USD" }
+      ptep_groups:
+        type: object
+        label: "PTEP distribution by §959(c) group"
+        fields:
+          section_959c1_reclassified_245ae: { type: decimal, label: "§959(c)(1) — reclassified §245A(e)(2)" }
+          section_959c1_reclassified_959a2: { type: decimal, label: "§959(c)(1) — reclassified §959(a)(2)" }
+          section_959c1_965a: { type: decimal, label: "§959(c)(1) — §965(a)" }
+          section_959c1_965b4a: { type: decimal, label: "§959(c)(1) — §965(b)(4)(A)" }
+          section_959c1_951a: { type: decimal, label: "§959(c)(1) — §951A" }
+          section_959c1_subpart_f: { type: decimal, label: "§959(c)(1) — Subpart F" }
+          section_959c2_951a: { type: decimal, label: "§959(c)(2) — §951A" }
+          section_959c2_subpart_f: { type: decimal, label: "§959(c)(2) — Subpart F" }
+          section_959c2_245a_dividend: { type: decimal, label: "§959(c)(2) — §245A(d) dividend" }
+          section_959c2_1248: { type: decimal, label: "§959(c)(2) — §1248" }
+      non_ptep_distribution: { type: decimal, label: "Non-PTEP distribution (dividend)" }
+      section_986c_gain_loss: { type: decimal, label: "§986(c) foreign currency gain or loss on PTEP" }
+
+  # ════════════════════════════════════════════════════════════════════════
+  # PART VI — §951(a)(1) and §951A Inclusions
+  # OTD Primitive: RECORDSET (one row per CFC)
+  # ════════════════════════════════════════════════════════════════════════
+
+  part_vi:
+    title: "Part VI — Information on Partner's Section 951(a)(1) and Section 951A Inclusions"
+    type: recordset
+    semantic_id: "k3.part_vi"
+    form_location: "Part VI"
+    primary_key: ["cfc_name", "cfc_ein"]
+    cross_references: ["Form 8992", "Form 5471"]
+
+    record_schema:
+      cfc_name: { type: string, label: "Name of CFC" }
+      cfc_ein: { type: string, label: "EIN or reference ID" }
+      country_of_incorporation: { type: string, label: "Country (ISO 3166-1)" }
+      partner_share_percentage: { type: percentage, label: "Partner's share of CFC for §951" }
+      subpart_f_income: { type: decimal, label: "Subpart F income inclusion — §951(a)(1)(A)" }
+      section_951a1b_inclusion: { type: decimal, label: "§951(a)(1)(B) inclusion (withdrawn PTEP)" }
+      gilti_tested_income: { type: decimal, label: "GILTI tested income" }
+      gilti_tested_loss: { type: decimal, label: "GILTI tested loss" }
+      qbai: { type: decimal, label: "Qualified business asset investment (QBAI)" }
+      tested_interest_income: { type: decimal, label: "Tested interest income" }
+      tested_interest_expense: { type: decimal, label: "Tested interest expense" }
+      tested_loss_qbai_amount: { type: decimal, label: "Tested loss QBAI amount" }
+
+  # ════════════════════════════════════════════════════════════════════════
+  # PART VII — PFICs
+  # OTD Primitive: RECORDSET (2 sections per PFIC entity)
+  # ════════════════════════════════════════════════════════════════════════
+
+  part_vii:
+    title: "Part VII — Information Regarding Passive Foreign Investment Companies (PFICs)"
+    type: recordset
+    semantic_id: "k3.part_vii"
+    form_location: "Part VII"
+    primary_key: ["pfic_name", "pfic_ein"]
+    cross_references: ["Form 8621"]
+
+    sections:
+
+      section_1_general:
+        title: "Section 1 — General Information"
+        record_schema:
+          pfic_name: { type: string, label: "Name of PFIC", form_ref: "Column (a)" }
+          pfic_ein: { type: string, label: "EIN or reference ID", form_ref: "Column (b)" }
+          pfic_address: { type: string, label: "Address", form_ref: "Column (c)" }
+          pfic_tax_year_end: { type: date, label: "Tax year end", form_ref: "Column (d)" }
+          partner_share_percentage: { type: percentage, label: "Partner's share", form_ref: "Column (e)" }
+          ordinary_earnings: { type: decimal, label: "Ordinary earnings", form_ref: "Column (f)" }
+          net_capital_gain: { type: decimal, label: "Net capital gain", form_ref: "Column (g)" }
+          fair_market_value_boy: { type: decimal, label: "FMV at beginning of year", form_ref: "Column (h)" }
+          fair_market_value_eoy: { type: decimal, label: "FMV at end of year", form_ref: "Column (i)" }
+          election_by_partnership: { type: string, label: "Election made by partnership", form_ref: "Column (j)", note: "QEF, MTM, or §1291" }
+          election_date: { type: date, label: "Election date", form_ref: "Column (k)" }
+          election_beginning_date: { type: date, label: "Beginning date of election", form_ref: "Column (l)" }
+          election_ending_date: { type: date, label: "Ending date of election", form_ref: "Column (m)" }
+          election_gain_recognized: { type: decimal, label: "Gain recognized on election", form_ref: "Column (n)" }
+
+      section_2_additional:
+        title: "Section 2 — Additional Information on PFIC or QEF"
+        subsections:
+          qef_information:
+            title: "QEF Information"
+            record_schema:
+              ordinary_earnings: { type: decimal, label: "Partner's share of ordinary earnings", form_ref: "Column (c)" }
+              net_capital_gain: { type: decimal, label: "Partner's share of net capital gain", form_ref: "Column (d)" }
+
+          mark_to_market:
+            title: "Section 1296 Mark-to-Market Information"
+            record_schema:
+              fmv_boy: { type: decimal, label: "FMV of PFIC shares at beginning of year", form_ref: "Column (e)" }
+              fmv_eoy: { type: decimal, label: "FMV of PFIC shares at end of year", form_ref: "Column (f)" }
+
+          section_1291:
+            title: "Section 1291 and Other Information"
+            record_schema:
+              acquisition_dates: { type: string, label: "Dates PFIC shares acquired", form_ref: "Column (g)" }
+              distributions_amount: { type: decimal, label: "Cash and FMV of property distributed", form_ref: "Column (h)" }
+              distribution_dates: { type: string, label: "Dates of distribution", form_ref: "Column (i)" }
+              creditable_foreign_taxes: { type: decimal, label: "Total creditable foreign taxes on distributions", form_ref: "Column (j)" }
+              prior_3yr_distributions: { type: decimal, label: "Total distributions in preceding 3 tax years", form_ref: "Column (k)" }
+              disposition_dates: { type: string, label: "Dates shares disposed", form_ref: "Column (l)" }
+              disposition_amount: { type: decimal, label: "Amount realized on disposition", form_ref: "Column (m)" }
+              gain_on_disposition: { type: decimal, label: "Gain on disposition", form_ref: "Column (n)" }
+              excess_distribution: { type: decimal, label: "Excess distribution", form_ref: "Column (o)" }
+
+  # ════════════════════════════════════════════════════════════════════════
+  # PART VIII — §960 Deemed Paid Taxes
+  # OTD Primitive: GRID (CFC × inclusion type × tax category)
+  # ════════════════════════════════════════════════════════════════════════
+
+  part_viii:
+    title: "Part VIII — Partner's Interest in Foreign Corporation Income (Section 960)"
+    type: grid
+    semantic_id: "k3.part_viii"
+    form_location: "Part VIII"
+    description: "Deemed paid taxes on inclusions under §951A, §951(a)(1), or §1293(f)"
+    cross_references: ["Form 1118"]
+
+    axes:
+      rows_by_cfc: "One set of rows per CFC (entity_name, entity_ein)"
+      columns:
+        - id: "section_951a_inclusion"
+          label: "§951A inclusion"
+        - id: "section_951a1_inclusion"
+          label: "§951(a)(1) inclusion"
+        - id: "section_1293f"
+          label: "§1293(f) inclusion"
+
+    per_cfc_rows:
+      - { semantic_id: "k3.s960.tested_income", label: "Tested income / Subpart F income / QEF income" }
+      - { semantic_id: "k3.s960.taxes_paid_accrued", label: "Foreign taxes paid or accrued" }
+      - { semantic_id: "k3.s960.taxes_deemed_paid", label: "Taxes deemed paid — §960" }
+
+  # ════════════════════════════════════════════════════════════════════════
+  # PART IX — BEAT (§59A)
+  # OTD Primitive: HYBRID (scalar applicability + grid of payment types)
+  # ════════════════════════════════════════════════════════════════════════
+
+  part_ix:
+    title: "Part IX — Partner's Information for Base Erosion and Anti-Abuse Tax (Section 59A)"
+    semantic_id: "k3.part_ix"
+    form_location: "Part IX"
+    cross_references: ["Form 8991"]
+
+    sections:
+
+      section_1_applicable_taxpayer:
+        title: "Section 1 — Applicable Taxpayer"
+        type: grid
+        semantic_id: "k3.part_ix.s1"
+        rows:
+          - { line: 1, semantic_id: "k3.beat.gross_receipts", label: "Gross receipts for §59A(e)" }
+          - { line: 2, semantic_id: "k3.beat.base_erosion_pct_denominator_additions", label: "Additions to denominator — Reg §1.59A-2(e)(3)(i)(B)" }
+          - { line: 3, semantic_id: "k3.beat.reserved_3", label: "Reserved", reserved: true }
+          - { line: 4, semantic_id: "k3.beat.reserved_4", label: "Reserved", reserved: true }
+          - { line: 5, semantic_id: "k3.beat.denominator_amounts", label: "Amounts in denominator per Reg §1.59A-2(e)(3)(i)(B)" }
+
+      section_2_base_erosion:
+        title: "Section 2 — Base Erosion Payments and Base Erosion Tax Benefits"
+        type: grid
+        semantic_id: "k3.part_ix.s2"
+        axes:
+          columns:
+            - { id: "amount", label: "Amount", form_ref: "Column (a)" }
+            - { id: "base_erosion_payment", label: "Base erosion payment", form_ref: "Column (b)" }
+            - { id: "base_erosion_tax_benefit", label: "Base erosion tax benefit", form_ref: "Column (c)" }
+        rows:
+          - { line: 6, semantic_id: "k3.beat.reserved_6", label: "Reserved", reserved: true }
+          - { line: 7, semantic_id: "k3.beat.cost_sharing", label: "Cost sharing transaction payments" }
+          - { line: 8, semantic_id: "k3.beat.intangible_rights", label: "Purchase/creation of intangible property rights" }
+          - { line: 9, semantic_id: "k3.beat.rents_royalties_license", label: "Rents, royalties, and license fees" }
+          - { line: "10a", semantic_id: "k3.beat.services_not_excepted", label: "Services compensation — NOT excepted by §59A(d)(5)" }
+          - { line: "10b", semantic_id: "k3.beat.services_excepted", label: "Services compensation — excepted by §59A(d)(5)" }
+          - { line: 11, semantic_id: "k3.beat.interest_expense", label: "Interest expense" }
+          - { line: 12, semantic_id: "k3.beat.tangible_personal_property", label: "Payments for tangible personal property" }
+          - { line: 13, semantic_id: "k3.beat.insurance_reinsurance", label: "Insurance and reinsurance premiums" }
+          - { line: "14a", semantic_id: "k3.beat.nonqualified_derivatives", label: "Nonqualified derivative payments" }
+          - { line: "14b", semantic_id: "k3.beat.qualified_derivatives_excepted", label: "Qualified derivative payments — excepted by §59A(h)" }
+          - { line: 15, semantic_id: "k3.beat.surrogate_foreign_corp", label: "Payments reducing gross receipts — surrogate foreign corp" }
+          - { line: 16, semantic_id: "k3.beat.other_payments", label: "Other payments — specify" }
+          - { line: 17, semantic_id: "k3.beat.total_base_erosion_payments", label: "Total base erosion payments", is_total: true }
+          - { line: 18, semantic_id: "k3.beat.total_base_erosion_pct_denominator", label: "Total amounts — base erosion percentage denominator" }
+          - { line: 19, semantic_id: "k3.beat.total_base_erosion_tax_benefits", label: "Total base erosion tax benefits", is_total: true }
+
+  # ════════════════════════════════════════════════════════════════════════
+  # PART X — Foreign Partner's Character and Source
+  # OTD Primitive: GRID (the ECI/FDAP characterization matrix)
+  # Dimensions: ~20 lines × 7 columns
+  # ════════════════════════════════════════════════════════════════════════
+
+  part_x:
+    title: "Part X — Foreign Partner's Character and Source of Income and Deductions"
+    type: grid
+    semantic_id: "k3.part_x"
+    form_location: "Part X"
+    description: "ECI and FDAP income characterization for foreign partners"
+
+    sections:
+
+      section_1_gross_income:
+        title: "Section 1 — Gross Income"
+        axes:
+          columns:
+            - { id: "total", label: "Total", form_ref: "Column (a)" }
+            - { id: "partner_determination", label: "Partner determination", form_ref: "Column (b)" }
+            - { id: "eci_us_source", label: "ECI — U.S. source", form_ref: "Column (c)" }
+            - { id: "eci_foreign_source", label: "ECI — foreign source", form_ref: "Column (d)" }
+            - { id: "non_eci_fdap", label: "Non-ECI FDAP — U.S. source", form_ref: "Column (e)" }
+            - { id: "non_eci_other", label: "Non-ECI other — U.S. source", form_ref: "Column (f)" }
+        rows:
+          - { line: 1, semantic_id: "k3.foreign_partner.gross.ordinary_income", label: "Ordinary business income" }
+          - { line: 2, semantic_id: "k3.foreign_partner.gross.net_rental_re", label: "Net rental real estate income" }
+          - { line: 3, semantic_id: "k3.foreign_partner.gross.other_rental", label: "Other net rental income" }
+          - { line: 4, semantic_id: "k3.foreign_partner.gross.guaranteed", label: "Guaranteed payments" }
+          - { line: 5, semantic_id: "k3.foreign_partner.gross.interest", label: "Interest income" }
+          - { line: 6, semantic_id: "k3.foreign_partner.gross.interest_detail", label: "Interest income (detail)" }
+          - { line: 7, semantic_id: "k3.foreign_partner.gross.dividends", label: "Dividends" }
+          - { line: 8, semantic_id: "k3.foreign_partner.gross.dividend_equivalents", label: "Dividend equivalents" }
+          - { line: 9, semantic_id: "k3.foreign_partner.gross.royalties_license", label: "Royalties and license fees" }
+          - { line: 10, semantic_id: "k3.foreign_partner.gross.net_stcg", label: "Net short-term capital gain" }
+          - { line: 11, semantic_id: "k3.foreign_partner.gross.net_ltcg", label: "Net long-term capital gain" }
+          - { line: 12, semantic_id: "k3.foreign_partner.gross.collectibles", label: "Collectibles (28%) gain" }
+          - { line: 13, semantic_id: "k3.foreign_partner.gross.unrecaptured_1250", label: "Unrecaptured §1250 gain" }
+          - { line: 14, semantic_id: "k3.foreign_partner.gross.net_1231", label: "Net §1231 gain" }
+          - { line: 15, semantic_id: "k3.foreign_partner.gross.other_gain_type_1", label: "Other type of gain (specify)" }
+          - { line: 16, semantic_id: "k3.foreign_partner.gross.other_gain_amount_1", label: "Other gain amount" }
+          - { line: 17, semantic_id: "k3.foreign_partner.gross.reserved_17", label: "Reserved", reserved: true }
+          - { line: 18, semantic_id: "k3.foreign_partner.gross.reserved_18", label: "Reserved", reserved: true }
+          - { line: 19, semantic_id: "k3.foreign_partner.gross.other_income_type_1", label: "Other type of income (specify)" }
+          - { line: 20, semantic_id: "k3.foreign_partner.gross.other_income_amount_1", label: "Other income amount" }
+          - { line: 21, semantic_id: "k3.foreign_partner.gross.total", label: "Total gross income", is_total: true }
+
+      section_2_deductions:
+        title: "Section 2 — Deductions, Losses, and Net Income"
+        axes:
+          columns:
+            - { id: "total", label: "Total", form_ref: "Column (a)" }
+            - { id: "partner_determination", label: "Partner determination", form_ref: "Column (b)" }
+            - { id: "eci_us_source", label: "ECI — U.S. source", form_ref: "Column (c)" }
+            - { id: "eci_foreign_source", label: "ECI — foreign source", form_ref: "Column (d)" }
+            - { id: "non_eci_allocated", label: "Non-ECI — allocated to ECI", form_ref: "Column (e)" }
+            - { id: "non_eci_apportioned_fdap", label: "Non-ECI — apportioned to FDAP", form_ref: "Column (f)" }
+            - { id: "non_eci_apportioned_other", label: "Non-ECI — apportioned to other", form_ref: "Column (g)" }
+        rows:
+          - { line: 1, semantic_id: "k3.foreign_partner.ded.allocable_to_eci", label: "Deductions allocable to ECI" }
+          - { line: 2, semantic_id: "k3.foreign_partner.ded.re_expenses", label: "R&E expenses" }
+          - { line: 3, semantic_id: "k3.foreign_partner.ded.reserved_3", label: "Reserved", reserved: true }
+          - { line: 4, semantic_id: "k3.foreign_partner.ded.reserved_4", label: "Reserved", reserved: true }
+          - { line: 5, semantic_id: "k3.foreign_partner.ded.reserved_5", label: "Reserved", reserved: true }
+          - { line: 6, semantic_id: "k3.foreign_partner.ded.reserved_6", label: "Reserved", reserved: true }
+          - { line: 7, semantic_id: "k3.foreign_partner.ded.interest_us_booked", label: "Interest expense on U.S.-booked liabilities" }
+          - { line: 8, semantic_id: "k3.foreign_partner.ded.other_interest", label: "Other interest expense" }
+          - { line: 9, semantic_id: "k3.foreign_partner.ded.reserved_9", label: "Reserved", reserved: true }
+          - { line: 10, semantic_id: "k3.foreign_partner.ded.section_59e2", label: "Section 59(e)(2) expenditures" }
+          - { line: 11, semantic_id: "k3.foreign_partner.ded.net_stcl", label: "Net short-term capital loss" }
+          - { line: 12, semantic_id: "k3.foreign_partner.ded.net_ltcl", label: "Net long-term capital loss" }
+          - { line: 13, semantic_id: "k3.foreign_partner.ded.collectibles_loss", label: "Collectibles (28%) loss" }
+          - { line: 14, semantic_id: "k3.foreign_partner.ded.net_1231_loss", label: "Net §1231 loss" }
+          - { line: 15, semantic_id: "k3.foreign_partner.ded.other_deductions", label: "Other deductions" }
+          - { line: 16, semantic_id: "k3.foreign_partner.ded.charitable", label: "Charitable contributions" }
+          - { line: 17, semantic_id: "k3.foreign_partner.ded.total", label: "Total deductions", is_total: true }
+          - { line: 18, semantic_id: "k3.foreign_partner.net_income", label: "Net income", is_total: true }
+
+      section_3_allocation_methods:
+        title: "Section 3 — Allocation and Apportionment Methods for Deductions"
+        type: scalar
+        semantic_id: "k3.part_x.s3"
+        rows:
+          - { line: "1a", semantic_id: "k3.foreign_partner.alloc.gross_eci", label: "Gross ECI" }
+          - { line: "1b", semantic_id: "k3.foreign_partner.alloc.worldwide_gross", label: "Worldwide gross income" }
+          - { line: "2a", semantic_id: "k3.foreign_partner.alloc.avg_us_assets", label: "Average U.S. assets (inside basis)" }
+          - { line: "3a", semantic_id: "k3.foreign_partner.alloc.us_booked_liabilities", label: "U.S.-booked liabilities of partnership" }
+          - { line: "3b", semantic_id: "k3.foreign_partner.alloc.directly_allocated_debt", label: "Directly allocated partnership indebtedness" }
+          - { line: "4a", semantic_id: "k3.foreign_partner.alloc.us_personnel", label: "Personnel of U.S. trade or business" }
+          - { line: "4b", semantic_id: "k3.foreign_partner.alloc.worldwide_personnel", label: "Worldwide personnel" }
+          - { line: 5, semantic_id: "k3.foreign_partner.alloc.gross_receipts_by_sic", label: "Gross receipts from sales or services by SIC code" }
+          - { line: 7, semantic_id: "k3.foreign_partner.alloc.other_key_1", label: "Other allocation and apportionment key" }
+          - { line: 8, semantic_id: "k3.foreign_partner.alloc.other_key_2", label: "Other allocation and apportionment key (2)" }
+
+      section_4_reserved:
+        title: "Section 4 — Reserved for Future Use"
+        type: scalar
+        semantic_id: "k3.part_x.s4"
+        reserved: true
+
+  # ════════════════════════════════════════════════════════════════════════
+  # PART XI — §871(m) Covered Partnerships
+  # OTD Primitive: RECORDSET
+  # ════════════════════════════════════════════════════════════════════════
+
+  part_xi:
+    title: "Part XI — Section 871(m) Covered Partnerships"
+    type: recordset
+    semantic_id: "k3.part_xi"
+    form_location: "Part XI"
+    description: "§871(m) transaction-level data for covered partnerships (PTPs)"
+    cross_references: ["Form 1042", "Form 1042-S"]
+
+    record_schema:
+      transaction_description: { type: string, label: "Description of §871(m) transaction" }
+      dividend_equivalent_amount: { type: decimal, label: "Dividend equivalent amount" }
+      withholding_tax: { type: decimal, label: "Withholding tax" }
+      treaty_rate: { type: percentage, label: "Treaty rate (if applicable)" }
+      treaty_country: { type: string, label: "Treaty country (ISO 3166-1)" }
+
+  # ════════════════════════════════════════════════════════════════════════
+  # PART XII — §871(m) QDD Tax Liability
+  # OTD Primitive: RECORDSET
+  # ════════════════════════════════════════════════════════════════════════
+
+  part_xii:
+    title: "Part XII — Section 871(m) Tax Liability of a Qualified Derivatives Dealer (QDD)"
+    type: recordset
+    semantic_id: "k3.part_xii"
+    form_location: "Part XII"
+    description: "QDD-specific §871(m) liability data"
+    cross_references: ["Form 1042-S"]
+
+    record_schema:
+      qdd_name: { type: string, label: "Name of QDD" }
+      qdd_ein: { type: string, label: "EIN of QDD" }
+      net_delta_exposure: { type: decimal, label: "Net delta exposure" }
+      withholding_tax_liability: { type: decimal, label: "Withholding tax liability" }
+      dividend_equivalent_amount: { type: decimal, label: "Dividend equivalent amount" }
+
+  # ════════════════════════════════════════════════════════════════════════
+  # PART XIII — Foreign Partner's Deemed Sale on Transfer
+  # OTD Primitive: HYBRID (scalar + grid by character)
+  # ════════════════════════════════════════════════════════════════════════
+
+  part_xiii:
+    title: "Part XIII — Foreign Partner's Distributive Share of Deemed Sale Items on Transfer of Partnership Interest"
+    type: grid
+    semantic_id: "k3.part_xiii"
+    form_location: "Part XIII"
+    description: "§864(c)(8) deemed sale items by character of gain/loss"
+    cross_references: ["Schedule P (Form 1040-NR)", "Schedule P (Form 1120-F)", "Form 4797", "Form 8949", "Form 6252"]
+
+    record_schema:
+      gain_loss_character: { type: string, label: "Character of gain or loss" }
+      eci_amount: { type: decimal, label: "ECI gain/loss amount" }
+      non_eci_amount: { type: decimal, label: "Non-ECI gain/loss amount" }
+      total_amount: { type: decimal, label: "Total gain/loss" }
+      section_1231_indicator: { type: boolean, label: "§1231 property" }
+      collectibles_indicator: { type: boolean, label: "Collectibles (28%)" }
+      unrecaptured_1250_indicator: { type: boolean, label: "Unrecaptured §1250" }
+      installment_sale: { type: boolean, label: "Installment sale (Form 6252)" }
+
+  # ════════════════════════════════════════════════════════════════════════
+  # CROSS-REFERENCE MAPPING
+  # ════════════════════════════════════════════════════════════════════════
+
+  cross_references:
+    - source: "k3.part_ii"
+      target_form: "Form 1116"
+      target_description: "Foreign Tax Credit (Individuals)"
+      relationship: "provides_data_for"
+    - source: "k3.part_ii"
+      target_form: "Form 1118"
+      target_description: "Foreign Tax Credit (Corporations)"
+      relationship: "provides_data_for"
+    - source: "k3.part_iii.s1"
+      target_form: "Form 1116/1118"
+      target_description: "R&E expense apportionment"
+      relationship: "provides_factors_for"
+    - source: "k3.part_iv"
+      target_form: "Form 8993"
+      target_description: "§250 FDII/GILTI Deduction"
+      relationship: "provides_data_for"
+    - source: "k3.part_v"
+      target_form: "Schedule P (Form 5471)"
+      target_description: "PTEP accounts"
+
+    - source: "k3.part_vi"
+      target_form: "Form 8992"
+      target_description: "GILTI computation"
+      relationship: "provides_data_for"
+    - source: "k3.part_vi"
+      target_form: "Form 5471"
+      target_description: "CFC information"
+      relationship: "provides_data_for"
+    - source: "k3.part_vii"
+      target_form: "Form 8621"
+      target_description: "PFIC Information Return"
+      relationship: "provides_data_for"
+    - source: "k3.part_viii"
+      target_form: "Form 1118"
+      target_description: "Deemed paid credits"
+      relationship: "provides_data_for"
+    - source: "k3.part_ix"
+      target_form: "Form 8991"
+      target_description: "BEAT computation"
+      relationship: "provides_data_for"
+    - source: "k3.part_x"
+      target_form: "Form 1040-NR"
+      target_description: "Foreign partner income characterization"
+      relationship: "provides_data_for"
+    - source: "k3.part_x"
+      target_form: "Form 1120-F"
+      target_description: "Foreign corporation ECI"
+      relationship: "provides_data_for"
+    - source: "k3.part_xi"
+      target_form: "Form 1042"
+      target_description: "§871(m) withholding"
+      relationship: "provides_data_for"
+    - source: "k3.part_xii"
+      target_form: "Form 1042-S"
+      target_description: "QDD withholding statements"
+      relationship: "provides_data_for"
+    - source: "k3.part_xiii"
+      target_form: "Form 4797"
+      target_description: "§864(c)(8) deemed sale — business property"
+      relationship: "provides_data_for"
+    - source: "k3.part_xiii"
+      target_form: "Form 8949"
+      target_description: "§864(c)(8) deemed sale — capital assets"
+      relationship: "provides_data_for"
+
+  # ════════════════════════════════════════════════════════════════════════
+  # VALIDATION CONSTRAINTS
+  # ════════════════════════════════════════════════════════════════════════
+
+  validation_constraints:
+    - id: "part_ii_line_24_total"
+      description: "Part II, Line 24 must equal sum of Lines 1-23 for each column"
+      severity: error
+      expression: "line_24 == sum(lines_1_through_23) per column"
+    - id: "part_ii_line_54_total"
+      description: "Part II, Line 54 must equal sum of Lines 25-53 for each column"
+      severity: error
+      expression: "line_54 == sum(lines_25_through_53) per column"
+    - id: "part_applicability_consistency"
+      description: "If Part data is present, corresponding part_applicability flag must be true"
+      severity: warning
+      expression: "for each part with data: part_applicability[part] == true"
+    - id: "part_v_ptep_sum"
+      description: "Sum of PTEP groups + non_ptep must equal total distribution"
+      severity: warning
+      expression: "sum(ptep_groups) + non_ptep == total_distribution_usd"
+    - id: "part_ix_line_17_total"
+      description: "Part IX, Section 2, Line 17 = sum of Lines 6-16, Column (b)"
+      severity: error
+      expression: "line_17_col_b == sum(lines_6_through_16_col_b)"
+    - id: "part_ix_line_19_total"
+      description: "Part IX, Section 2, Line 19 = sum of Lines 6-16, Column (c)"
+      severity: error
+      expression: "line_19_col_c == sum(lines_6_through_16_col_c)"
+    - id: "part_x_s1_line_21_total"
+      description: "Part X, Section 1, Line 21 = sum of Lines 1-20 per column"
+      severity: error
+      expression: "line_21 == sum(lines_1_through_20) per column"
+    - id: "part_x_s2_line_18_net"
+      description: "Part X, Section 2, Line 18 = Section 1 Line 21 - Section 2 Line 17"
+      severity: error
+      expression: "line_18 == section_1_line_21 - section_2_line_17"
+    - id: "country_codes_valid"
+      description: "All country codes must be valid ISO 3166-1 alpha-2"
+      severity: error
+      expression: "all country_code values in ISO_3166_1_alpha_2"
+    - id: "ein_format"
+      description: "All EINs must match XX-XXXXXXX format (or redacted pattern)"
+      severity: warning
+      expression: "ein matches /^\\d{2}-\\d{7}$/ or /^XX-XXXX\\d{3}$/"
