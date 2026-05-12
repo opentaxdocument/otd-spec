@@ -1,0 +1,801 @@
+# ============================================================================
+# Open Tax Document (OTD) Specification — v0.1 DRAFT
+# ============================================================================
+#
+# An AI-native, self-documenting standard for representing structured tax data.
+#
+# License:  Creative Commons Attribution 4.0 International (CC BY 4.0)
+# Authors:  Tom O'Sullivan, Second Wind
+# Date:     2026-04-02
+# Status:   DRAFT — seeking multi-firm review (RSM, Alvarez & Marsal, others)
+#
+
+# Design Principles:
+#   1. The document IS the schema — every node carries its own context
+#   2. Ontology-derivable — taxonomies are generated from IRS instructions,
+#      not hardcoded into the spec
+#   3. Semantic & structural fidelity — every node carries sufficient metadata
+#      (box, line, code, column) to locate it on the physical form and feed
+#      a rendering engine. OTD provides SEMANTIC and STRUCTURAL fidelity,
+#      not typographic fidelity (PDF coordinates, font scaling, page breaks).
+#      A rendering engine that knows the IRS form layout can produce a
+#      print-ready form from OTD data; OTD does not embed that layout.
+#   4. Round-trip guarantee — emit → parse → emit produces identical output
+#   5. Statement-first — footnotes, overflow, and attachments are first-class
+#      structured citizens, not text blobs
+# Projections to JSON, XML, and other formats are trivial by design.
+# ============================================================================
+
+# ────────────────────────────────────────────────────────────────────────────
+# §1  DOCUMENT ENVELOPE
+# ────────────────────────────────────────────────────────────────────────────
+#
+# Every OTD file begins with an envelope that identifies the document,
+# its provenance, and the taxonomy version used to produce it.
+#
+# The envelope is NOT tax data — it is metadata about the document itself.
+# ────────────────────────────────────────────────────────────────────────────
+
+otd:
+  version: "0.1"                          # OTD spec version
+  document_id: "example-001"              # Unique ID for this document instance
+  created: "2026-04-02T15:00:00Z"         # ISO 8601
+  producer:                               # Who/what created this document
+    name: "Crimson Tree TIERS"
+    version: "2.0"
+  taxonomy:                               # Which taxonomy was used
+    id: "irs-k1-1065-2025"
+    version: "2025.1.0"
+    source: "IRS Instructions for Schedule K-1 (Form 1065), 2025"
+
+# ────────────────────────────────────────────────────────────────────────────
+
+# ────────────────────────────────────────────────────────────────────────────
+# §1b  FORM METADATA
+# ────────────────────────────────────────────────────────────────────────────
+#
+# Legal and administrative metadata about the form instance. These fields
+# appear on the physical form above Part I and are legally significant.
+#
+# Every OTD document representing a filed or fileable tax form MUST include
+# this block. It captures the temporal, amendment, and status context that
+# governs the legal weight of the document.
+# ────────────────────────────────────────────────────────────────────────────
+
+form_metadata:
+  tax_year: 2025                            # Calendar year or fiscal year end
+  fiscal_year: false                        # true if non-calendar fiscal year
+  fiscal_year_begin: null                   # ISO 8601 date; null if calendar year
+  fiscal_year_end: null                     # ISO 8601 date; null if calendar year
+  amended: false                            # true if this is an amended K-1
+  final: false                              # true if this is a final K-1
+  supersedes_document_id: null              # OTD document_id of the K-1 this amends (if amended)
+  filing_status: "original"                 # original | amended | superseded | void
+  form_revision_date: "2025"               # IRS form revision indicator
+
+# §2  TAXNODE — THE ATOMIC UNIT
+# ────────────────────────────────────────────────────────────────────────────
+#
+# Every piece of tax data is a TaxNode. TaxNodes compose into trees.
+#
+# A TaxNode has two identity systems:
+#   - semantic:  what the data MEANS (for reasoning)
+#   - form:      where the data PRINTS (for form production)
+#
+# And one of six structural types:
+#   - scalar:     single typed value
+#   - coded:      value qualified by a letter/number code
+#   - grid:       matrix with named axes (rows × columns)
+#   - recordset:  list of typed entity records
+#   - statement:  structured overflow / footnote / attachment
+#   - reference:  pointer to another node, form, or document
+#
+# ────────────────────────────────────────────────────────────────────────────
+
+# §2.1  SCALAR — A single typed value
+# ────────────────────────────────────
+# The simplest node. One box, one value.
+
+# Example: K-1 Box 1, Ordinary Business Income
+scalar_example:
+  type: scalar
+  semantic:
+    id: "ordinary_business_income"
+    label: "Ordinary Business Income (Loss)"
+    description: "Partner's distributive share of partnership ordinary income or loss from trade or business activities."
+  form:
+    form_id: "k1-1065"
+    location: "Part III, Box 1"
+    box: 1
+  value: 150000.00
+  currency: "USD"
+  sign_convention: "positive_is_income"    # explicit: no ambiguity about signs
+
+# §2.2  CODED — Value qualified by an IRS code
+# ──────────────────────────────────────────────
+# Many K-1 boxes contain multiple items distinguished by letter codes.
+# Each code is its own TaxNode.
+
+# Example: K-1 Box 11, Code A — Other Portfolio Income
+coded_example:
+  type: coded
+  semantic:
+    id: "other_income.portfolio"
+    label: "Other Portfolio Income (Loss)"
+    description: "Partner's share of portfolio income not reported on lines 5 through 9a."
+  form:
+    form_id: "k1-1065"
+    location: "Part III, Box 11, Code A"
+    box: 11
+    code: "A"
+  value: 12500.00
+  currency: "USD"
+
+# §2.3  CODED with STATEMENT — The "ZZ Problem" solved
+# ─────────────────────────────────────────────────────
+# Code ZZ entries carry a required classification and a structured body.
+# This is where the standard earns its keep — making the catch-all queryable.
+
+coded_zz_example:
+  type: coded
+  semantic:
+    id: "other_information.section_1062_farmland"
+    label: "Gain from Sale of Qualified Farmland Property"
+    description: "Section 1062 election for 4-installment gain recognition on qualified farmland sale to qualified farmers."
+    classification: "section_1062_farmland_gain"    # REQUIRED for ZZ codes
+  form:
+    form_id: "k1-1065"
+    location: "Part III, Box 20, Code ZZ"
+    box: 20
+    code: "ZZ"
+  value: 500000.00
+  currency: "USD"
+  statement:                                # Structured overflow, not a text blob
+    type: statement
+    semantic:
+      id: "section_1062_installment_schedule"
+      label: "Section 1062 Installment Payment Schedule"
+    entries:
+      - year: 2026
+        installment: 1
+        amount: 125000.00
+      - year: 2027
+        installment: 2
+        amount: 125000.00
+      - year: 2028
+        installment: 3
+        amount: 125000.00
+      - year: 2029
+        installment: 4
+        amount: 125000.00
+
+# §2.4  GRID — Named matrix with fixed axes
+# ──────────────────────────────────────────
+# For tabular structures where rows and columns are predetermined by
+# the form. The canonical example is K-3 Part II (FTC Limitation).
+#
+# Grid cells are accessed as: grid[row_key][column_key]
+#
+# Design rule: column keys correspond to source categories;
+#              row keys correspond to income/deduction types.
+
+grid_example:
+  type: grid
+  semantic:
+    id: "ftc_limitation.gross_income"
+    label: "Foreign Tax Credit Limitation — Gross Income"
+    description: "Partner's share of gross income by source and category for FTC limitation (Form 1116/1118)."
+  form:
+    form_id: "k3-1065"
+    location: "Part II, Section 1, Lines 1-24"
+    part: "II"
+    section: 1
+  columns:
+    - key: "us_source"
+      label: "U.S. Source"
+      form_column: "(a)"
+    - key: "foreign_general"
+      label: "Foreign Source — General Category"
+      form_column: "(b)"
+    - key: "foreign_passive"
+      label: "Foreign Source — Passive Category"
+      form_column: "(c)"
+    - key: "foreign_treaty"
+      label: "Foreign Source — Treaty"
+      form_column: "(d)"
+    - key: "foreign_901j"
+      label: "Foreign Source — Section 901(j)"
+      form_column: "(e)"
+    - key: "sourced_by_partner"
+      label: "Sourced by Partner"
+      form_column: "(f)"
+  rows:
+    - key: "sales"
+      label: "Sales"
+      form_line: 1
+      values:
+        us_source: 500000.00
+        foreign_general: 200000.00
+        foreign_passive: 0
+        foreign_treaty: 0
+        foreign_901j: 0
+        sourced_by_partner: 0
+    - key: "services"
+      label: "Gross income from performance of services"
+      form_line: 2
+      values:
+        us_source: 100000.00
+        foreign_general: 50000.00
+        foreign_passive: 0
+        foreign_treaty: 0
+        foreign_901j: 0
+        sourced_by_partner: 0
+  currency: "USD"
+  # Additional rows follow the same pattern through line 24...
+  # Country code is a sub-axis when the grid is country-specific:
+  country_code: "FR"                       # ISO 3166-1 alpha-2; null if aggregate
+
+
+  # GRID CELL TYPED-OBJECT RULE:
+  # Grid cells may contain either:
+  #   1. A raw scalar value:   us_source: 500000.00
+  #   2. A typed cell object:  us_source: { value: 500000.00, statement: { ... } }
+  #
+  # The typed-object form MUST be used when a cell carries supplemental
+  # information (e.g., "See Statement 4" annotations ubiquitous in K-3
+  # international schedules). Parsers MUST handle both forms.
+  #
+  # Example — cell with inline statement reference:
+  grid_cell_statement_example:
+    type: grid
+    semantic:
+      id: "k3_part_ii_line2_with_stmt"
+      label: "FTC Gross Income with Cell-Level Statement"
+    form:
+      form_id: "k3-1065"
+      location: "Part II, Section 1, Line 2"
+    columns:
+      - key: "foreign_general"
+        label: "Foreign Source — General Category"
+        form_column: "(b)"
+    rows:
+      - key: "services"
+        label: "Gross income from performance of services"
+        form_line: 2
+        values:
+          foreign_general:
+            value: 50000.00                  # Typed-object form
+            statement:
+              type: statement
+              semantic:
+                id: "k3_part_ii_line2_col_b_stmt"
+                label: "See Statement 4"
+                classification: "see_statement"
+              content:
+                reference: "Statement 4"
+                detail: "Services income sourced to France per Treaty Article 14"
+
+
+# §2.5  RECORDSET — List of typed entity records
+# ───────────────────────────────────────────────
+# For structures where each entry is a distinct entity with its own fields.
+# Unlike grids, the number of records is variable and entity-driven.
+#
+# Canonical example: K-3 Part VII (PFICs), Part V (distributions from
+# foreign corporations), or a multi-state K-1 grid.
+
+recordset_example:
+  type: recordset
+  semantic:
+    id: "pfic_information"
+    label: "Passive Foreign Investment Companies"
+    description: "Information regarding each PFIC held through the partnership."
+  form:
+    form_id: "k3-1065"
+    location: "Part VII"
+    part: "VII"
+
+  primary_key: ["reference_id"]            # Optional: field(s) uniquely identifying each record.
+                                           # Required when documents may be merged or amended.
+                                           # Parsers use this for deterministic record matching
+                                           # (update vs. append) during document merge operations.
+  record_schema:                           # Defines the shape of each record
+    - field: "name"
+      type: "string"
+      label: "Name of PFIC"
+      form_column: "(a)"
+    - field: "ein"
+      type: "string"
+      label: "EIN"
+      form_column: "(b)"
+      nullable: true
+    - field: "reference_id"
+      type: "string"
+      label: "Reference ID number"
+      form_column: "(c)"
+      nullable: true
+    - field: "fmv_start"
+      type: "decimal"
+      label: "FMV of PFIC shares at beginning of tax year"
+      form_column: "(e)"
+      section: 2
+    - field: "fmv_end"
+      type: "decimal"
+      label: "FMV of PFIC shares at end of tax year"
+      form_column: "(f)"
+      section: 2
+    - field: "election"
+      type: "enum"
+      label: "Election made by partnership"
+      form_column: "(j)"
+      section: 1
+      values: ["qef", "mark_to_market", "section_1291", "none"]
+  records:
+    - name: "Luxembourg Holdco SARL"
+      ein: null
+      reference_id: "PFIC-001"
+      fmv_start: 1000000.00
+      fmv_end: 1150000.00
+      election: "qef"
+    - name: "Cayman Fund Ltd"
+      ein: null
+      reference_id: "PFIC-002"
+      fmv_start: 500000.00
+      fmv_end: 480000.00
+      election: "mark_to_market"
+
+# §2.6  STATEMENT — Structured overflow / footnote / attachment
+# ─────────────────────────────────────────────────────────────
+# Statements are the bridge between "data on the form" and "everything
+# that overflows off the form." In the PDF world, these are the pages
+# of supplemental information that cause 90% of ingestion failures.
+#
+# In OTD, a Statement is itself a tree of TaxNodes. It can contain
+# scalars, coded values, grids, recordsets, and even other statements.
+# This recursive structure is what allows us to represent Form 926,
+# state K-1 schedules, and complex footnotes as first-class citizens.
+
+# Example: Form 926 attached as a statement to K-1 Box 20
+statement_926_example:
+  type: statement
+  semantic:
+    id: "form_926_return_by_transferor"
+    label: "Return by a U.S. Transferor of Property to a Foreign Corporation"
+    description: "Information regarding partner's transfer of property to a foreign corporation during the tax year."
+    classification: "irs_form_926"
+    form_year: 2025
+  form:
+    form_id: "k1-1065"
+    location: "Part III, Box 20, Code ZZ"
+    box: 20
+    code: "ZZ"
+    attachment: true                        # This is an attachment to the parent node
+  parent_ref: "other_information.form_926"  # Semantic link to parent
+  content:
+    # Form 926 data as nested TaxNodes
+    transferor:
+      type: scalar
+      semantic:
+        id: "form_926.transferor_name"
+        label: "Name of Transferor"
+      value: "ABC Partners LP"
+    transferee:
+      type: scalar
+      semantic:
+        id: "form_926.transferee_name"
+        label: "Name of Foreign Corporation"
+      value: "XYZ Holdings GmbH"
+    transferee_country: "DE"
+    transfer_date: "2025-06-15"
+    property_transferred:
+      type: recordset
+      semantic:
+        id: "form_926.property_schedule"
+        label: "Schedule of Property Transferred"
+      record_schema:
+        - field: "description"
+          type: "string"
+          label: "Description of property"
+        - field: "fmv"
+          type: "decimal"
+          label: "Fair market value on date of transfer"
+        - field: "adjusted_basis"
+          type: "decimal"
+          label: "Adjusted basis"
+        - field: "gain_recognized"
+          type: "decimal"
+          label: "Gain recognized on transfer"
+      records:
+        - description: "Patent portfolio — semiconductor processes"
+          fmv: 5000000.00
+          adjusted_basis: 500000.00
+          gain_recognized: 4500000.00
+
+# Example: Multi-state K-1 grid as a statement
+statement_state_grid_example:
+  type: statement
+  semantic:
+    id: "state_k1_apportionment"
+    label: "State K-1 Income Apportionment Schedule"
+    description: "Partner's share of income apportioned by state jurisdiction."
+    classification: "state_k1_grid"
+  form:
+    form_id: "k1-1065"
+    location: "Supplemental — State Apportionment"
+    attachment: true
+  content:
+    type: grid
+    semantic:
+      id: "state_apportionment_grid"
+      label: "State Apportionment of Partner Income"
+    columns:
+      - key: "ordinary_income"
+        label: "Ordinary Business Income"
+      - key: "rental_income"
+        label: "Net Rental Real Estate Income"
+      - key: "guaranteed_payments"
+        label: "Guaranteed Payments"
+      - key: "interest_income"
+        label: "Interest Income"
+      - key: "total"
+        label: "Total"
+    rows:
+      - key: "NY"
+        label: "New York"
+        state_code: "NY"
+        values:
+          ordinary_income: 75000.00
+          rental_income: 10000.00
+          guaranteed_payments: 50000.00
+          interest_income: 2000.00
+          total: 137000.00
+      - key: "CA"
+        label: "California"
+        state_code: "CA"
+        values:
+          ordinary_income: 45000.00
+          rental_income: 5000.00
+          guaranteed_payments: 30000.00
+          interest_income: 1500.00
+          total: 81500.00
+      - key: "CT"
+        label: "Connecticut"
+        state_code: "CT"
+        values:
+          ordinary_income: 30000.00
+          rental_income: 0
+          guaranteed_payments: 20000.00
+          interest_income: 500.00
+          total: 50500.00
+
+# §2.7  REFERENCE — Pointer to another node, form, or document
+# ─────────────────────────────────────────────────────────────
+# References link related data across forms and documents.
+# They are the mechanism for cross-form integrity.
+
+reference_example:
+  type: reference
+  semantic:
+    id: "international_transactions_ref"
+    label: "International Transactions"
+    description: "Partner's international tax information is reported on Schedule K-3."
+  form:
+    form_id: "k1-1065"
+    location: "Part III, Box 16"
+    box: 16
+  target:
+    document_type: "otd"
+    taxonomy_id: "irs-k3-1065-2025"
+    document_id: "k3-partner-001"          # Points to a separate OTD file
+    node_path: "/"                          # Root of the K-3 document
+
+# ────────────────────────────────────────────────────────────────────────────
+# §3  DOCUMENT BODY — COMPOSING A COMPLETE K-1
+# ────────────────────────────────────────────────────────────────────────────
+#
+# A complete K-1 OTD document is a composition of TaxNodes organized
+# by the form's structure (Part I, Part II, Part III).
+#
+# The body mirrors the physical form's layout while carrying full
+# semantic and structural metadata.
+# ────────────────────────────────────────────────────────────────────────────
+
+body:
+  form_id: "k1-1065"
+  tax_year: 2025
+  form_revision: "2025"
+
+  # Part I — Information About the Partnership
+  part_i:
+    partnership_name:
+      type: scalar
+      semantic: { id: "partnership.name", label: "Partnership's Name" }
+      form: { location: "Part I, Item A" }
+      value: "Greenfield Capital Partners LP"
+    partnership_ein:
+      type: scalar
+      semantic: { id: "partnership.ein", label: "Partnership's EIN" }
+      form: { location: "Part I, Item B" }
+      value: "XX-XXXXXXX"                  # Redaction-aware
+    irs_center:
+      type: scalar
+      semantic: { id: "partnership.irs_center", label: "IRS Center Where Return Filed" }
+      form: { location: "Part I, Item C" }
+      value: "Ogden, UT"
+
+  # Part II — Information About the Partner
+  part_ii:
+    partner_name:
+      type: scalar
+      semantic: { id: "partner.name", label: "Partner's Name" }
+      form: { location: "Part II, Item E" }
+      value: "Jane Doe"
+    partner_ssn:
+      type: scalar
+      semantic: { id: "partner.ssn", label: "Partner's SSN or TIN" }
+      form: { location: "Part II, Item E" }
+      value: "XXX-XX-1234"                 # Redaction-aware
+    partner_type:
+      type: scalar
+      semantic:
+        id: "partner.type"
+        label: "Type of Partner"
+        description: "General partner, limited partner, or LLC member-manager."
+      form: { location: "Part II, Item G" }
+      value: "limited_partner"
+    profit_share:
+      type: scalar
+      semantic: { id: "partner.profit_share", label: "Partner's Share of Profit" }
+      form: { location: "Part II, Item J, Profit" }
+      value: 0.15                           # 15%
+      format: "percentage"
+    loss_share:
+      type: scalar
+      semantic: { id: "partner.loss_share", label: "Partner's Share of Loss" }
+      form: { location: "Part II, Item J, Loss" }
+      value: 0.15
+      format: "percentage"
+    capital_share:
+      type: scalar
+      semantic: { id: "partner.capital_share", label: "Partner's Share of Capital" }
+      form: { location: "Part II, Item J, Capital" }
+      value: 0.12
+      format: "percentage"
+    capital_account:
+      type: scalar
+      semantic:
+        id: "partner.capital_account_analysis"
+        label: "Partner's Capital Account Analysis"
+      form: { location: "Part II, Item L" }
+      value:
+        beginning: 1000000.00
+        contributions: 250000.00
+        current_year_increase: 150000.00
+        withdrawals: -100000.00
+        ending: 1300000.00
+      basis_method: "tax"                   # tax | gaap | section_704b | other
+
+  # Part III — Partner's Share of Current Year Income, Deductions, Credits...
+  # This is where the bulk of TaxNodes live.
+  part_iii:
+    # Income
+    box_1:
+      type: scalar
+      semantic: { id: "ordinary_business_income", label: "Ordinary Business Income (Loss)" }
+      form: { form_id: "k1-1065", location: "Part III, Box 1", box: 1 }
+      value: 150000.00
+      currency: "USD"
+
+    box_2:
+      type: scalar
+      semantic: { id: "net_rental_real_estate_income", label: "Net Rental Real Estate Income (Loss)" }
+      form: { form_id: "k1-1065", location: "Part III, Box 2", box: 2 }
+      value: -25000.00
+      currency: "USD"
+
+    # ... boxes 3-10 follow identical scalar pattern ...
+
+    # Box 11 — Other Income (multiple codes)
+    box_11:
+      type: coded
+      semantic: { id: "other_income", label: "Other Income (Loss)" }
+      form: { form_id: "k1-1065", location: "Part III, Box 11", box: 11 }
+      entries:
+        - code: "A"
+          semantic: { id: "other_income.portfolio", label: "Other Portfolio Income" }
+          value: 12500.00
+        - code: "F"
+          semantic: { id: "other_income.743b_positive", label: "Section 743(b) Positive Adjustments" }
+          value: 35000.00
+
+    # Box 16 — International Transactions (reference to K-3)
+    box_16:
+      type: reference
+      semantic: { id: "international_transactions", label: "International Transactions" }
+      form: { form_id: "k1-1065", location: "Part III, Box 16", box: 16 }
+      target:
+        document_type: "otd"
+        taxonomy_id: "irs-k3-1065-2025"
+        document_id: "k3-partner-001"
+
+    # Box 20 — Other Information (the big one)
+    box_20:
+      type: coded
+      semantic: { id: "other_information", label: "Other Information" }
+      form: { form_id: "k1-1065", location: "Part III, Box 20", box: 20 }
+      entries:
+        - code: "Z"
+          semantic:
+            id: "other_information.section_199a"
+            label: "Section 199A Information"
+          value: null                       # Complex — carried in statement
+          statement:
+            type: statement
+            semantic:
+              id: "section_199a_detail"
+              label: "Section 199A Qualified Business Income"
+              classification: "section_199a"
+            content:
+              qbi: 150000.00
+              w2_wages: 80000.00
+              ubia: 500000.00
+              sstb: false
+              business_name: "Greenfield Operations"
+        - code: "AH"
+          semantic:
+            id: "other_information.noncash_charitable"
+            label: "Noncash Charitable Contributions"
+          value: 25000.00
+          statement:
+            type: statement
+            semantic:
+              id: "noncash_charitable_detail"
+              label: "Noncash Contribution Detail"
+              classification: "noncash_charitable"
+            content:
+              - description: "Conservation easement — Lot 42, Green County"
+                fmv: 25000.00
+                date_contributed: "2025-09-15"
+                donee: "Green County Land Trust"
+        - code: "ZZ"
+          semantic:
+            id: "other_information.form_926"
+            label: "Form 926 — Transfer to Foreign Corporation"
+            classification: "irs_form_926"  # REQUIRED for ZZ
+          value: null
+          statement:
+            # Full Form 926 data — see §2.6 for expanded example
+            type: statement
+            semantic:
+              id: "form_926_attachment"
+              label: "Form 926 Detail"
+              classification: "irs_form_926"
+            form:
+              attachment: true
+            content:
+              transferee: "XYZ Holdings GmbH"
+              transferee_country: "DE"
+              transfer_date: "2025-06-15"
+              total_gain_recognized: 4500000.00
+
+  # Statements — standalone overflow pages
+  statements:
+    - type: statement
+      semantic:
+        id: "state_k1_apportionment"
+        label: "Multi-State K-1 Apportionment"
+        classification: "state_k1_grid"
+      form:
+        attachment: true
+        location: "Supplemental Schedule"
+      content:
+        # See §2.6 state grid example for full structure
+        states: ["NY", "CA", "CT"]
+        note: "See expanded example in §2.6"
+
+# ────────────────────────────────────────────────────────────────────────────
+# §4  TYPE SYSTEM
+# ────────────────────────────────────────────────────────────────────────────
+#
+# OTD values are typed. Parsers MUST support these types.
+# Emitters MUST emit values conforming to these rules.
+#
+
+# Type         | YAML Representation      | Notes
+# -------------|--------------------------|-------------------------------
+# decimal      | 150000.00                | MUST use exactly 2 decimal places for
+#              |                          | currency; emitters MUST use decimal-
+#              |                          | preserving YAML libraries (e.g.,
+#              |                          | ruamel.yaml, not PyYAML) to prevent
+#              |                          | IEEE 754 floating-point drift.
+#              |                          | Parsers MUST load decimal values into
+#              |                          | native Decimal/BigDecimal types, NOT
+#              |                          | IEEE 754 floats.
+# integer      | 4                        | Whole numbers (installment counts, etc.)
+# string       | "ABC Partners LP"        | Quoted
+# boolean      | true / false             | Lowercase
+# date         | "2025-06-15"             | ISO 8601 date
+# datetime     | "2025-06-15T14:30:00Z"   | ISO 8601 with timezone
+# percentage   | 0.15                     | Decimal (0.15 = 15%), with format: "percentage"
+#              |                          | MUST use decimal-preserving serialization.
+# currency     | "USD"                    | ISO 4217
+# enum         | "limited_partner"        | Snake_case, defined by taxonomy
+# null         | null                     | Explicit absence (not the same as omission)
+#
+# DECIMAL PRECISION RULE (MANDATORY):
+#   All currency/financial values MUST be serialized with exactly 2 decimal
+#   places (e.g., 150000.00, not 150000 or 150000.0).
+#   Emitters MUST NOT rely on language-default float serialization.
+#   Parsers MUST NOT load financial values as IEEE 754 doubles.
+#   The reference implementation uses Python's ruamel.yaml with native
+#   decimal preservation. Implementations in other languages MUST use
+#   equivalent decimal-safe serialization (e.g., BigDecimal in Java/C#,
+#   decimal.js in JavaScript, rust_decimal in Rust).
+#
+# Omission vs. null:
+#   - A node OMITTED from the document means "not applicable" or "not reported"
+#   - A node present with value: null means "reported as having no value"
+#   - This distinction matters for compliance (e.g., zero vs. not reported)
+#
+# ────────────────────────────────────────────────────────────────────────────
+
+# ────────────────────────────────────────────────────────────────────────────
+# §5  VALIDATION CONSTRAINTS
+# ────────────────────────────────────────────────────────────────────────────
+#
+# Taxonomies MAY include validation rules. These are expressed as
+# constraint nodes alongside the data they govern.
+#
+# Constraint types:
+#   - sum:       value must equal sum of specified children
+#   - range:     value must fall within [min, max]
+#   - required:  node must be present (not omitted)
+#   - enum:      value must be one of listed values
+#   - cross_ref: value must match a corresponding value in another node
+#
+# Example: Box 4c = Box 4a + Box 4b
+# ────────────────────────────────────────────────────────────────────────────
+
+validation_example:
+  - constraint: "sum"
+    target: "body.part_iii.box_4c"
+    operands:
+      - "body.part_iii.box_4a"
+      - "body.part_iii.box_4b"
+    tolerance: 0.01                         # Rounding tolerance in currency units
+    severity: "error"                       # error | warning | info
+
+# ────────────────────────────────────────────────────────────────────────────
+# §6  REDACTION POLICY
+# ────────────────────────────────────────────────────────────────────────────
+#
+# OTD documents are often transmitted between parties. The redaction
+# policy governs how sensitive fields are handled.
+#
+# Levels:
+#   - full:    all PII replaced with masks (SSN → XXX-XX-1234)
+#   - partial: last-4 only for identifiers
+#   - none:    full values present (internal use / secure transmission)
+#
+# The policy is declared in the envelope. Emitters MUST respect it.
+# Parsers MUST NOT attempt to reconstruct redacted values.
+# ────────────────────────────────────────────────────────────────────────────
+
+redaction:
+  policy: "partial"
+  fields_redacted:
+    - "body.part_i.partnership_ein"
+    - "body.part_ii.partner_ssn"
+
+# ============================================================================
+# END OF SPECIFICATION v0.1
+# ============================================================================
+#
+# Next deliverables:
+#   - otd-k1-taxonomy-2025.yaml    — Derived taxonomy for K-1 (2025)
+#   - otd-derivation-spec.md       — How to derive taxonomies from IRS instructions
+#   - otd-emitter-spec.md          — Implementation guide for emitters
+#   - otd-parser-spec.md           — Implementation guide for parsers
+#   - otd-k3-taxonomy-2025.yaml    — Stress-test against K-3
+#
+# ============================================================================

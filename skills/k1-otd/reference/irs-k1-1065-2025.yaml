@@ -1,0 +1,1830 @@
+# ============================================================================
+# Open Tax Document — K-1 (Form 1065) 2025 Taxonomy
+# ============================================================================
+#
+# Derived using: OTD Taxonomy Derivation Specification v0.1
+# Source:        Partner's Instructions for Schedule K-1 (Form 1065), 2025
+#                https://www.irs.gov/instructions/i1065sk1
+# Retrieved:     2026-04-02
+#
+# License:       Creative Commons Attribution 4.0 International (CC BY 4.0)
+# Authors:       Tom O'Sullivan, Second Wind
+# Date:          2026-04-02
+# Status:        DRAFT
+# ============================================================================
+
+# ────────────────────────────────────────────────────────────────────────────
+# STAGE 1 — Form Identification
+# ────────────────────────────────────────────────────────────────────────────
+
+taxonomy:
+  id: "irs-k1-1065-2025"
+  version: "2025.1.0"
+  form_number: "Schedule K-1"
+  parent_form: "Form 1065"
+  tax_year: 2025
+  authority: "irs"
+  source:
+    title: "Partner's Instructions for Schedule K-1 (Form 1065), 2025"
+    url: "https://www.irs.gov/instructions/i1065sk1"
+    retrieved: "2026-04-02"
+  derived_by:
+    agent: "Second Wind"
+    method: "otd-derivation-spec-v0.1"
+
+
+# MeF Tag Convention:
+# Each taxonomy node MAY include a `mef_tag` attribute mapping it to the
+# official IRS Modernized e-File (MeF) XML schema tag name. This bridges
+# OTD's human-readable semantic IDs with the government's CamelCase standard,
+# lowering integration cost for vendors already implementing MeF XML.
+#
+# MeF tag reference: IRS MeF XML schema for Form 1065, Schedule K-1
+# https://www.irs.gov/e-file-providers/modernized-e-file-mef-xml-schema
+#
+# Example mapping (from Box 1):
+#   semantic_id: "ordinary_business_income"
+#   mef_tag:     "OrdinaryBusinessIncomeLossAmt"
+#
+# Where mef_tag is absent, no direct MeF mapping has been confirmed.
+# Implementers should consult the MeF schema directly.
+
+change_log:
+  - version: "2025.1.0"
+    date: "2025-01-01"
+    changes:
+      - "Box 13, Code X: Expanded to include qualified sound recording production expenses (P.L. 119-21)"
+      - "Box 19: Distribution codes separated by category with new Codes E, F, G"
+      - "Box 20, Code ZZ: Added section 1062 gain from sale of qualified farmland property to qualified farmers"
+      - "Form 7217: New requirement for partners receiving property distributions (beginning TY2024)"
+
+# ────────────────────────────────────────────────────────────────────────────
+# STAGE 2-4 — Structure Tree, Code Enumeration, Type Classification
+# ────────────────────────────────────────────────────────────────────────────
+
+nodes:
+
+  # ══════════════════════════════════════════════════════════════════════════
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # FORM METADATA — Legal and administrative identifiers
+  # ══════════════════════════════════════════════════════════════════════════
+
+  form_metadata:
+    title: "Form Metadata — Legal and Administrative Identifiers"
+    children:
+
+      tax_year:
+        type: scalar
+        semantic_id: "form.tax_year"
+        label: "Tax year"
+        value_type: integer
+        form_location: "Top of Form"
+        required: true
+
+      fiscal_year:
+        type: scalar
+        semantic_id: "form.fiscal_year"
+        label: "Fiscal year indicator"
+        value_type: boolean
+        form_location: "Top of Form"
+        required: true
+
+      fiscal_year_begin:
+        type: scalar
+        semantic_id: "form.fiscal_year_begin"
+        label: "Fiscal year beginning date"
+        value_type: date
+        form_location: "Top of Form — tax year beginning"
+        nullable: true
+
+      fiscal_year_end:
+        type: scalar
+        semantic_id: "form.fiscal_year_end"
+        label: "Fiscal year ending date"
+        value_type: date
+        form_location: "Top of Form — tax year ending"
+        nullable: true
+
+      amended:
+        type: scalar
+        semantic_id: "form.amended"
+        label: "Amended K-1"
+        value_type: boolean
+        form_location: "Top of Form — Amended K-1 checkbox"
+        required: true
+
+      final:
+        type: scalar
+        semantic_id: "form.final"
+        label: "Final K-1"
+        value_type: boolean
+        form_location: "Top of Form — Final K-1 checkbox"
+        required: true
+
+      filing_status:
+        type: scalar
+        semantic_id: "form.filing_status"
+        label: "Filing status"
+        value_type: enum
+        values: ["original", "amended", "superseded", "void"]
+        form_location: "Derived from amended/final flags"
+        required: true
+
+      supersedes_document_id:
+        type: scalar
+        semantic_id: "form.supersedes_document_id"
+        label: "OTD document ID of the K-1 this amends"
+        value_type: string
+        nullable: true
+        form_location: "Cross-reference to prior OTD document"
+
+  # PART I — Information About the Partnership
+  # ══════════════════════════════════════════════════════════════════════════
+
+  part_i:
+    title: "Information About the Partnership"
+    children:
+
+      item_a:
+        type: scalar
+        semantic_id: "partnership.name_address"
+        label: "Partnership's name, address, city, state, and ZIP code"
+        value_type: string
+        form_location: "Part I, Item A"
+        required: true
+
+      item_b:
+        type: scalar
+        semantic_id: "partnership.ein"
+        label: "Partnership's employer identification number (EIN)"
+        value_type: string
+        form_location: "Part I, Item B"
+        required: true
+        redactable: true
+
+      item_c:
+        type: scalar
+        semantic_id: "partnership.irs_center"
+        label: "IRS Center where partnership filed return"
+        value_type: string
+        form_location: "Part I, Item C"
+
+      item_d:
+        type: scalar
+        semantic_id: "partnership.publicly_traded"
+        label: "Check if this is a publicly traded partnership (PTP)"
+        value_type: boolean
+        form_location: "Part I, Item D"
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # PART II — Information About the Partner
+  # ══════════════════════════════════════════════════════════════════════════
+
+  part_ii:
+    title: "Information About the Partner"
+    children:
+
+      item_e:
+        type: scalar
+        semantic_id: "partner.name_address"
+        label: "Partner's name, address, city, state, and ZIP code"
+        value_type: string
+        form_location: "Part II, Item E"
+        required: true
+
+      item_e_ssn:
+        type: scalar
+        semantic_id: "partner.identifying_number"
+        label: "Partner's identifying number (SSN or TIN)"
+        value_type: string
+        form_location: "Part II, Item E"
+        required: true
+        redactable: true
+
+      item_f:
+        type: scalar
+        semantic_id: "partner.entity_type"
+        label: "Partner's entity type"
+        value_type: enum
+        form_location: "Part II, Item F"
+        values:
+          - "individual"
+          - "corporation"
+          - "estate"
+          - "trust"
+          - "partnership"
+          - "exempt_organization"
+          - "foreign_government"
+          - "nominee"
+          - "disregarded_entity"
+          - "ira"
+
+      item_g:
+        type: scalar
+        semantic_id: "partner.general_or_limited"
+        label: "General partner or LLC member-manager / Limited partner or other LLC member"
+        value_type: enum
+        form_location: "Part II, Item G"
+        values:
+          - "general_partner"
+          - "limited_partner"
+          - "llc_member_manager"
+          - "llc_member"
+
+      item_h1:
+        type: scalar
+        semantic_id: "partner.domestic_or_foreign"
+        label: "Domestic partner / Foreign partner"
+        value_type: enum
+        form_location: "Part II, Item H1"
+        values: ["domestic", "foreign"]
+
+      item_h2:
+        type: scalar
+        semantic_id: "partner.disregarded_entity_info"
+        label: "If the partner is a disregarded entity (DE), enter the partner's TIN and name"
+        value_type: string
+        form_location: "Part II, Item H2"
+        nullable: true
+
+      item_i1:
+        type: scalar
+        semantic_id: "partner.retirement_plan"
+        label: "What type of entity is this partner?"
+        value_type: string
+        form_location: "Part II, Item I1"
+        nullable: true
+
+      item_i2:
+        type: scalar
+        semantic_id: "partner.section_1061_applies"
+        label: "If this partner is a retirement plan (IRA/SEP/Keogh/etc.), check here"
+        value_type: boolean
+        form_location: "Part II, Item I2"
+
+      item_j:
+        type: scalar
+        semantic_id: "partner.share_percentages"
+        label: "Partner's share of profit, loss, and capital"
+        value_type: object
+        form_location: "Part II, Item J"
+        fields:
+          profit_beginning:
+            value_type: percentage
+            label: "Profit — Beginning"
+          profit_ending:
+            value_type: percentage
+            label: "Profit — Ending"
+          loss_beginning:
+            value_type: percentage
+            label: "Loss — Beginning"
+          loss_ending:
+            value_type: percentage
+            label: "Loss — Ending"
+          capital_beginning:
+            value_type: percentage
+            label: "Capital — Beginning"
+          capital_ending:
+            value_type: percentage
+            label: "Capital — Ending"
+
+      item_k1:
+        type: scalar
+        semantic_id: "partner.share_of_liabilities"
+        label: "Partner's share of liabilities"
+        value_type: object
+        form_location: "Part II, Item K1"
+        fields:
+          nonrecourse_beginning:
+            value_type: decimal
+            label: "Nonrecourse — Beginning"
+          nonrecourse_ending:
+            value_type: decimal
+            label: "Nonrecourse — Ending"
+          qualified_nonrecourse_beginning:
+            value_type: decimal
+            label: "Qualified nonrecourse financing — Beginning"
+          qualified_nonrecourse_ending:
+            value_type: decimal
+            label: "Qualified nonrecourse financing — Ending"
+          recourse_beginning:
+            value_type: decimal
+            label: "Recourse — Beginning"
+          recourse_ending:
+            value_type: decimal
+            label: "Recourse — Ending"
+
+      item_k3:
+        type: scalar
+        semantic_id: "partner.share_of_liabilities_increase"
+        label: "Partner's share of net unrecognized section 704(c) gain or loss"
+        value_type: object
+        form_location: "Part II, Item K3"
+        fields:
+          beginning:
+            value_type: decimal
+            label: "Beginning"
+          ending:
+            value_type: decimal
+            label: "Ending"
+
+      item_l:
+        type: scalar
+        semantic_id: "partner.capital_account_analysis"
+        label: "Partner's capital account analysis"
+        value_type: object
+        form_location: "Part II, Item L"
+        fields:
+          beginning:
+            value_type: decimal
+            label: "Beginning capital account"
+            nullable: true
+          contributions:
+            value_type: decimal
+            label: "Capital contributed during the year"
+            nullable: true
+          current_year_increase_decrease:
+            value_type: decimal
+            label: "Current year net income (loss)"
+            nullable: true
+          other_increase_decrease:
+            value_type: decimal
+            label: "Other increase (decrease)"
+            nullable: true
+          withdrawals:
+            value_type: decimal
+            label: "Withdrawals & distributions"
+            nullable: true
+          ending:
+            value_type: decimal
+            label: "Ending capital account"
+            nullable: true
+          basis_method:
+            value_type: enum
+            label: "Tax basis method"
+            values: ["tax", "gaap", "section_704b", "other"]
+
+      item_m:
+        type: scalar
+        semantic_id: "partner.contributed_property_built_in_gain_loss"
+        label: "Did the partner contribute property with a built-in gain or loss?"
+        value_type: boolean
+        form_location: "Part II, Item M"
+
+      item_n:
+        type: scalar
+        semantic_id: "partner.interest_changed_during_year"
+        label: "Partner's share of net unrecognized section 704(c) gain or loss"
+        value_type: boolean
+        form_location: "Part II, Item N"
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # PART III — Partner's Share of Current Year Income, Deductions,
+  #            Credits, and Other Items
+  # ══════════════════════════════════════════════════════════════════════════
+
+  part_iii:
+    title: "Partner's Share of Current Year Income, Deductions, Credits, and Other Items"
+    children:
+
+      # ────────────────────────────────────────────────────────────────────
+      # INCOME (Boxes 1-11)
+      # ────────────────────────────────────────────────────────────────────
+
+      box_1:
+        type: scalar
+        semantic_id: "ordinary_business_income"
+        label: "Ordinary business income (loss)"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 1"
+        box: 1
+        sign_convention: "positive_is_income"
+
+      box_2:
+        type: scalar
+        semantic_id: "net_rental_real_estate_income"
+        label: "Net rental real estate income (loss)"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 2"
+        box: 2
+        sign_convention: "positive_is_income"
+
+      box_3:
+        type: scalar
+        semantic_id: "other_net_rental_income"
+        label: "Other net rental income (loss)"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 3"
+        box: 3
+        sign_convention: "positive_is_income"
+
+      box_4a:
+        type: scalar
+        semantic_id: "guaranteed_payments_services"
+        label: "Guaranteed payments for services"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 4a"
+        box: "4a"
+
+      box_4b:
+        type: scalar
+        semantic_id: "guaranteed_payments_capital"
+        label: "Guaranteed payments for capital"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 4b"
+        box: "4b"
+
+      box_4c:
+        type: scalar
+        semantic_id: "guaranteed_payments_total"
+        label: "Total guaranteed payments"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 4c"
+        box: "4c"
+        computed: true
+
+      box_5:
+        type: scalar
+        semantic_id: "interest_income"
+        label: "Interest income"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 5"
+        box: 5
+
+      box_6a:
+        type: scalar
+        semantic_id: "ordinary_dividends"
+        label: "Ordinary dividends"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 6a"
+        box: "6a"
+
+      box_6b:
+        type: scalar
+        semantic_id: "qualified_dividends"
+        label: "Qualified dividends"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 6b"
+        box: "6b"
+
+      box_6c:
+        type: scalar
+        semantic_id: "dividend_equivalents"
+        label: "Dividend equivalents"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 6c"
+        box: "6c"
+
+      box_7:
+        type: scalar
+        semantic_id: "royalties"
+        label: "Royalties"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 7"
+        box: 7
+
+      box_8:
+        type: scalar
+        semantic_id: "net_short_term_capital_gain"
+        label: "Net short-term capital gain (loss)"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 8"
+        box: 8
+        sign_convention: "positive_is_gain"
+
+      box_9a:
+        type: scalar
+        semantic_id: "net_long_term_capital_gain"
+        label: "Net long-term capital gain (loss)"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 9a"
+        box: "9a"
+        sign_convention: "positive_is_gain"
+
+      box_9b:
+        type: scalar
+        semantic_id: "collectibles_gain"
+        label: "Collectibles (28%) gain (loss)"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 9b"
+        box: "9b"
+
+      box_9c:
+        type: scalar
+        semantic_id: "unrecaptured_section_1250_gain"
+        label: "Unrecaptured section 1250 gain"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 9c"
+        box: "9c"
+
+      box_10:
+        type: scalar
+        semantic_id: "net_section_1231_gain"
+        label: "Net section 1231 gain (loss)"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 10"
+        box: 10
+        sign_convention: "positive_is_gain"
+
+      # ── Box 11: Other Income (Coded) ──────────────────────────────────
+
+      box_11:
+        type: coded
+        semantic_id: "other_income"
+        label: "Other income (loss)"
+        form_location: "Part III, Box 11"
+        box: 11
+        codes:
+          A:
+            semantic_id: "other_income.portfolio"
+            label: "Other portfolio income (loss)"
+            value_type: decimal
+          B:
+            semantic_id: "other_income.involuntary_conversions"
+            label: "Involuntary conversions"
+            value_type: decimal
+          C:
+            semantic_id: "other_income.section_1256_contracts"
+            label: "Section 1256 contracts and straddles"
+            value_type: decimal
+          D:
+            semantic_id: "other_income.mining_exploration_recapture"
+            label: "Mining exploration costs recapture"
+            value_type: decimal
+          E:
+            semantic_id: "other_income.cod_income"
+            label: "Cancellation of debt"
+            value_type: decimal
+            may_attach_statement: true
+          F:
+            semantic_id: "other_income.743b_positive"
+            label: "Section 743(b) positive income adjustments"
+            value_type: decimal
+          G:
+            semantic_id: "other_income.reserved_g"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          H:
+            semantic_id: "other_income.reserved_h"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          I:
+            semantic_id: "other_income.oil_gas_mineral_disposition"
+            label: "Gain (loss) from disposition of oil, gas, geothermal, or other mineral properties (section 59(e))"
+            value_type: decimal
+          J:
+            semantic_id: "other_income.tax_benefit_recoveries"
+            label: "Recoveries of tax benefit items"
+            value_type: decimal
+          K:
+            semantic_id: "other_income.gambling"
+            label: "Gambling gains and losses"
+            value_type: decimal
+            may_attach_statement: true
+          L:
+            semantic_id: "other_income.section_751b"
+            label: "Any income, gain, or loss from a distribution under section 751(b)"
+            value_type: decimal
+          M:
+            semantic_id: "other_income.section_1045_rollover_partnership"
+            label: "Gain eligible for section 1045 rollover (replacement stock purchased by partnership)"
+            value_type: decimal
+          N:
+            semantic_id: "other_income.section_1045_rollover_partner"
+            label: "Gain eligible for section 1045 rollover (replacement stock not purchased by partnership)"
+            value_type: decimal
+          O:
+            semantic_id: "other_income.section_1202_exclusion"
+            label: "Sale or exchange of QSB stock with section 1202 exclusion"
+            value_type: decimal
+            may_attach_statement: true
+          P:
+            semantic_id: "other_income.farm_recapture"
+            label: "Gain or loss on disposition of farm recapture property (section 1252)"
+            value_type: decimal
+          Q:
+            semantic_id: "other_income.fannie_freddie_stock"
+            label: "Gain or loss on Fannie Mae or Freddie Mac qualified preferred stock"
+            value_type: decimal
+          R:
+            semantic_id: "other_income.specially_allocated_ordinary"
+            label: "Specially allocated ordinary gain (loss)"
+            value_type: decimal
+          S:
+            semantic_id: "other_income.non_portfolio_capital"
+            label: "Non-portfolio capital gain (loss)"
+            value_type: decimal
+          T:
+            semantic_id: "other_income.reserved_t"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          U:
+            semantic_id: "other_income.reserved_u"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          V:
+            semantic_id: "other_income.reserved_v"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          W:
+            semantic_id: "other_income.reserved_w"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          X:
+            semantic_id: "other_income.reserved_x"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          ZZ:
+            semantic_id: "other_income.other"
+            label: "Other"
+            value_type: any
+            requires_classification: true
+            may_attach_statement: true
+
+      # ────────────────────────────────────────────────────────────────────
+      # DEDUCTIONS (Boxes 12-13)
+      # ────────────────────────────────────────────────────────────────────
+
+      box_12:
+        type: scalar
+        semantic_id: "section_179_deduction"
+        label: "Section 179 deduction"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 12"
+        box: 12
+
+      # ── Box 13: Other Deductions (Coded) ──────────────────────────────
+
+      box_13:
+        type: coded
+        semantic_id: "other_deductions"
+        label: "Other deductions"
+        form_location: "Part III, Box 13"
+        box: 13
+        codes:
+          A:
+            semantic_id: "other_deductions.cash_contributions_60"
+            label: "Cash contributions (60%)"
+            value_type: decimal
+          B:
+            semantic_id: "other_deductions.cash_contributions_30"
+            label: "Cash contributions (30%)"
+            value_type: decimal
+          C:
+            semantic_id: "other_deductions.noncash_contributions_50"
+            label: "Noncash contributions (50%)"
+            value_type: decimal
+            may_attach_statement: true
+          D:
+            semantic_id: "other_deductions.noncash_contributions_30"
+            label: "Noncash contributions (30%)"
+            value_type: decimal
+          E:
+            semantic_id: "other_deductions.capital_gain_property_50org_30"
+            label: "Capital gain property to a 50% organization (30%)"
+            value_type: decimal
+          F:
+            semantic_id: "other_deductions.capital_gain_property_20"
+            label: "Capital gain property (20%)"
+            value_type: decimal
+          G:
+            semantic_id: "other_deductions.contributions_100"
+            label: "Contributions (100%)"
+            value_type: decimal
+          H:
+            semantic_id: "other_deductions.investment_interest"
+            label: "Investment interest expense"
+            value_type: decimal
+          I:
+            semantic_id: "other_deductions.royalty_deductions"
+            label: "Deductions — royalty income"
+            value_type: decimal
+          J:
+            semantic_id: "other_deductions.section_59e2"
+            label: "Section 59(e)(2) expenditures"
+            value_type: decimal
+            may_attach_statement: true
+          K:
+            semantic_id: "other_deductions.ebie"
+            label: "Excess business interest expense (EBIE)"
+            value_type: decimal
+          L:
+            semantic_id: "other_deductions.portfolio_other"
+            label: "Deductions — portfolio income (other)"
+            value_type: decimal
+          M:
+            semantic_id: "other_deductions.medical_insurance"
+            label: "Amounts paid for medical insurance"
+            value_type: decimal
+          N:
+            semantic_id: "other_deductions.educational_assistance"
+            label: "Educational assistance benefits"
+            value_type: decimal
+          O:
+            semantic_id: "other_deductions.dependent_care"
+            label: "Dependent care benefits"
+            value_type: decimal
+          P:
+            semantic_id: "other_deductions.preproductive_period"
+            label: "Preproductive period expenses"
+            value_type: decimal
+          Q:
+            semantic_id: "other_deductions.commercial_revitalization"
+            label: "Commercial revitalization deduction from rental real estate"
+            value_type: decimal
+          R:
+            semantic_id: "other_deductions.pensions_iras"
+            label: "Pensions and IRAs"
+            value_type: decimal
+          S:
+            semantic_id: "other_deductions.reforestation"
+            label: "Reforestation expense deduction"
+            value_type: decimal
+          T:
+            semantic_id: "other_deductions.reserved_t"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          U:
+            semantic_id: "other_deductions.reserved_u"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          V:
+            semantic_id: "other_deductions.743b_negative"
+            label: "Section 743(b) negative income adjustments"
+            value_type: decimal
+          W:
+            semantic_id: "other_deductions.soil_water_conservation"
+            label: "Soil and water conservation"
+            value_type: decimal
+          X:
+            semantic_id: "other_deductions.qualified_production_expenses"
+            label: "Qualified film, television, theatrical, and sound recording production expenses"
+            value_type: decimal
+          Y:
+            semantic_id: "other_deductions.barrier_removal"
+            label: "Expenditures for removal of barriers"
+            value_type: decimal
+          Z:
+            semantic_id: "other_deductions.itemized"
+            label: "Itemized deductions"
+            value_type: decimal
+          AA:
+            semantic_id: "other_deductions.ccf_contributions"
+            label: "Contributions to a capital construction fund (CCF)"
+            value_type: decimal
+          AB:
+            semantic_id: "other_deductions.early_withdrawal_penalty"
+            label: "Penalty on early withdrawal of savings"
+            value_type: decimal
+          AC:
+            semantic_id: "other_deductions.interest_debt_financed_distributions"
+            label: "Interest expense allocated to debt-financed distributions"
+            value_type: decimal
+          AD:
+            semantic_id: "other_deductions.interest_oil_gas"
+            label: "Interest expense on working interest in oil or gas"
+            value_type: decimal
+          AE:
+            semantic_id: "other_deductions.portfolio_deductions"
+            label: "Deductions — portfolio income"
+            value_type: decimal
+          AF:
+            semantic_id: "other_deductions.reserved_af"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          AG:
+            semantic_id: "other_deductions.reserved_ag"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          AH:
+            semantic_id: "other_deductions.reserved_ah"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          AI:
+            semantic_id: "other_deductions.reserved_ai"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          AJ:
+            semantic_id: "other_deductions.reserved_aj"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          ZZ:
+            semantic_id: "other_deductions.other"
+            label: "Other"
+            value_type: any
+            requires_classification: true
+            may_attach_statement: true
+
+      # ────────────────────────────────────────────────────────────────────
+      # SELF-EMPLOYMENT (Box 14)
+      # ────────────────────────────────────────────────────────────────────
+
+      box_14:
+        type: coded
+        semantic_id: "self_employment"
+        label: "Self-employment earnings (loss)"
+        form_location: "Part III, Box 14"
+        box: 14
+        codes:
+          A:
+            semantic_id: "self_employment.net_earnings"
+            label: "Net earnings (loss) from self-employment"
+            value_type: decimal
+          B:
+            semantic_id: "self_employment.gross_farming"
+            label: "Gross farming or fishing income"
+            value_type: decimal
+          C:
+            semantic_id: "self_employment.gross_nonfarm"
+            label: "Gross nonfarm income"
+            value_type: decimal
+
+      # ────────────────────────────────────────────────────────────────────
+      # CREDITS (Box 15)
+      # ────────────────────────────────────────────────────────────────────
+
+      box_15:
+        type: coded
+        semantic_id: "credits"
+        label: "Credits"
+        form_location: "Part III, Box 15"
+        box: 15
+        codes:
+          A:
+            semantic_id: "credits.zero_emission_nuclear"
+            label: "Zero-emission nuclear power production credit"
+            value_type: decimal
+          B:
+            semantic_id: "credits.advanced_nuclear"
+            label: "Credit for production from advanced nuclear power facilities"
+            value_type: decimal
+          C:
+            semantic_id: "credits.low_income_housing_current"
+            label: "Low-income housing credit (section 42(j)(5)) from pre-2008 buildings"
+            value_type: decimal
+          D:
+            semantic_id: "credits.low_income_housing_other"
+            label: "Low-income housing credit (other) from pre-2008 buildings"
+            value_type: decimal
+          E:
+            semantic_id: "credits.rehab_rental_real_estate"
+            label: "Qualified rehabilitation expenditures (rental real estate)"
+            value_type: decimal
+          F:
+            semantic_id: "credits.other_rental_real_estate"
+            label: "Other rental real estate credits"
+            value_type: decimal
+          G:
+            semantic_id: "credits.other_rental"
+            label: "Other rental credits"
+            value_type: decimal
+          H:
+            semantic_id: "credits.undistributed_capital_gains"
+            label: "Undistributed capital gains credit"
+            value_type: decimal
+          I:
+            semantic_id: "credits.biofuel_producer"
+            label: "Biofuel producer credit"
+            value_type: decimal
+          J:
+            semantic_id: "credits.work_opportunity"
+            label: "Work opportunity credit"
+            value_type: decimal
+          K:
+            semantic_id: "credits.disabled_access"
+            label: "Disabled access credit"
+            value_type: decimal
+          L:
+            semantic_id: "credits.empowerment_zone"
+            label: "Empowerment zone employment credit"
+            value_type: decimal
+          M:
+            semantic_id: "credits.research_activities"
+            label: "Credit for increasing research activities"
+            value_type: decimal
+          N:
+            semantic_id: "credits.employer_ss_medicare"
+            label: "Credit for employer social security and Medicare taxes"
+            value_type: decimal
+          O:
+            semantic_id: "credits.backup_withholding"
+            label: "Backup withholding"
+            value_type: decimal
+          P:
+            semantic_id: "credits.unused_investment_coal_gasification"
+            label: "Unused investment credit from qualifying advanced coal/gasification project allocated from cooperatives"
+            value_type: decimal
+          Q:
+            semantic_id: "credits.unused_investment_advanced_energy"
+            label: "Unused investment credit from qualifying advanced energy project allocated from cooperatives"
+            value_type: decimal
+          R:
+            semantic_id: "credits.unused_investment_advanced_manufacturing"
+            label: "Unused investment credit from advanced manufacturing investment allocated from cooperatives"
+            value_type: decimal
+          S:
+            semantic_id: "credits.unused_investment_clean_electricity"
+            label: "Unused investment credit from clean electricity investment allocated from cooperatives"
+            value_type: decimal
+          T:
+            semantic_id: "credits.unused_investment_energy"
+            label: "Unused investment credit from energy credit allocated from cooperatives"
+            value_type: decimal
+          U:
+            semantic_id: "credits.unused_investment_rehabilitation"
+            label: "Unused investment credit from rehabilitation credit allocated from cooperatives"
+            value_type: decimal
+          V:
+            semantic_id: "credits.advanced_manufacturing_production"
+            label: "Advanced manufacturing production credit"
+            value_type: decimal
+          W:
+            semantic_id: "credits.clean_electricity_production"
+            label: "Clean electricity production credit"
+            value_type: decimal
+          X:
+            semantic_id: "credits.clean_fuel_production"
+            label: "Clean fuel production credit"
+            value_type: decimal
+          Y:
+            semantic_id: "credits.clean_hydrogen_production"
+            label: "Clean hydrogen production credit"
+            value_type: decimal
+          Z:
+            semantic_id: "credits.orphan_drug"
+            label: "Orphan drug credit"
+            value_type: decimal
+          AA:
+            semantic_id: "credits.enhanced_oil_recovery"
+            label: "Enhanced oil recovery credit"
+            value_type: decimal
+          AB:
+            semantic_id: "credits.renewable_electricity"
+            label: "Renewable electricity production credit"
+            value_type: decimal
+          AC:
+            semantic_id: "credits.biodiesel_renewable_saf"
+            label: "Biodiesel, renewable diesel, or sustainable aviation fuels credit"
+            value_type: decimal
+          AD:
+            semantic_id: "credits.new_markets"
+            label: "New markets credit"
+            value_type: decimal
+          AE:
+            semantic_id: "credits.small_employer_pension"
+            label: "Small employer pension plan startup costs credit and contributions credit"
+            value_type: decimal
+          AF:
+            semantic_id: "credits.small_employer_auto_enrollment"
+            label: "Small employer auto-enrollment credit"
+            value_type: decimal
+          AG:
+            semantic_id: "credits.small_employer_military_spouse"
+            label: "Small employer military spouse participation credit"
+            value_type: decimal
+          AH:
+            semantic_id: "credits.employer_childcare"
+            label: "Credit for employer-provided childcare facilities and services"
+            value_type: decimal
+          AI:
+            semantic_id: "credits.low_sulfur_diesel"
+            label: "Low sulfur diesel fuel production credit"
+            value_type: decimal
+          AJ:
+            semantic_id: "credits.railroad_track_maintenance"
+            label: "Qualified railroad track maintenance credit"
+            value_type: decimal
+          AK:
+            semantic_id: "credits.marginal_wells"
+            label: "Credit for oil and gas production from marginal wells"
+            value_type: decimal
+          AL:
+            semantic_id: "credits.distilled_spirits"
+            label: "Distilled spirits credit"
+            value_type: decimal
+          AM:
+            semantic_id: "credits.energy_efficient_home"
+            label: "Energy efficient home credit"
+            value_type: decimal
+          AN:
+            semantic_id: "credits.reserved_an"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          AO:
+            semantic_id: "credits.alt_fuel_refueling"
+            label: "Alternative fuel vehicle refueling property credit"
+            value_type: decimal
+          AP:
+            semantic_id: "credits.clean_renewable_energy_bond"
+            label: "Clean renewable energy bond credit"
+            value_type: decimal
+          AQ:
+            semantic_id: "credits.new_clean_renewable_energy_bond"
+            label: "New clean renewable energy bond credit"
+            value_type: decimal
+          AR:
+            semantic_id: "credits.qualified_energy_conservation_bond"
+            label: "Qualified energy conservation bond credit"
+            value_type: decimal
+          AS:
+            semantic_id: "credits.qualified_zone_academy_bond"
+            label: "Qualified zone academy bond credit"
+            value_type: decimal
+          AT:
+            semantic_id: "credits.qualified_school_construction_bond"
+            label: "Qualified school construction bond credit"
+            value_type: decimal
+          AU:
+            semantic_id: "credits.build_america_bond"
+            label: "Build America bond credit"
+            value_type: decimal
+          AV:
+            semantic_id: "credits.differential_wage_payments"
+            label: "Credit for employer differential wage payments"
+            value_type: decimal
+          AW:
+            semantic_id: "credits.carbon_oxide_sequestration"
+            label: "Carbon oxide sequestration credit"
+            value_type: decimal
+          AX:
+            semantic_id: "credits.carbon_oxide_recapture"
+            label: "Carbon oxide sequestration credit recapture"
+            value_type: decimal
+          AY:
+            semantic_id: "credits.new_clean_vehicle"
+            label: "New clean vehicle credit"
+            value_type: decimal
+          AZ:
+            semantic_id: "credits.commercial_clean_vehicle"
+            label: "Credit for qualified commercial clean vehicles"
+            value_type: decimal
+          BA:
+            semantic_id: "credits.small_employer_health_insurance"
+            label: "Credit for small employer health insurance premiums"
+            value_type: decimal
+          BB:
+            semantic_id: "credits.employer_family_leave"
+            label: "Employer credit for paid family and medical leave"
+            value_type: decimal
+          BC:
+            semantic_id: "credits.section_6418_transfer"
+            label: "Eligible credits from transferor(s) under section 6418"
+            value_type: decimal
+            may_attach_statement: true
+          BD:
+            semantic_id: "credits.reserved_bd"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          BE:
+            semantic_id: "credits.reserved_be"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          BF:
+            semantic_id: "credits.reserved_bf"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          BG:
+            semantic_id: "credits.reserved_bg"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          ZZ:
+            semantic_id: "credits.other"
+            label: "Other"
+            value_type: any
+            requires_classification: true
+            may_attach_statement: true
+
+      # ────────────────────────────────────────────────────────────────────
+      # INTERNATIONAL (Box 16)
+      # ────────────────────────────────────────────────────────────────────
+
+      box_16:
+        type: reference
+        semantic_id: "international_transactions"
+        label: "International transactions"
+        form_location: "Part III, Box 16"
+        box: 16
+        target_form: "k3-1065"
+        target_taxonomy: "irs-k3-1065-2025"
+        relationship: "detail"
+        description: "Partner's share of international tax information reported on Schedule K-3"
+
+      # ────────────────────────────────────────────────────────────────────
+      # AMT (Box 17)
+      # ────────────────────────────────────────────────────────────────────
+
+      box_17:
+        type: coded
+        semantic_id: "amt_items"
+        label: "Alternative minimum tax (AMT) items"
+        form_location: "Part III, Box 17"
+        box: 17
+        codes:
+          A:
+            semantic_id: "amt.depreciation_adjustment"
+            label: "Post-1986 depreciation adjustment"
+            value_type: decimal
+          B:
+            semantic_id: "amt.adjusted_gain_loss"
+            label: "Adjusted gain or loss"
+            value_type: decimal
+          C:
+            semantic_id: "amt.depletion"
+            label: "Depletion (other than oil & gas)"
+            value_type: decimal
+          D:
+            semantic_id: "amt.oil_gas_gross_income"
+            label: "Oil, gas, & geothermal properties — gross income"
+            value_type: decimal
+          E:
+            semantic_id: "amt.oil_gas_deductions"
+            label: "Oil, gas, & geothermal properties — deductions"
+            value_type: decimal
+          F:
+            semantic_id: "amt.other"
+            label: "Other AMT items"
+            value_type: decimal
+            may_attach_statement: true
+
+      # ────────────────────────────────────────────────────────────────────
+      # TAX-EXEMPT / NONDEDUCTIBLE (Box 18)
+      # ────────────────────────────────────────────────────────────────────
+
+      box_18:
+        type: coded
+        semantic_id: "tax_exempt_nondeductible"
+        label: "Tax-exempt income and nondeductible expenses"
+        form_location: "Part III, Box 18"
+        box: 18
+        codes:
+          A:
+            semantic_id: "tax_exempt.interest"
+            label: "Tax-exempt interest income"
+            value_type: decimal
+          B:
+            semantic_id: "tax_exempt.other"
+            label: "Other tax-exempt income"
+            value_type: decimal
+          C:
+            semantic_id: "nondeductible.expenses"
+            label: "Nondeductible expenses"
+            value_type: decimal
+
+      # ────────────────────────────────────────────────────────────────────
+      # DISTRIBUTIONS (Box 19)
+      # ────────────────────────────────────────────────────────────────────
+
+      box_19:
+        type: coded
+        semantic_id: "distributions"
+        label: "Distributions"
+        form_location: "Part III, Box 19"
+        box: 19
+        codes:
+          A:
+            semantic_id: "distributions.cash_marketable_securities"
+            label: "Cash and marketable securities other than for services"
+            value_type: decimal
+          B:
+            semantic_id: "distributions.section_737"
+            label: "Distribution subject to section 737"
+            value_type: decimal
+          C:
+            semantic_id: "distributions.other_property"
+            label: "Other property"
+            value_type: decimal
+            may_attach_statement: true
+          D:
+            semantic_id: "distributions.deemed_money_liability_decrease"
+            label: "Deemed distributions of money — decreases in partner's share of liabilities"
+            value_type: decimal
+          E:
+            semantic_id: "distributions.reserved_e"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          F:
+            semantic_id: "distributions.property_for_services_taxable"
+            label: "Certain distributions of property for performing services — taxable portion"
+            value_type: decimal
+          G:
+            semantic_id: "distributions.property_for_services_basis"
+            label: "Certain distributions of property for performing services — basis portion"
+            value_type: decimal
+
+      # ────────────────────────────────────────────────────────────────────
+      # OTHER INFORMATION (Box 20) — The Big One
+      # ────────────────────────────────────────────────────────────────────
+
+      box_20:
+        type: coded
+        semantic_id: "other_information"
+        label: "Other information"
+        form_location: "Part III, Box 20"
+        box: 20
+        codes:
+          A:
+            semantic_id: "other_information.investment_income"
+            label: "Investment income"
+            value_type: decimal
+          B:
+            semantic_id: "other_information.investment_expenses"
+            label: "Investment expenses"
+            value_type: decimal
+          C:
+            semantic_id: "other_information.fuel_tax_credit"
+            label: "Fuel tax credit information"
+            value_type: decimal
+            may_attach_statement: true
+          D:
+            semantic_id: "other_information.rehab_non_rental"
+            label: "Qualified rehabilitation expenditures (other than rental real estate)"
+            value_type: decimal
+          E:
+            semantic_id: "other_information.energy_property_basis"
+            label: "Basis of energy property"
+            value_type: decimal
+          F:
+            semantic_id: "other_information.low_income_housing_recapture_current"
+            label: "Recapture of low-income housing credit (section 42(j)(5)) from pre-2008 buildings"
+            value_type: decimal
+          G:
+            semantic_id: "other_information.low_income_housing_recapture_other"
+            label: "Recapture of low-income housing credit (other) from pre-2008 buildings"
+            value_type: decimal
+          H:
+            semantic_id: "other_information.investment_credit_recapture"
+            label: "Recapture of investment credit"
+            value_type: decimal
+            may_attach_statement: true
+          I:
+            semantic_id: "other_information.other_credit_recapture"
+            label: "Recapture of other credits"
+            value_type: decimal
+            may_attach_statement: true
+          J:
+            semantic_id: "other_information.lookback_long_term_contracts"
+            label: "Look-back interest — completed long-term contracts"
+            value_type: decimal
+          K:
+            semantic_id: "other_information.lookback_income_forecast"
+            label: "Look-back interest — income forecast method"
+            value_type: decimal
+          L:
+            semantic_id: "other_information.section_179_dispositions"
+            label: "Dispositions of property with section 179 deductions"
+            value_type: decimal
+            may_attach_statement: true
+          M:
+            semantic_id: "other_information.section_179_recapture"
+            label: "Recapture of section 179 deduction"
+            value_type: decimal
+          N:
+            semantic_id: "other_information.business_interest_expense"
+            label: "Business interest expense (BIE)"
+            value_type: decimal
+          O:
+            semantic_id: "other_information.section_453l3"
+            label: "Section 453(l)(3) information"
+            value_type: decimal
+            may_attach_statement: true
+          P:
+            semantic_id: "other_information.section_453Ac"
+            label: "Section 453A(c) information"
+            value_type: decimal
+            may_attach_statement: true
+          Q:
+            semantic_id: "other_information.section_1260b"
+            label: "Section 1260(b) information"
+            value_type: decimal
+          R:
+            semantic_id: "other_information.interest_production_expenditures"
+            label: "Interest allocable to production expenditures"
+            value_type: decimal
+          S:
+            semantic_id: "other_information.ccf_nonqualified_withdrawals"
+            label: "Capital construction fund (CCF) nonqualified withdrawals"
+            value_type: decimal
+          T:
+            semantic_id: "other_information.depletion_oil_gas"
+            label: "Depletion information — oil and gas"
+            value_type: decimal
+            may_attach_statement: true
+          U:
+            semantic_id: "other_information.743b_basis_adjustment"
+            label: "Section 743(b) basis adjustment"
+            value_type: decimal
+          V:
+            semantic_id: "other_information.ubti"
+            label: "Unrelated business taxable income"
+            value_type: decimal
+          W:
+            semantic_id: "other_information.precontribution_gain_loss"
+            label: "Precontribution gain (loss)"
+            value_type: decimal
+          X:
+            semantic_id: "other_information.payment_obligations"
+            label: "Payment obligations including guarantees and deficit obligations (DROs)"
+            value_type: decimal
+            may_attach_statement: true
+          Y:
+            semantic_id: "other_information.nii"
+            label: "Net investment income (NII)"
+            value_type: decimal
+          Z:
+            semantic_id: "other_information.section_199a"
+            label: "Section 199A information"
+            value_type: null
+            requires_statement: true
+            statement_classification: "section_199a"
+            statement_schema:
+              fields:
+                - field: "qbi"
+                  label: "Qualified business income"
+                  value_type: decimal
+                - field: "w2_wages"
+                  label: "W-2 wages"
+                  value_type: decimal
+                - field: "ubia"
+                  label: "UBIA of qualified property"
+                  value_type: decimal
+                - field: "sstb"
+                  label: "Specified service trade or business (SSTB)"
+                  value_type: boolean
+                - field: "section_199a_dividends"
+                  label: "Section 199A dividends"
+                  value_type: decimal
+                - field: "patron_reduction"
+                  label: "Section 199A(g) deduction from specified cooperatives"
+                  value_type: decimal
+          AA:
+            semantic_id: "other_information.section_704c"
+            label: "Section 704(c) information"
+            value_type: decimal
+            may_attach_statement: true
+          AB:
+            semantic_id: "other_information.section_751_gain_loss"
+            label: "Section 751 gain (loss)"
+            value_type: decimal
+          AC:
+            semantic_id: "other_information.collectibles_gain_1h5"
+            label: "Section 1(h)(5) collectibles gain"
+            value_type: decimal
+          AD:
+            semantic_id: "other_information.unrecaptured_1250_gain_1h6"
+            label: "Section 1(h)(6) unrecaptured section 1250 gain"
+            value_type: decimal
+          AE:
+            semantic_id: "other_information.excess_taxable_income"
+            label: "Excess taxable income"
+            value_type: decimal
+          AF:
+            semantic_id: "other_information.excess_business_interest_income"
+            label: "Excess business interest income"
+            value_type: decimal
+          AG:
+            semantic_id: "other_information.gross_receipts_448c"
+            label: "Gross receipts for section 448(c)"
+            value_type: decimal
+          AH:
+            semantic_id: "other_information.noncash_charitable"
+            label: "Noncash charitable contributions"
+            value_type: decimal
+            may_attach_statement: true
+          AI:
+            semantic_id: "other_information.deferred_compensation_interest_tax"
+            label: "Interest and tax on deferred compensation to partners"
+            value_type: decimal
+          AJ:
+            semantic_id: "other_information.excess_business_loss"
+            label: "Excess business loss limitation"
+            value_type: decimal
+          AK:
+            semantic_id: "other_information.mark_to_market_gain"
+            label: "Gain from mark-to-market election"
+            value_type: decimal
+          AL:
+            semantic_id: "other_information.section_721c_partnership"
+            label: "Section 721(c) partnership"
+            value_type: decimal
+            may_attach_statement: true
+          AM:
+            semantic_id: "other_information.section_1061"
+            label: "Section 1061 information"
+            value_type: decimal
+            may_attach_statement: true
+          AN:
+            semantic_id: "other_information.farming_fishing"
+            label: "Farming and fishing business"
+            value_type: boolean
+          AO:
+            semantic_id: "other_information.ptp"
+            label: "PTP information"
+            value_type: decimal
+            may_attach_statement: true
+          AP:
+            semantic_id: "other_information.inversion_gain"
+            label: "Inversion gain"
+            value_type: decimal
+          AQ:
+            semantic_id: "other_information.crp_payments"
+            label: "Conservation reserve program payments"
+            value_type: decimal
+          AR:
+            semantic_id: "other_information.ira_disclosure"
+            label: "IRA disclosure"
+            value_type: decimal
+          AS:
+            semantic_id: "other_information.advanced_coal_gasification_property"
+            label: "Qualifying advanced coal project property and qualifying gasification project property"
+            value_type: decimal
+          AT:
+            semantic_id: "other_information.advanced_energy_property"
+            label: "Qualifying advanced energy project property"
+            value_type: decimal
+          AU:
+            semantic_id: "other_information.advanced_manufacturing_property"
+            label: "Advanced manufacturing investment property"
+            value_type: decimal
+          AV:
+            semantic_id: "other_information.clean_electricity_property"
+            label: "Clean electricity investment property"
+            value_type: decimal
+          AW:
+            semantic_id: "other_information.reportable_transactions"
+            label: "Reportable transactions"
+            value_type: decimal
+            may_attach_statement: true
+          AX:
+            semantic_id: "other_information.camt"
+            label: "Corporate alternative minimum tax (CAMT)"
+            value_type: decimal
+          AY:
+            semantic_id: "other_information.foreign_partners_8990"
+            label: "Foreign partners, Form 8990, Schedule A"
+            value_type: decimal
+          AZ:
+            semantic_id: "other_information.reimbursement_preformation"
+            label: "Reimbursement of preformation expenditures"
+            value_type: decimal
+          BA:
+            semantic_id: "other_information.reserved_ba"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          BB:
+            semantic_id: "other_information.reserved_bb"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          BC:
+            semantic_id: "other_information.reserved_bc"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          BD:
+            semantic_id: "other_information.reserved_bd"
+            label: "Reserved"
+            value_type: null
+            status: reserved
+          ZZ:
+            semantic_id: "other_information.other"
+            label: "Other"
+            value_type: any
+            requires_classification: true
+            may_attach_statement: true
+            known_classifications:
+              - "section_1062_farmland_gain"
+              - "irs_form_926"
+              - "state_k1_grid"
+              - "irs_form_8865"
+              - "irs_form_5471"
+
+      # ────────────────────────────────────────────────────────────────────
+      # FOREIGN TAXES (Box 21)
+      # ────────────────────────────────────────────────────────────────────
+
+      box_21:
+        type: scalar
+        semantic_id: "foreign_taxes_paid_accrued"
+        label: "Foreign taxes paid or accrued"
+        value_type: decimal
+        currency: USD
+        form_location: "Part III, Box 21"
+        box: 21
+        may_attach_statement: true
+
+      # ────────────────────────────────────────────────────────────────────
+      # AT-RISK / PASSIVE ACTIVITY (Boxes 22-23)
+      # ────────────────────────────────────────────────────────────────────
+
+      box_22:
+        type: scalar
+        semantic_id: "at_risk_activities"
+        label: "More than one activity for at-risk purposes"
+        value_type: boolean
+        form_location: "Part III, Box 22"
+        box: 22
+        may_attach_statement: true
+
+      box_23:
+        type: scalar
+        semantic_id: "passive_activities"
+        label: "More than one activity for passive activity purposes"
+        value_type: boolean
+        form_location: "Part III, Box 23"
+        box: 23
+        may_attach_statement: true
+
+# ────────────────────────────────────────────────────────────────────────────
+
+# ────────────────────────────────────────────────────────────────────────────
+# INVESTOR-LEVEL FOOTNOTES
+# ────────────────────────────────────────────────────────────────────────────
+#
+# Footnotes are first-class citizens in the OTD K-1 document.
+# They represent per-partner disclosures not anchored to a specific box.
+# Every footnote has two layers: structured (for computation) and source_text
+# (for legal defensibility).
+#
+# Full footnote taxonomy: otd-footnote-taxonomy.md
+# ────────────────────────────────────────────────────────────────────────────
+
+footnote_types:
+  title: "Known Investor-Level Footnote Classifications"
+  description: "See otd-footnote-taxonomy.md for full schemas and extraction guidance"
+  known_classifications:
+    - id: "section_754_adjustment"
+      label: "Section 754/743(b) Basis Adjustment Disclosure"
+      common_box_refs: ["part_iii.box_20.U"]
+    - id: "firpta_withholding"
+      label: "FIRPTA Withholding and USRPI Disclosure"
+      common_box_refs: ["part_iii.box_20"]
+    - id: "debt_allocation"
+      label: "Debt Allocation Schedule"
+      common_box_refs: ["part_ii.item_k1"]
+    - id: "carried_interest_section_1061"
+      label: "Section 1061 Carried Interest Recharacterization"
+      common_box_refs: ["part_iii.box_9a", "part_iii.box_20.AM"]
+    - id: "ubti_unrelated_business_taxable_income"
+      label: "Unrelated Business Taxable Income (UBTI)"
+      common_box_refs: ["part_iii.box_20.V"]
+    - id: "passive_activity_grouping"
+      label: "Passive Activity Grouping Election"
+      common_box_refs: ["part_iii.box_22", "part_iii.box_23"]
+    - id: "state_apportionment"
+      label: "Multi-State Income Apportionment Schedule"
+      common_box_refs: []
+    - id: "section_199a_detail"
+      label: "Section 199A QBI Detail"
+      common_box_refs: ["part_iii.box_20.Z"]
+    - id: "form_926_transfer_to_foreign_corp"
+      label: "Form 926 — Transfer to Foreign Corporation"
+      common_box_refs: ["part_iii.box_20.ZZ"]
+    - id: "nii_net_investment_income"
+      label: "Net Investment Income (§1411) Detail"
+      common_box_refs: ["part_iii.box_20.Y"]
+    - id: "section_163j_business_interest"
+      label: "Section 163(j) Business Interest Limitation"
+      common_box_refs: ["part_iii.box_13.K", "part_iii.box_20.N", "part_iii.box_20.AE", "part_iii.box_20.AF"]
+    - id: "custom"
+      label: "Custom/Unclassified Footnote"
+      common_box_refs: []
+      requires_custom_classification: true
+
+# STAGE 5 — Cross-Reference Mapping
+# ────────────────────────────────────────────────────────────────────────────
+
+cross_references:
+
+  - source: "part_iii.box_16"
+    target_form: "k3-1065"
+    target_taxonomy: "irs-k3-1065-2025"
+    target_path: "/"
+    relationship: "detail"
+    description: "K-3 provides international tax detail for Box 16"
+
+  - source: "part_iii.box_20.Z"
+    target_form: null
+    target_path: "statements.section_199a"
+    relationship: "overflow"
+    description: "Section 199A detail statement"
+
+  - source: "part_iii.box_1"
+    target_form: "1040"
+    target_path: "Schedule E, Part II"
+    relationship: "feeds"
+    description: "Ordinary income flows to Schedule E"
+
+  - source: "part_iii.box_2"
+    target_form: "1040"
+    target_path: "Schedule E, Part II"
+    relationship: "feeds"
+    description: "Rental real estate income flows to Schedule E"
+
+  - source: "part_iii.box_4a"
+    target_form: "1040"
+    target_path: "Schedule E, Part II or Schedule SE"
+    relationship: "feeds"
+    description: "Guaranteed payments for services may flow to Schedule SE"
+
+  - source: "part_iii.box_5"
+    target_form: "1040"
+    target_path: "Schedule B"
+    relationship: "feeds"
+    description: "Interest income flows to Schedule B"
+
+  - source: "part_iii.box_6a"
+    target_form: "1040"
+    target_path: "Schedule B"
+    relationship: "feeds"
+    description: "Ordinary dividends flow to Schedule B"
+
+  - source: "part_iii.box_8"
+    target_form: "1040"
+    target_path: "Schedule D, Part I"
+    relationship: "feeds"
+    description: "Short-term capital gain flows to Schedule D"
+
+  - source: "part_iii.box_9a"
+    target_form: "1040"
+    target_path: "Schedule D, Part II"
+    relationship: "feeds"
+    description: "Long-term capital gain flows to Schedule D"
+
+  - source: "part_iii.box_10"
+    target_form: "4797"
+    target_path: "Part I"
+    relationship: "feeds"
+    description: "Section 1231 gain flows to Form 4797"
+
+  - source: "part_iii.box_12"
+    target_form: "4562"
+    target_path: null
+    relationship: "feeds"
+    description: "Section 179 deduction flows to Form 4562"
+
+  - source: "part_iii.box_14.A"
+    target_form: "1040"
+    target_path: "Schedule SE"
+    relationship: "feeds"
+    description: "Self-employment earnings flow to Schedule SE"
+
+  - source: "part_iii.box_15"
+    target_form: "3800"
+    target_path: null
+    relationship: "feeds"
+    description: "Most credits flow to Form 3800 (General Business Credit)"
+
+  - source: "part_iii.box_17"
+    target_form: "6251"
+    target_path: null
+    relationship: "feeds"
+    description: "AMT items flow to Form 6251"
+
+  - source: "part_iii.box_21"
+    target_form: "1116"
+    target_path: null
+    relationship: "feeds"
+    description: "Foreign taxes flow to Form 1116"
+
+  - source: "part_iii.box_20.Z"
+    target_form: "8995"
+    target_path: null
+    relationship: "feeds"
+    description: "Section 199A information flows to Form 8995 or 8995-A"
+
+# ────────────────────────────────────────────────────────────────────────────
+# STAGE 6 — Validation Constraints
+# ────────────────────────────────────────────────────────────────────────────
+
+constraints:
+
+  - id: "box_4c_equals_4a_plus_4b"
+    type: "sum"
+    target: "part_iii.box_4c"
+    operands:
+      - "part_iii.box_4a"
+      - "part_iii.box_4b"
+    tolerance: 0.01
+    severity: "error"
+    source: "Box 4c is the total of boxes 4a and 4b"
+
+  - id: "box_6b_lte_6a"
+    type: "range"
+    target: "part_iii.box_6b"
+    rule: "value <= part_iii.box_6a.value"
+    severity: "error"
+    source: "Qualified dividends cannot exceed ordinary dividends"
+
+  - id: "box_20_zz_requires_classification"
+    type: "required_field"
+    target: "part_iii.box_20.ZZ.semantic.classification"
+    condition: "when code is ZZ and node is present"
+    severity: "error"
+    source: "OTD specification §2.3"
+
+  - id: "box_11_zz_requires_classification"
+    type: "required_field"
+    target: "part_iii.box_11.ZZ.semantic.classification"
+    condition: "when code is ZZ and node is present"
+    severity: "error"
+    source: "OTD specification §2.3"
+
+  - id: "box_13_zz_requires_classification"
+    type: "required_field"
+    target: "part_iii.box_13.ZZ.semantic.classification"
+    condition: "when code is ZZ and node is present"
+    severity: "error"
+    source: "OTD specification §2.3"
+
+  - id: "box_15_zz_requires_classification"
+    type: "required_field"
+    target: "part_iii.box_15.ZZ.semantic.classification"
+    condition: "when code is ZZ and node is present"
+    severity: "error"
+    source: "OTD specification §2.3"
+
+  - id: "capital_account_continuity"
+    type: "sum"
+    target: "part_ii.item_l.ending"
+    operands:
+      - "part_ii.item_l.beginning"
+      - "part_ii.item_l.contributions"
+      - "part_ii.item_l.current_year_increase_decrease"
+      - "part_ii.item_l.other_increase_decrease"
+      - "part_ii.item_l.withdrawals"
+    tolerance: 1.00
+    severity: "warning"
+    source: "Capital account ending = beginning + contributions + income + other +/- withdrawals"
+
+  - id: "percentages_valid_range"
+    type: "range"
+    target: "part_ii.item_j.*"
+    rule: "value >= 0 and value <= 1"
+    severity: "error"
+    source: "Partnership share percentages must be between 0% and 100%"
+
+  - id: "liabilities_non_negative"
+    type: "range"
+    target: "part_ii.item_k1.*"
+    rule: "value >= 0"
+    severity: "warning"
+    source: "Liability shares should be non-negative"
+
+# ============================================================================
+# END OF TAXONOMY
+# ============================================================================
+#
+# Coverage Summary:
+#   Part I:    4 nodes (Items A-D)
+#   Part II:   14 nodes (Items E-N, including sub-fields)
+#   Part III:  23 boxes with ~200+ individual codes
+#   Cross-Refs: 16 edges to external forms
+#   Constraints: 9 validation rules
+#
+# Known Classifications for Box 20 Code ZZ:
+#   - section_1062_farmland_gain
+#   - irs_form_926
+#   - state_k1_grid
+#   - irs_form_8865
+#   - irs_form_5471
+#
+# ============================================================================

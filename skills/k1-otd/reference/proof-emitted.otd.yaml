@@ -1,0 +1,538 @@
+otd:
+  version: '0.1'
+  document_id: 77455c78-08dd-5a66-a288-0575d8de0603
+  created: '2026-04-02T17:12:05Z'
+  producer:
+    name: OTD Round-Trip Proof
+    version: 0.1.0
+  taxonomy:
+    id: irs-k1-1065-2025
+    version: 2025.1.0
+    source: Partner's Instructions for Schedule K-1 (Form 1065), 2025
+body:
+  form_id: k1-1065
+  tax_year: 2025
+  part_i:
+    partnership_name:
+      type: scalar
+      semantic:
+        id: partnership.name_address
+        label: Partnership's name, address
+      form:
+        form_id: k1-1065
+        location: Part I, Item A
+        box: A
+      value: Greenfield Capital Partners LP, 100 Park Avenue, Suite 2400, New York, NY 10017
+    partnership_ein:
+      type: scalar
+      semantic:
+        id: partnership.ein
+        label: Partnership's EIN
+      form:
+        form_id: k1-1065
+        location: Part I, Item B
+        box: B
+      value: XX-XXXX567
+    irs_center:
+      type: scalar
+      semantic:
+        id: partnership.irs_center
+        label: IRS Center
+      form:
+        form_id: k1-1065
+        location: Part I, Item C
+        box: C
+      value: Ogden, UT
+    publicly_traded:
+      type: scalar
+      semantic:
+        id: partnership.publicly_traded
+        label: Publicly Traded Partnership
+      form:
+        form_id: k1-1065
+        location: Part I, Item D
+        box: D
+      value: false
+  part_ii:
+    partner_name:
+      type: scalar
+      semantic:
+        id: partner.name_address
+        label: Partner's name, address
+      form:
+        form_id: k1-1065
+        location: Part II, Item E
+        box: E
+      value: Jane A. Doe, 42 Maple Lane, Greenwich, CT 06830
+    partner_ssn:
+      type: scalar
+      semantic:
+        id: partner.identifying_number
+        label: Partner's SSN/TIN
+      form:
+        form_id: k1-1065
+        location: Part II, Item E
+        box: E
+      value: XXX-XX-4321
+    entity_type:
+      type: scalar
+      semantic:
+        id: partner.entity_type
+        label: Entity Type
+      form:
+        form_id: k1-1065
+        location: Part II, Item F
+        box: F
+      value: individual
+    general_or_limited:
+      type: scalar
+      semantic:
+        id: partner.general_or_limited
+        label: General or Limited
+      form:
+        form_id: k1-1065
+        location: Part II, Item G
+        box: G
+      value: limited_partner
+    share_percentages:
+      type: scalar
+      semantic:
+        id: partner.share_percentages
+        label: Partner's Share
+      form:
+        form_id: k1-1065
+        location: Part II, Item J
+        box: J
+      value:
+        profit_beginning: 0.15
+        profit_ending: 0.15
+        loss_beginning: 0.15
+        loss_ending: 0.15
+        capital_beginning: 0.12
+        capital_ending: 0.12
+      format: percentage
+    liabilities:
+      type: scalar
+      semantic:
+        id: partner.share_of_liabilities
+        label: Liabilities
+      form:
+        form_id: k1-1065
+        location: Part II, Item K1
+        box: K1
+      value:
+        nonrecourse_beginning: 500000.0
+        nonrecourse_ending: 480000.0
+        qualified_nonrecourse_beginning: 0.0
+        qualified_nonrecourse_ending: 0.0
+        recourse_beginning: 100000.0
+        recourse_ending: 95000.0
+      currency: USD
+    capital_account:
+      type: scalar
+      semantic:
+        id: partner.capital_account_analysis
+        label: Capital Account
+      form:
+        form_id: k1-1065
+        location: Part II, Item L
+        box: L
+      value:
+        beginning: 1000000.0
+        contributions: 250000.0
+        current_year_increase_decrease: 150000.0
+        other_increase_decrease: 0.0
+        withdrawals: -100000.0
+        ending: 1300000.0
+        basis_method: tax
+      currency: USD
+  part_iii:
+    box_1:
+      type: scalar
+      semantic:
+        id: ordinary_business_income
+        label: Ordinary Business Income (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 1
+        box: 1
+      value: 150000.0
+      currency: USD
+      sign_convention: positive_is_income
+    box_2:
+      type: scalar
+      semantic:
+        id: net_rental_real_estate_income
+        label: Net Rental Real Estate Income (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 2
+        box: 2
+      value: -25000.0
+      currency: USD
+      sign_convention: positive_is_income
+    box_4a:
+      type: scalar
+      semantic:
+        id: guaranteed_payments_services
+        label: Guaranteed Payments for Services
+      form:
+        form_id: k1-1065
+        location: Part III, Box 4a
+        box: 4a
+      value: 75000.0
+      currency: USD
+    box_4b:
+      type: scalar
+      semantic:
+        id: guaranteed_payments_capital
+        label: Guaranteed Payments for Capital
+      form:
+        form_id: k1-1065
+        location: Part III, Box 4b
+        box: 4b
+      value: 25000.0
+      currency: USD
+    box_4c:
+      type: scalar
+      semantic:
+        id: guaranteed_payments_total
+        label: Total Guaranteed Payments
+      form:
+        form_id: k1-1065
+        location: Part III, Box 4c
+        box: 4c
+      value: 100000.0
+      currency: USD
+    box_5:
+      type: scalar
+      semantic:
+        id: interest_income
+        label: Interest Income
+      form:
+        form_id: k1-1065
+        location: Part III, Box 5
+        box: 5
+      value: 18500.0
+      currency: USD
+    box_6a:
+      type: scalar
+      semantic:
+        id: ordinary_dividends
+        label: Ordinary Dividends
+      form:
+        form_id: k1-1065
+        location: Part III, Box 6a
+        box: 6a
+      value: 32000.0
+      currency: USD
+    box_6b:
+      type: scalar
+      semantic:
+        id: qualified_dividends
+        label: Qualified Dividends
+      form:
+        form_id: k1-1065
+        location: Part III, Box 6b
+        box: 6b
+      value: 28000.0
+      currency: USD
+    box_7:
+      type: scalar
+      semantic:
+        id: royalties
+        label: Royalties
+      form:
+        form_id: k1-1065
+        location: Part III, Box 7
+        box: 7
+      value: 5000.0
+      currency: USD
+    box_8:
+      type: scalar
+      semantic:
+        id: net_short_term_capital_gain
+        label: Net Short-Term Capital Gain (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 8
+        box: 8
+      value: -3200.0
+      currency: USD
+      sign_convention: positive_is_gain
+    box_9a:
+      type: scalar
+      semantic:
+        id: net_long_term_capital_gain
+        label: Net Long-Term Capital Gain (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 9a
+        box: 9a
+      value: 45000.0
+      currency: USD
+      sign_convention: positive_is_gain
+    box_9c:
+      type: scalar
+      semantic:
+        id: unrecaptured_section_1250_gain
+        label: Unrecaptured Section 1250 Gain
+      form:
+        form_id: k1-1065
+        location: Part III, Box 9c
+        box: 9c
+      value: 12000.0
+      currency: USD
+    box_10:
+      type: scalar
+      semantic:
+        id: net_section_1231_gain
+        label: Net Section 1231 Gain (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 10
+        box: 10
+      value: 8500.0
+      currency: USD
+      sign_convention: positive_is_gain
+    box_11:
+      type: coded
+      semantic:
+        id: other_income
+        label: Other Income (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 11
+        box: 11
+      entries:
+        - code: A
+          semantic:
+            id: other_income.a
+            label: Other portfolio income
+          value: 12500.0
+        - code: F
+          semantic:
+            id: other_income.f
+            label: Section 743(b) positive adjustments
+          value: 35000.0
+    box_12:
+      type: scalar
+      semantic:
+        id: section_179_deduction
+        label: Section 179 Deduction
+      form:
+        form_id: k1-1065
+        location: Part III, Box 12
+        box: 12
+      value: 50000.0
+      currency: USD
+    box_13:
+      type: coded
+      semantic:
+        id: other_deductions
+        label: Other Deductions
+      form:
+        form_id: k1-1065
+        location: Part III, Box 13
+        box: 13
+      entries:
+        - code: A
+          semantic:
+            id: other_deductions.a
+            label: Cash contributions (60%)
+          value: 15000.0
+        - code: H
+          semantic:
+            id: other_deductions.h
+            label: Investment interest expense
+          value: 8200.0
+        - code: K
+          semantic:
+            id: other_deductions.k
+            label: Excess business interest expense (EBIE)
+          value: 22000.0
+    box_15:
+      type: coded
+      semantic:
+        id: credits
+        label: Credits
+      form:
+        form_id: k1-1065
+        location: Part III, Box 15
+        box: 15
+      entries:
+        - code: M
+          semantic:
+            id: credits.m
+            label: Credit for increasing research activities
+          value: 7500.0
+        - code: AW
+          semantic:
+            id: credits.aw
+            label: Carbon oxide sequestration credit
+          value: 12000.0
+    box_16:
+      type: reference
+      semantic:
+        id: international_transactions
+        label: International Transactions
+      form:
+        form_id: k1-1065
+        location: Part III, Box 16
+        box: 16
+      target:
+        document_type: otd
+        taxonomy_id: irs-k3-1065-2025
+        node_path: /
+    box_17:
+      type: coded
+      semantic:
+        id: amt_items
+        label: AMT Items
+      form:
+        form_id: k1-1065
+        location: Part III, Box 17
+        box: 17
+      entries:
+        - code: A
+          semantic:
+            id: amt.a
+            label: AMT Code A
+          value: 3200.0
+    box_18:
+      type: coded
+      semantic:
+        id: tax_exempt_nondeductible
+        label: Tax-Exempt & Nondeductible
+      form:
+        form_id: k1-1065
+        location: Part III, Box 18
+        box: 18
+      entries:
+        - code: A
+          semantic:
+            id: tax_exempt.a
+            label: Tax-exempt interest income
+          value: 4500.0
+        - code: C
+          semantic:
+            id: tax_exempt.c
+            label: Nondeductible expenses
+          value: 1200.0
+    box_19:
+      type: coded
+      semantic:
+        id: distributions
+        label: Distributions
+      form:
+        form_id: k1-1065
+        location: Part III, Box 19
+        box: 19
+      entries:
+        - code: A
+          semantic:
+            id: distributions.a
+            label: Distribution Code A
+          value: 100000.0
+    box_20:
+      type: coded
+      semantic:
+        id: other_information
+        label: Other Information
+      form:
+        form_id: k1-1065
+        location: Part III, Box 20
+        box: 20
+      entries:
+        - code: A
+          semantic:
+            id: other_information.a
+            label: Investment income
+          value: 50500.0
+        - code: B
+          semantic:
+            id: other_information.b
+            label: Investment expenses
+          value: 8200.0
+        - code: N
+          semantic:
+            id: other_information.n
+            label: Business interest expense (BIE)
+          value: 22000.0
+        - code: Y
+          semantic:
+            id: other_information.y
+            label: Net investment income (NII)
+          value: 195300.0
+        - code: Z
+          semantic:
+            id: other_information.z
+            label: Section 199A information
+          value:
+          statement:
+            type: statement
+            semantic:
+              id: stmt_section_199a
+              label: Section 199A
+              classification: section_199a
+            content:
+              qbi: 150000.0
+              w2_wages: 80000.0
+              ubia: 500000.0
+              sstb: false
+              business_name: Greenfield Operations LLC
+        - code: ZZ
+          semantic:
+            id: other_information.zz
+            label: Other
+            classification: irs_form_926
+          value:
+          statement:
+            type: statement
+            semantic:
+              id: stmt_irs_form_926
+              label: Irs Form 926
+              classification: irs_form_926
+            content:
+              transferee: XYZ Holdings GmbH
+              transferee_country: DE
+              transfer_date: '2025-06-15'
+              total_fmv: 5000000.0
+              total_adjusted_basis: 500000.0
+              total_gain_recognized: 4500000.0
+    box_21:
+      type: scalar
+      semantic:
+        id: foreign_taxes_paid_accrued
+        label: Foreign Taxes Paid or Accrued
+      form:
+        form_id: k1-1065
+        location: Part III, Box 21
+        box: 21
+      value: 3200.0
+      currency: USD
+    box_22:
+      type: scalar
+      semantic:
+        id: at_risk_activities
+        label: More Than One At-Risk Activity
+      form:
+        form_id: k1-1065
+        location: Part III, Box 22
+        box: 22
+      value: false
+    box_23:
+      type: scalar
+      semantic:
+        id: passive_activities
+        label: More Than One Passive Activity
+      form:
+        form_id: k1-1065
+        location: Part III, Box 23
+        box: 23
+      value: true
+redaction:
+  policy: partial
+  fields_redacted:
+    - body.part_i.partnership_ein
+    - body.part_ii.partner_ssn
