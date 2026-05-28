@@ -4,7 +4,7 @@ Open Tax Document (OTD) — Round-Trip Proof of Concept
 
 PHASE 1: EMIT
 ----------------------------------------
-  Emitted: D:\SecondWind\Artifacts\20260402-k1-standard\proof-emitted.otd.yaml
+  Emitted: proof/generated/proof-emitted.otd.yaml
   Size: 13,313 bytes
   Redacted fields: ['body.part_i.partnership_ein', 'body.part_ii.partner_ssn']
 
@@ -109,7 +109,7 @@ PHASE 4: QUERY DEMO
 PHASE 5: ROUND-TRIP
 ----------------------------------------
   PASS — Byte-identical after normalization
-  Re-emitted: D:\SecondWind\Artifacts\20260402-k1-standard\proof-re-emitted.otd.yaml
+  Re-emitted: proof/generated/proof-re-emitted.otd.yaml
   SHA256 (original, normalized):   1dccfde23ab112db
   SHA256 (re-emitted, normalized): 1dccfde23ab112db
   Match: True

@@ -468,7 +468,7 @@ This specification is designed to be implementable by an AI coding agent
 
 1. The text of the IRS instructions
 2. This derivation specification
-3. The OTD TaxNode specification (otd-spec-v0.1.yaml)
+3. The OTD TaxNode specification (otd-spec-v0.2.yaml)
 
 The agent should be able to produce a complete taxonomy YAML file as a
 **draft for review**. The recommended approach is:

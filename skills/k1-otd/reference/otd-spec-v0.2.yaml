@@ -1,5 +1,5 @@
 # ============================================================================
-# Open Tax Document (OTD) Specification — v0.1 DRAFT
+# Open Tax Document (OTD) TaxNode Specification — v0.2 RC-1
 # ============================================================================
 #
 # An AI-native, self-documenting standard for representing structured tax data.
@@ -37,7 +37,7 @@
 # ────────────────────────────────────────────────────────────────────────────
 
 otd:
-  version: "0.1"                          # OTD spec version
+  version: "0.1"                          # OTD document envelope version
   document_id: "example-001"              # Unique ID for this document instance
   created: "2026-04-02T15:00:00Z"         # ISO 8601
   producer:                               # Who/what created this document
@@ -788,7 +788,7 @@ redaction:
     - "body.part_ii.partner_ssn"
 
 # ============================================================================
-# END OF SPECIFICATION v0.1
+# END OF SPECIFICATION v0.2 RC-1
 # ============================================================================
 #
 # Next deliverables:

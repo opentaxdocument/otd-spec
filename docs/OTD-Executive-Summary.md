@@ -2,10 +2,10 @@
 
 **An Open Standard for AI-Native Tax Document Representation**
 
-**Version:** 0.1 DRAFT | **Date:** April 2, 2026
+**Version:** 0.2 RC-1 | **Date:** April 2, 2026
 **Authors:** Tom O'Sullivan, Crimson Tree Software
 **License:** Creative Commons Attribution 4.0 International (CC BY 4.0)
-**Status:** Seeking multi-firm review and adoption
+**Status:** Release candidate seeking multi-firm review and adoption
 
 ---
 
@@ -57,14 +57,14 @@ in YAML. It is designed so that:
 
 | Document | Purpose |
 |----------|---------|
-| `otd-spec-v0.1.yaml` | **Core specification** — the six TaxNode primitives (scalar, coded, grid, recordset, statement, reference) with real examples |
-| `otd-k1-taxonomy-2025.yaml` | **Complete K-1 taxonomy** — every box, every code (200+), every cross-reference, derived from 2025 IRS instructions |
-| `otd-derivation-spec.md` | **Taxonomy derivation rules** — how to generate a taxonomy for *any* IRS form from its instructions, making the standard self-perpetuating |
-| `otd-emitter-spec.md` | **Emitter guide** — how to build software that produces OTD documents |
-| `otd-parser-spec.md` | **Parser guide** — how to build software that consumes OTD documents |
-| `otd_round_trip_proof.py` | **Working proof-of-concept** — Python script that emits, parses, validates, queries, and round-trips a realistic K-1 |
-| `proof-emitted.otd.yaml` | **Example output** — a realistic K-1 OTD document with §199A, Form 926, and multi-code boxes |
-| `proof-results.txt` | **Test results** — all five phases passed, including byte-identical round-trip |
+| `spec/otd-spec-v0.2.yaml` | **Core TaxNode specification** — the six TaxNode primitives (scalar, coded, grid, recordset, statement, reference), document envelope, and real examples |
+| `taxonomies/irs-k1-1065-2025.yaml` | **Complete K-1 taxonomy** — every box, every code (200+), every cross-reference, derived from 2025 IRS instructions |
+| `spec/otd-derivation-spec.md` | **Taxonomy derivation rules** — how to generate a taxonomy for *any* IRS form from its instructions, making the standard self-perpetuating |
+| `spec/otd-emitter-spec.md` | **Emitter guide** — how to build software that produces OTD documents |
+| `spec/otd-parser-spec.md` | **Parser guide** — how to build software that consumes OTD documents |
+| `proof/otd_round_trip_proof.py` | **Working proof-of-concept** — Python script that emits, parses, validates, queries, and round-trips a realistic K-1 |
+| `proof/proof-emitted.otd.yaml` | **Example output** — a realistic K-1 OTD document with §199A, Form 926, and multi-code boxes |
+| `proof/proof-results.txt` | **Test results** — all five phases passed, including byte-identical round-trip |
 
 ## Key Design Decisions
 

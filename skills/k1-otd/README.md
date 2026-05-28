@@ -112,7 +112,7 @@ skills/k1-otd/
 
 ## Output Contract
 
-The primary deliverable is `output.otd.yaml` — a document conforming to [OTD v0.1](../../spec/otd-spec-v0.2.yaml).
+The primary deliverable is `output.otd.yaml` — a document conforming to the current [OTD TaxNode/reference schema](../../spec/otd-spec-v0.2.yaml) while using document envelope version `0.1`.
 
 **Target quality gate:** `PASS | 0 errors | ≤1 warning`
 

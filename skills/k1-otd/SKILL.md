@@ -401,9 +401,9 @@ Before declaring the extraction complete and generating the Preparer's Summary, 
 
 
 
-## OTD Output Contract (v0.1)
+## OTD Output Contract (Schema v0.2; Envelope version 0.1)
 
-The primary deliverable for every K-1 extraction is `output.otd.yaml` — a document conforming to the Open Tax Document (OTD) v0.1 specification. It is produced by `phase4_assemble.py` and validated by `validate_otd.py`.
+The primary deliverable for every K-1 extraction is `output.otd.yaml` — a document conforming to the current Open Tax Document (OTD) TaxNode/reference schema while using document envelope version `0.1`. It is produced by `phase4_assemble.py` and validated by `validate_otd.py`.
 
 **You must never hand-write this file.** Run the pipeline.
 

@@ -37,10 +37,21 @@ except ImportError:
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-ARTIFACT_DIR = Path("D:/SecondWind/Artifacts/20260402-k1-standard")
+PROOF_DIR = Path(__file__).resolve().parent
+REPO_ROOT = PROOF_DIR.parent
+ARTIFACT_DIR = PROOF_DIR / "generated"
+ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
 EMITTED_FILE = ARTIFACT_DIR / "proof-emitted.otd.yaml"
 RE_EMITTED_FILE = ARTIFACT_DIR / "proof-re-emitted.otd.yaml"
 RESULTS_FILE = ARTIFACT_DIR / "proof-results.txt"
+
+
+def display_path(path: Path) -> str:
+    """Return a stable repo-relative path for proof logs."""
+    try:
+        return path.resolve().relative_to(REPO_ROOT).as_posix()
+    except ValueError:
+        return path.as_posix()
 
 # ============================================================================
 # §1  SOURCE DATA — Realistic K-1 for proof
@@ -782,7 +793,7 @@ def main():
     log("-" * 40)
     emitter = OTDEmitter(redaction_policy="partial")
     emitted_text = emitter.emit_to_file(SOURCE_DATA, EMITTED_FILE)
-    log(f"  Emitted: {EMITTED_FILE}")
+    log(f"  Emitted: {display_path(EMITTED_FILE)}")
     log(f"  Size: {len(emitted_text):,} bytes")
     log(f"  Redacted fields: {emitter.fields_redacted}")
     log("")
@@ -857,7 +868,7 @@ def main():
     passed, message = round_trip_test(emitted_text, RE_EMITTED_FILE)
     log(f"  {message}")
     if passed:
-        log(f"  Re-emitted: {RE_EMITTED_FILE}")
+        log(f"  Re-emitted: {display_path(RE_EMITTED_FILE)}")
         # Verify hashes
         h1 = hashlib.sha256(normalize_yaml(emitted_text).encode()).hexdigest()[:16]
         h2 = hashlib.sha256(normalize_yaml(RE_EMITTED_FILE.read_text(encoding="utf-8")).encode()).hexdigest()[:16]
@@ -879,7 +890,7 @@ def main():
 
     # Save results
     RESULTS_FILE.write_text("\n".join(output), encoding="utf-8", newline="\n")
-    print(f"\nResults saved to: {RESULTS_FILE}")
+    print(f"\nResults saved to: {display_path(RESULTS_FILE)}")
 
     return 0 if (all_passed and passed) else 1
 
