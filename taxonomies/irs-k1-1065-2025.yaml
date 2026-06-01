@@ -320,19 +320,19 @@ nodes:
             value_type: decimal
             label: "Recourse — Ending"
 
+      item_k2:
+        type: scalar
+        semantic_id: "partner.liabilities_from_lower_tier_partnerships"
+        label: "Check this box if item K1 includes liability amounts from lower-tier partnerships"
+        value_type: boolean
+        form_location: "Part II, Item K2"
+
       item_k3:
         type: scalar
-        semantic_id: "partner.share_of_liabilities_increase"
-        label: "Partner's share of net unrecognized section 704(c) gain or loss"
-        value_type: object
+        semantic_id: "partner.liabilities_subject_to_guarantees_or_payment_obligations"
+        label: "Check if any of the above liability is subject to guarantees or other payment obligations by the partner"
+        value_type: boolean
         form_location: "Part II, Item K3"
-        fields:
-          beginning:
-            value_type: decimal
-            label: "Beginning"
-          ending:
-            value_type: decimal
-            label: "Ending"
 
       item_l:
         type: scalar
@@ -379,10 +379,19 @@ nodes:
 
       item_n:
         type: scalar
-        semantic_id: "partner.interest_changed_during_year"
-        label: "Partner's share of net unrecognized section 704(c) gain or loss"
-        value_type: boolean
+        semantic_id: "partner.net_unrecognized_section_704c_gain_loss"
+        label: "Partner's Share of Net Unrecognized Section 704(c) Gain or (Loss)"
+        value_type: object
         form_location: "Part II, Item N"
+        fields:
+          beginning:
+            value_type: decimal
+            label: "Beginning"
+            nullable: true
+          ending:
+            value_type: decimal
+            label: "Ending"
+            nullable: true
 
   # ══════════════════════════════════════════════════════════════════════════
   # PART III — Partner's Share of Current Year Income, Deductions,
@@ -1143,7 +1152,7 @@ nodes:
       box_16:
         type: reference
         semantic_id: "international_transactions"
-        label: "International transactions"
+        label: "Schedule K-3 is attached if checked"
         form_location: "Part III, Box 16"
         box: 16
         target_form: "k3-1065"
