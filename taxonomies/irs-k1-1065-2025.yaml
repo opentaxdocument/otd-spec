@@ -148,20 +148,20 @@ nodes:
 
       item_a:
         type: scalar
-        semantic_id: "partnership.name_address"
-        label: "Partnership's name, address, city, state, and ZIP code"
-        value_type: string
-        form_location: "Part I, Item A"
-        required: true
-
-      item_b:
-        type: scalar
         semantic_id: "partnership.ein"
         label: "Partnership's employer identification number (EIN)"
         value_type: string
-        form_location: "Part I, Item B"
+        form_location: "Part I, Item A"
         required: true
         redactable: true
+
+      item_b:
+        type: scalar
+        semantic_id: "partnership.name_address"
+        label: "Partnership's name, address, city, state, and ZIP code"
+        value_type: string
+        form_location: "Part I, Item B"
+        required: true
 
       item_c:
         type: scalar
@@ -187,14 +187,6 @@ nodes:
 
       item_e:
         type: scalar
-        semantic_id: "partner.name_address"
-        label: "Partner's name, address, city, state, and ZIP code"
-        value_type: string
-        form_location: "Part II, Item E"
-        required: true
-
-      item_e_ssn:
-        type: scalar
         semantic_id: "partner.identifying_number"
         label: "Partner's identifying number (SSN or TIN)"
         value_type: string
@@ -204,21 +196,11 @@ nodes:
 
       item_f:
         type: scalar
-        semantic_id: "partner.entity_type"
-        label: "Partner's entity type"
-        value_type: enum
+        semantic_id: "partner.name_address"
+        label: "Partner's name, address, city, state, and ZIP code"
+        value_type: string
         form_location: "Part II, Item F"
-        values:
-          - "individual"
-          - "corporation"
-          - "estate"
-          - "trust"
-          - "partnership"
-          - "exempt_organization"
-          - "foreign_government"
-          - "nominee"
-          - "disregarded_entity"
-          - "ira"
+        required: true
 
       item_g:
         type: scalar
@@ -244,21 +226,44 @@ nodes:
         type: scalar
         semantic_id: "partner.disregarded_entity_info"
         label: "If the partner is a disregarded entity (DE), enter the partner's TIN and name"
-        value_type: string
+        value_type: object
         form_location: "Part II, Item H2"
         nullable: true
+        fields:
+          is_disregarded_entity:
+            value_type: boolean
+            label: "Disregarded entity checkbox"
+          partner_tin:
+            value_type: string
+            label: "Disregarded entity partner's TIN"
+            nullable: true
+            redactable: true
+          partner_name:
+            value_type: string
+            label: "Disregarded entity partner's name"
+            nullable: true
 
       item_i1:
         type: scalar
-        semantic_id: "partner.retirement_plan"
+        semantic_id: "partner.entity_type"
         label: "What type of entity is this partner?"
-        value_type: string
+        value_type: enum
         form_location: "Part II, Item I1"
-        nullable: true
+        values:
+          - "individual"
+          - "corporation"
+          - "estate"
+          - "trust"
+          - "partnership"
+          - "exempt_organization"
+          - "foreign_government"
+          - "nominee"
+          - "disregarded_entity"
+          - "ira"
 
       item_i2:
         type: scalar
-        semantic_id: "partner.section_1061_applies"
+        semantic_id: "partner.retirement_plan"
         label: "If this partner is a retirement plan (IRA/SEP/Keogh/etc.), check here"
         value_type: boolean
         form_location: "Part II, Item I2"
