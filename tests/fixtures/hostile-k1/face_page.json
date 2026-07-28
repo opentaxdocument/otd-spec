@@ -1,0 +1,31 @@
+{
+  "form_metadata": {"tax_year": 2025, "fiscal_year": false, "amended": false, "final": false, "filing_status": "original"},
+  "part_i": {"partnership_name": "Greenfield Capital Partners LP", "partnership_ein": "83-1234567", "_partnership_ein_masked": false, "irs_center": "Ogden, UT", "publicly_traded": false},
+  "part_ii": {
+    "partner_name": "Jane A. Doe",
+    "partner_tin": "987-65-4321",
+    "_partner_tin_masked": false,
+    "entity_type": "individual",
+    "general_or_limited": "limited_partner",
+    "domestic_or_foreign": "domestic",
+    "disregarded_entity_info": {"is_disregarded_entity": false, "partner_tin": null, "partner_name": null},
+    "retirement_plan": false,
+    "share_percentages": {"profit_beginning": 0.15, "profit_ending": 0.15, "loss_beginning": 0.15, "loss_ending": 0.15, "capital_beginning": 0.12, "capital_ending": 0.12},
+    "liabilities": {"nonrecourse_beginning": 500000.0, "nonrecourse_ending": 480000.0, "qualified_nonrecourse_beginning": 0.0, "qualified_nonrecourse_ending": 0.0, "recourse_beginning": 100000.0, "recourse_ending": 95000.0},
+    "item_k2": false,
+    "item_k3": true,
+    "capital_account": {"beginning": 1000000.0, "contributions": 250000.0, "current_year_net": 150000.0, "other_increase_decrease": 0.0, "withdrawals": -100000.0, "ending": 1300000.0, "basis_method": "tax"},
+    "item_m": {"value": true, "statement": {"classification": "item_m_built_in_gain_loss", "content": {"property_description": "Contributed partnership interest", "contribution_date": "2025-01-15", "built_in_gain": 125000.0, "built_in_loss": null}}},
+    "item_n": {"beginning": 0.0, "ending": 0.0}
+  },
+  "part_iii_face": {
+    "box_1": 150000.0, "box_2": -25000.0, "box_3": 0.0,
+    "box_4a": 75000.0, "box_4b": 25000.0, "box_4c": 100000.0,
+    "box_5": 18500.0, "box_6a": 32000.0, "box_6b": 28000.0, "box_6c": 0.0,
+    "box_7": 5000.0, "box_8": -3200.0, "box_9a": 45000.0, "box_9b": 0.0,
+    "box_9c": 12000.0, "box_10": 8500.0, "box_12": 50000.0,
+    "box_21": 3200.0, "box_22": false, "box_23": true,
+    "box_16_checked": false
+  },
+  "_unmapped_source_data": []
+}

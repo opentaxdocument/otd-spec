@@ -293,6 +293,12 @@ nodes:
           capital_ending:
             value_type: percentage
             label: "Capital — Ending"
+          decrease_due_to_sale:
+            value_type: boolean
+            label: "Decrease due to sale"
+          decrease_due_to_exchange:
+            value_type: boolean
+            label: "Decrease due to exchange"
 
       item_k1:
         type: scalar
@@ -376,6 +382,42 @@ nodes:
         label: "Did the partner contribute property with a built-in gain or loss?"
         value_type: boolean
         form_location: "Part II, Item M"
+        may_attach_statement: true
+        statement_required_when: "value == true"
+        statement_classification: "item_m_built_in_gain_loss"
+        statement_schema:
+          type: recordset
+          record_schema:
+            - field: "property_description"
+              type: string
+              label: "Description of contributed property"
+            - field: "contribution_date"
+              type: date
+              label: "Date property was contributed"
+            - field: "built_in_gain"
+              type: decimal
+              label: "Built-in gain"
+              nullable: true
+            - field: "built_in_loss"
+              type: decimal
+              label: "Built-in loss"
+              nullable: true
+            # IRS aggregate alternative: when more than 10 properties were
+            # contributed on a single date, the partnership may report the
+            # aggregate rather than each property individually. These fields
+            # are optional (nullable) and used only for that alternative.
+            - field: "is_aggregate"
+              type: boolean
+              label: "True when using the IRS aggregate alternative for more than 10 properties contributed on one date"
+              nullable: true
+            - field: "aggregate_property_count"
+              type: integer
+              label: "Number of contributed properties represented when is_aggregate is true"
+              nullable: true
+            - field: "aggregate_contribution_date"
+              type: date
+              label: "Single contribution date shared by the aggregated properties"
+              nullable: true
 
       item_n:
         type: scalar
@@ -1155,9 +1197,18 @@ nodes:
         label: "Schedule K-3 is attached if checked"
         form_location: "Part III, Box 16"
         box: 16
+        checked:
+          value_type: boolean
+          required: true
+          label: "Schedule K-3 attached checkbox"
         target_form: "k3-1065"
         target_taxonomy: "irs-k3-1065-2025"
         relationship: "detail"
+        notification:
+          type: statement
+          required_when: "checked == false"
+          classification: "k3_not_attached_notification"
+          description: "Notification that Schedule K-3 is not furnished unless requested"
         description: "Partner's share of international tax information reported on Schedule K-3"
 
       # ────────────────────────────────────────────────────────────────────
@@ -1244,7 +1295,8 @@ nodes:
             semantic_id: "distributions.other_property"
             label: "Other property"
             value_type: decimal
-            may_attach_statement: true
+            requires_statement: true
+            statement_classification: "property_distribution_detail"
           D:
             semantic_id: "distributions.deemed_money_liability_decrease"
             label: "Deemed distributions of money — decreases in partner's share of liabilities"
@@ -1258,10 +1310,14 @@ nodes:
             semantic_id: "distributions.property_for_services_taxable"
             label: "Certain distributions of property for performing services — taxable portion"
             value_type: decimal
+            requires_statement: true
+            statement_classification: "property_distribution_detail"
           G:
             semantic_id: "distributions.property_for_services_basis"
             label: "Certain distributions of property for performing services — basis portion"
             value_type: decimal
+            requires_statement: true
+            statement_classification: "property_distribution_detail"
 
       # ────────────────────────────────────────────────────────────────────
       # OTHER INFORMATION (Box 20) — The Big One
@@ -1285,8 +1341,20 @@ nodes:
           C:
             semantic_id: "other_information.fuel_tax_credit"
             label: "Fuel tax credit information"
-            value_type: decimal
-            may_attach_statement: true
+            value_type: null
+            requires_statement: true
+            statement_classification: "fuel_tax_credit"
+            statement_schema:
+              type: recordset
+              record_schema:
+                - field: "fuel_type"
+                  type: string
+                - field: "gallons"
+                  type: decimal
+                - field: "use_type"
+                  type: string
+                - field: "credit_per_gallon"
+                  type: decimal
           D:
             semantic_id: "other_information.rehab_non_rental"
             label: "Qualified rehabilitation expenditures (other than rental real estate)"
@@ -1324,8 +1392,22 @@ nodes:
           L:
             semantic_id: "other_information.section_179_dispositions"
             label: "Dispositions of property with section 179 deductions"
-            value_type: decimal
-            may_attach_statement: true
+            value_type: null
+            requires_statement: true
+            statement_classification: "section_179_disposition"
+            statement_schema:
+              type: recordset
+              record_schema:
+                - field: "property_description"
+                  type: string
+                - field: "date_acquired"
+                  type: date
+                - field: "date_disposed"
+                  type: date
+                - field: "amount_realized"
+                  type: decimal
+                - field: "adjusted_basis"
+                  type: decimal
           M:
             semantic_id: "other_information.section_179_recapture"
             label: "Recapture of section 179 deduction"
@@ -1342,8 +1424,9 @@ nodes:
           P:
             semantic_id: "other_information.section_453Ac"
             label: "Section 453A(c) information"
-            value_type: decimal
-            may_attach_statement: true
+            value_type: null
+            requires_statement: true
+            statement_classification: "section_453a_installment_sale"
           Q:
             semantic_id: "other_information.section_1260b"
             label: "Section 1260(b) information"
@@ -1359,8 +1442,9 @@ nodes:
           T:
             semantic_id: "other_information.depletion_oil_gas"
             label: "Depletion information — oil and gas"
-            value_type: decimal
-            may_attach_statement: true
+            value_type: null
+            requires_statement: true
+            statement_classification: "oil_gas_depletion"
           U:
             semantic_id: "other_information.743b_basis_adjustment"
             label: "Section 743(b) basis adjustment"
@@ -1378,6 +1462,17 @@ nodes:
             label: "Payment obligations including guarantees and deficit obligations (DROs)"
             value_type: decimal
             may_attach_statement: true
+            statement_required_when: "part_ii.item_k3.value == true"
+            statement_classification: "payment_obligation"
+            statement_schema:
+              type: recordset
+              record_schema:
+                - field: "obligation_type"
+                  type: string
+                  label: "Type of recognized payment obligation (guarantee, DRO, indemnity)"
+                - field: "ending_balance"
+                  type: decimal
+                  label: "Ending balance of the recognized payment obligation"
           Y:
             semantic_id: "other_information.nii"
             label: "Net investment income (NII)"
@@ -1387,27 +1482,26 @@ nodes:
             label: "Section 199A information"
             value_type: null
             requires_statement: true
-            statement_classification: "section_199a"
+            statement_classification: "section_199a_detail"
             statement_schema:
-              fields:
+              type: recordset
+              record_schema:
+                - field: "business_name"
+                  type: string
                 - field: "qbi"
-                  label: "Qualified business income"
-                  value_type: decimal
+                  type: decimal
                 - field: "w2_wages"
-                  label: "W-2 wages"
-                  value_type: decimal
+                  type: decimal
                 - field: "ubia"
-                  label: "UBIA of qualified property"
-                  value_type: decimal
+                  type: decimal
                 - field: "sstb"
-                  label: "Specified service trade or business (SSTB)"
-                  value_type: boolean
+                  type: boolean
                 - field: "section_199a_dividends"
-                  label: "Section 199A dividends"
-                  value_type: decimal
+                  type: decimal
+                  nullable: true
                 - field: "patron_reduction"
-                  label: "Section 199A(g) deduction from specified cooperatives"
-                  value_type: decimal
+                  type: decimal
+                  nullable: true
           AA:
             semantic_id: "other_information.section_704c"
             label: "Section 704(c) information"
@@ -1546,8 +1640,30 @@ nodes:
             may_attach_statement: true
             known_classifications:
               - "section_1062_farmland_gain"
-              - "irs_form_926"
-              - "state_k1_grid"
+              - "section_754_adjustment"
+              - "firpta_withholding"
+              - "debt_allocation"
+              - "carried_interest_section_1061"
+              - "ubti_unrelated_business_taxable_income"
+              - "passive_activity_grouping"
+              - "state_apportionment"
+              - "section_199a_detail"
+              - "form_926_transfer_to_foreign_corp"
+              - "nii_net_investment_income"
+              - "section_163j_business_interest"
+              - "subpart_f_inclusion"
+              - "gilti_inclusion"
+              - "ptep_distribution"
+              - "pfic_qef_election"
+              - "eci_effectively_connected_income"
+              - "fdap_income_withholding"
+              - "drd_dividends_received_deduction"
+              - "state_pte_tax"
+              - "state_nonresident_withholding"
+              - "item_m_built_in_gain_loss"
+              - "property_distribution_detail"
+              - "payment_obligation"
+              - "custom"
               - "irs_form_8865"
               - "irs_form_5471"
 
@@ -1638,10 +1754,66 @@ footnote_types:
     - id: "section_163j_business_interest"
       label: "Section 163(j) Business Interest Limitation"
       common_box_refs: ["part_iii.box_13.K", "part_iii.box_20.N", "part_iii.box_20.AE", "part_iii.box_20.AF"]
+    - id: "subpart_f_inclusion"
+      label: "Subpart F Inclusion"
+      common_box_refs: ["part_iii.box_20", "part_iii.box_16"]
+    - id: "gilti_inclusion"
+      label: "GILTI Inclusion"
+      common_box_refs: ["part_iii.box_20", "part_iii.box_16"]
+    - id: "ptep_distribution"
+      label: "Previously Taxed Earnings and Profits Distribution"
+      common_box_refs: ["part_iii.box_19", "part_iii.box_16"]
+    - id: "pfic_qef_election"
+      label: "PFIC/QEF Election Detail"
+      common_box_refs: ["part_iii.box_16"]
+    - id: "eci_effectively_connected_income"
+      label: "Effectively Connected Income"
+      common_box_refs: ["part_iii.box_1", "part_iii.box_16"]
+    - id: "fdap_income_withholding"
+      label: "FDAP Income Withholding"
+      common_box_refs: ["part_iii.box_5", "part_iii.box_6a", "part_iii.box_7"]
+    - id: "drd_dividends_received_deduction"
+      label: "Dividends Received Deduction"
+      common_box_refs: ["part_iii.box_6a", "part_iii.box_6b"]
+    - id: "state_pte_tax"
+      label: "State Pass-Through Entity Tax"
+      common_box_refs: ["part_iii.box_13", "part_iii.box_18"]
+    - id: "state_nonresident_withholding"
+      label: "State Nonresident Withholding"
+      common_box_refs: ["part_iii.box_13"]
+    - id: "item_m_built_in_gain_loss"
+      label: "Item M Built-In Gain or Loss Detail"
+      common_box_refs: ["part_ii.item_m"]
+    - id: "property_distribution_detail"
+      label: "Property Distribution Detail"
+      common_box_refs: ["part_iii.box_19"]
+    - id: "k3_not_attached_notification"
+      label: "Schedule K-3 Not-Attached Notification"
+      common_box_refs: ["part_iii.box_16"]
+    - id: "payment_obligation"
+      label: "Payment Obligation Detail"
+      common_box_refs: ["part_ii.item_k3", "part_iii.box_20.X"]
+    - id: "fuel_tax_credit"
+      label: "Fuel Tax Credit Detail"
+      common_box_refs: ["part_iii.box_20.C"]
+    - id: "oil_gas_depletion"
+      label: "Oil, Gas, and Geothermal Depletion Detail"
+      common_box_refs: ["part_iii.box_20.T"]
+    - id: "section_179_disposition"
+      label: "Section 179 Property Disposition Detail"
+      common_box_refs: ["part_iii.box_20.L"]
+    - id: "section_453a_installment_sale"
+      label: "Section 453A Installment Sale Detail"
+      common_box_refs: ["part_iii.box_20.P"]
     - id: "custom"
-      label: "Custom/Unclassified Footnote"
+      label: "Custom Extension Footnote"
       common_box_refs: []
       requires_custom_classification: true
+
+classification_aliases:
+  section_199a: "section_199a_detail"
+  irs_form_926: "form_926_transfer_to_foreign_corp"
+  state_k1_grid: "state_apportionment"
 
 # STAGE 5 — Cross-Reference Mapping
 # ────────────────────────────────────────────────────────────────────────────
@@ -1795,6 +1967,34 @@ constraints:
     condition: "when code is ZZ and node is present"
     severity: "error"
     source: "OTD specification §2.3"
+
+  - id: "item_m_true_requires_statement"
+    type: "conditional_required"
+    target: "part_ii.item_m.statement"
+    condition: "part_ii.item_m.value == true"
+    severity: "error"
+    source: "IRS Item M requires a statement identifying contributed property, date, and built-in gain or loss"
+
+  - id: "item_k3_requires_box20_x_statement"
+    type: "conditional_required"
+    target: "part_iii.box_20.X.statement"
+    condition: "part_ii.item_k3.value == true"
+    severity: "error"
+    source: "IRS Item K3 links payment-obligation detail to Box 20 Code X"
+
+  - id: "box_16_checked_requires_k3_reference"
+    type: "conditional_required"
+    target: "part_iii.box_16.target"
+    condition: "part_iii.box_16.checked == true"
+    severity: "error"
+    source: "IRS Box 16 checked state points to attached Schedule K-3"
+
+  - id: "box_16_unchecked_requires_notification"
+    type: "conditional_required"
+    target: "part_iii.box_16.notification"
+    condition: "part_iii.box_16.checked == false"
+    severity: "error"
+    source: "IRS Box 16 unchecked state requires the K-3 non-furnishing notification"
 
   - id: "capital_account_continuity"
     type: "sum"

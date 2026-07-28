@@ -30,13 +30,279 @@ def load(path):
         return json.load(f)
 
 
-def scalar(sem_id, label, loc, box, value):
-    return {
+
+CLASSIFICATION_ALIASES = {
+    "section_199a": "section_199a_detail",
+    "irs_form_926": "form_926_transfer_to_foreign_corp",
+    "state_k1_grid": "state_apportionment",
+}
+
+
+def canon_classification(value):
+    """Map deprecated classification names onto their canonical catalog IDs."""
+    if not isinstance(value, str):
+        return value
+    return CLASSIFICATION_ALIASES.get(value, value)
+
+
+def scalar(sem_id, label, loc, box, value, unverified=None):
+    node = {
         "type": "scalar",
         "semantic": {"id": sem_id, "label": label},
         "form": {"form_id": "k1-1065", "location": loc, "box": box},
         "value": value
     }
+    if unverified:
+        node["_unverified"] = unverified
+    return node
+
+
+
+# The SKILL.md Turn A contract declares null AND the literal "UNKNOWN" as
+# "not yet observed" sentinels that must never appear as output values.
+# field() honoured null but passed "UNKNOWN" through as a real value, so a
+# boolean checkbox could emit the string "UNKNOWN" -- and the regression case
+# named unknown_sentinel_item_k3_flagged passed for two waves while the
+# flagging it named never happened. Taxonomy binding caught the gap.
+#
+# Deliberately contract-exact. "n/a" is NOT included: field()'s own docstring
+# directs a source reporting "not applicable" to use a non-null sentinel to
+# survive this check, so swallowing it would discard a reported fact.
+_UNKNOWN_SENTINELS = {"unknown"}
+
+
+def _is_unknown_sentinel(value):
+    """True when a source value is a not-yet-observed placeholder."""
+    return isinstance(value, str) and value.strip().lower() in _UNKNOWN_SENTINELS
+
+
+def field(src, key, sem_id, label, loc, box):
+    """Emit a scalar from a source mapping without fabricating defaults.
+
+    A key the extraction pipeline never populated -- whether the key is
+    absent entirely, or present with an explicit `null` (the template's
+    "not yet extracted" sentinel) -- yields value: null plus an
+    _unverified marker. An unknown checkbox is never reported as false,
+    and an unextracted amount is never reported as zero. Omission and
+    reported-null remain distinguishable from a genuinely observed null
+    only in the sense that both routes to this function; a source that
+    explicitly reports "not applicable" should use a non-null sentinel
+    value, not bare null, to survive this check.
+    """
+    if (not isinstance(src, dict) or key not in src
+            or src.get(key) is None or _is_unknown_sentinel(src.get(key))):
+        return scalar(
+            sem_id, label, loc, box, None,
+            unverified=f"HUMAN REVIEW REQUIRED: {loc} was not extracted from the source document")
+    return scalar(sem_id, label, loc, box, src.get(key))
+
+
+def make_statement_node(stmt_data):
+    """Build a canonical statement TaxNode from extracted footnote/statement data.
+
+    Defensive against malformed (non-dict) input: rather than raising
+    AttributeError deep in assembly, emits an explicit review-flagged
+    placeholder statement so the document remains assemblable and the
+    defect is visible to a human reviewer instead of crashing the pipeline.
+    """
+    if not isinstance(stmt_data, dict):
+        return {
+            "type": "statement",
+            "semantic": {
+                "id": "stmt_malformed_input",
+                "label": "Malformed Statement Input",
+                "classification": "unclassified_requires_review",
+                "role": "investor_footnote"
+            },
+            "form": {"attachment": True},
+            "content": {},
+            "_unverified": (
+                "HUMAN REVIEW REQUIRED: statement input was not a structured "
+                f"object (received {type(stmt_data).__name__})")
+        }
+    classification = canon_classification(
+        stmt_data.get("classification", "unclassified_requires_review"))
+    return {
+        "type": "statement",
+        "semantic": {
+            "id": f"stmt_{classification}",
+            "label": classification.replace("_", " ").title(),
+            "classification": classification,
+            "role": stmt_data.get("role", "investor_footnote")
+        },
+        "form": {"attachment": True},
+        "content": stmt_data.get("content", {})
+    }
+
+
+def make_item_m(raw):
+    """Item M: boolean scalar; attaches the IRS-required built-in gain/loss
+    statement when true. Never fabricates a false default and never leaves
+    the emitted value as a raw dict. A non-boolean sentinel (e.g. "UNKNOWN")
+    is treated the same as an unresolved checkbox, not as a literal value."""
+    loc, box = "Part II, Item M", "M"
+    sem_id = "partner.contributed_property_built_in_gain_loss"
+    label = "Contributed Property with Built-In Gain or Loss"
+    if raw is None:
+        return scalar(sem_id, label, loc, box, None,
+            unverified="HUMAN REVIEW REQUIRED: Part II, Item M was not extracted from the source document")
+    if isinstance(raw, dict):
+        value = raw.get("value")
+        if value is None or (isinstance(value, str) and not isinstance(value, bool)):
+            return scalar(sem_id, label, loc, box, None,
+                unverified="HUMAN REVIEW REQUIRED: Part II, Item M was not extracted from the source document")
+        node = scalar(sem_id, label, loc, box, value)
+        if value is True:
+            if raw.get("statement"):
+                node["statement"] = make_statement_node(raw["statement"])
+            else:
+                node["_unverified"] = (
+                    "HUMAN REVIEW REQUIRED: Item M is Yes but no built-in gain/loss "
+                    "statement (property description, contribution date, gain/loss) was extracted")
+        return node
+    if isinstance(raw, str):
+        return scalar(sem_id, label, loc, box, None,
+            unverified="HUMAN REVIEW REQUIRED: Part II, Item M was not extracted from the source document")
+    value = bool(raw)
+    node = scalar(sem_id, label, loc, box, value)
+    if value:
+        node["_unverified"] = "HUMAN REVIEW REQUIRED: Item M is Yes but statement detail was not extracted"
+    return node
+
+
+def normalize_capital_account(pii):
+    """Normalize legacy capital-account aliases without double counting."""
+    loc, box = "Part II, Item L", "L"
+    sem_id = "partner.capital_account_analysis"
+    label = "Capital account analysis"
+    if not isinstance(pii, dict) or "capital_account" not in pii:
+        return scalar(
+            sem_id, label, loc, box, None,
+            unverified="HUMAN REVIEW REQUIRED: Part II, Item L was not extracted from the source document")
+    raw = pii.get("capital_account")
+    if raw is None:
+        return scalar(sem_id, label, loc, box, None,
+                      unverified="HUMAN REVIEW REQUIRED: Part II, Item L was explicitly null")
+    if not isinstance(raw, dict):
+        return scalar(sem_id, label, loc, box, raw,
+                      unverified="HUMAN REVIEW REQUIRED: Part II, Item L is not an object")
+    value = dict(raw)
+    if "current_year_increase_decrease" in value and "current_year_net" in value:
+        return scalar(
+            sem_id, label, loc, box, value,
+            unverified="HUMAN REVIEW REQUIRED: Item L contains both current-year field aliases")
+    if "current_year_increase_decrease" not in value and "current_year_net" in value:
+        value["current_year_increase_decrease"] = value.pop("current_year_net")
+    return scalar(sem_id, label, loc, box, value)
+
+
+# ---------------------------------------------------------------------------
+# Taxonomy-sourced coded semantics
+# ---------------------------------------------------------------------------
+#
+# A binding dry run found 18 positional semantic ids in emitted output
+# (other_income.a) where the taxonomy declares meaning-bearing ones
+# (other_income.portfolio). make_coded_entry carried the same fabrication in
+# its fallback -- latent here only because no fixture exercised a coded box.
+#
+# Production must not invent identity. Resolve it from the taxonomy the
+# document already claims to be governed by, and flag it when resolution
+# fails rather than presenting a synthesized id as declared fact.
+
+_TAXONOMY_PATH = (Path(__file__).resolve().parent.parent
+                  / "reference" / "irs-k1-1065-2025.yaml")
+_TAXONOMY_CACHE = None
+_CODE_SEMANTICS_CACHE = {}
+
+
+def load_taxonomy():
+    """Load the canonical taxonomy mirror shipped beside this skill."""
+    global _TAXONOMY_CACHE
+    if _TAXONOMY_CACHE is None:
+        if not _TAXONOMY_PATH.exists():
+            print(f"WARNING: taxonomy not found at {_TAXONOMY_PATH}",
+                  file=sys.stderr)
+            _TAXONOMY_CACHE = {}
+        else:
+            with open(_TAXONOMY_PATH, encoding="utf-8") as f:
+                _TAXONOMY_CACHE = _yaml.load(f) or {}
+    return _TAXONOMY_CACHE
+
+
+def taxonomy_code_semantics(box_key):
+    """{CODE: {"semantic_id": ..., "label": ...}} as declared for one box."""
+    if box_key in _CODE_SEMANTICS_CACHE:
+        return _CODE_SEMANTICS_CACHE[box_key]
+    tax = load_taxonomy()
+    root = tax.get("nodes", tax)
+    part = root.get("part_iii")
+    out = {}
+    if isinstance(part, dict):
+        children = part.get("children")
+        if not isinstance(children, dict):
+            children = part
+        decl = children.get(box_key)
+        codes = decl.get("codes") if isinstance(decl, dict) else None
+        if isinstance(codes, dict):
+            for code, cdecl in codes.items():
+                if isinstance(cdecl, dict):
+                    out[str(code).upper()] = {
+                        "semantic_id": cdecl.get("semantic_id"),
+                        "label": cdecl.get("label"),
+                    }
+    _CODE_SEMANTICS_CACHE[box_key] = out
+    return out
+
+
+def make_coded_entry(box_key, raw_entry, statement=None):
+    """Convert one extraction entry into the canonical coded-node wire shape.
+
+    Semantic identity is resolved from the taxonomy rather than synthesized
+    from the code letter. A synthesized id is a last resort and is always
+    accompanied by an _unverified marker.
+    """
+    raw = raw_entry if isinstance(raw_entry, dict) else {}
+    code = str(raw.get("code", "")).upper()
+    raw_semantic = raw.get("semantic") if isinstance(raw.get("semantic"), dict) else {}
+    declared = taxonomy_code_semantics(box_key).get(code) or {}
+    label = (raw.get("label")
+             or raw_semantic.get("label")
+             or declared.get("label")
+             or f"Code {code or 'UNKNOWN'}")
+    semantic_id = (
+        raw.get("semantic_id")
+        or raw_semantic.get("id")
+        or declared.get("semantic_id")
+    )
+    unresolved_identity = not semantic_id
+    if unresolved_identity:
+        # Keep the node structurally valid so primitive checks still run,
+        # but never present a fabricated identity as declared fact.
+        semantic_id = f"part_iii.{box_key}.{code.lower() or 'unknown'}"
+    value = raw["value"] if "value" in raw else raw.get("amount")
+    semantic = {"id": semantic_id, "label": label}
+    classification = canon_classification(
+        raw.get("classification") or raw_semantic.get("classification")
+    )
+    if classification:
+        semantic["classification"] = classification
+    node = {"code": code, "semantic": semantic, "value": value}
+    if statement is not None:
+        node["statement"] = statement
+    elif isinstance(raw.get("statement"), dict):
+        node["statement"] = make_statement_node(raw["statement"])
+    if raw.get("statement_ref") and statement is None:
+        node["source_statement_ref"] = raw["statement_ref"]
+    reasons = []
+    if "value" not in raw and "amount" not in raw:
+        reasons.append(f"{box_key} Code {code or 'UNKNOWN'} has no extracted value")
+    if unresolved_identity:
+        reasons.append(
+            f"{box_key} Code {code or 'UNKNOWN'} is not declared by the "
+            f"taxonomy; semantic id was synthesized")
+    if reasons:
+        node["_unverified"] = "HUMAN REVIEW REQUIRED: " + "; ".join(reasons)
+    return node
 
 
 def count_unverified(obj, path=""):
@@ -77,9 +343,10 @@ def as_list(obj):
     return []
 
 
+
 # Part III scalar box definitions: (key, semantic_id, label, location, box)
 SCALAR_BOXES = [
-    ("box_1",  "ordinary_business_income",     "Ordinary Business Income (Loss)",      "Part III, Box 1",  1),
+    ("box_1",  "ordinary_business_income",      "Ordinary Business Income (Loss)",      "Part III, Box 1",  1),
     ("box_2",  "net_rental_real_estate_income", "Net Rental Real Estate Income (Loss)", "Part III, Box 2",  2),
     ("box_3",  "other_net_rental_income",       "Other Net Rental Income (Loss)",       "Part III, Box 3",  3),
     ("box_4a", "guaranteed_payments_services",  "Guaranteed Payments for Services",     "Part III, Box 4a", "4a"),
@@ -88,14 +355,27 @@ SCALAR_BOXES = [
     ("box_5",  "interest_income",               "Interest Income",                      "Part III, Box 5",  5),
     ("box_6a", "ordinary_dividends",            "Ordinary Dividends",                   "Part III, Box 6a", "6a"),
     ("box_6b", "qualified_dividends",           "Qualified Dividends",                  "Part III, Box 6b", "6b"),
+    ("box_6c", "dividend_equivalents",          "Dividend Equivalents",                 "Part III, Box 6c", "6c"),
     ("box_7",  "royalties",                     "Royalties",                            "Part III, Box 7",  7),
-    ("box_8",  "net_stcg",                      "Net Short-Term Capital Gain (Loss)",   "Part III, Box 8",  8),
-    ("box_9a", "net_ltcg",                      "Net Long-Term Capital Gain (Loss)",    "Part III, Box 9a", "9a"),
-    ("box_9c", "unrec_1250",                    "Unrecaptured Section 1250 Gain",       "Part III, Box 9c", "9c"),
-    ("box_10", "net_1231",                      "Net Section 1231 Gain (Loss)",         "Part III, Box 10", 10),
-    ("box_12", "sec_179",                       "Section 179 Deduction",                "Part III, Box 12", 12),
+    ("box_8",  "net_short_term_capital_gain",                      "Net Short-Term Capital Gain (Loss)",   "Part III, Box 8",  8),
+    ("box_9a", "net_long_term_capital_gain",                      "Net Long-Term Capital Gain (Loss)",    "Part III, Box 9a", "9a"),
+    ("box_9b", "collectibles_gain",             "Collectibles (28%) Gain (Loss)",       "Part III, Box 9b", "9b"),
+    ("box_9c", "unrecaptured_section_1250_gain",                    "Unrecaptured Section 1250 Gain",       "Part III, Box 9c", "9c"),
+    ("box_10", "net_section_1231_gain",                      "Net Section 1231 Gain (Loss)",         "Part III, Box 10", 10),
+    ("box_12", "section_179_deduction",                       "Section 179 Deduction",                "Part III, Box 12", 12),
+    ("box_21", "foreign_taxes_paid_accrued",    "Foreign Taxes Paid or Accrued",        "Part III, Box 21", 21),
+    ("box_22", "at_risk_activities",            "More Than One At-Risk Activity",       "Part III, Box 22", 22),
+    ("box_23", "passive_activities",            "More Than One Passive Activity",       "Part III, Box 23", 23),
 ]
 
+# Canonical Part III emission order, matching the printed form.
+PART_III_ORDER = [
+    "box_1", "box_2", "box_3", "box_4a", "box_4b", "box_4c", "box_5",
+    "box_6a", "box_6b", "box_6c", "box_7", "box_8", "box_9a", "box_9b",
+    "box_9c", "box_10", "box_11", "box_12", "box_13", "box_14", "box_15",
+    "box_16", "box_17", "box_18", "box_19", "box_20", "box_21", "box_22",
+    "box_23",
+]
 CODED_BOXES = {
     "box_11": "Other Income (Loss)",
     "box_13": "Other Deductions",
@@ -132,13 +412,17 @@ def main():
     statements_root = []
     statement_map = {}
 
-    for i, fn in enumerate(as_list(fn_a) + as_list(fn_b), 1):
+
+    for i, raw_fn in enumerate(as_list(fn_a) + as_list(fn_b), 1):
+        fn = raw_fn if isinstance(raw_fn, dict) else {}
         node = {
             "type": "statement",
             "semantic": {
                 "id": fn.get("id", f"stmt-{i:03d}"),
                 "label": fn.get("label", ""),
-                "classification": fn.get("classification", "unclassified_requires_review")
+                "classification": canon_classification(
+                    fn.get("classification", "unclassified_requires_review")),
+                "role": fn.get("role", "investor_footnote")
             },
             "form": {"attachment": True, "attachment_sequence": i},
             "cross_references": fn.get("cross_references", []),
@@ -150,7 +434,7 @@ def main():
         for flag in ("_unverified", "_escalate"):
             if flag in fn:
                 node[flag] = fn[flag]
-        
+
         refs = fn.get("cross_references", [])
         if refs:
             for ref in refs:
@@ -158,44 +442,58 @@ def main():
         else:
             statements_root.append(node)
 
-    # ── Part III ─────────────────────────────────────────────────────────
+    # Part III scalars. Absent source keys are flagged, never defaulted.
     part_iii = {}
     for box_key, sem_id, label, loc, box in SCALAR_BOXES:
-        part_iii[box_key] = scalar(sem_id, label, loc, box, fb.get(box_key))
+        part_iii[box_key] = field(fb, box_key, sem_id, label, loc, box)
+
 
     for box_key, label in CODED_BOXES.items():
         box_num = box_key.replace("box_", "")
-
-        # Gather from face and overflow
         face_list = as_list(fb.get(box_key, []))
         ov_list = as_list(ov.get(box_key, []))
 
-        # Deduplicate by (code, amount) keeping the richest dictionary
         merged_dict = {}
         for raw_entry in face_list + ov_list:
-            code = raw_entry.get("code", "")
-            amt = raw_entry.get("amount")
-            key = (code, amt)
+            if not isinstance(raw_entry, dict):
+                continue
+            code = str(raw_entry.get("code", "")).upper()
+            raw_value = raw_entry["value"] if "value" in raw_entry else raw_entry.get("amount")
+            dedupe_value = json.dumps(raw_value, sort_keys=True, default=str)
+            key = (code, dedupe_value)
             if key not in merged_dict or len(raw_entry) > len(merged_dict[key]):
                 merged_dict[key] = dict(raw_entry)
 
         entries = []
-        for entry_node in merged_dict.values():
-            code = entry_node.get("code", "")
+        for raw_entry in merged_dict.values():
+            code = str(raw_entry.get("code", "")).upper()
             ref_str = f"{box_key}_{code}".lower()
-            if ref_str in statement_map and len(statement_map[ref_str]) > 0:
-                entry_node["statement"] = statement_map[ref_str].pop(0)
-            entries.append(entry_node)
+            statement = None
+            if ref_str in statement_map and statement_map[ref_str]:
+                statement = statement_map[ref_str].pop(0)
+            entries.append(make_coded_entry(box_key, raw_entry, statement))
 
         part_iii[box_key] = {
             "type": "coded",
-            "semantic": {"id": f"part_iii.{box_key}", "label": label},
+            "semantic": {
+                "id": {
+                    "box_11": "other_income",
+                    "box_13": "other_deductions",
+                    "box_14": "self_employment",
+                    "box_15": "credits",
+                    "box_17": "amt_items",
+                    "box_18": "tax_exempt_nondeductible",
+                    "box_19": "distributions",
+                    "box_20": "other_information",
+                }.get(box_key, f"part_iii.{box_key}"),
+                "label": label,
+            },
             "form": {
                 "form_id": "k1-1065",
                 "location": f"Part III, Box {box_num}",
-                "box": int(box_num) if box_num.isdigit() else box_num
+                "box": int(box_num) if box_num.isdigit() else box_num,
             },
-            "entries": entries
+            "entries": entries,
         }
 
     for remaining_list in statement_map.values():
@@ -206,48 +504,71 @@ def main():
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     # Normalize filing_status against spec enum (original | amended | superseded | void)
-    raw_status = (fm.get("filing_status") or "original").lower()
+    raw_status = fm.get("filing_status")
+    if isinstance(raw_status, str):
+        raw_status = raw_status.lower()
     if raw_status in ("original", "amended", "superseded", "void"):
         filing_status = raw_status
     elif fm.get("amended"):
         filing_status = "amended"
     else:
-        filing_status = "original"
+        filing_status = "amended" if fm.get("amended") is True else None
 
     # Detect masked PII fields and emit redaction declaration
     redacted_fields = []
     if pi.get("_partnership_ein_masked") or (isinstance(pi.get("partnership_ein"), str) and "*" in (pi.get("partnership_ein") or "")):
-        redacted_fields.append("body.part_i.partnership_ein")
+        redacted_fields.append("body.part_i.item_a")
     if pii.get("_partner_tin_masked") or (isinstance(pii.get("partner_tin"), str) and "*" in (pii.get("partner_tin") or "")):
-        redacted_fields.append("body.part_ii.partner_tin")
+        redacted_fields.append("body.part_ii.item_e")
 
-    # Box 16 reference to K-3 (always emitted; spec-conformant cross-form reference)
-    box_16_ref = {
+
+    # Box 16 — International transactions; branches on the extracted checkbox
+    # state. IRS: checked -> attached K-3 reference; unchecked -> required
+    # non-furnishing notification; unknown -> explicit human-review flag.
+    box_16_checked = fb.get("box_16_checked")
+    b16 = {
         "type": "reference",
-        "semantic": {
-            "id": "international_transactions",
-            "label": "International Transactions"
-        },
-        "form": {
-            "form_id": "k1-1065",
-            "location": "Part III, Box 16",
-            "box": 16
-        },
-        "target": {
+        "semantic": {"id": "international_transactions", "label": "International Transactions"},
+        "form": {"form_id": "k1-1065", "location": "Part III, Box 16", "box": 16},
+        "checked": box_16_checked,
+    }
+    if box_16_checked is True:
+        b16["target"] = {
             "document_type": "otd",
             "taxonomy_id": "irs-k3-1065-2025",
             "node_path": "/"
         }
-    }
+    elif box_16_checked is False:
+        b16["notification"] = make_statement_node({
+            "classification": "k3_not_attached_notification",
+            "content": {
+                "notification_text": (
+                    "The partner will not receive Schedule K-3 unless the partner requests the schedule.")
+            }
+        })
+    else:
+        b16["_unverified"] = "HUMAN REVIEW REQUIRED: Box 16 checkbox state was not extracted"
     # Insert box_16 between box_15 and box_17 in part_iii (preserve form order)
     ordered_part_iii = {}
     for k in part_iii.keys():
         ordered_part_iii[k] = part_iii[k]
         if k == "box_15":
-            ordered_part_iii["box_16"] = box_16_ref
+            ordered_part_iii["box_16"] = b16
     if "box_16" not in ordered_part_iii:
-        ordered_part_iii["box_16"] = box_16_ref
+        ordered_part_iii["box_16"] = b16
     part_iii = ordered_part_iii
+
+    # Item K3 -> Box 20 Code X linkage (IRS requires payment-obligation detail
+    # under Box 20 Code X when Item K3 is checked)
+    if pii.get("item_k3") is True:
+        entries_20 = part_iii.get("box_20", {}).get("entries", [])
+        has_x_statement = any(e.get("code") == "X" and e.get("statement") for e in entries_20)
+        if not has_x_statement:
+            part_iii["box_20"]["_unverified"] = (
+                "HUMAN REVIEW REQUIRED: Item K3 is checked but Box 20 Code X "
+                "payment-obligation detail was not found")
+
+    part_iii = {key: part_iii[key] for key in PART_III_ORDER if key in part_iii}
 
     doc = {
         "otd": {
@@ -280,19 +601,27 @@ def main():
         "body": {
             "form_id": "k1-1065",
             "part_i": {
-                "partnership_name": scalar("partnership.name_address", "Partnership's name, address", "Part I, Item A", "A", pi.get("partnership_name")),
-                "partnership_ein":  scalar("partnership.ein",          "Partnership's EIN",           "Part I, Item B", "B", pi.get("partnership_ein")),
-                "irs_center":       scalar("partnership.irs_center",   "IRS Center",                  "Part I, Item C", "C", pi.get("irs_center")),
-                "publicly_traded":  scalar("partnership.publicly_traded", "Publicly Traded Partnership", "Part I, Item D", "D", pi.get("publicly_traded", False))
+                "item_a": field(pi, "partnership_ein", "partnership.ein", "Partnership's EIN", "Part I, Item A", "A"),
+                "item_b": field(pi, "partnership_name", "partnership.name_address", "Partnership's name, address", "Part I, Item B", "B"),
+                "item_c": field(pi, "irs_center", "partnership.irs_center", "IRS Center", "Part I, Item C", "C"),
+                "item_d": field(pi, "publicly_traded", "partnership.publicly_traded", "Publicly Traded Partnership", "Part I, Item D", "D")
             },
+
             "part_ii": {
-                "partner_name":       scalar("partner.name_address",        "Partner's name, address",       "Part II, Item E",  "E",  pii.get("partner_name")),
-                "partner_tin":        scalar("partner.identifying_number",  "Partner's identifying number",  "Part II, Item E",  "E",  pii.get("partner_tin")),
-                "entity_type":        scalar("partner.entity_type",         "Entity type",                   "Part II, Item F",  "F",  pii.get("entity_type")),
-                "general_or_limited": scalar("partner.general_or_limited",  "General or Limited",            "Part II, Item G",  "G",  pii.get("general_or_limited")),
-                "share_percentages":  scalar("partner.share_percentages",   "Share percentages",             "Part II, Item J",  "J",  pii.get("share_percentages")),
-                "liabilities":        scalar("partner.share_of_liabilities","Liabilities",                   "Part II, Item K1", "K1", pii.get("liabilities")),
-                "capital_account":    scalar("partner.capital_account_analysis", "Capital account analysis", "Part II, Item L",  "L",  pii.get("capital_account"))
+                "item_e": field(pii, "partner_tin", "partner.identifying_number", "Partner's identifying number", "Part II, Item E", "E"),
+                "item_f": field(pii, "partner_name", "partner.name_address", "Partner's name, address", "Part II, Item F", "F"),
+                "item_g": field(pii, "general_or_limited", "partner.general_or_limited", "General or Limited", "Part II, Item G", "G"),
+                "item_h1": field(pii, "domestic_or_foreign", "partner.domestic_or_foreign", "Domestic or Foreign Partner", "Part II, Item H1", "H1"),
+                "item_h2": field(pii, "disregarded_entity_info", "partner.disregarded_entity_info", "Disregarded Entity Info", "Part II, Item H2", "H2"),
+                "item_i1": field(pii, "entity_type", "partner.entity_type", "Entity type", "Part II, Item I1", "I1"),
+                "item_i2": field(pii, "retirement_plan", "partner.retirement_plan", "Retirement Plan Partner", "Part II, Item I2", "I2"),
+                "item_j": field(pii, "share_percentages", "partner.share_percentages", "Share percentages", "Part II, Item J", "J"),
+                "item_k1": field(pii, "liabilities", "partner.share_of_liabilities", "Liabilities", "Part II, Item K1", "K1"),
+                "item_k2": field(pii, "item_k2", "partner.liabilities_from_lower_tier_partnerships", "Lower-Tier Liabilities", "Part II, Item K2", "K2"),
+                "item_k3": field(pii, "item_k3", "partner.liabilities_subject_to_guarantees_or_payment_obligations", "Payment Obligation Liabilities", "Part II, Item K3", "K3"),
+                "item_l": normalize_capital_account(pii),
+                "item_m": make_item_m(pii.get("item_m")),
+                "item_n": field(pii, "item_n", "partner.net_unrecognized_section_704c_gain_loss", "Net Unrecognized 704(c) Gain/Loss", "Part II, Item N", "N")
             },
             "part_iii": part_iii
         },
@@ -320,7 +649,8 @@ def main():
                 "semantic": {
                     "id": f"state_grid_{grid.get('grid_type', 'unknown')}",
                     "label": f"State Grid — {grid.get('grid_type', 'unknown').upper()}",
-                    "classification": "state_apportionment"
+                    "classification": "state_apportionment",
+                    "role": "investor_footnote"
                 },
                 "form": {"attachment": True, "attachment_sequence": next_seq},
                 "cross_references": [],
@@ -342,7 +672,8 @@ def main():
                 "semantic": {
                     "id": "state_tax_summary",
                     "label": "State Tax Summary (Source Income, Withholding, Composite)",
-                    "classification": "state_apportionment"
+                    "classification": "state_apportionment",
+                    "role": "investor_footnote"
                 },
                 "form": {"attachment": True, "attachment_sequence": next_seq},
                 "cross_references": [],
@@ -360,7 +691,8 @@ def main():
                 "semantic": {
                     "id": "activity_schedule",
                     "label": "Schedule of Activities",
-                    "classification": "custom"
+                    "classification": "custom",
+                    "role": "investor_footnote"
                 },
                 "form": {"attachment": True, "attachment_sequence": next_seq},
                 "cross_references": [],

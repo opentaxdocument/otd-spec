@@ -65,6 +65,37 @@ This ensures forward compatibility: a parser built for 2025 taxonomies
 can still consume a 2026 document, accessing all 2025-compatible nodes
 while preserving the rest.
 
+
+### 4.1.1 Parse Leniency vs. Validation Strictness
+
+Schema-tolerant parsing (§4.1) and taxonomy validation (§4.7) are **two
+distinct phases with opposite dispositions**. Conflating them is the most
+common implementation error.
+
+| Phase | Disposition | Governs |
+|---|---|---|
+| **Parse** | Lenient. MUST NOT reject. | Structural readability. Unknown nodes are preserved, not errors. |
+| **Validate** | Strict. SHOULD reject. | Conformance of *declared* nodes to the taxonomy. |
+
+The distinction that matters:
+
+- An **unknown** node — one the taxonomy does not declare — is preserved
+  verbatim and reported informationally. This is forward compatibility, and
+  it is mandatory.
+- A **known** node — one the taxonomy *does* declare — that carries a wrong
+  type, a wrong semantic identity, or a wrong form placement is a
+  conformance failure. A validator with a taxonomy in hand SHOULD reject it.
+
+A parser that rejects unknown nodes breaks forward compatibility. A
+validator that accepts malformed known nodes provides false assurance —
+it certifies a document as conformant while the meaning or type of reported
+tax data has silently changed. Both failures are serious; they are opposite
+failures and must not be traded against each other.
+
+**Practical consequence.** `parse()` and `validate()` are separate calls
+with separate outcomes. A document may parse cleanly and fail validation.
+That is the intended design, not a contradiction.
+
 ### 4.2 Type Coercion
 
 When the parser encounters a value, it applies type coercion:
@@ -262,16 +293,89 @@ YAML → XML follows these conventions:
 
 ## 7. Error Handling
 
-| Condition | Behavior |
-|-----------|----------|
-| Invalid YAML syntax | **Error.** Abort parse, return error with line/column |
-| Missing `otd:` envelope | **Error.** Document is not OTD-conformant |
-| Missing `body` | **Error.** Document has no tax data |
-| Unknown node type | **Warning.** Preserve as generic map |
-| Type coercion failure | **Warning.** Preserve raw value |
-| Missing required node | **Warning** (without taxonomy) or **Error** (with taxonomy) |
-| Constraint violation | **Error** or **Warning** per constraint severity |
-| Redacted value encountered | **Info.** Flag as redacted; do not attempt to reconstruct |
+
+Behaviour depends on whether a taxonomy is available. Parsing without a
+taxonomy is lenient by necessity — there is nothing to check against.
+Validation with a taxonomy is strict by design (§4.1.1).
+
+| Condition | Parse only (no taxonomy) | Validate (taxonomy provided) |
+|-----------|--------------------------|------------------------------|
+| Invalid YAML syntax | **Error.** Abort parse, return error with line/column | **Error.** |
+| Missing `otd:` envelope | **Error.** Document is not OTD-conformant | **Error.** |
+| Missing `body` | **Error.** Document has no tax data | **Error.** |
+| Unknown node type (not declared by taxonomy) | **Warning.** Preserve as generic map | **Warning.** Preserve; forward compatibility (§4.1) |
+| Type coercion failure on an **undeclared** node | **Warning.** Preserve raw value | **Warning.** Preserve raw value |
+| Type coercion failure on a **declared** node | **Warning.** Preserve raw value | **Error.** Declared `value_type` not satisfied |
+| Declared node missing `type`, `semantic.id`, or `form` | **Warning.** Preserve as generic map | **Error.** Node does not bind to its declaration |
+| Declared node with mismatched `semantic.id` or form placement | n/a — undetectable | **Error.** Identity does not match declaration |
+| Missing required node | **Warning** | **Error** |
+| Declared field absent from document | n/a — undetectable | **Error.** Physical completeness (§4.7) |
+| Constraint violation | n/a — undetectable | **Error** or **Warning** per constraint severity |
+| Constraint references an undeclared path | n/a | **Error.** Malformed rule; MUST NOT silently skip |
+| Redacted value encountered | **Info.** Flag as redacted; do not attempt to reconstruct | **Info.** |
+| Taxonomy cannot be resolved | n/a | **Error.** A validator that cannot load its schema has not validated anything |
+
+**On the last row.** An unresolvable taxonomy MUST NOT degrade to a warning
+with a success exit status. Silently reporting "rules were not enforced"
+while returning success is a fail-open channel: the caller believes the
+document was validated when nothing was checked.
+
+---
+
+
+## 7.1 Validation Profile — Rules Beyond the Base Specification
+
+The reference implementation (`skills/k1-otd/scripts/constraint_engine.py`)
+enforces four rules that are **not derivable from the taxonomy alone**. They
+are documented here so a third-party implementation can match its behaviour
+rather than discover the divergence in production.
+
+Status: **DRAFT.** These are proposed for promotion to normative in v0.3.
+Implementer feedback is specifically invited.
+
+### 7.1.1 Duplicate coded entries are rejected
+
+A coded box MUST NOT contain two entries for the same code. On the physical
+Schedule K-1 a code appears once per box; multiplicity belongs in an attached
+statement, not in repeated face entries.
+
+*Rationale beyond form fidelity:* path resolution (`part_iii.box_20.X`)
+returns the first match. A second entry for the same code is unreachable by
+every path-based check, so a non-conforming entry could hide behind a
+conforming one.
+
+### 7.1.2 Statement nodes carry `semantic.role`
+
+Every statement node MUST declare `semantic.role`. Footnote statements use
+`investor_footnote` (§2.6 of the TaxNode specification). This makes footnote
+enumeration a structural query rather than a classification heuristic.
+
+### 7.1.3 Capital accounts are complete or explicitly quarantined
+
+Item L MUST carry all six components (beginning, contributions,
+current-year increase/decrease, other increase/decrease, withdrawals,
+ending), or be marked `_unverified`. A partial capital account cannot be
+checked for continuity, and silently skipping the check reports success
+on unverifiable arithmetic.
+
+Where both `current_year_increase_decrease` and the legacy
+`current_year_net` alias are present, the document is rejected as
+ambiguous rather than summing both.
+
+### 7.1.4 Not-yet-observed values are `null`, never a plausible default
+
+A field that was not observed in the source MUST be emitted as `null` with
+an `_unverified` marker. It MUST NOT be emitted as `false`, `0`, or any
+other plausible-looking default.
+
+This is the single most consequential rule in the profile. Writing `false`
+for an unread checkbox converts an unknown fact into an **incorrect negative
+assertion** on a tax document — for example, asserting that a partner has no
+payment obligations when the form was simply never read.
+
+Extraction pipelines that use a sentinel string (the reference pipeline uses
+`"UNKNOWN"`) MUST resolve it to `null` plus a marker before emission, never
+pass it through as a value.
 
 ---
 

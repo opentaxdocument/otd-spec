@@ -1,7 +1,7 @@
 otd:
   version: '0.1'
   document_id: 77455c78-08dd-5a66-a288-0575d8de0603
-  created: '2026-04-02T17:12:05Z'
+  created: '2026-07-28T03:33:16Z'
   producer:
     name: OTD Round-Trip Proof
     version: 0.1.0
@@ -9,31 +9,41 @@ otd:
     id: irs-k1-1065-2025
     version: 2025.1.0
     source: Partner's Instructions for Schedule K-1 (Form 1065), 2025
+form_metadata:
+  tax_year: 2025
+  fiscal_year: false
+  fiscal_year_begin:
+  fiscal_year_end:
+  amended: false
+  final: false
+  supersedes_document_id:
+  filing_status: original
+  form_revision_date: '2025'
 body:
   form_id: k1-1065
   tax_year: 2025
   part_i:
-    partnership_name:
-      type: scalar
-      semantic:
-        id: partnership.name_address
-        label: Partnership's name, address
-      form:
-        form_id: k1-1065
-        location: Part I, Item A
-        box: A
-      value: Greenfield Capital Partners LP, 100 Park Avenue, Suite 2400, New York, NY 10017
-    partnership_ein:
+    item_a:
       type: scalar
       semantic:
         id: partnership.ein
         label: Partnership's EIN
       form:
         form_id: k1-1065
+        location: Part I, Item A
+        box: A
+      value: XX-XXXX567
+    item_b:
+      type: scalar
+      semantic:
+        id: partnership.name_address
+        label: Partnership's name, address
+      form:
+        form_id: k1-1065
         location: Part I, Item B
         box: B
-      value: XX-XXXX567
-    irs_center:
+      value: Greenfield Capital Partners LP, 100 Park Avenue, Suite 2400, New York, NY 10017
+    item_c:
       type: scalar
       semantic:
         id: partnership.irs_center
@@ -43,7 +53,7 @@ body:
         location: Part I, Item C
         box: C
       value: Ogden, UT
-    publicly_traded:
+    item_d:
       type: scalar
       semantic:
         id: partnership.publicly_traded
@@ -54,17 +64,7 @@ body:
         box: D
       value: false
   part_ii:
-    partner_name:
-      type: scalar
-      semantic:
-        id: partner.name_address
-        label: Partner's name, address
-      form:
-        form_id: k1-1065
-        location: Part II, Item E
-        box: E
-      value: Jane A. Doe, 42 Maple Lane, Greenwich, CT 06830
-    partner_ssn:
+    item_e:
       type: scalar
       semantic:
         id: partner.identifying_number
@@ -74,17 +74,17 @@ body:
         location: Part II, Item E
         box: E
       value: XXX-XX-4321
-    entity_type:
+    item_f:
       type: scalar
       semantic:
-        id: partner.entity_type
-        label: Entity Type
+        id: partner.name_address
+        label: Partner's name, address
       form:
         form_id: k1-1065
         location: Part II, Item F
         box: F
-      value: individual
-    general_or_limited:
+      value: Jane A. Doe, 42 Maple Lane, Greenwich, CT 06830
+    item_g:
       type: scalar
       semantic:
         id: partner.general_or_limited
@@ -94,7 +94,50 @@ body:
         location: Part II, Item G
         box: G
       value: limited_partner
-    share_percentages:
+    item_h1:
+      type: scalar
+      semantic:
+        id: partner.domestic_or_foreign
+        label: Domestic or Foreign Partner
+      form:
+        form_id: k1-1065
+        location: Part II, Item H1
+        box: H1
+      value: domestic
+    item_h2:
+      type: scalar
+      semantic:
+        id: partner.disregarded_entity_info
+        label: Disregarded Entity Information
+      form:
+        form_id: k1-1065
+        location: Part II, Item H2
+        box: H2
+      value:
+        is_disregarded_entity: false
+        partner_tin:
+        partner_name:
+    item_i1:
+      type: scalar
+      semantic:
+        id: partner.entity_type
+        label: Partner Entity Type
+      form:
+        form_id: k1-1065
+        location: Part II, Item I1
+        box: I1
+      value: individual
+    item_i2:
+      type: scalar
+      semantic:
+        id: partner.retirement_plan
+        label: Partner Is a Retirement Plan
+      form:
+        form_id: k1-1065
+        location: Part II, Item I2
+        box: I2
+      value: false
+    item_j:
       type: scalar
       semantic:
         id: partner.share_percentages
@@ -110,8 +153,10 @@ body:
         loss_ending: 0.15
         capital_beginning: 0.12
         capital_ending: 0.12
+        decrease_due_to_sale: false
+        decrease_due_to_exchange: false
       format: percentage
-    liabilities:
+    item_k1:
       type: scalar
       semantic:
         id: partner.share_of_liabilities
@@ -128,7 +173,27 @@ body:
         recourse_beginning: 100000.0
         recourse_ending: 95000.0
       currency: USD
-    capital_account:
+    item_k2:
+      type: scalar
+      semantic:
+        id: partner.liabilities_from_lower_tier_partnerships
+        label: Liabilities from Lower-Tier Partnerships
+      form:
+        form_id: k1-1065
+        location: Part II, Item K2
+        box: K2
+      value: false
+    item_k3:
+      type: scalar
+      semantic:
+        id: partner.liabilities_subject_to_guarantees_or_payment_obligations
+        label: Liabilities Subject to Guarantees or Payment Obligations
+      form:
+        form_id: k1-1065
+        location: Part II, Item K3
+        box: K3
+      value: true
+    item_l:
       type: scalar
       semantic:
         id: partner.capital_account_analysis
@@ -146,6 +211,42 @@ body:
         ending: 1300000.0
         basis_method: tax
       currency: USD
+    item_m:
+      type: scalar
+      semantic:
+        id: partner.contributed_property_built_in_gain_loss
+        label: Contributed Property with Built-In Gain or Loss
+      form:
+        form_id: k1-1065
+        location: Part II, Item M
+        box: M
+      value: true
+      statement:
+        type: statement
+        semantic:
+          id: stmt_item_m_built_in_gain_loss
+          label: Item M Built In Gain Loss
+          classification: item_m_built_in_gain_loss
+          role: investor_footnote
+        form:
+          attachment: true
+        content:
+          property_description: Contributed partnership interest
+          contribution_date: '2025-01-15'
+          built_in_gain: 125000.0
+          built_in_loss:
+    item_n:
+      type: scalar
+      semantic:
+        id: partner.net_unrecognized_section_704c_gain_loss
+        label: Net Unrecognized Section 704(c) Gain or (Loss)
+      form:
+        form_id: k1-1065
+        location: Part II, Item N
+        box: N
+      value:
+        beginning: 0.0
+        ending: 0.0
   part_iii:
     box_1:
       type: scalar
@@ -169,6 +270,18 @@ body:
         location: Part III, Box 2
         box: 2
       value: -25000.0
+      currency: USD
+      sign_convention: positive_is_income
+    box_3:
+      type: scalar
+      semantic:
+        id: other_net_rental_income
+        label: Other Net Rental Income (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 3
+        box: 3
+      value: 0.0
       currency: USD
       sign_convention: positive_is_income
     box_4a:
@@ -237,6 +350,17 @@ body:
         box: 6b
       value: 28000.0
       currency: USD
+    box_6c:
+      type: scalar
+      semantic:
+        id: dividend_equivalents
+        label: Dividend Equivalents
+      form:
+        form_id: k1-1065
+        location: Part III, Box 6c
+        box: 6c
+      value: 0.0
+      currency: USD
     box_7:
       type: scalar
       semantic:
@@ -272,6 +396,17 @@ body:
       value: 45000.0
       currency: USD
       sign_convention: positive_is_gain
+    box_9b:
+      type: scalar
+      semantic:
+        id: collectibles_gain
+        label: Collectibles (28%) Gain (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 9b
+        box: 9b
+      value: 0.0
+      currency: USD
     box_9c:
       type: scalar
       semantic:
@@ -307,12 +442,12 @@ body:
       entries:
         - code: A
           semantic:
-            id: other_income.a
+            id: other_income.portfolio
             label: Other portfolio income
           value: 12500.0
         - code: F
           semantic:
-            id: other_income.f
+            id: other_income.743b_positive
             label: Section 743(b) positive adjustments
           value: 35000.0
     box_12:
@@ -338,19 +473,44 @@ body:
       entries:
         - code: A
           semantic:
-            id: other_deductions.a
+            id: other_deductions.cash_contributions_60
             label: Cash contributions (60%)
           value: 15000.0
         - code: H
           semantic:
-            id: other_deductions.h
+            id: other_deductions.investment_interest
             label: Investment interest expense
           value: 8200.0
         - code: K
           semantic:
-            id: other_deductions.k
+            id: other_deductions.ebie
             label: Excess business interest expense (EBIE)
           value: 22000.0
+    box_14:
+      type: coded
+      semantic:
+        id: self_employment
+        label: Self-Employment Earnings (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 14
+        box: 14
+      entries:
+        - code: A
+          semantic:
+            id: self_employment.net_earnings
+            label: Net earnings (loss) from self-employment
+          value: 0.0
+        - code: B
+          semantic:
+            id: self_employment.gross_farming
+            label: Gross farming or fishing income
+          value: 0.0
+        - code: C
+          semantic:
+            id: self_employment.gross_nonfarm
+            label: Gross nonfarm income
+          value: 0.0
     box_15:
       type: coded
       semantic:
@@ -363,12 +523,12 @@ body:
       entries:
         - code: M
           semantic:
-            id: credits.m
+            id: credits.research_activities
             label: Credit for increasing research activities
           value: 7500.0
         - code: AW
           semantic:
-            id: credits.aw
+            id: credits.carbon_oxide_sequestration
             label: Carbon oxide sequestration credit
           value: 12000.0
     box_16:
@@ -380,10 +540,18 @@ body:
         form_id: k1-1065
         location: Part III, Box 16
         box: 16
-      target:
-        document_type: otd
-        taxonomy_id: irs-k3-1065-2025
-        node_path: /
+      checked: false
+      notification:
+        type: statement
+        semantic:
+          id: stmt_k3_not_attached_notification
+          label: K3 Not Attached Notification
+          classification: k3_not_attached_notification
+          role: investor_footnote
+        form:
+          attachment: true
+        content:
+          notification_text: The partner will not receive Schedule K-3 unless the partner requests the schedule.
     box_17:
       type: coded
       semantic:
@@ -396,7 +564,7 @@ body:
       entries:
         - code: A
           semantic:
-            id: amt.a
+            id: amt.depreciation_adjustment
             label: AMT Code A
           value: 3200.0
     box_18:
@@ -411,12 +579,12 @@ body:
       entries:
         - code: A
           semantic:
-            id: tax_exempt.a
+            id: tax_exempt.interest
             label: Tax-exempt interest income
           value: 4500.0
         - code: C
           semantic:
-            id: tax_exempt.c
+            id: nondeductible.expenses
             label: Nondeductible expenses
           value: 1200.0
     box_19:
@@ -431,7 +599,7 @@ body:
       entries:
         - code: A
           semantic:
-            id: distributions.a
+            id: distributions.cash_marketable_securities
             label: Distribution Code A
           value: 100000.0
     box_20:
@@ -446,53 +614,79 @@ body:
       entries:
         - code: A
           semantic:
-            id: other_information.a
+            id: other_information.investment_income
             label: Investment income
           value: 50500.0
         - code: B
           semantic:
-            id: other_information.b
+            id: other_information.investment_expenses
             label: Investment expenses
           value: 8200.0
         - code: N
           semantic:
-            id: other_information.n
+            id: other_information.business_interest_expense
             label: Business interest expense (BIE)
           value: 22000.0
+        - code: X
+          semantic:
+            id: other_information.payment_obligations
+            label: Code X
+            classification: payment_obligation
+          value: 25000.0
+          statement:
+            type: statement
+            semantic:
+              id: stmt_payment_obligation
+              label: Payment Obligation
+              classification: payment_obligation
+              role: investor_footnote
+            form:
+              attachment: true
+            content:
+              obligation_type: recognized_guarantee
+              ending_balance: 25000.0
         - code: Y
           semantic:
-            id: other_information.y
+            id: other_information.nii
             label: Net investment income (NII)
           value: 195300.0
         - code: Z
           semantic:
-            id: other_information.z
+            id: other_information.section_199a
             label: Section 199A information
           value:
           statement:
             type: statement
             semantic:
-              id: stmt_section_199a
-              label: Section 199A
-              classification: section_199a
+              id: stmt_section_199a_detail
+              label: Section 199A Detail
+              classification: section_199a_detail
+              role: investor_footnote
+            form:
+              attachment: true
             content:
               qbi: 150000.0
               w2_wages: 80000.0
               ubia: 500000.0
               sstb: false
               business_name: Greenfield Operations LLC
+              section_199a_dividends:
+              patron_reduction:
         - code: ZZ
           semantic:
-            id: other_information.zz
+            id: other_information.other
             label: Other
-            classification: irs_form_926
+            classification: form_926_transfer_to_foreign_corp
           value:
           statement:
             type: statement
             semantic:
-              id: stmt_irs_form_926
-              label: Irs Form 926
-              classification: irs_form_926
+              id: stmt_form_926_transfer_to_foreign_corp
+              label: Form 926 Transfer To Foreign Corp
+              classification: form_926_transfer_to_foreign_corp
+              role: investor_footnote
+            form:
+              attachment: true
             content:
               transferee: XYZ Holdings GmbH
               transferee_country: DE
@@ -534,5 +728,5 @@ body:
 redaction:
   policy: partial
   fields_redacted:
-    - body.part_i.partnership_ein
-    - body.part_ii.partner_ssn
+    - body.part_i.item_a
+    - body.part_ii.item_e

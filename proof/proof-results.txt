@@ -5,15 +5,15 @@ Open Tax Document (OTD) — Round-Trip Proof of Concept
 PHASE 1: EMIT
 ----------------------------------------
   Emitted: proof/generated/proof-emitted.otd.yaml
-  Size: 13,313 bytes
-  Redacted fields: ['body.part_i.partnership_ein', 'body.part_ii.partner_ssn']
+  Size: 18,908 bytes
+  Redacted fields: ['body.part_i.item_a', 'body.part_ii.item_e']
 
 PHASE 2: PARSE
 ----------------------------------------
   Envelope version: 0.1
   Taxonomy: irs-k1-1065-2025
-  Total indexed nodes: 53
-  Statements found: 2
+  Total indexed nodes: 70
+  Statements found: 5
   References found: 1
 
 PHASE 3: VALIDATE
@@ -36,30 +36,36 @@ PHASE 4: QUERY DEMO
       → $100,000.00
 
   4c. Statement enumeration (flattened):
-      → stmt_section_199a [section_199a]
-      → stmt_irs_form_926 [irs_form_926]
+      → stmt_item_m_built_in_gain_loss [item_m_built_in_gain_loss]
+      → stmt_k3_not_attached_notification [k3_not_attached_notification]
+      → stmt_payment_obligation [payment_obligation]
+      → stmt_section_199a_detail [section_199a_detail]
+      → stmt_form_926_transfer_to_foreign_corp [form_926_transfer_to_foreign_corp]
 
   4d. Reference enumeration:
-      → international_transactions → {'document_type': 'otd', 'taxonomy_id': 'irs-k3-1065-2025', 'node_path': '/'}
+      → international_transactions → None
 
   4e. Type filter: all 'coded' nodes:
       → other_income (2 entries)
       → other_deductions (3 entries)
+      → self_employment (3 entries)
       → credits (2 entries)
       → amt_items (1 entries)
       → tax_exempt_nondeductible (2 entries)
       → distributions (1 entries)
-      → other_information (6 entries)
+      → other_information (7 entries)
 
-  4f. All 53 indexed semantic IDs:
-      • amt.a
+  4f. All 70 indexed semantic IDs:
+      • amt.depreciation_adjustment
       • amt_items
       • at_risk_activities
+      • collectibles_gain
       • credits
-      • credits.aw
-      • credits.m
+      • credits.carbon_oxide_sequestration
+      • credits.research_activities
       • distributions
-      • distributions.a
+      • distributions.cash_marketable_securities
+      • dividend_equivalents
       • foreign_taxes_paid_accrued
       • guaranteed_payments_capital
       • guaranteed_payments_services
@@ -70,27 +76,37 @@ PHASE 4: QUERY DEMO
       • net_rental_real_estate_income
       • net_section_1231_gain
       • net_short_term_capital_gain
+      • nondeductible.expenses
       • ordinary_business_income
       • ordinary_dividends
       • other_deductions
-      • other_deductions.a
-      • other_deductions.h
-      • other_deductions.k
+      • other_deductions.cash_contributions_60
+      • other_deductions.ebie
+      • other_deductions.investment_interest
       • other_income
-      • other_income.a
-      • other_income.f
+      • other_income.743b_positive
+      • other_income.portfolio
       • other_information
-      • other_information.a
-      • other_information.b
-      • other_information.n
-      • other_information.y
-      • other_information.z
-      • other_information.zz
+      • other_information.business_interest_expense
+      • other_information.investment_expenses
+      • other_information.investment_income
+      • other_information.nii
+      • other_information.other
+      • other_information.payment_obligations
+      • other_information.section_199a
+      • other_net_rental_income
       • partner.capital_account_analysis
+      • partner.contributed_property_built_in_gain_loss
+      • partner.disregarded_entity_info
+      • partner.domestic_or_foreign
       • partner.entity_type
       • partner.general_or_limited
       • partner.identifying_number
+      • partner.liabilities_from_lower_tier_partnerships
+      • partner.liabilities_subject_to_guarantees_or_payment_obligations
       • partner.name_address
+      • partner.net_unrecognized_section_704c_gain_loss
+      • partner.retirement_plan
       • partner.share_of_liabilities
       • partner.share_percentages
       • partnership.ein
@@ -101,8 +117,13 @@ PHASE 4: QUERY DEMO
       • qualified_dividends
       • royalties
       • section_179_deduction
-      • tax_exempt.a
-      • tax_exempt.c
+      • self_employment
+      • self_employment.gross_farming
+      • self_employment.gross_nonfarm
+      • self_employment.net_earnings
+      • stmt_item_m_built_in_gain_loss
+      • stmt_k3_not_attached_notification
+      • tax_exempt.interest
       • tax_exempt_nondeductible
       • unrecaptured_section_1250_gain
 
@@ -110,15 +131,15 @@ PHASE 5: ROUND-TRIP
 ----------------------------------------
   PASS — Byte-identical after normalization
   Re-emitted: proof/generated/proof-re-emitted.otd.yaml
-  SHA256 (original, normalized):   1dccfde23ab112db
-  SHA256 (re-emitted, normalized): 1dccfde23ab112db
+  SHA256 (original, normalized):   2ab918b3d6ba72aa
+  SHA256 (re-emitted, normalized): 2ab918b3d6ba72aa
   Match: True
 
 ========================================================================
 SUMMARY
 ========================================================================
-  Emit:       ✓ (13,313 bytes)
-  Parse:      ✓ (53 nodes indexed)
+  Emit:       ✓ (18,908 bytes)
+  Parse:      ✓ (70 nodes indexed)
   Validate:   ✓ All passed
   Query:      ✓ (semantic, value, type, statement, reference)
   Round-trip: ✓ Byte-identical

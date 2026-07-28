@@ -45,6 +45,91 @@ EMITTED_FILE = ARTIFACT_DIR / "proof-emitted.otd.yaml"
 RE_EMITTED_FILE = ARTIFACT_DIR / "proof-re-emitted.otd.yaml"
 RESULTS_FILE = ARTIFACT_DIR / "proof-results.txt"
 
+# ---------------------------------------------------------------------------
+# Taxonomy-declared coded semantics
+# ---------------------------------------------------------------------------
+#
+# These ids are transcribed from irs-k1-1065-2025.yaml. A binding dry run
+# found 18 emitted entries carrying positional ids (other_income.a) where the
+# taxonomy declares meaning-bearing ones (other_income.portfolio).
+#
+# A positional scheme cannot be made correct by care alone. Box 18 declares
+# tax_exempt.interest for Code A and nondeductible.expenses for Code C --
+# two concepts sharing one box. Any f"{prefix}.{code}" construction must pick
+# one prefix and will mislabel the other.
+#
+# The proof keeps these explicit rather than loading the YAML: a reader of a
+# demonstration artifact learns more from a visible mapping than from an
+# opaque lookup. Drift is no longer silent -- the binding validator rejects
+# any id that disagrees with the taxonomy.
+
+PROOF_CODE_IDS = {
+    "box_11": {
+        "A": "other_income.portfolio",
+        "F": "other_income.743b_positive",
+    },
+    "box_13": {
+        "A": "other_deductions.cash_contributions_60",
+        "H": "other_deductions.investment_interest",
+        "K": "other_deductions.ebie",
+    },
+    "box_15": {
+        "M": "credits.research_activities",
+        "AW": "credits.carbon_oxide_sequestration",
+    },
+    "box_17": {
+        "A": "amt.depreciation_adjustment",
+    },
+    "box_18": {
+        "A": "tax_exempt.interest",
+        "C": "nondeductible.expenses",
+    },
+    "box_19": {
+        "A": "distributions.cash_marketable_securities",
+    },
+    "box_20": {
+        "A": "other_information.investment_income",
+        "B": "other_information.investment_expenses",
+        "N": "other_information.business_interest_expense",
+        "X": "other_information.payment_obligations",
+        "Y": "other_information.nii",
+        "Z": "other_information.section_199a",
+        "ZZ": "other_information.other",
+    },
+}
+
+_PROOF_CODE_FALLBACK_PREFIX = {
+    "box_11": "other_income",
+    "box_13": "other_deductions",
+    "box_15": "credits",
+    "box_17": "amt",
+    "box_18": "tax_exempt",
+    "box_19": "distributions",
+    "box_20": "other_information",
+}
+
+
+def _proof_code_id(box_key, code):
+    """Taxonomy-declared semantic id for one coded entry.
+
+    Falls back to the historical positional form only for a code the map does
+    not cover, which the binding validator will then reject by name rather
+    than accept as declared fact.
+    """
+    declared = PROOF_CODE_IDS.get(box_key, {}).get(str(code).upper())
+    if declared:
+        return declared
+    prefix = _PROOF_CODE_FALLBACK_PREFIX.get(box_key, box_key)
+    return f"{prefix}.{str(code).lower()}"
+
+
+CLASSIFICATION_ALIASES = {
+    "section_199a": "section_199a_detail",
+    "irs_form_926": "form_926_transfer_to_foreign_corp",
+    "state_k1_grid": "state_apportionment",
+}
+
+
 
 def display_path(path: Path) -> str:
     """Return a stable repo-relative path for proof logs."""
@@ -77,12 +162,28 @@ SOURCE_DATA = {
             "profit_beginning": 0.15, "profit_ending": 0.15,
             "loss_beginning": 0.15, "loss_ending": 0.15,
             "capital_beginning": 0.12, "capital_ending": 0.12,
+            "decrease_due_to_sale": False, "decrease_due_to_exchange": False,
         },
         "liabilities": {
             "nonrecourse_beginning": 500000.00, "nonrecourse_ending": 480000.00,
             "qualified_nonrecourse_beginning": 0.00, "qualified_nonrecourse_ending": 0.00,
             "recourse_beginning": 100000.00, "recourse_ending": 95000.00,
         },
+        "item_k2": False,
+        "item_k3": True,
+        "item_m": {
+            "value": True,
+            "statement": {
+                "classification": "item_m_built_in_gain_loss",
+                "content": {
+                    "property_description": "Contributed partnership interest",
+                    "contribution_date": "2025-01-15",
+                    "built_in_gain": 125000.00,
+                    "built_in_loss": None,
+                },
+            },
+        },
+        "item_n": {"beginning": 0.00, "ending": 0.00},
         "capital_account": {
             "beginning": 1000000.00,
             "contributions": 250000.00,
@@ -93,6 +194,7 @@ SOURCE_DATA = {
             "basis_method": "tax",
         },
     },
+    "international": {"box_16_checked": False},
     "income": {
         "box_1": 150000.00,
         "box_2": -25000.00,
@@ -157,6 +259,17 @@ SOURCE_DATA = {
             "A": 50500.00,
             "B": 8200.00,
             "N": 22000.00,
+            "X": {
+                "value": 25000.00,
+                "classification": "payment_obligation",
+                "statement": {
+                    "classification": "payment_obligation",
+                    "content": {
+                        "obligation_type": "recognized_guarantee",
+                        "ending_balance": 25000.00,
+                    },
+                },
+            },
             "Y": 195300.00,
             "Z": {
                 "value": None,
@@ -168,6 +281,8 @@ SOURCE_DATA = {
                         "ubia": 500000.00,
                         "sstb": False,
                         "business_name": "Greenfield Operations LLC",
+                        "section_199a_dividends": None,
+                        "patron_reduction": None,
                     },
                 },
             },
@@ -242,23 +357,44 @@ class OTDEmitter:
         entry["code"] = code
         sem = CommentedMap([("id", semantic_id), ("label", label)])
         if classification:
-            sem["classification"] = classification
+            sem["classification"] = self._canonical_classification(classification)
         entry["semantic"] = sem
         entry["value"] = value
         if statement:
             entry["statement"] = self._make_statement(statement)
         return entry
 
+    def _canonical_classification(self, classification):
+        return CLASSIFICATION_ALIASES.get(classification, classification) if classification else classification
+
     def _make_statement(self, stmt_data):
+        if not isinstance(stmt_data, dict):
+            stmt = CommentedMap()
+            stmt["type"] = "statement"
+            sem = CommentedMap()
+            sem["id"] = "stmt_malformed_input"
+            sem["label"] = "Malformed Statement Input"
+            sem["classification"] = "unclassified_requires_review"
+            sem["role"] = "investor_footnote"
+            stmt["semantic"] = sem
+            stmt["form"] = CommentedMap([("attachment", True)])
+            stmt["content"] = CommentedMap()
+            stmt["_unverified"] = (
+                "HUMAN REVIEW REQUIRED: statement input was not a structured "
+                f"object (received {type(stmt_data).__name__})")
+            return stmt
+        classification = self._canonical_classification(stmt_data["classification"])
         stmt = CommentedMap()
         stmt["type"] = "statement"
         sem = CommentedMap()
-        sem["id"] = f"stmt_{stmt_data['classification']}"
-        sem["label"] = stmt_data["classification"].replace("_", " ").title()
-        sem["classification"] = stmt_data["classification"]
+        sem["id"] = f"stmt_{classification}"
+        sem["label"] = classification.replace("_", " ").title()
+        sem["classification"] = classification
+        sem["role"] = stmt_data.get("role", "investor_footnote")
         stmt["semantic"] = sem
+        stmt["form"] = CommentedMap([("attachment", True)])
         content = CommentedMap()
-        for k, v in stmt_data["content"].items():
+        for k, v in (stmt_data.get("content") or {}).items():
             content[k] = v
         stmt["content"] = content
         return stmt
@@ -282,57 +418,82 @@ class OTDEmitter:
         envelope["taxonomy"] = taxonomy
         doc["otd"] = envelope
 
+        doc["form_metadata"] = CommentedMap([
+            ("tax_year", 2025),
+            ("fiscal_year", False),
+            ("fiscal_year_begin", None),
+            ("fiscal_year_end", None),
+            ("amended", False),
+            ("final", False),
+            ("supersedes_document_id", None),
+            ("filing_status", "original"),
+            ("form_revision_date", "2025"),
+        ])
+
         # ── Body ────────────────────────────────────────────────────────
         body = CommentedMap()
         body["form_id"] = "k1-1065"
         body["tax_year"] = 2025
 
-        # Part I
+        # Part I — IRS Item A is the partnership EIN; Item B is name and address
         part_i = CommentedMap()
-        part_i["partnership_name"] = self._make_scalar(
-            "partnership.name_address", "Partnership's name, address",
-            "Part I, Item A", "A", f"{p['name']}, {p['address']}", value_type="string")
-
         redacted_ein = self._redact_ein(p["ein"])
         if redacted_ein != p["ein"]:
-            self.fields_redacted.append("body.part_i.partnership_ein")
-        part_i["partnership_ein"] = self._make_scalar(
+            self.fields_redacted.append("body.part_i.item_a")
+        part_i["item_a"] = self._make_scalar(
             "partnership.ein", "Partnership's EIN",
-            "Part I, Item B", "B", redacted_ein, value_type="string")
-        part_i["irs_center"] = self._make_scalar(
+            "Part I, Item A", "A", redacted_ein, value_type="string")
+        part_i["item_b"] = self._make_scalar(
+            "partnership.name_address", "Partnership's name, address",
+            "Part I, Item B", "B", f"{p['name']}, {p['address']}", value_type="string")
+        part_i["item_c"] = self._make_scalar(
             "partnership.irs_center", "IRS Center",
             "Part I, Item C", "C", p["irs_center"], value_type="string")
-        part_i["publicly_traded"] = self._make_scalar(
+        part_i["item_d"] = self._make_scalar(
             "partnership.publicly_traded", "Publicly Traded Partnership",
             "Part I, Item D", "D", p["publicly_traded"], value_type="boolean")
         body["part_i"] = part_i
 
-        # Part II
+        # Part II — physical IRS item keys
         part_ii = CommentedMap()
-        part_ii["partner_name"] = self._make_scalar(
-            "partner.name_address", "Partner's name, address",
-            "Part II, Item E", "E", f"{pr['name']}, {pr['address']}", value_type="string")
         redacted_ssn = self._redact_ssn(pr["ssn"])
         if redacted_ssn != pr["ssn"]:
-            self.fields_redacted.append("body.part_ii.partner_ssn")
-        part_ii["partner_ssn"] = self._make_scalar(
+            self.fields_redacted.append("body.part_ii.item_e")
+        part_ii["item_e"] = self._make_scalar(
             "partner.identifying_number", "Partner's SSN/TIN",
             "Part II, Item E", "E", redacted_ssn, value_type="string")
-        part_ii["entity_type"] = self._make_scalar(
-            "partner.entity_type", "Entity Type",
-            "Part II, Item F", "F", pr["entity_type"], value_type="enum")
-        part_ii["general_or_limited"] = self._make_scalar(
+        part_ii["item_f"] = self._make_scalar(
+            "partner.name_address", "Partner's name, address",
+            "Part II, Item F", "F", f"{pr['name']}, {pr['address']}", value_type="string")
+        part_ii["item_g"] = self._make_scalar(
             "partner.general_or_limited", "General or Limited",
             "Part II, Item G", "G", pr["general_or_limited"], value_type="enum")
+        part_ii["item_h1"] = self._make_scalar(
+            "partner.domestic_or_foreign", "Domestic or Foreign Partner",
+            "Part II, Item H1", "H1", pr.get("domestic_or_foreign"), value_type="enum")
+        h2_value = pr.get("disregarded_entity_info", {
+            "is_disregarded_entity": False,
+            "partner_tin": None,
+            "partner_name": None,
+        })
+        part_ii["item_h2"] = self._make_scalar(
+            "partner.disregarded_entity_info", "Disregarded Entity Information",
+            "Part II, Item H2", "H2", CommentedMap(h2_value), value_type="object")
+        part_ii["item_i1"] = self._make_scalar(
+            "partner.entity_type", "Partner Entity Type",
+            "Part II, Item I1", "I1", pr["entity_type"], value_type="enum")
+        part_ii["item_i2"] = self._make_scalar(
+            "partner.retirement_plan", "Partner Is a Retirement Plan",
+            "Part II, Item I2", "I2", pr.get("retirement_plan", False), value_type="boolean")
 
-        # Item J — Share percentages
+        # Item J — Share percentages and IRS decrease reasons
         j_node = CommentedMap()
         j_node["type"] = "scalar"
         j_node["semantic"] = CommentedMap([("id", "partner.share_percentages"), ("label", "Partner's Share")])
         j_node["form"] = CommentedMap([("form_id", "k1-1065"), ("location", "Part II, Item J"), ("box", "J")])
         j_node["value"] = CommentedMap(pr["share_percentages"])
         j_node["format"] = "percentage"
-        part_ii["share_percentages"] = j_node
+        part_ii["item_j"] = j_node
 
         # Item K1 — Liabilities
         k1_node = CommentedMap()
@@ -341,7 +502,15 @@ class OTDEmitter:
         k1_node["form"] = CommentedMap([("form_id", "k1-1065"), ("location", "Part II, Item K1"), ("box", "K1")])
         k1_node["value"] = CommentedMap(pr["liabilities"])
         k1_node["currency"] = "USD"
-        part_ii["liabilities"] = k1_node
+        part_ii["item_k1"] = k1_node
+        part_ii["item_k2"] = self._make_scalar(
+            "partner.liabilities_from_lower_tier_partnerships",
+            "Liabilities from Lower-Tier Partnerships",
+            "Part II, Item K2", "K2", pr.get("item_k2", False), value_type="boolean")
+        part_ii["item_k3"] = self._make_scalar(
+            "partner.liabilities_subject_to_guarantees_or_payment_obligations",
+            "Liabilities Subject to Guarantees or Payment Obligations",
+            "Part II, Item K3", "K3", pr.get("item_k3", False), value_type="boolean")
 
         # Item L — Capital account
         l_node = CommentedMap()
@@ -350,7 +519,24 @@ class OTDEmitter:
         l_node["form"] = CommentedMap([("form_id", "k1-1065"), ("location", "Part II, Item L"), ("box", "L")])
         l_node["value"] = CommentedMap(pr["capital_account"])
         l_node["currency"] = "USD"
-        part_ii["capital_account"] = l_node
+        part_ii["item_l"] = l_node
+
+        # Item M — built-in gain/loss attachment when checked
+        m_data = pr.get("item_m", {"value": False})
+        m_value = m_data.get("value", False) if isinstance(m_data, dict) else bool(m_data)
+        m_node = self._make_scalar(
+            "partner.contributed_property_built_in_gain_loss",
+            "Contributed Property with Built-In Gain or Loss",
+            "Part II, Item M", "M", m_value, value_type="boolean")
+        if isinstance(m_data, dict) and m_data.get("statement"):
+            m_node["statement"] = self._make_statement(m_data["statement"])
+        part_ii["item_m"] = m_node
+
+        # Item N — net unrecognized Section 704(c) gain/loss
+        part_ii["item_n"] = self._make_scalar(
+            "partner.net_unrecognized_section_704c_gain_loss",
+            "Net Unrecognized Section 704(c) Gain or (Loss)",
+            "Part II, Item N", "N", CommentedMap(pr.get("item_n", {})), value_type="object")
 
         body["part_ii"] = part_ii
 
@@ -380,7 +566,10 @@ class OTDEmitter:
         inc = source["income"]
         for key, sem_id, label, box, sign in income_map:
             val = inc.get(key)
-            if val is not None and val != 0:
+            # A box reported as zero is a reported fact, not an omission.
+            # Suppressing zeros left the physical form incomplete, which the
+            # taxonomy-driven completeness validator correctly rejected.
+            if val is not None:
                 part_iii[key] = self._make_scalar(
                     sem_id, label, f"Part III, Box {box}", box, val,
                     sign_convention=sign)
@@ -395,7 +584,7 @@ class OTDEmitter:
             code_labels = {"A": "Other portfolio income", "F": "Section 743(b) positive adjustments"}
             for code, val in inc["box_11"].items():
                 entries.append(self._make_coded_entry(
-                    f"other_income.{code.lower()}", code_labels.get(code, code),
+                    _proof_code_id("box_11", code), code_labels.get(code, code),
                     code, val))
             b11["entries"] = entries
             part_iii["box_11"] = b11
@@ -421,10 +610,29 @@ class OTDEmitter:
             }
             for code, val in ded["box_13"].items():
                 entries.append(self._make_coded_entry(
-                    f"other_deductions.{code.lower()}", code_labels_13.get(code, code),
+                    _proof_code_id("box_13", code), code_labels_13.get(code, code),
                     code, val))
             b13["entries"] = entries
             part_iii["box_13"] = b13
+
+        # Box 14 — Self-Employment Earnings (coded)
+        se = source["self_employment"]
+        if "box_14" in se and se["box_14"]:
+            b14 = CommentedMap()
+            b14["type"] = "coded"
+            b14["semantic"] = CommentedMap([("id", "self_employment"), ("label", "Self-Employment Earnings (Loss)")])
+            b14["form"] = CommentedMap([("form_id", "k1-1065"), ("location", "Part III, Box 14"), ("box", 14)])
+            entries = CommentedSeq()
+            code_ids_14 = {
+                "A": ("self_employment.net_earnings", "Net earnings (loss) from self-employment"),
+                "B": ("self_employment.gross_farming", "Gross farming or fishing income"),
+                "C": ("self_employment.gross_nonfarm", "Gross nonfarm income"),
+            }
+            for code, val in se["box_14"].items():
+                sem_id, sem_label = code_ids_14.get(code, (f"self_employment.{code.lower()}", code))
+                entries.append(self._make_coded_entry(sem_id, sem_label, code, val))
+            b14["entries"] = entries
+            part_iii["box_14"] = b14
 
         # Box 15 — Credits (coded)
         cr = source["credits"]
@@ -440,24 +648,38 @@ class OTDEmitter:
             }
             for code, val in cr["box_15"].items():
                 entries.append(self._make_coded_entry(
-                    f"credits.{code.lower()}", code_labels_15.get(code, code),
+                    _proof_code_id("box_15", code), code_labels_15.get(code, code),
                     code, val))
             b15["entries"] = entries
             part_iii["box_15"] = b15
 
-        # Box 16 — International (reference)
+        # Box 16 — International transactions and K-3 state
+        international = source.get("international", {})
+        box_16_checked = international.get("box_16_checked")
         b16 = CommentedMap()
         b16["type"] = "reference"
         b16["semantic"] = CommentedMap([("id", "international_transactions"), ("label", "International Transactions")])
         b16["form"] = CommentedMap([("form_id", "k1-1065"), ("location", "Part III, Box 16"), ("box", 16)])
-        target = CommentedMap()
-        target["document_type"] = "otd"
-        target["taxonomy_id"] = "irs-k3-1065-2025"
-        target["node_path"] = "/"
-        b16["target"] = target
+        b16["checked"] = box_16_checked
+        if box_16_checked is True:
+            target = CommentedMap()
+            target["document_type"] = "otd"
+            target["taxonomy_id"] = "irs-k3-1065-2025"
+            target["document_id"] = international.get("k3_document_id", "k3-partner-001")
+            target["node_path"] = "/"
+            b16["target"] = target
+        elif box_16_checked is False:
+            b16["notification"] = self._make_statement({
+                "classification": "k3_not_attached_notification",
+                "content": {
+                    "notification_text": (
+                        "The partner will not receive Schedule K-3 unless the partner requests the schedule."
+                    )
+                },
+            })
+        else:
+            b16["_unverified"] = "HUMAN REVIEW REQUIRED: Box 16 checkbox state was not extracted"
         part_iii["box_16"] = b16
-
-        # Box 17 — AMT
         amt = source["amt"]
         if "box_17" in amt and amt["box_17"]:
             b17 = CommentedMap()
@@ -467,7 +689,7 @@ class OTDEmitter:
             entries = CommentedSeq()
             for code, val in amt["box_17"].items():
                 entries.append(self._make_coded_entry(
-                    f"amt.{code.lower()}", f"AMT Code {code}", code, val))
+                    _proof_code_id("box_17", code), f"AMT Code {code}", code, val))
             b17["entries"] = entries
             part_iii["box_17"] = b17
 
@@ -482,7 +704,7 @@ class OTDEmitter:
             code_labels_18 = {"A": "Tax-exempt interest income", "C": "Nondeductible expenses"}
             for code, val in te["box_18"].items():
                 entries.append(self._make_coded_entry(
-                    f"tax_exempt.{code.lower()}", code_labels_18.get(code, code), code, val))
+                    _proof_code_id("box_18", code), code_labels_18.get(code, code), code, val))
             b18["entries"] = entries
             part_iii["box_18"] = b18
 
@@ -496,7 +718,7 @@ class OTDEmitter:
             entries = CommentedSeq()
             for code, val in dist["box_19"].items():
                 entries.append(self._make_coded_entry(
-                    f"distributions.{code.lower()}", f"Distribution Code {code}", code, val))
+                    _proof_code_id("box_19", code), f"Distribution Code {code}", code, val))
             b19["entries"] = entries
             part_iii["box_19"] = b19
 
@@ -518,14 +740,14 @@ class OTDEmitter:
                     # Complex entry with statement
                     classification = val.get("classification")
                     entries.append(self._make_coded_entry(
-                        f"other_information.{code.lower()}",
+                        _proof_code_id("box_20", code),
                         code_labels_20.get(code, f"Code {code}"),
                         code, val.get("value"),
                         statement=val.get("statement"),
                         classification=classification))
                 else:
                     entries.append(self._make_coded_entry(
-                        f"other_information.{code.lower()}",
+                        _proof_code_id("box_20", code),
                         code_labels_20.get(code, f"Code {code}"),
                         code, val))
             b20["entries"] = entries

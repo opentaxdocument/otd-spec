@@ -89,6 +89,10 @@ form_metadata:
 #   - recordset:  list of typed entity records
 #   - statement:  structured overflow / footnote / attachment
 #   - reference:  pointer to another node, form, or document
+# Footnotes are statement nodes with role investor_footnote.
+# They retain canonical classification, structured content, and source_text.
+# The legacy type footnote may be accepted on input, but emitters MUST
+# canonicalize it to type statement with role investor_footnote.
 #
 # ────────────────────────────────────────────────────────────────────────────
 
@@ -362,7 +366,7 @@ statement_926_example:
     id: "form_926_return_by_transferor"
     label: "Return by a U.S. Transferor of Property to a Foreign Corporation"
     description: "Information regarding partner's transfer of property to a foreign corporation during the tax year."
-    classification: "irs_form_926"
+    classification: "form_926_transfer_to_foreign_corp"
     form_year: 2025
   form:
     form_id: "k1-1065"
@@ -418,7 +422,7 @@ statement_state_grid_example:
     id: "state_k1_apportionment"
     label: "State K-1 Income Apportionment Schedule"
     description: "Partner's share of income apportioned by state jurisdiction."
-    classification: "state_k1_grid"
+    classification: "state_apportionment"
   form:
     form_id: "k1-1065"
     location: "Supplemental — State Apportionment"
@@ -483,6 +487,7 @@ reference_example:
     form_id: "k1-1065"
     location: "Part III, Box 16"
     box: 16
+  checked: true
   target:
     document_type: "otd"
     taxonomy_id: "irs-k3-1065-2025"
@@ -507,73 +512,129 @@ body:
 
   # Part I — Information About the Partnership
   part_i:
-    partnership_name:
-      type: scalar
-      semantic: { id: "partnership.name", label: "Partnership's Name" }
-      form: { location: "Part I, Item A" }
-      value: "Greenfield Capital Partners LP"
-    partnership_ein:
+    item_a:
       type: scalar
       semantic: { id: "partnership.ein", label: "Partnership's EIN" }
-      form: { location: "Part I, Item B" }
-      value: "XX-XXXXXXX"                  # Redaction-aware
-    irs_center:
+      form: { form_id: "k1-1065", location: "Part I, Item A", box: "A" }
+      value: "XX-XXXXXXX"
+    item_b:
+      type: scalar
+      semantic: { id: "partnership.name_address", label: "Partnership's Name and Address" }
+      form: { form_id: "k1-1065", location: "Part I, Item B", box: "B" }
+      value: "Greenfield Capital Partners LP, 100 Park Avenue, New York, NY 10017"
+    item_c:
       type: scalar
       semantic: { id: "partnership.irs_center", label: "IRS Center Where Return Filed" }
-      form: { location: "Part I, Item C" }
+      form: { form_id: "k1-1065", location: "Part I, Item C", box: "C" }
       value: "Ogden, UT"
+    item_d:
+      type: scalar
+      semantic: { id: "partnership.publicly_traded", label: "Publicly Traded Partnership" }
+      form: { form_id: "k1-1065", location: "Part I, Item D", box: "D" }
+      value: false
 
   # Part II — Information About the Partner
   part_ii:
-    partner_name:
+    item_e:
       type: scalar
-      semantic: { id: "partner.name", label: "Partner's Name" }
-      form: { location: "Part II, Item E" }
-      value: "Jane Doe"
-    partner_ssn:
+      semantic: { id: "partner.identifying_number", label: "Partner's SSN or TIN" }
+      form: { form_id: "k1-1065", location: "Part II, Item E", box: "E" }
+      value: "XXX-XX-1234"
+    item_f:
       type: scalar
-      semantic: { id: "partner.ssn", label: "Partner's SSN or TIN" }
-      form: { location: "Part II, Item E" }
-      value: "XXX-XX-1234"                 # Redaction-aware
-    partner_type:
+      semantic: { id: "partner.name_address", label: "Partner's Name and Address" }
+      form: { form_id: "k1-1065", location: "Part II, Item F", box: "F" }
+      value: "Jane Doe, 42 Maple Lane, Greenwich, CT 06830"
+    item_g:
       type: scalar
       semantic:
-        id: "partner.type"
-        label: "Type of Partner"
-        description: "General partner, limited partner, or LLC member-manager."
-      form: { location: "Part II, Item G" }
+        id: "partner.general_or_limited"
+        label: "General Partner, Limited Partner, or LLC Member"
+      form: { form_id: "k1-1065", location: "Part II, Item G", box: "G" }
       value: "limited_partner"
-    profit_share:
+    item_h1:
       type: scalar
-      semantic: { id: "partner.profit_share", label: "Partner's Share of Profit" }
-      form: { location: "Part II, Item J, Profit" }
-      value: 0.15                           # 15%
+      semantic: { id: "partner.domestic_or_foreign", label: "Domestic or Foreign Partner" }
+      form: { form_id: "k1-1065", location: "Part II, Item H1", box: "H1" }
+      value: "domestic"
+    item_h2:
+      type: scalar
+      semantic: { id: "partner.disregarded_entity_info", label: "Disregarded Entity Information" }
+      form: { form_id: "k1-1065", location: "Part II, Item H2", box: "H2" }
+      value:
+        is_disregarded_entity: false
+        partner_tin: null
+        partner_name: null
+    item_i2:
+      type: scalar
+      semantic: { id: "partner.retirement_plan", label: "Partner Is a Retirement Plan" }
+      form: { form_id: "k1-1065", location: "Part II, Item I2", box: "I2" }
+      value: false
+    item_i1:
+      type: scalar
+      semantic: { id: "partner.entity_type", label: "Partner Entity Type" }
+      form: { form_id: "k1-1065", location: "Part II, Item I1", box: "I1" }
+      value: "individual"
+    item_j:
+      type: scalar
+      semantic: { id: "partner.share_percentages", label: "Partner's Share of Profit, Loss, and Capital" }
+      form: { form_id: "k1-1065", location: "Part II, Item J", box: "J" }
+      value:
+        profit_beginning: 0.15
+        profit_ending: 0.15
+        loss_beginning: 0.15
+        loss_ending: 0.15
+        capital_beginning: 0.12
+        capital_ending: 0.12
+        decrease_due_to_sale: false
+        decrease_due_to_exchange: false
       format: "percentage"
-    loss_share:
+    item_k1:
       type: scalar
-      semantic: { id: "partner.loss_share", label: "Partner's Share of Loss" }
-      form: { location: "Part II, Item J, Loss" }
-      value: 0.15
-      format: "percentage"
-    capital_share:
+      semantic: { id: "partner.share_of_liabilities", label: "Partner's Share of Nonrecourse, Qualified Nonrecourse, and Recourse Liabilities" }
+      form: { form_id: "k1-1065", location: "Part II, Item K1", box: "K1" }
+      value:
+        nonrecourse_beginning: 500000.00
+        nonrecourse_ending: 480000.00
+        qualified_nonrecourse_beginning: 0.00
+        qualified_nonrecourse_ending: 0.00
+        recourse_beginning: 100000.00
+        recourse_ending: 95000.00
+      currency: "USD"
+    item_k2:
       type: scalar
-      semantic: { id: "partner.capital_share", label: "Partner's Share of Capital" }
-      form: { location: "Part II, Item J, Capital" }
-      value: 0.12
-      format: "percentage"
-    capital_account:
+      semantic: { id: "partner.liabilities_from_lower_tier_partnerships", label: "Check If Any Liabilities Are from Lower-Tier Partnerships" }
+      form: { form_id: "k1-1065", location: "Part II, Item K2", box: "K2" }
+      value: false
+    item_k3:
       type: scalar
-      semantic:
-        id: "partner.capital_account_analysis"
-        label: "Partner's Capital Account Analysis"
-      form: { location: "Part II, Item L" }
+      semantic: { id: "partner.liabilities_subject_to_guarantees_or_payment_obligations", label: "Check If Any Liability Is Subject to Guarantees or Other Payment Obligations" }
+      form: { form_id: "k1-1065", location: "Part II, Item K3", box: "K3" }
+      value: false
+    item_l:
+      type: scalar
+      semantic: { id: "partner.capital_account_analysis", label: "Partner's Capital Account Analysis" }
+      form: { form_id: "k1-1065", location: "Part II, Item L", box: "L" }
       value:
         beginning: 1000000.00
         contributions: 250000.00
-        current_year_increase: 150000.00
+        current_year_increase_decrease: 150000.00
+        other_increase_decrease: 0.00
         withdrawals: -100000.00
         ending: 1300000.00
       basis_method: "tax"                   # tax | gaap | section_704b | other
+    item_m:
+      type: scalar
+      semantic: { id: "partner.contributed_property_built_in_gain_loss", label: "Did the Partner Contribute Property With a Built-In Gain or Loss?" }
+      form: { form_id: "k1-1065", location: "Part II, Item M", box: "M" }
+      value: false
+    item_n:
+      type: scalar
+      semantic: { id: "partner.net_unrecognized_section_704c_gain_loss", label: "Partner's Share of Net Unrecognized Section 704(c) Gain or (Loss)" }
+      form: { form_id: "k1-1065", location: "Part II, Item N", box: "N" }
+      value:
+        beginning: 0.00
+        ending: 0.00
 
   # Part III — Partner's Share of Current Year Income, Deductions, Credits...
   # This is where the bulk of TaxNodes live.
@@ -634,7 +695,7 @@ body:
             semantic:
               id: "section_199a_detail"
               label: "Section 199A Qualified Business Income"
-              classification: "section_199a"
+              classification: "section_199a_detail"
             content:
               qbi: 150000.00
               w2_wages: 80000.00
@@ -661,7 +722,7 @@ body:
           semantic:
             id: "other_information.form_926"
             label: "Form 926 — Transfer to Foreign Corporation"
-            classification: "irs_form_926"  # REQUIRED for ZZ
+            classification: "form_926_transfer_to_foreign_corp"  # REQUIRED for ZZ
           value: null
           statement:
             # Full Form 926 data — see §2.6 for expanded example
@@ -669,7 +730,7 @@ body:
             semantic:
               id: "form_926_attachment"
               label: "Form 926 Detail"
-              classification: "irs_form_926"
+              classification: "form_926_transfer_to_foreign_corp"
             form:
               attachment: true
             content:
@@ -684,7 +745,7 @@ body:
       semantic:
         id: "state_k1_apportionment"
         label: "Multi-State K-1 Apportionment"
-        classification: "state_k1_grid"
+        classification: "state_apportionment"
       form:
         attachment: true
         location: "Supplemental Schedule"
@@ -785,7 +846,12 @@ redaction:
   policy: "partial"
   fields_redacted:
     - "body.part_i.partnership_ein"
-    - "body.part_ii.partner_ssn"
+    - "body.part_ii.item_e"
+
+classification_aliases:
+  section_199a: "section_199a_detail"
+  irs_form_926: "form_926_transfer_to_foreign_corp"
+  state_k1_grid: "state_apportionment"
 
 # ============================================================================
 # END OF SPECIFICATION v0.2 RC-1

@@ -167,27 +167,52 @@ python {SKILL_ROOT}/scripts/build_mini_taxonomy.py \
 **Extraction Strategy:** Read the page and process it systematically by section to ensure no fields are dropped. Extract Part I, then Part II (paying close attention to the Capital Account block), and finally Part III. Ensure every field defined in the schema below is actively searched for and populated.
 
 **Extraction schema:**
+
+**IMPORTANT — Sentinel values below (`null`, and the literal string `"UNKNOWN"` for
+checkboxes) mean "not yet observed in the source." They are NOT valid output values
+and MUST NOT be copied into the extracted JSON as a substitute for actually reading
+the page.** If a checkbox, amount, or field genuinely cannot be determined from the
+source document after careful reading, leave it as `null` (or `"UNKNOWN"` for
+checkbox-type fields) and it will be automatically flagged `_unverified` for human
+review downstream. Do NOT write `false`, `0`, or a plausible-looking default for a
+field you did not actually observe -- that converts an unknown fact into an
+incorrect negative assertion on a tax document.
+
 ```json
 {
-  "form_metadata": {"tax_year": null, "fiscal_year": false, "amended": false, "final": false, "filing_status": "original"},
+  "form_metadata": {"tax_year": null, "fiscal_year": "UNKNOWN", "fiscal_year_begin": null, "fiscal_year_end": null, "amended": "UNKNOWN", "final": "UNKNOWN", "filing_status": null},
   "part_i": {
-    "partnership_name": null, "partnership_ein": null, "_partnership_ein_masked": false,
-    "irs_center": null, "publicly_traded": false
+    "partnership_ein": null, "_partnership_ein_masked": false,
+    "partnership_name": null, "irs_center": null, "publicly_traded": "UNKNOWN"
   },
   "part_ii": {
-    "partner_name": null, "partner_tin": null, "_partner_tin_masked": false,
-    "entity_type": null, "general_or_limited": null, "domestic_or_foreign": null,
-    "share_percentages": { "profit_beginning": null, "profit_ending": null, "loss_beginning": null, "loss_ending": null, "capital_beginning": null, "capital_ending": null },
+    "partner_tin": null, "_partner_tin_masked": false, "partner_name": null,
+    "general_or_limited": null, "domestic_or_foreign": null,
+    "disregarded_entity_info": { "is_disregarded_entity": "UNKNOWN", "partner_tin": null, "partner_name": null },
+    "entity_type": null, "retirement_plan": "UNKNOWN",
+    "share_percentages": { "profit_beginning": null, "profit_ending": null, "loss_beginning": null, "loss_ending": null, "capital_beginning": null, "capital_ending": null, "decrease_due_to_sale": "UNKNOWN", "decrease_due_to_exchange": "UNKNOWN" },
     "liabilities": { "nonrecourse_beginning": null, "nonrecourse_ending": null, "qualified_nonrecourse_beginning": null, "qualified_nonrecourse_ending": null, "recourse_beginning": null, "recourse_ending": null },
-    "capital_account": { "beginning": null, "contributions": null, "current_year_net": null, "other_increase_decrease": null, "withdrawals": null, "ending": null, "basis_method": "tax|gaap|section_704b|other" }
+    "item_k2": "UNKNOWN", "item_k3": "UNKNOWN",
+    "capital_account": { "beginning": null, "contributions": null, "current_year_increase_decrease": null, "other_increase_decrease": null, "withdrawals": null, "ending": null, "basis_method": null },
+    "item_m": { "value": "UNKNOWN", "statement": null },
+    "item_n": { "beginning": null, "ending": null }
   },
   "part_iii_face": {
     "box_1": null, "box_2": null, "box_3": null, "box_4a": null, "box_4b": null, "box_4c": null,
-    "box_5": null, "box_6a": null, "box_6b": null, "box_7": null, "box_8": null, "box_9a": null,
-    "box_9c": null, "box_10": null, "box_12": null
+    "box_5": null, "box_6a": null, "box_6b": null, "box_6c": null, "box_7": null, "box_8": null,
+    "box_9a": null, "box_9b": null, "box_9c": null, "box_10": null, "box_12": null,
+    "box_16_checked": null, "box_21": null, "box_22": null, "box_23": null
   },
   "_unmapped_source_data": []
 }
+```
+**Sentinel Resolution Rule:** After extraction, resolve every `"UNKNOWN"` checkbox
+sentinel to an actual `true`/`false` if the source page shows a clear checked or
+unchecked state. Only leave `"UNKNOWN"` if the checkbox's state genuinely cannot be
+determined (e.g., illegible scan, missing page). A `"UNKNOWN"` boolean-type field
+that reaches assembly will be flagged `_unverified` for human review, exactly like a
+missing scalar field -- it will never be silently treated as `false`.
+**Layout Note:**
 ```
 **Layout Note:** Part III is a two-column table. Assign values by column position, not row order.
 **Masking Rule:** Masked TIN/EIN (e.g., ***-**-1600) → extract as-is, set `_masked: true`. Do NOT use `_unverified` for intentional masking.

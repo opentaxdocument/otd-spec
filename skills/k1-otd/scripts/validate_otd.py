@@ -8,6 +8,9 @@ import json
 import argparse
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from constraint_engine import run_taxonomy_driven_validation  # noqa: E402
+
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 try:
@@ -86,41 +89,77 @@ def check_types(obj, path, errors):
             check_types(v, f"{path}[{i}]", errors)
 
 
-def validate(input_path):
+def load_taxonomy(taxonomy_path):
+    """Load the taxonomy YAML that governs conditional/statement rules.
+    Falls back gracefully (empty rule set, not a crash) if unavailable so
+    structural checks still run even when the taxonomy path cannot be
+    resolved in a given invocation context."""
+    try:
+        with open(taxonomy_path, encoding="utf-8") as f:
+            return _yaml.load(f) or {}
+    except (FileNotFoundError, OSError):
+        return {}
+
+
+def validate(input_path, taxonomy_path=None):
     with open(input_path, encoding="utf-8") as f:
         doc = _yaml.load(f)
 
     errors, warnings = [], []
-
-    # Required sections and keys
-    for section, keys in REQUIRED.items():
-        obj = doc.get(section) or {}
-        for k in keys:
-            if k not in obj:
-                errors.append(f"Missing required key: {section}.{k}")
-
     # Node type validity
     check_types(doc.get("body", {}), "body", errors)
 
     # form_metadata enum + amendment-chain rules
     validate_filing_status(doc.get("form_metadata", {}), errors, warnings)
 
+    # Taxonomy-driven constraint and statement-schema enforcement.
+    # Reads constraints and statement_classification/statement_schema
+    # declarations directly from the taxonomy YAML — a new rule added
+    # there is enforced automatically, with no new Python required.
+
+    if taxonomy_path is None:
+        candidate = Path(input_path).resolve()
+        for ancestor in [candidate.parent] + list(candidate.parents):
+            probe = ancestor / "taxonomies" / "irs-k1-1065-2025.yaml"
+            if probe.exists():
+                taxonomy_path = str(probe)
+                break
+
+    # Script-relative fallback. A document being validated outside the repo
+    # (an artifact directory, a customer file, a temp path) has no repo
+    # ancestor, so the walk above finds nothing. The canonical mirror ships
+    # beside this script; the assembler already resolves it the same way.
+    if taxonomy_path is None:
+        mirror = Path(__file__).resolve().parent.parent / "reference" / "irs-k1-1065-2025.yaml"
+        if mirror.exists():
+            taxonomy_path = str(mirror)
+
+    # Fail closed. Previously an unresolved taxonomy degraded to a warning and
+    # the document still exited 0 with "rules were not enforced" -- the same
+    # fail-open shape as the range-rule `except: return True` removed in Wave 10.
+    # A validator that cannot load its schema has not validated anything.
+    if not taxonomy_path:
+        errors.append(
+            "Taxonomy could not be resolved; conditional, statement, binding and "
+            "completeness rules were NOT enforced. Pass --taxonomy explicitly.")
+    else:
+        taxonomy = load_taxonomy(taxonomy_path)
+        tax_errors, tax_warnings = run_taxonomy_driven_validation(
+            doc.get("body", {}), taxonomy, doc.get("statements"))
+        errors.extend(tax_errors)
+        warnings.extend(tax_warnings)
+
     # Unverified markers
     uv = find_unverified(doc)
     for path in uv:
         warnings.append(f"⚠️ HUMAN REVIEW at: {path}")
 
-    # Capital account arithmetic
-    try:
-        cap = (doc["body"]["part_ii"]["capital_account"].get("value") or {})
-        fields = ["beginning", "contributions", "current_year_net", "other_increase_decrease", "withdrawals"]
-        if all(cap.get(f) is not None for f in fields) and cap.get("ending") is not None:
-            computed = sum(cap.get(f, 0) or 0 for f in fields)
-            delta = abs(computed - (cap["ending"] or 0))
-            if delta > 1.0:
-                warnings.append(f"⚠️ Capital account arithmetic delta: ${delta:,.2f}")
-    except (KeyError, TypeError, AttributeError):
-        pass
+    # Capital account integrity (completeness, alias ambiguity, and continuity)
+    # is enforced generically by constraint_engine.validate_capital_account.
+    # The previous inline check filtered its expected field list down to fields
+    # already present -- so an incomplete capital account always passed -- and
+    # summed both current-year aliases when both appeared, producing a false
+    # continuity figure. Both defects are fixed in the engine.
 
     # Unclassified statements
     all_stmts = find_statements(doc)
@@ -164,6 +203,7 @@ def validate(input_path):
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description="OTD structural validation")
     p.add_argument("--input", required=True, help="Path to output.otd.yaml")
+    p.add_argument("--taxonomy", default=None, help="Path to governing taxonomy YAML (auto-detected if omitted)")
     args = p.parse_args()
-    r = validate(args.input)
+    r = validate(args.input, taxonomy_path=args.taxonomy)
     sys.exit(0 if r["passes"] else 1)
