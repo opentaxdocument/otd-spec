@@ -71,14 +71,56 @@ RANGE_RULE = [{"id": "box_6b_lte_6a",
                "rule": "value <= part_iii.box_6a.value",
                "severity": "error"}]
 
+
+# H2: same rule, but the cross-path reference is typo'd -- declared nowhere
+# in the taxonomy. Adversary's exact counterexample: this must hard-error,
+# not silently skip like a legitimately-absent-but-declared field would.
+RANGE_RULE_TYPO = [{"id": "box_6b_lte_6a",
+                    "type": "range",
+                    "target": "part_iii.box_6b",
+                    "rule": "value <= part_iii.box_6a_typo.value",
+                    "severity": "error"}]
+
 ZZ_RULE = [{"id": "box_20_zz_requires_classification",
             "type": "required_field",
             "target": "part_iii.box_20.ZZ.semantic.classification",
+            "non_null": True,
             "severity": "error"}]
+
+# Same constraint without the non_null opt-in, to prove parser-spec 4.7's
+# default -- a present-but-null value passes a generic required_field
+# constraint -- is genuinely honored, not just overridden everywhere.
+ZZ_RULE_NO_NONNULL = [{"id": "box_20_zz_requires_classification",
+                       "type": "required_field",
+                       "target": "part_iii.box_20.ZZ.semantic.classification",
+                       "severity": "error"}]
+
+
+# Minimal synthetic taxonomy declaring exactly the fields these cases
+# reference, matching declared_physical_fields()'s real contract
+# (nodes -> part -> children -> box/item key -> declaration dict) without
+# coupling this unit test to the full production taxonomy. Needed so
+# taxonomy_declares_path() (H2) can distinguish "declared but absent from
+# this document" (skip) from "not declared anywhere" (hard error) without
+# every currently-passing skip case here flipping to a false error.
+TAXONOMY = {
+    "nodes": {
+        "part_iii": {
+            "children": {
+                "box_4a": {"value_type": "decimal"},
+                "box_4b": {"value_type": "decimal"},
+                "box_4c": {"value_type": "decimal"},
+                "box_6a": {"value_type": "decimal"},
+                "box_6b": {"value_type": "decimal"},
+                "box_20": {"codes": {"A": {}, "X": {}, "ZZ": {}}},
+            }
+        }
+    }
+}
 
 
 def constraints_case(body, constraints):
-    return lambda: run_constraints(body, constraints)
+    return lambda: run_constraints(body, constraints, TAXONOMY)
 
 
 def uniqueness_case(body):
@@ -104,6 +146,21 @@ CASES = [
                        "box_6b": scalar("qualified_dividends", 100.0)}},
          RANGE_RULE),
      False),
+
+    # -- H2: constraint-path preflight must distinguish declared-but-absent
+    # (skip, per section 4.7) from undeclared/typo'd (hard error) -----------
+    ("range_rule_legitimate_absence_skips",
+     constraints_case(
+         {"part_iii": {"box_6b": scalar("qualified_dividends", 500.0)}},
+         RANGE_RULE),
+     False),
+
+    ("range_rule_undeclared_path_errors",
+     constraints_case(
+         {"part_iii": {"box_6a": scalar("ordinary_dividends", 100.0),
+                       "box_6b": scalar("qualified_dividends", 500.0)}},
+         RANGE_RULE_TYPO),
+     True),
 
     # -- F2: bare-path sum targets must resolve through the TaxNode ---------
     ("sum_mismatch_fails",
@@ -191,6 +248,7 @@ CASES = [
          ZZ_RULE),
      True),
 
+
     ("required_field_present_classification_passes",
      constraints_case(
          {"part_iii": {"box_20": coded("other_information", [
@@ -200,6 +258,30 @@ CASES = [
          ])}},
          ZZ_RULE),
      False),
+
+    # -- M1: parser-spec 4.7 required-field null-vs-absent semantics --------
+    # A present node whose value resolved to null is not the same as an
+    # absent node. The default (no non_null opt-in) must PASS; the same
+    # body against the opted-in production rule must still FAIL.
+    ("required_field_null_present_passes_without_non_null",
+     constraints_case(
+         {"part_iii": {"box_20": coded("other_information", [
+             {"code": "ZZ", "value": 100.0,
+              "semantic": {"id": "other_information.zz",
+                           "classification": None}},
+         ])}},
+         ZZ_RULE_NO_NONNULL),
+     False),
+
+    ("required_field_null_present_fails_with_non_null",
+     constraints_case(
+         {"part_iii": {"box_20": coded("other_information", [
+             {"code": "ZZ", "value": 100.0,
+              "semantic": {"id": "other_information.zz",
+                           "classification": None}},
+         ])}},
+         ZZ_RULE),
+     True),
 ]
 
 

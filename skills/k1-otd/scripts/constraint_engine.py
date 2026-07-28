@@ -169,7 +169,7 @@ def _numeric(value):
     return isinstance(value, (int, float)) and not isinstance(value, bool)
 
 
-def _eval_range_rule(rule, value, body):
+def _eval_range_rule(rule, value, body, taxonomy):
     """Evaluate a restricted range rule, e.g. 'value >= 0 and value <= 1'
     or 'value <= part_iii.box_6a.value'.
 
@@ -191,10 +191,18 @@ def _eval_range_rule(rule, value, body):
         found, val, _ = resolve_path(body, path)
         if not found:
             # 4.7: an absent operand skips the constraint rather than
-            # failing it. Previously this emitted the literal "None", so
-            # `float <= None` raised and reported a rule-evaluation error
-            # on any document where the referenced box was not extracted.
-            raise RangeRuleSkip(path)
+            # failing it -- but only when the taxonomy actually declares
+            # the path. An undeclared path (e.g. a typo'd box reference)
+            # is a malformed rule, not a legitimately-missing value, and
+            # must be a hard error rather than a silent skip. A
+            # misspelled cross-path reference previously disabled the
+            # rule for every document (Adversary's fourth review,
+            # box_6a -> box_6a_typo).
+            if taxonomy_declares_path(taxonomy, path):
+                raise RangeRuleSkip(path)
+            raise RangeRuleError(
+                f"{rule!r} references {path!r}, which the taxonomy does "
+                f"not declare (possible typo)")
         val = _unwrap_value(val)
         if val is None:
             # 4.7: a null operand is arithmetically 0.00.
@@ -215,7 +223,48 @@ def _eval_range_rule(rule, value, body):
 # Execute the taxonomy's declared `constraints:` list
 # ---------------------------------------------------------------------------
 
-def run_constraints(body, constraints):
+def taxonomy_declares_path(taxonomy, path):
+    """True when a constraint path's field is declared in the taxonomy.
+
+    A constraint referencing a path the taxonomy does not declare is a
+    malformed rule -- most likely a typo -- and must be a hard error, never
+    a silent skip. Adversary's fourth-review counterexample: changing
+    `box_6a` to `box_6a_typo` inside a range rule made `_eval_range_rule`
+    treat the reference as legitimately absent (RangeRuleSkip) instead of
+    flagging the rule itself as broken, silently disabling
+    `box_6b_lte_6a` for any document evaluated against the misspelled
+    taxonomy.
+
+    Checks only the root field (part.box_or_item) -- the same granularity
+    validate_physical_completeness() already enforces -- plus, for coded
+    boxes, that a referenced code is declared under that box. Deeper
+    wire-shape suffixes (.value, .checked, .beginning, etc.) are
+    structural to the node type rather than separately declared per path,
+    so they are not checked here.
+    """
+    parts = path.split(".")
+    if len(parts) < 2:
+        return False
+    part, field_key = parts[0], parts[1]
+    fields = declared_physical_fields(taxonomy).get(part, {})
+    decl = fields.get(field_key)
+    if decl is None:
+        return False
+    if len(parts) >= 3:
+        codes = decl.get("codes")
+        if isinstance(codes, dict):
+            maybe_code = parts[2]
+            declared_codes = {str(c).upper() for c in codes}
+            if maybe_code.upper() in declared_codes:
+                return True
+            if maybe_code.isupper():
+                # Looks like a code reference (e.g. "ZZ") this box does
+                # not declare -- treat as undeclared, not merely absent.
+                return False
+    return True
+
+
+def run_constraints(body, constraints, taxonomy):
     """Execute every constraint declared in the taxonomy's `constraints:`
     list against the assembled document body. Returns a list of
     (severity, constraint_id, message) tuples."""
@@ -267,7 +316,7 @@ def run_constraints(body, constraints):
                     if not _numeric(sub_val):
                         continue
                     try:
-                        ok = _eval_range_rule(rule, sub_val, body)
+                        ok = _eval_range_rule(rule, sub_val, body, taxonomy)
                     except RangeRuleSkip:
                         continue
                     except RangeRuleError as exc:
@@ -290,7 +339,7 @@ def run_constraints(body, constraints):
                 if not _numeric(val):
                     continue
                 try:
-                    ok = _eval_range_rule(rule, val, body)
+                    ok = _eval_range_rule(rule, val, body, taxonomy)
                 except RangeRuleSkip:
                     continue
                 except RangeRuleError as exc:
@@ -319,9 +368,20 @@ def run_constraints(body, constraints):
                     segs = segs[:-1]
                 anchor = ".".join(segs)
             anchor_found = bool(anchor) and resolve_path(body, anchor)[0]
-            if anchor_found and (not found or val in (None, "")):
+            non_null = bool(c.get("non_null"))
+            if non_null:
+                # Explicit taxonomy opt-in: a present node whose value resolved
+                # to null or empty string is still treated as missing. Used when
+                # a null value is itself the defect a constraint exists to catch
+                # (e.g. a ZZ code whose classification extraction failed).
+                missing = not found or val in (None, "")
+            else:
+                # parser-spec Sec 4.7: a present node with value null still
+                # satisfies a generic required_field constraint. Only true
+                # absence (not found) fails.
+                missing = not found
+            if anchor_found and missing:
                 findings.append((severity, cid, f"{cid}: required field {target} is missing"))
-
         elif ctype == "conditional_required":
             condition = c.get("condition", "")
             if evaluate_condition(body, condition) is not True:
@@ -923,7 +983,7 @@ def run_taxonomy_driven_validation(body, taxonomy, statements=None):
     the taxonomy and execute both against the assembled document body.
     Returns (errors: list[str], warnings: list[str])."""
     errors, warnings = [], []
-    constraint_findings = run_constraints(body, taxonomy.get("constraints"))
+    constraint_findings = run_constraints(body, taxonomy.get("constraints"), taxonomy)
     for severity, cid, msg in constraint_findings:
         (errors if severity == "error" else warnings).append(msg)
 

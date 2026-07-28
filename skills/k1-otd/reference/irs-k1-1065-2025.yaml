@@ -1943,6 +1943,7 @@ constraints:
   - id: "box_20_zz_requires_classification"
     type: "required_field"
     target: "part_iii.box_20.ZZ.semantic.classification"
+    non_null: true
     condition: "when code is ZZ and node is present"
     severity: "error"
     source: "OTD specification §2.3"
@@ -1950,6 +1951,7 @@ constraints:
   - id: "box_11_zz_requires_classification"
     type: "required_field"
     target: "part_iii.box_11.ZZ.semantic.classification"
+    non_null: true
     condition: "when code is ZZ and node is present"
     severity: "error"
     source: "OTD specification §2.3"
@@ -1957,6 +1959,7 @@ constraints:
   - id: "box_13_zz_requires_classification"
     type: "required_field"
     target: "part_iii.box_13.ZZ.semantic.classification"
+    non_null: true
     condition: "when code is ZZ and node is present"
     severity: "error"
     source: "OTD specification §2.3"
@@ -1964,6 +1967,7 @@ constraints:
   - id: "box_15_zz_requires_classification"
     type: "required_field"
     target: "part_iii.box_15.ZZ.semantic.classification"
+    non_null: true
     condition: "when code is ZZ and node is present"
     severity: "error"
     source: "OTD specification §2.3"
