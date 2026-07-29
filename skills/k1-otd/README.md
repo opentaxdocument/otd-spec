@@ -1,159 +1,304 @@
-# K-1 OTD Extraction Skill
+# K-1 OTD Toolkit
 
-**Version:** 1.2.0
-**Skill Pack for:** [Second Wind](https://github.com/crimsontreesoftware/second-wind) AI Runtime
-**OTD Spec:** [opentaxdocument/otd-spec](https://github.com/opentaxdocument/otd-spec)
-**License:** CC BY 4.0
+A staged toolkit for extracting, structuring, assembling, and validating IRS Schedule K-1 (Form 1065) data as Open Tax Document (OTD) YAML.
 
----
+This directory contains the K-1-specific operational layer of the [Open Tax Document project](../../README.md): grammar-based face extraction, deterministic package classification, fragment utilities, taxonomy-driven validation, and agent guidance for the parts that still require judgment.
 
-## What This Is
+## Current status
 
-A complete, production-tested pipeline for extracting IRS Schedule K-1 (Form 1065) PDFs into [OTD-compliant](../../spec/otd-spec-v0.2.yaml) YAML documents.
+| Area | Current state |
+|---|---|
+| Document family | Schedule K-1 (Form 1065) |
+| Deterministic face grammar | Tax year 2025 |
+| Workflow | Staged; no single end-to-end orchestrator |
+| Face extraction | Grammar and geometry based |
+| Package classification | Deterministic logical-section classification |
+| Overflow and footnotes | Agent-guided extraction with deterministic validation |
+| Assembly | Five named JSON fragments into OTD YAML |
+| Validation | Fail-closed, taxonomy-driven validator |
+| Contract evidence | 33 blocking validator cases; no deferred cases |
+| PDF regression corpus | Two machine-local 2025 fixtures |
+| Standard maturity | Public draft; not universal conformance certification |
 
-This skill was validated against a 19-page, 2022 amended K-1 for a complex fund-of-funds partnership with:
-- 87 coded entries across 8 Part III boxes
-- 31 structured footnote nodes
-- 48-jurisdiction SALT footprint (state source income, ECI, UBTI grids)
-- 4-activity schedule
-- §743(e) EIP election, QSBS §1202, Form 926, Form 8886, §163(j), and more
+The toolkit is useful for controlled, evidence-backed K-1 work. It is not a claim of broad support across all vendors, years, scanned documents, rotations, or K-3 packages.
 
-**Result:** 7,201 OTD fields | 0 validation errors | Full adversarial review | Preparer's Summary generated
+## What the toolkit does
 
----
+- Extracts each PDF page's text and basic metadata.
+- Segments pages into logical sections and classifies their roles.
+- Validates a 2025 K-1 face grammar.
+- Checks whether a grammar fits a candidate PDF before face values are trusted.
+- Reads face-page fields and checkboxes into evidence envelopes.
+- Extracts selected state grids and line-item detail tables.
+- Supports agent-reviewed overflow statements and footnotes.
+- Assembles five canonical fragments into OTD YAML plus a confidence manifest.
+- Validates document structure, taxonomy identity, constraint paths, nested types, closed enums, statement classifications, references, and no-fabrication rules.
+- Reconciles face values to printed line-item details when those details are available.
+
+## What it does not do
+
+- It does not provide a single-command PDF-to-OTD pipeline.
+- It does not automatically resolve ambiguous or unsupported layouts.
+- It does not certify all preparers, form years, scanned PDFs, rotations, or skew.
+- It does not provide broad K-3 extraction coverage.
+- It does not make warnings disappear. Every warning and `_unverified` marker requires disposition.
+- It does not make the standalone template-fit gate part of face extraction automatically; operators must run and inspect it.
+
+## Repository layout
+
+```text
+skills/k1-otd/
+├── README.md
+├── SKILL.md
+├── grammars/
+│   ├── GRAMMAR-FORMAT.md
+│   └── k1-1065-2025.grammar.yaml
+├── signatures/
+│   └── page-signatures.yaml
+├── reference/
+│   └── bundled OTD specifications, taxonomy, and proof fixture
+└── scripts/
+    └── extraction, classification, assembly, reconciliation, and validation tools
+```
+
+The governing K-1 taxonomy is `taxonomies/irs-k1-1065-2025.yaml`.
 
 ## Requirements
 
-```bash
-pip install pdfplumber ruamel.yaml
-```
+- Python 3.9 or later
+- `pdfplumber`
+- `PyYAML`
+- `ruamel.yaml`
 
-Python 3.10+. No other dependencies.
-
----
-
-## Quick Start
+Install the observed third-party dependencies:
 
 ```bash
-# 1. Extract PDF text
-python scripts/phase1_extract_text.py \
-  --pdf "path/to/your-k1.pdf" \
-  --out "output/artifacts"
-
-# 2. Classify pages
-python scripts/phase2_classify.py \
-  --index "output/artifacts/text_blocks/page_index.json" \
-  --out "output/artifacts/fragments/page_manifest.json"
-
-# 3. Build mini taxonomy (token-efficient extraction reference)
-python scripts/build_mini_taxonomy.py \
-  --text-dir "output/artifacts/text_blocks" \
-  --master-taxonomy "../../taxonomies/irs-k1-1065-2025.yaml" \
-  --out "output/artifacts/fragments/mini_taxonomy.yaml"
-
-# 4. Run Phase 3 inline AI extraction (see SKILL.md §6 for agent turn discipline)
-
-# 5. Assemble
-python scripts/phase4_assemble.py \
-  --fragments "output/artifacts/fragments" \
-  --out "output/artifacts/output.otd.yaml" \
-  --sha256 "<pdf-sha256>"
-
-# 6. Validate
-python scripts/validate_otd.py \
-  --input "output/artifacts/output.otd.yaml"
+python -m pip install pdfplumber PyYAML ruamel.yaml
 ```
 
----
+Run commands from the repository root. Keep the source PDF immutable and put generated files under a dedicated artifact directory.
 
-## Pipeline Overview
+## Canonical staged workflow
 
-```
-PDF → Phase 1 (Python) → Phase 2 (Python) → Phase 3 (AI + Python)
-    → Phase 4 (Python) → Phase 5 (Adversarial AI) → output.otd.yaml
-```
+The examples below use `work/` as the artifact directory.
 
-| Phase | Method | Description |
-|-------|--------|-------------|
-| 1 | Python | Deterministic PDF text extraction via `pdfplumber`. Zero AI tokens. |
-| 2 | Python | Page classification + mini taxonomy construction. Zero AI tokens. |
-| 3 | AI (inline) | 5-turn sequential extraction: Face Page → Overflow → Footnotes A → Footnotes B → State Schedules |
-| 4 | Python | OTD assembly + validation. Zero AI tokens. |
-| 5 | AI (adversarial) | Spot-check, code validation, capital check, coverage audit. Emits patch. |
+### 1. Preserve the source and extract page text
 
----
+Record the source PDF's SHA-256 before extraction. Then run:
 
-## Directory Layout
-
-```
-skills/k1-otd/
-├── README.md                        ← You are here
-├── SKILL.md                         ← Full agent execution manifest
-├── reference/                       ← Local copies of spec files (for self-contained use)
-│   ├── otd-spec-v0.2.yaml
-│   ├── irs-k1-1065-2025.yaml
-│   ├── otd-footnote-taxonomy.md
-│   ├── proof-emitted.otd.yaml
-│   ├── otd-emitter-spec.md
-│   ├── otd-parser-spec.md
-│   └── otd-derivation-spec.md
-└── scripts/
-    ├── phase1_extract_text.py       ← PDF → text blocks
-    ├── phase2_classify.py           ← Page classification
-    ├── build_mini_taxonomy.py       ← Token-efficient taxonomy builder
-    ├── extract_state_grids.py       ← Deterministic state grid extraction (with AI fallback)
-    ├── state_grid_parsers.py        ← Reusable parser strategies for state grid formats
-    ├── phase4_assemble.py           ← Fragment → OTD assembly
-    ├── validate_otd.py              ← OTD validation
-    └── apply_adversary_patch.py     ← Apply adversarial review corrections
+```bash
+python skills/k1-otd/scripts/phase1_extract_text.py \
+  --pdf path/to/package.pdf \
+  --out work
 ```
 
----
+This writes page text files beneath `work/text_blocks/` and a `page_index.json`.
 
-## Output Contract
+Image-only PDFs need an explicit OCR step outside this script. Preserve OCR provenance and do not present OCR text as native PDF evidence.
 
-The primary deliverable is `output.otd.yaml` — a document conforming to the current [OTD TaxNode/reference schema](../../spec/otd-spec-v0.2.yaml) while using document envelope version `0.1`.
+### 2. Validate and fit the face grammar
 
-**Target quality gate:** `PASS | 0 errors | ≤1 warning`
+Validate the grammar itself:
 
-The one acceptable warning on amended K-1s: `supersedes_document_id is null` (when the prior OTD document ID is genuinely unknown).
+```bash
+python skills/k1-otd/scripts/grammar_validator.py \
+  skills/k1-otd/grammars/k1-1065-2025.grammar.yaml
+```
 
----
+Run the standalone fit gate:
 
-## Key Design Decisions
+```bash
+python skills/k1-otd/scripts/template_match.py \
+  --pdf path/to/package.pdf \
+  --grammar skills/k1-otd/grammars/k1-1065-2025.grammar.yaml \
+  --outdir work/template-fit
+```
 
-**Inline extraction over sub-agents.** Phase 3 uses the main agent in sequential turns rather than parallel sub-agents. This eliminates start/pause/resume latency, timeout risk, and wake signal overhead. See `SKILL.md §10` for rationale.
+Inspect `work/template-fit/template_fit_report.json`.
 
-**Face-Page Merge Rule.** Overflow extraction (Turn B) explicitly re-reads the face page to ensure Part III coded entries visible on both the face and overflow statements are not silently dropped.
+Do not rely on the process return code as the fit decision. Proceed only when the report is evaluable, has no ambiguous tie, and identifies a unique matching grammar. Treat `partial`, `mismatch`, `unverified`, and ambiguous ties as stop-and-review outcomes.
 
-**Adversarial review is mandatory.** Phase 5 must use a frontier model (Gemini 3.1 Pro or Claude 4.6) for genuine cross-document reasoning. Self-review by the same model that extracted the data is insufficient for a tax document of this complexity.
+### 3. Classify logical sections
 
-**Parser library (`state_grid_parsers.py`).** State schedule grids vary dramatically by issuer and OCR engine. The parser library accumulates successful strategies across runs rather than discarding them. New parsing challenges should extend this library.
+```bash
+python skills/k1-otd/scripts/phase2_classify.py \
+  --index work/text_blocks/page_index.json \
+  --text-dir work/text_blocks \
+  --out work/fragments/page_manifest.json \
+  --section-out work/fragments/section_manifest.json
+```
 
----
+The normal path uses deterministic section-level classification. Do not use `--legacy-heuristics` except to reproduce historical behavior. Any unresolved section requires review before extraction continues.
 
-## Validated Against
+### 4. Build extraction fragments
 
-- **Form:** IRS Schedule K-1 (Form 1065), Tax Year 2022, Amended
-- **Entity:** Complex fund-of-funds LP with 4 underlying activities
-- **Pages:** 19 (face + overflow + 16 footnote pages + activity schedule + state schedule)
-- **SHA-256:** `95489c86cb56fd869a5ab8d38a2b4ee00a0a261cf5998e11e647acdee057ce06`
-- **Result:** 7,201 fields | 66 statement nodes | 87 coded entries | 0 errors
+Read the face page:
 
----
+```bash
+python skills/k1-otd/scripts/face_reader.py \
+  path/to/package.pdf \
+  skills/k1-otd/grammars/k1-1065-2025.grammar.yaml \
+  > work/fragments/face_page.json
+```
 
-## Contributing
+Extract state grids when present:
 
-State grid formats vary by K-1 issuer. If you encounter a new format that `extract_state_grids.py` escalates:
-1. Add a new parser strategy to `state_grid_parsers.py`
-2. Wire it into `extract_state_grids.py`
-3. Open a PR describing the format you solved
+```bash
+python skills/k1-otd/scripts/extract_state_grids.py \
+  --input-dir work/text_blocks \
+  --manifest work/fragments/page_manifest.json \
+  --out work/fragments/state_schedules.json
+```
 
-See `SKILL.md §6` ("State Schedule Parsing & Parser Library") for the contribution protocol.
+Build line-item details when the package contains printed detail tables:
 
----
+```bash
+python skills/k1-otd/scripts/build_line_item_details.py \
+  --pages work/text_blocks \
+  --grammar skills/k1-otd/grammars/k1-1065-2025.grammar.yaml \
+  --out work/fragments/line_item_details.json
+```
 
-## License
+Overflow statements and footnotes are not fully automated. Extract them from the classified source sections with explicit evidence and preserve source text. Never infer a value solely because it is plausible.
 
-Creative Commons Attribution 4.0 International (CC BY 4.0).
-See [LICENSE](../../LICENSE).
+### 5. Satisfy the assembler fragment contract
+
+`phase4_assemble.py` reads these five files from the fragment directory:
+
+```text
+face_page.json
+overflow_statements.json
+footnotes_a.json
+footnotes_b.json
+state_schedules.json
+```
+
+Use empty lists or empty structured objects only where the fragment contract permits them. Do not omit a fragment silently.
+
+### 6. Assemble OTD YAML
+
+```bash
+python skills/k1-otd/scripts/phase4_assemble.py \
+  --fragments work/fragments \
+  --out work/output.otd.yaml \
+  --sha256 SOURCE_PDF_SHA256
+```
+
+The assembler writes `work/output.otd.yaml` and a sibling confidence manifest, normally `work/output.confidence.json`.
+
+### 7. Validate against the governing taxonomy
+
+```bash
+python skills/k1-otd/scripts/validate_otd.py \
+  --input work/output.otd.yaml \
+  --taxonomy taxonomies/irs-k1-1065-2025.yaml
+```
+
+Exit codes are stable:
+
+| Code | Meaning |
+|---:|---|
+| `0` | The document passed the implemented conformance checks |
+| `1` | The document is invalid |
+| `2` | The validator or governing taxonomy could not operate safely |
+
+A missing, malformed, empty, non-operative, or identity-mismatched taxonomy is a validator/configuration failure, not a successful validation.
+
+### 8. Reconcile face and detail values
+
+When `line_item_details.json` exists, run the hard-error reconciliation gate:
+
+```bash
+python skills/k1-otd/scripts/reconcile_line_item_details.py \
+  --otd work/output.otd.yaml \
+  --details work/fragments/line_item_details.json \
+  --out work/line-item-reconciliation.json \
+  --posture hard_error
+```
+
+Investigate every mismatch against the source PDF. Do not waive a mismatch by changing the expected output.
+
+## Truth-preservation rules
+
+These rules are non-negotiable:
+
+1. Never guess.
+2. An unobserved fact is `null` plus a non-empty `_unverified` explanation—not `false`, `0`, or an invented value.
+3. Intentional masking uses `_masked: true`, not `_unverified`.
+4. A `custom` statement classification requires non-empty `content.custom_classification`.
+5. `unclassified_requires_review` requires a non-empty `_unverified` marker.
+6. Statement nodes must be attached with `form.attachment: true`.
+7. Box 16 and K-3 references must agree with the observed checkbox state.
+8. Unknown extension nodes are preserved for forward compatibility; known taxonomy nodes remain strict.
+9. Every warning, unresolved section, and `_unverified` marker must appear in the review ledger.
+
+## Validation coverage
+
+Run the repository test programs from the repository root:
+
+```bash
+python -B tests/test_validator_contract.py
+python -B tests/test_constraint_engine.py
+python -B tests/test_direct_documents.py
+python -B tests/test_rectification.py
+python -B tests/test_face_reader.py
+python -B tests/check_mirrors.py
+```
+
+At the current repository revision, the validator contract matrix contains 33 blocking cases and no deferred cases.
+
+`tests/test_face_reader.py` is intentionally not portable: it depends on two machine-local PDFs, a blank IRS 2025 form and one flattened preparer document. That suite is a regression net for confirmed examples, not proof of general vendor or form-year support.
+
+## Important scripts
+
+| Script | Role |
+|---|---|
+| `phase1_extract_text.py` | Per-page text extraction and page index |
+| `phase2_classify.py` | Logical-section classification and manifests |
+| `grammar_validator.py` | Grammar structure and reader validation |
+| `template_match.py` | Standalone grammar-fit evidence gate |
+| `face_reader.py` | Grammar-driven face-page extraction |
+| `extract_state_grids.py` | State schedule grid extraction |
+| `build_line_item_details.py` | Printed line-item detail fragment |
+| `reconcile_line_item_details.py` | Face-versus-detail reconciliation |
+| `phase4_assemble.py` | Five-fragment OTD assembly |
+| `constraint_engine.py` | Taxonomy compilation and generic constraints |
+| `validate_otd.py` | Document and taxonomy validation |
+
+Additional scripts support diagnostics, section analysis, mini-taxonomy generation, and reviewed patch application. Inspect each script's `--help` or source contract before use.
+
+## Review and delivery checklist
+
+Before delivering an OTD document:
+
+- Source PDF and SHA-256 are recorded.
+- Grammar syntax passes.
+- Template-fit evidence supports a unique match.
+- No classified section is unresolved without review.
+- All five assembler fragments exist and are structurally valid.
+- Assembly completes and writes the confidence manifest.
+- Validator exits `0` against the intended taxonomy.
+- Reconciliation passes when detail tables exist.
+- Every warning and `_unverified` item is reviewed and documented.
+- No source value was invented, silently dropped, or converted from unknown to false/zero.
+- Output artifacts and logs are retained.
+
+## Limits and next work
+
+The highest-value next steps are:
+
+- build portable, redistributable PDF fixtures;
+- add grammars for additional form years and preparer layouts;
+- integrate the template-fit gate into an explicit orchestrator;
+- add OCR and rotation/skew handling with provenance;
+- broaden overflow, footnote, state, and K-3 corpus coverage;
+- add cross-implementation OTD conformance tests.
+
+## References
+
+- Agent operating contract: [SKILL.md](SKILL.md)
+- Grammar format: [grammars/GRAMMAR-FORMAT.md](grammars/GRAMMAR-FORMAT.md)
+- Parser specification: [reference/otd-parser-spec.md](reference/otd-parser-spec.md)
+- Emitter specification: [reference/otd-emitter-spec.md](reference/otd-emitter-spec.md)
+- Footnote taxonomy: [reference/otd-footnote-taxonomy.md](reference/otd-footnote-taxonomy.md)
+- License: [../../LICENSE](../../LICENSE)
