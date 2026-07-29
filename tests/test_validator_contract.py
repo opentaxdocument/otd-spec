@@ -228,7 +228,6 @@ def build_cases():
         mutate_taxonomy=lambda taxonomy: constraint(
             taxonomy, "box_4c_equals_4a_plus_4b"
         ).__setitem__("target", "part_iii.box_4c_typo"),
-        deferred_current_rc=EXIT_CONFORMANT,
     )
     add_case(
         cases,
@@ -238,7 +237,6 @@ def build_cases():
         mutate_taxonomy=lambda taxonomy: constraint(
             taxonomy, "box_6b_lte_6a"
         ).__setitem__("target", "part_iii.box_6b_typo"),
-        deferred_current_rc=EXIT_CONFORMANT,
     )
     add_case(
         cases,
@@ -248,7 +246,6 @@ def build_cases():
         mutate_taxonomy=lambda taxonomy: constraint(
             taxonomy, "item_k3_requires_box20_x_statement"
         ).__setitem__("condition", "part_ii.item_k3_typo.value == true"),
-        deferred_current_rc=EXIT_CONFORMANT,
     )
 
     def break_sum_operand_document(document):
@@ -266,7 +263,6 @@ def build_cases():
         EXIT_VALIDATOR_ERROR,
         break_sum_operand_document,
         break_sum_operand_taxonomy,
-        deferred_current_rc=EXIT_CONFORMANT,
     )
 
     def unverified_false(document):
@@ -280,7 +276,6 @@ def build_cases():
         "An unobserved fact must be null rather than a plausible false value.",
         EXIT_INVALID_DOCUMENT,
         unverified_false,
-        deferred_current_rc=EXIT_CONFORMANT,
     )
     add_case(
         cases,
@@ -290,7 +285,6 @@ def build_cases():
         lambda document: document["body"]["part_ii"]["item_g"].__setitem__(
             "value", "definitely_not_a_partner_type"
         ),
-        deferred_current_rc=EXIT_CONFORMANT,
     )
     add_case(
         cases,
@@ -300,7 +294,6 @@ def build_cases():
         lambda document: document["body"]["part_ii"]["item_j"]["value"].__setitem__(
             "profit_beginning", "not-a-percentage"
         ),
-        deferred_current_rc=EXIT_CONFORMANT,
     )
 
     def invalid_form_metadata(document):
@@ -325,7 +318,6 @@ def build_cases():
         lambda document: document["body"]["part_iii"]["box_1"]["form"].pop(
             "box", None
         ),
-        deferred_current_rc=EXIT_CONFORMANT,
     )
     add_case(
         cases,
@@ -358,7 +350,6 @@ def build_cases():
         "Undeclared extensions must be preserved and reported, not rejected.",
         EXIT_CONFORMANT,
         add_unknown_extension,
-        deferred_current_rc=EXIT_INVALID_DOCUMENT,
     )
 
     def add_unknown_statement_classification(document):
@@ -382,7 +373,52 @@ def build_cases():
         "Statement classifications must bind to the canonical catalog or custom.",
         EXIT_INVALID_DOCUMENT,
         add_unknown_statement_classification,
-        deferred_current_rc=EXIT_CONFORMANT,
+    )
+
+    def add_unqualified_custom_statement(document):
+        document.setdefault("statements", []).append(
+            {
+                "type": "statement",
+                "semantic": {
+                    "id": "stmt_unqualified_custom",
+                    "label": "Unqualified Custom Statement",
+                    "classification": "custom",
+                    "role": "investor_footnote",
+                },
+                "form": {"attachment": True},
+                "content": {"detail": "missing custom classification"},
+            }
+        )
+
+    add_case(
+        cases,
+        "custom_statement_missing_custom_classification",
+        "Custom statements require a non-empty content.custom_classification.",
+        EXIT_INVALID_DOCUMENT,
+        add_unqualified_custom_statement,
+    )
+
+    def add_unmarked_review_statement(document):
+        document.setdefault("statements", []).append(
+            {
+                "type": "statement",
+                "semantic": {
+                    "id": "stmt_unmarked_review",
+                    "label": "Unmarked Review Statement",
+                    "classification": "unclassified_requires_review",
+                    "role": "investor_footnote",
+                },
+                "form": {"attachment": True},
+                "content": {"detail": "missing review marker"},
+            }
+        )
+
+    add_case(
+        cases,
+        "unclassified_statement_missing_unverified",
+        "Review-required statements must carry a non-empty _unverified marker.",
+        EXIT_INVALID_DOCUMENT,
+        add_unmarked_review_statement,
     )
 
     def remove_statement_form(document):
@@ -397,7 +433,6 @@ def build_cases():
         "Statement nodes require form.attachment.",
         EXIT_INVALID_DOCUMENT,
         remove_statement_form,
-        deferred_current_rc=EXIT_CONFORMANT,
     )
 
     def unchecked_with_target(document):
@@ -416,7 +451,6 @@ def build_cases():
         "Unchecked Box 16 cannot assert a furnished K-3 target.",
         EXIT_INVALID_DOCUMENT,
         unchecked_with_target,
-        deferred_current_rc=EXIT_CONFORMANT,
     )
 
     return cases
@@ -547,7 +581,7 @@ def main():
             print(f"  {name}")
         return 1
 
-    print("ALL BLOCKING CASES PASSED; ALL DEFERRED CASES REMAIN EXPLICIT.")
+    print("ALL 33 CONTRACT CASES PASSED; NO DEFERRED CASES REMAIN.")
     return 0
 
 

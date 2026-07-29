@@ -545,51 +545,95 @@ _PAYLOAD_KEYS = {
 
 
 def validate_primitive_contracts(body, root_path="body"):
-    """Every typed TaxNode must carry semantic identity, form placement, and a
-    type-appropriate payload.
-
-    A prior adversarial review found that a node containing only
-    `type: scalar` -- no semantic, no form, no value -- validated cleanly.
-    This walks the whole body and enforces the primitive contract
-    structurally, so malformed nodes are rejected at any depth.
-    """
+    """Validate primitive shape plus cross-cutting truth invariants."""
     findings = []
 
     def walk(node, path):
         if isinstance(node, dict):
             ntype = node.get("type")
+
+            if "_unverified" in node:
+                for factual_key in ("value", "checked"):
+                    if factual_key in node and node.get(factual_key) is not None:
+                        findings.append((
+                            "error",
+                            f"unverified_fabrication:{path}.{factual_key}",
+                            f"{path} is marked _unverified but asserts "
+                            f"{factual_key}={node.get(factual_key)!r}; "
+                            "unobserved facts must be null",
+                        ))
+
             if ntype in _VALID_TYPES:
                 semantic = node.get("semantic")
                 if not isinstance(semantic, dict) or not semantic.get("id"):
-                    findings.append(("error", f"primitive_semantic:{path}",
-                        f"{path} ({ntype}) is missing semantic.id"))
-                # Statements carry form.attachment rather than form placement
-                # on the printed grid; every other primitive must be locatable.
-                if ntype != "statement" and not isinstance(node.get("form"), dict):
-                    findings.append(("error", f"primitive_form:{path}",
-                        f"{path} ({ntype}) is missing form placement"))
+                    findings.append((
+                        "error",
+                        f"primitive_semantic:{path}",
+                        f"{path} ({ntype}) is missing semantic.id",
+                    ))
+
+                if ntype == "statement":
+                    form = node.get("form")
+                    if not isinstance(form, dict) or form.get("attachment") is not True:
+                        findings.append((
+                            "error",
+                            f"primitive_form:{path}",
+                            f"{path} (statement) requires form.attachment=true",
+                        ))
+                elif not isinstance(node.get("form"), dict):
+                    findings.append((
+                        "error",
+                        f"primitive_form:{path}",
+                        f"{path} ({ntype}) is missing form placement",
+                    ))
+
                 keys = _PAYLOAD_KEYS.get(ntype, ())
-                if keys and not any(k in node for k in keys):
-                    findings.append(("error", f"primitive_payload:{path}",
+                if keys and not any(key in node for key in keys):
+                    findings.append((
+                        "error",
+                        f"primitive_payload:{path}",
                         f"{path} ({ntype}) is missing a type-appropriate payload "
-                        f"(one of: {', '.join(keys)})"))
+                        f"(one of: {', '.join(keys)})",
+                    ))
+
                 if ntype == "statement":
                     role = semantic.get("role") if isinstance(semantic, dict) else None
                     if not role:
-                        findings.append(("error", f"primitive_role:{path}",
-                            f"{path} (statement) is missing semantic.role"))
+                        findings.append((
+                            "error",
+                            f"primitive_role:{path}",
+                            f"{path} (statement) is missing semantic.role",
+                        ))
                     elif role not in _VALID_STATEMENT_ROLES:
-                        findings.append(("error", f"primitive_role:{path}",
+                        findings.append((
+                            "error",
+                            f"primitive_role:{path}",
                             f"{path} (statement) has unrecognized semantic.role "
-                            f"'{role}' (expected one of: "
-                            f"{', '.join(sorted(_VALID_STATEMENT_ROLES))})"))
-            for k, v in node.items():
-                if k in ("semantic", "form"):
+                            f"{role!r}",
+                        ))
+
+                if ntype == "reference":
+                    checked = node.get("checked")
+                    if checked is False and node.get("target") is not None:
+                        findings.append((
+                            "error",
+                            f"reference_truth:{path}",
+                            f"{path} is unchecked but asserts a reference target",
+                        ))
+                    if checked is True and node.get("notification") is not None:
+                        findings.append((
+                            "error",
+                            f"reference_truth:{path}",
+                            f"{path} is checked but asserts a non-furnishing notification",
+                        ))
+
+            for key, value in node.items():
+                if key in ("semantic", "form"):
                     continue
-                walk(v, f"{path}.{k}" if path else k)
+                walk(value, f"{path}.{key}" if path else key)
         elif isinstance(node, list):
-            for i, v in enumerate(node):
-                walk(v, f"{path}[{i}]")
+            for index, value in enumerate(node):
+                walk(value, f"{path}[{index}]")
 
     walk(body, root_path)
     return findings
@@ -803,6 +847,187 @@ def validate_coded_entry_uniqueness(body):
 # Coded boxes add a second layer: taxonomy `codes: {A: {...}}` against
 # document `entries: [{code: A, semantic: {...}, value: ...}]`.
 
+class TaxonomyCompilationError(ValueError):
+    """The governing taxonomy is internally inconsistent or references unknown symbols."""
+
+
+_CONDITION_PATH_RE = re.compile(
+    r"^\s*(part_[a-z0-9_]+(?:\.[A-Za-z0-9_*]+)+)\s*"
+    r"(?:==|!=|>=|<=|>|<)\s*.+?\s*$"
+)
+_RULE_PATH_RE = re.compile(
+    r"\bpart_[a-z0-9_]+(?:\.[A-Za-z0-9_*]+)+\b"
+)
+
+
+def _taxonomy_path_declaration(taxonomy, path):
+    """Return the declaration reached by a constraint path, or None.
+
+    Constraint paths address the physical part/item tree, then may descend
+    through object fields, coded entries, statement attachments, semantic
+    metadata, or reference payloads.
+    """
+    if not isinstance(path, str) or not path.strip():
+        return None
+    parts = [part for part in path.strip().split(".") if part]
+    if parts and parts[0] == "body":
+        parts = parts[1:]
+    if len(parts) < 2:
+        return None
+
+    root = taxonomy.get("nodes", taxonomy)
+    part = root.get(parts[0]) if isinstance(root, dict) else None
+    if not isinstance(part, dict):
+        return None
+    children = part.get("children")
+    if not isinstance(children, dict):
+        children = part
+    declaration = children.get(parts[1]) if isinstance(children, dict) else None
+    if not isinstance(declaration, dict):
+        return None
+
+    remaining = parts[2:]
+    while remaining:
+        token = remaining.pop(0)
+
+        if token == "value":
+            if not remaining:
+                return declaration
+            continue
+
+        if token == "*":
+            fields = declaration.get("fields")
+            return declaration if isinstance(fields, dict) and fields else None
+
+        if declaration.get("type") == "coded":
+            codes = declaration.get("codes")
+            if not isinstance(codes, dict):
+                return None
+            code_declaration = codes.get(token)
+            if code_declaration is None:
+                code_declaration = codes.get(str(token).upper())
+            if not isinstance(code_declaration, dict):
+                return None
+            declaration = code_declaration
+            if not remaining:
+                return declaration
+            continue
+
+        fields = declaration.get("fields")
+        if isinstance(fields, dict) and token in fields:
+            field_declaration = fields.get(token)
+            if not isinstance(field_declaration, dict):
+                return None
+            declaration = field_declaration
+            if not remaining:
+                return declaration
+            continue
+
+        if token == "statement":
+            if (
+                declaration.get("statement_classification")
+                or declaration.get("statement_schema")
+            ):
+                return declaration if not remaining else None
+            return None
+
+        if token in ("checked", "target", "notification"):
+            if declaration.get("type") == "reference":
+                return declaration
+            return None
+
+        if token == "semantic":
+            if remaining and remaining[0] in ("id", "classification", "role"):
+                remaining.pop(0)
+                return declaration if not remaining else None
+            return None
+
+        return None
+
+    return declaration
+
+
+def _require_declared_path(taxonomy, path, constraint_id, role, errors):
+    if _taxonomy_path_declaration(taxonomy, path) is None:
+        errors.append(
+            f"{constraint_id}: {role} path {path!r} is not declared by the taxonomy"
+        )
+
+
+def compile_taxonomy(taxonomy):
+    """Compile every constraint symbol before evaluating a document."""
+    constraints = taxonomy.get("constraints")
+    if not isinstance(constraints, list):
+        raise TaxonomyCompilationError("constraints must be a sequence")
+
+    errors = []
+    supported = {"sum", "range", "required_field", "conditional_required"}
+    for index, constraint in enumerate(constraints):
+        if not isinstance(constraint, dict):
+            errors.append(f"constraint[{index}] is not a mapping")
+            continue
+        cid = str(constraint.get("id") or f"constraint[{index}]")
+        kind = constraint.get("type")
+        if kind not in supported:
+            errors.append(f"{cid}: unsupported constraint type {kind!r}")
+            continue
+
+        target = constraint.get("target")
+        _require_declared_path(taxonomy, target, cid, "target", errors)
+
+        if kind == "sum":
+            operands = constraint.get("operands")
+            if not isinstance(operands, list) or not operands:
+                errors.append(f"{cid}: sum operands must be a non-empty sequence")
+            else:
+                for operand_index, operand in enumerate(operands):
+                    _require_declared_path(
+                        taxonomy,
+                        operand,
+                        cid,
+                        f"operand[{operand_index}]",
+                        errors,
+                    )
+
+        elif kind == "range":
+            rule = constraint.get("rule")
+            if not isinstance(rule, str) or not rule.strip():
+                errors.append(f"{cid}: range rule must be a non-empty string")
+            else:
+                for referenced_path in _RULE_PATH_RE.findall(rule):
+                    _require_declared_path(
+                        taxonomy,
+                        referenced_path,
+                        cid,
+                        "range expression",
+                        errors,
+                    )
+
+        elif kind == "conditional_required":
+            condition = constraint.get("condition")
+            if not isinstance(condition, str):
+                errors.append(f"{cid}: condition must be a string")
+            else:
+                match = _CONDITION_PATH_RE.fullmatch(condition)
+                if match is None:
+                    errors.append(
+                        f"{cid}: condition {condition!r} does not match "
+                        "'path operator literal'"
+                    )
+                else:
+                    _require_declared_path(
+                        taxonomy,
+                        match.group(1),
+                        cid,
+                        "condition",
+                        errors,
+                    )
+
+    if errors:
+        raise TaxonomyCompilationError("; ".join(errors))
+    return taxonomy
+
+
 _BINDING_VALUE_TYPES = {
     "decimal": (int, float),
     "integer": (int,),
@@ -819,22 +1044,65 @@ def _bind_norm(value):
 
 
 def _payload_conforms(value_type, value):
-    """A null payload always conforms.
-
-    The no-fabrication policy emits null plus an _unverified marker for
-    anything not observed in the source. That is a reported fact about the
-    document, not a type violation, and rejecting it would fail every honest
-    partially-extracted K-1.
-    """
+    """Return whether a scalar payload conforms to its declared primitive type."""
     if value is None:
         return True
     expected = _BINDING_VALUE_TYPES.get(value_type)
     if expected is None:
-        return True          # structured or unmapped declaration
+        return True
     if value_type in ("decimal", "integer", "percentage"):
-        # bool is a subclass of int in Python; True must not satisfy decimal.
         return isinstance(value, expected) and not isinstance(value, bool)
     return isinstance(value, expected)
+
+
+def _validate_declared_payload(path, declaration, value):
+    """Recursively validate enum and object payload declarations."""
+    findings = []
+    value_type = _bind_norm(declaration.get("value_type"))
+    if value is None:
+        return findings
+
+    if value_type == "object":
+        if not isinstance(value, dict):
+            findings.append((
+                "error",
+                f"binding_value_type:{path}",
+                f"{path} declares value_type 'object' but carries "
+                f"{type(value).__name__}",
+            ))
+            return findings
+        fields = declaration.get("fields")
+        if isinstance(fields, dict):
+            for field_name, field_declaration in fields.items():
+                if field_name not in value or not isinstance(field_declaration, dict):
+                    continue
+                findings.extend(
+                    _validate_declared_payload(
+                        f"{path}.{field_name}",
+                        field_declaration,
+                        value.get(field_name),
+                    )
+                )
+        return findings
+
+    if value_type and not _payload_conforms(value_type, value):
+        findings.append((
+            "error",
+            f"binding_value_type:{path}",
+            f"{path} declares value_type {value_type!r} but carries "
+            f"{type(value).__name__} ({value!r})",
+        ))
+        return findings
+
+    if value_type == "enum":
+        allowed = declaration.get("values")
+        if isinstance(allowed, list) and value not in allowed:
+            findings.append((
+                "error",
+                f"binding_enum:{path}",
+                f"{path} value {value!r} is not in the taxonomy enum",
+            ))
+    return findings
 
 
 def declared_physical_fields(taxonomy):
@@ -864,159 +1132,281 @@ def declared_physical_fields(taxonomy):
 
 
 def _bind_coded_entries(path, decl, node):
-    """Bind each coded entry to the code the taxonomy declares for that box."""
+    """Bind each coded entry to the code and payload the taxonomy declares."""
     findings = []
     codes = decl.get("codes")
     entries = node.get("entries")
     if not isinstance(codes, dict) or not isinstance(entries, list):
         return findings
-    for i, entry in enumerate(entries):
+    for index, entry in enumerate(entries):
         if not isinstance(entry, dict):
-            findings.append(("error", f"binding_code_shape:{path}",
-                f"{path}.entries[{i}] is not a structured coded entry"))
+            findings.append((
+                "error",
+                f"binding_code_shape:{path}",
+                f"{path}.entries[{index}] is not a structured coded entry",
+            ))
             continue
         code = _bind_norm(entry.get("code"))
         if not code:
-            continue          # uniqueness check owns the missing-code finding
-        cdecl = codes.get(code) or codes.get(code.upper())
-        if not isinstance(cdecl, dict):
-            findings.append(("error", f"binding_code:{path}.{code}",
-                f"{path} reports code '{code}', which the taxonomy does not "
-                f"declare for this box"))
             continue
-        want_sem = _bind_norm(cdecl.get("semantic_id"))
+        declaration = codes.get(code)
+        if declaration is None:
+            declaration = codes.get(code.upper())
+        if not isinstance(declaration, dict):
+            findings.append((
+                "error",
+                f"binding_code:{path}.{code}",
+                f"{path} reports code {code!r}, which the taxonomy does not declare",
+            ))
+            continue
+
+        wanted_semantic = _bind_norm(declaration.get("semantic_id"))
         semantic = entry.get("semantic")
-        got_sem = (_bind_norm(semantic.get("id"))
-                   if isinstance(semantic, dict) else None)
-        if want_sem and got_sem != want_sem:
-            findings.append(("error", f"binding_code_semantic:{path}.{code}",
-                f"{path} code {code} carries semantic.id '{got_sem}' but the "
-                f"taxonomy declares '{want_sem}'"))
-        want_vt = _bind_norm(cdecl.get("value_type"))
-        if (want_vt and "value" in entry
-                and not _payload_conforms(want_vt, entry.get("value"))):
-            findings.append(("error", f"binding_code_value:{path}.{code}",
-                f"{path} code {code} declares value_type '{want_vt}' but "
-                f"carries {type(entry.get('value')).__name__}"))
+        actual_semantic = (
+            _bind_norm(semantic.get("id")) if isinstance(semantic, dict) else None
+        )
+        if wanted_semantic and actual_semantic != wanted_semantic:
+            findings.append((
+                "error",
+                f"binding_code_semantic:{path}.{code}",
+                f"{path} code {code} carries semantic.id {actual_semantic!r} "
+                f"but the taxonomy declares {wanted_semantic!r}",
+            ))
+
+        if "value" in entry:
+            findings.extend(
+                _validate_declared_payload(
+                    f"{path}.{code}.value",
+                    declaration,
+                    entry.get("value"),
+                )
+            )
     return findings
 
 
 def validate_taxonomy_binding(body, taxonomy):
-    """Bind every declared physical node to its taxonomy entry.
-
-    Absence is deliberately NOT reported here. validate_physical_completeness()
-    owns that finding, and duplicating it would report every missing field
-    twice under two different constraint ids.
-
-    A node that declares no `type` is an error rather than a skip. The prior
-    primitive walk gated on `if ntype in _VALID_TYPES`, so deleting the key
-    removed the node from validation entirely -- which also let a duplicate
-    coded entry hide by stripping `type: coded` from its enclosing box.
-    """
+    """Bind every declared physical node and nested payload to its declaration."""
     findings = []
     for part, fields in declared_physical_fields(taxonomy).items():
         section = body.get(part)
         if not isinstance(section, dict):
-            continue          # completeness owns the missing-part finding
-        for key, decl in fields.items():
+            continue
+        for key, declaration in fields.items():
             if key not in section:
-                continue      # completeness owns the missing-field finding
+                continue
             path = f"{part}.{key}"
             node = section.get(key)
             if not isinstance(node, dict):
-                findings.append(("error", f"binding_shape:{path}",
+                findings.append((
+                    "error",
+                    f"binding_shape:{path}",
                     f"{path} is declared by the taxonomy but is a "
-                    f"{type(node).__name__}, not a TaxNode"))
+                    f"{type(node).__name__}, not a TaxNode",
+                ))
                 continue
 
-            want_type = _bind_norm(decl.get("type"))
-            got_type = _bind_norm(node.get("type"))
-            if got_type is None:
-                findings.append(("error", f"binding_type:{path}",
-                    f"{path} declares no type; the taxonomy declares "
-                    f"'{want_type}'"))
-            elif want_type and got_type != want_type:
-                findings.append(("error", f"binding_type:{path}",
-                    f"{path} is '{got_type}' but the taxonomy declares "
-                    f"'{want_type}'"))
+            wanted_type = _bind_norm(declaration.get("type"))
+            actual_type = _bind_norm(node.get("type"))
+            if actual_type is None:
+                findings.append((
+                    "error",
+                    f"binding_type:{path}",
+                    f"{path} declares no type; taxonomy declares {wanted_type!r}",
+                ))
+            elif wanted_type and actual_type != wanted_type:
+                findings.append((
+                    "error",
+                    f"binding_type:{path}",
+                    f"{path} is {actual_type!r} but taxonomy declares {wanted_type!r}",
+                ))
 
-            want_sem = _bind_norm(decl.get("semantic_id"))
+            wanted_semantic = _bind_norm(declaration.get("semantic_id"))
             semantic = node.get("semantic")
-            got_sem = (_bind_norm(semantic.get("id"))
-                       if isinstance(semantic, dict) else None)
-            if want_sem and got_sem != want_sem:
-                findings.append(("error", f"binding_semantic:{path}",
-                    f"{path} carries semantic.id '{got_sem}' but the taxonomy "
-                    f"declares '{want_sem}'"))
+            actual_semantic = (
+                _bind_norm(semantic.get("id")) if isinstance(semantic, dict) else None
+            )
+            if wanted_semantic and actual_semantic != wanted_semantic:
+                findings.append((
+                    "error",
+                    f"binding_semantic:{path}",
+                    f"{path} carries semantic.id {actual_semantic!r} but taxonomy "
+                    f"declares {wanted_semantic!r}",
+                ))
 
             form = node.get("form")
-            want_loc = _bind_norm(decl.get("form_location"))
-            got_loc = (_bind_norm(form.get("location"))
-                       if isinstance(form, dict) else None)
-            if want_loc and got_loc != want_loc:
-                findings.append(("error", f"binding_form:{path}",
-                    f"{path} is placed at '{got_loc}' but the taxonomy "
-                    f"declares '{want_loc}'"))
+            wanted_location = _bind_norm(declaration.get("form_location"))
+            actual_location = (
+                _bind_norm(form.get("location")) if isinstance(form, dict) else None
+            )
+            if wanted_location and actual_location != wanted_location:
+                findings.append((
+                    "error",
+                    f"binding_form:{path}",
+                    f"{path} is placed at {actual_location!r} but taxonomy "
+                    f"declares {wanted_location!r}",
+                ))
 
-            want_box = _bind_norm(decl.get("box"))
-            got_box = (_bind_norm(form.get("box"))
-                       if isinstance(form, dict) else None)
-            if want_box and got_box and got_box != want_box:
-                findings.append(("error", f"binding_form:{path}",
-                    f"{path} reports box '{got_box}' but the taxonomy "
-                    f"declares '{want_box}'"))
+            wanted_box = _bind_norm(declaration.get("box"))
+            actual_box = (
+                _bind_norm(form.get("box")) if isinstance(form, dict) else None
+            )
+            if wanted_box and actual_box != wanted_box:
+                findings.append((
+                    "error",
+                    f"binding_form:{path}",
+                    f"{path} reports box {actual_box!r} but taxonomy "
+                    f"declares {wanted_box!r}",
+                ))
 
-            want_vt = _bind_norm(decl.get("value_type"))
-            if (want_vt and "value" in node
-                    and not _payload_conforms(want_vt, node.get("value"))):
-                findings.append(("error", f"binding_value_type:{path}",
-                    f"{path} declares value_type '{want_vt}' but carries "
-                    f"{type(node.get('value')).__name__} "
-                    f"({node.get('value')!r})"))
+            if "value" in node:
+                findings.extend(
+                    _validate_declared_payload(
+                        f"{path}.value",
+                        declaration,
+                        node.get("value"),
+                    )
+                )
+            findings.extend(_bind_coded_entries(path, declaration, node))
+    return findings
 
-            findings.extend(_bind_coded_entries(path, decl, node))
+
+
+def _known_statement_classifications(taxonomy):
+    known = {"custom", "unclassified_requires_review"}
+
+    def walk(node):
+        if isinstance(node, dict):
+            classification = node.get("statement_classification")
+            if isinstance(classification, str) and classification:
+                known.add(classification)
+
+            catalog = node.get("known_classifications")
+            if isinstance(catalog, list):
+                for entry in catalog:
+                    if isinstance(entry, dict):
+                        identifier = entry.get("id")
+                        if isinstance(identifier, str) and identifier:
+                            known.add(identifier)
+
+            for alias_key in ("classification_aliases", "aliases"):
+                aliases = node.get(alias_key)
+                if isinstance(aliases, dict):
+                    for alias, target in aliases.items():
+                        if isinstance(alias, str) and alias:
+                            known.add(alias)
+                        if isinstance(target, str) and target:
+                            known.add(target)
+
+            for value in node.values():
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    walk(taxonomy)
+    return known
+
+
+def validate_statement_catalog(body, taxonomy, statements=None):
+    """Bind every statement classification to the taxonomy catalog."""
+    findings = []
+    known = _known_statement_classifications(taxonomy)
+
+    def walk(node, path):
+        if isinstance(node, dict):
+            if node.get("type") == "statement":
+                semantic = node.get("semantic")
+                classification = (
+                    semantic.get("classification")
+                    if isinstance(semantic, dict)
+                    else None
+                )
+                if not isinstance(classification, str) or not classification:
+                    findings.append((
+                        "error",
+                        f"statement_classification:{path}",
+                        f"{path} is missing semantic.classification",
+                    ))
+                elif classification == "custom":
+                    content = node.get("content")
+                    custom_classification = (
+                        content.get("custom_classification")
+                        if isinstance(content, dict)
+                        else None
+                    )
+                    if (
+                        not isinstance(custom_classification, str)
+                        or not custom_classification.strip()
+                    ):
+                        findings.append((
+                            "error",
+                            f"statement_custom_classification:{path}",
+                            f"{path} classification 'custom' requires a non-empty "
+                            "content.custom_classification",
+                        ))
+                elif classification == "unclassified_requires_review":
+                    review_marker = node.get("_unverified")
+                    if (
+                        not isinstance(review_marker, str)
+                        or not review_marker.strip()
+                    ):
+                        findings.append((
+                            "error",
+                            f"statement_review_marker:{path}",
+                            f"{path} classification 'unclassified_requires_review' "
+                            "requires a non-empty _unverified marker",
+                        ))
+                elif classification not in known:
+                    findings.append((
+                        "error",
+                        f"statement_classification:{path}",
+                        f"{path} classification {classification!r} is not in "
+                        "the taxonomy catalog and is not custom",
+                    ))
+            for key, value in node.items():
+                walk(value, f"{path}.{key}" if path else str(key))
+        elif isinstance(node, list):
+            for index, value in enumerate(node):
+                walk(value, f"{path}[{index}]")
+
+    walk(body, "body")
+    if statements is not None:
+        walk(statements, "statements")
     return findings
 
 
 def run_taxonomy_driven_validation(body, taxonomy, statements=None):
-    """Single entry point: load constraints + statement requirements from
-    the taxonomy and execute both against the assembled document body.
-    Returns (errors: list[str], warnings: list[str])."""
+    """Compile the taxonomy, then validate one assembled document."""
+    compile_taxonomy(taxonomy)
     errors, warnings = [], []
-    constraint_findings = run_constraints(body, taxonomy.get("constraints"), taxonomy)
-    for severity, cid, msg in constraint_findings:
-        (errors if severity == "error" else warnings).append(msg)
+
+    for severity, _, message in run_constraints(
+        body,
+        taxonomy.get("constraints"),
+        taxonomy,
+    ):
+        (errors if severity == "error" else warnings).append(message)
 
     requirements = extract_statement_requirements(taxonomy)
-    stmt_findings = validate_statement_requirements(body, requirements)
-    for severity, _, msg in stmt_findings:
-        (errors if severity == "error" else warnings).append(msg)
+    for severity, _, message in validate_statement_requirements(body, requirements):
+        (errors if severity == "error" else warnings).append(message)
 
-    for severity, _, msg in validate_primitive_contracts(body):
-        (errors if severity == "error" else warnings).append(msg)
+    for validator in (
+        lambda: validate_primitive_contracts(body),
+        lambda: validate_physical_completeness(body, taxonomy),
+        lambda: validate_taxonomy_binding(body, taxonomy),
+        lambda: validate_capital_account(body),
+        lambda: validate_coded_entry_uniqueness(body),
+        lambda: validate_statement_catalog(body, taxonomy, statements),
+    ):
+        for severity, _, message in validator():
+            (errors if severity == "error" else warnings).append(message)
 
-    for severity, _, msg in validate_physical_completeness(body, taxonomy):
-        (errors if severity == "error" else warnings).append(msg)
-
-    # Taxonomy binding runs AFTER completeness by design. Completeness owns
-    # absence; binding owns the identity and type of what is present. Reversing
-    # the order would report a missing field twice under two constraint ids.
-    for severity, _, msg in validate_taxonomy_binding(body, taxonomy):
-        (errors if severity == "error" else warnings).append(msg)
-
-    for severity, _, msg in validate_capital_account(body):
-        (errors if severity == "error" else warnings).append(msg)
-
-    # Duplicate codes within a coded box are rejected outright: path
-    # resolution inspects only the first entry for a code, so a second entry
-    # would be invisible to every check above.
-    for severity, _, msg in validate_coded_entry_uniqueness(body):
-        (errors if severity == "error" else warnings).append(msg)
-
-    # Root-level statements live outside `body` but are still TaxNodes and
-    # must satisfy the same primitive contract as any in-body node.
     if statements:
-        for severity, _, msg in validate_primitive_contracts(statements, "statements"):
-            (errors if severity == "error" else warnings).append(msg)
+        for severity, _, message in validate_primitive_contracts(
+            statements,
+            "statements",
+        ):
+            (errors if severity == "error" else warnings).append(message)
 
     return errors, warnings

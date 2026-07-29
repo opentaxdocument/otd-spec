@@ -12,7 +12,11 @@ EXIT_INVALID_DOCUMENT = 1
 EXIT_VALIDATOR_ERROR = 2
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from constraint_engine import run_taxonomy_driven_validation  # noqa: E402
+from constraint_engine import (
+    TaxonomyCompilationError,
+    compile_taxonomy,
+    run_taxonomy_driven_validation,
+)  # noqa: E402
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
@@ -97,16 +101,19 @@ def find_statements(obj):
     return statements
 
 
-def check_types(obj, path, errors):
+def check_types(obj, path, warnings):
+    """Preserve unknown extension node types and report them informationally."""
     if isinstance(obj, dict):
         node_type = obj.get("type")
         if node_type and node_type not in VALID_TYPES:
-            errors.append(f"Invalid node type '{node_type}' at {path}")
+            warnings.append(
+                f"Preserved undeclared extension node type {node_type!r} at {path}"
+            )
         for key, value in obj.items():
-            check_types(value, f"{path}.{key}" if path else key, errors)
+            check_types(value, f"{path}.{key}" if path else key, warnings)
     elif isinstance(obj, list):
         for index, value in enumerate(obj):
-            check_types(value, f"{path}[{index}]", errors)
+            check_types(value, f"{path}[{index}]", warnings)
 
 
 def _is_integer(value):
@@ -318,6 +325,13 @@ def load_taxonomy(taxonomy_path):
             "K-1 taxonomy constraints must be a non-empty sequence"
         )
 
+    try:
+        compile_taxonomy(taxonomy)
+    except TaxonomyCompilationError as exc:
+        raise ValidatorConfigurationError(
+            f"Taxonomy compilation failed: {exc}"
+        ) from exc
+
     return taxonomy
 
 
@@ -446,7 +460,7 @@ def validate(input_path, taxonomy_path=None):
     validate_taxonomy_identity(doc, taxonomy, errors)
 
     body = doc.get("body", {}) if isinstance(doc, dict) else {}
-    check_types(body, "body", errors)
+    check_types(body, "body", warnings)
     form_metadata = doc.get("form_metadata", {}) if isinstance(doc, dict) else {}
     validate_filing_status(form_metadata, errors, warnings)
 
