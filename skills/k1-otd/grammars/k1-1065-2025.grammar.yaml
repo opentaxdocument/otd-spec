@@ -1,0 +1,814 @@
+
+schema_version: "k1-face-grammar/1.0"
+status: draft
+form:
+  jurisdiction: federal
+  form_name: "K-1 (Form 1065)"
+  tax_year: 2025
+  form_number_context: "651123"
+
+source_evidence:
+  golden_pdf_path: "D:/SecondWind/Artifacts/20260727-k1-face-form-grammar/irs/f1065sk1.pdf"
+  instructions_path: "D:/SecondWind/Artifacts/20260727-k1-face-form-grammar/irs/i1065sk1.pdf"
+  instructions_reconciled: true
+  derivation_method: "empirical layout probe (pdfplumber geometry + checkbox containment) + IRS instruction reconciliation"
+  derivation_date: "2026-07-28"
+  corroborating_source: "Extractium Federal K-1 2025 Schema.txt (independent derivation, structural cross-check only, no text copied)"
+
+status_values:
+  - present
+  - zero
+  - blank
+  - not_applicable
+  - ambiguous
+  - unreadable
+  - missing
+  - unresolved
+
+coordinate_policy:
+  use: label_anchored_relative_geometry
+  forbidden_use: absolute_coordinate_primary_parse
+
+fit_signals:
+  required_text:
+    - "Schedule K-1 (Form 1065) 2025"
+  page_size_points: [612, 792]
+  expected_checkbox_frame_count: 18
+  ocr_catalog_token: "651123"
+  note: >
+    Fit signals are corroborating evidence for the template fit gate
+    (Wave 3), not extraction anchors. A grammar with fit_signals mismatch
+    against the target document should be rejected before any field below
+    is trusted.
+
+regions:
+  - id: header
+    heading_anchors: ["Schedule K-1", "OMB No"]
+    lane: left
+    ends_before: part_i
+  - id: part_i
+    heading_anchors: ["Part I", "Information About the Partnership"]
+    lane: left
+    ends_before: part_ii
+  - id: part_ii
+    heading_anchors: ["Part II", "Information About the Partner"]
+    lane: left
+    ends_before: part_iii
+  - id: part_iii
+    heading_anchors: ["Part III", "Partner's Share of Current Year Income"]
+    lane: right
+    ends_before: footer
+    # Part III begins at the TOP of the page, in the right column, parallel
+    # to the page header -- confirmed empirically (gutter-probe artifact,
+    # 20260728 session): "Schedule K-1 2025" (left, x0~36-100) and
+    # "Part III Partner's Share..." (right, x0~319-551) share the same
+    # y-coordinate (top=48.4) with a 137pt internal word gap between them.
+
+# ---------------------------------------------------------------------------
+# HEADER
+# ---------------------------------------------------------------------------
+fields:
+  header.final_k1:
+    semantic_id: form.final
+    region: header
+    reader: independent_checkbox
+    anchors:
+      frame_row_top_hint: 38
+      governing_label: "Final K-1"
+      label_association: nearest_right
+    value_type: boolean
+    cardinality: 1
+
+  header.amended_k1:
+    semantic_id: form.amended
+    region: header
+    reader: independent_checkbox
+    anchors:
+      frame_row_top_hint: 38
+      governing_label: "Amended K-1"
+      label_association: nearest_right
+    value_type: boolean
+    cardinality: 1
+
+  header.tax_year_begin:
+    semantic_id: form.fiscal_year_begin
+    region: header
+    reader: header_period
+    anchors:
+      column_header: "beginning"
+      row_context: "For calendar year 2025, or tax year"
+    value_type: date
+    cardinality: 1
+    notes: >
+      Distinguish blank (calendar-year filer -- legitimate, non-fabricated
+      observation) from unresolved (column header not locatable at all).
+      Tom's focus area: year beginning/ending must never default to a
+      guessed date.
+
+  header.tax_year_end:
+    semantic_id: form.fiscal_year_end
+    region: header
+    reader: header_period
+    anchors:
+      column_header: "ending"
+      row_context: "For calendar year 2025, or tax year"
+    value_type: date
+    cardinality: 1
+    notes: "Same abstention discipline as tax_year_begin."
+
+# ---------------------------------------------------------------------------
+# PART I -- Information About the Partnership
+# ---------------------------------------------------------------------------
+  item_a:
+    semantic_id: partnership.ein
+    region: part_i
+    reader: bounded_identity
+    anchors:
+      label: "Partnership's employer identification number"
+      end_anchor_field: item_b
+    value_type: string
+    cardinality: 1
+
+  item_b:
+    semantic_id: partnership.name_address
+    region: part_i
+    reader: address_block
+    anchors:
+      label: "Partnership's name, address, city, state, and ZIP code"
+      end_anchor_field: item_c
+    value_type: string
+    cardinality: 1
+
+  item_c:
+    semantic_id: partnership.irs_center
+    region: part_i
+    reader: bounded_text
+    anchors:
+      label: "IRS Center where partnership filed return"
+      end_anchor_field: item_d
+    value_type: string
+    cardinality: 1
+
+  item_d:
+    semantic_id: partnership.publicly_traded
+    region: part_i
+    reader: independent_checkbox
+    anchors:
+      governing_label: "Check if this is a publicly traded partnership"
+      label_association: nearest_right
+      frame_row_top_hint: 241.75
+    value_type: boolean
+    cardinality: 1
+
+# ---------------------------------------------------------------------------
+# PART II -- Information About the Partner
+# ---------------------------------------------------------------------------
+  item_e:
+    semantic_id: partner.identifying_number
+    region: part_ii
+    reader: bounded_identity
+    anchors:
+      label: "Partner's SSN or TIN"
+      end_anchor_field: item_f
+    value_type: string
+    cardinality: 1
+    notes: "Do not use TIN of a disregarded entity per instructions -- see item_h2."
+
+  item_f:
+    semantic_id: partner.name_address
+    region: part_ii
+    reader: address_block
+    anchors:
+      label: "Name, address, city, state, and ZIP code for partner"
+      end_anchor_field: item_g
+    value_type: string
+    cardinality: 1
+
+  item_g:
+    semantic_id: partner.general_or_limited
+    region: part_ii
+    reader: exclusive_choice_pair
+    anchors:
+      frame_row_top_hint: 338.0
+      option_left:
+        governing_label: "General"
+        frame_x0_hint: 57.6
+      option_right:
+        governing_label: "Limited"
+        frame_x0_hint: 180.0
+      label_association: nearest_right
+    value_type: enum
+    options: [general_or_member_manager, limited_or_other_member]
+    cardinality: 1
+    notes: >
+      Confirmed empirically: checked frame at x0=180.0 top=338.0 governed
+      by right-neighbor "Limited" on a real sampled document.
+
+  item_h1:
+    semantic_id: partner.domestic_or_foreign
+    region: part_ii
+    reader: exclusive_choice_pair
+    anchors:
+      frame_row_top_hint: 362.0
+      option_left:
+        governing_label: "Domestic"
+        frame_x0_hint: 57.6
+      option_right:
+        governing_label: "Foreign"
+        frame_x0_hint: 180.0
+      label_association: nearest_right
+    value_type: enum
+    options: [domestic, foreign]
+    cardinality: 1
+    notes: >
+      Confirmed empirically: checked frame at x0=57.6 top=362.0 governed
+      by right-neighbor "Domestic" on a real sampled document.
+
+  item_h2:
+    semantic_id: partner.disregarded_entity_info
+    region: part_ii
+    reader: conditional_record
+    anchors:
+      governing_checkbox_label: "If the partner is a disregarded entity (DE), enter the partner's"
+      frame_row_top_hint: 374.0
+      dependent_fields: [tin, name]
+    value_type: object
+    cardinality: 1
+
+  item_i1:
+    semantic_id: partner.entity_type
+    region: part_ii
+    reader: bounded_text
+    anchors:
+      label: "What type of entity is this partner?"
+    value_type: enum
+    cardinality: 1
+    notes: "Open-vocabulary with known aliases per completeness review; not a fixed enum."
+
+  item_i2:
+    semantic_id: partner.retirement_plan
+    region: part_ii
+    reader: independent_checkbox
+    anchors:
+      governing_label: "retirement plan (IRA/SEP/Keogh/etc.)"
+      # CORRECTED 2026-07-29. Was nearest_right. The form prints
+      #     I2 If this partner is a retirement plan (IRA/SEP/Keogh/etc.), check here . [ ]
+      # so the label PRECEDES the box. Measured: frame at x0=294.40 top=411.00,
+      # left-band text is
+      #   'I2 If this partner is a retirement plan (IRA/SEP/Keogh/etc.), check here .'
+      # while its right-band text is '9c Unrecaptured section 1250 gain' --
+      # right-column content. Looking right could never bind this frame.
+      label_association: nearest_left
+    value_type: boolean
+    cardinality: 1
+
+  item_j:
+    semantic_id: partner.share_percentages
+    region: part_ii
+    reader: two_column_grid
+    anchors:
+      row_header_top_hint: 434.0
+      columns:
+        - id: beginning
+          anchor: "Beginning"
+        - id: ending
+          anchor: "Ending"
+      rows:
+        - id: profit
+          anchor: "Profit"
+          row_top_hint: 448.49
+        - id: loss
+          anchor: "Loss"
+          row_top_hint: 460.49
+        - id: capital
+          anchor: "Capital"
+          row_top_hint: 471.99
+    value_type: object
+    cardinality: 1
+    constraints:
+      - id: item_j_nonnegative
+        expression: "all(item_j_cells >= 0)"
+
+  item_j.decrease_reason:
+    semantic_id: null
+    region: part_ii
+    reader: multi_checkbox_set
+    anchors:
+      frame_row_top_hint: 494.0
+      options:
+        - id: sale
+          governing_label: "Sale"
+          frame_x0_hint: 57.6
+        - id: exchange
+          governing_label: "Exchange"
+          frame_x0_hint: 100.8
+      label_association: nearest_right
+    value_type: object
+    cardinality: "0..2"
+    taxonomy_gap: true
+    notes: >
+      NO TAXONOMY NODE EXISTS for this field (confirmed against the 2025
+      taxonomy inventory -- 245 face nodes enumerated, none present here).
+      2019 face uses ONE checkbox ("Check if decrease is due to sale or
+      exchange"); 2025 face uses TWO independent checkboxes ("Sale",
+      "Exchange"). Corroborated independently by Extractium's schema
+      (J.SaleOrExchange 2019-only vs J.Sale/J.Exchange 2025-only). This
+      field is extracted with full evidence but flagged taxonomy_gap;
+      it must not be silently dropped, and must not be forced into a
+      taxonomy shape that does not exist yet.
+
+  item_k1:
+    semantic_id: partner.share_of_liabilities
+    region: part_ii
+    reader: two_column_grid
+    anchors:
+      row_header_top_hint: 518.02
+      columns:
+        - id: beginning
+          anchor: "Beginning"
+        - id: ending
+          anchor: "Ending"
+      rows:
+        - id: nonrecourse
+          anchor: "Nonrecourse"
+          row_top_hint: 532.49
+        - id: qualified_nonrecourse_financing
+          anchor: "Qualified nonrecourse financing"
+          row_top_hint: 548.09
+        - id: recourse
+          anchor: "Recourse"
+          row_top_hint: 567.99
+    value_type: object
+    cardinality: 1
+
+  item_k2:
+    semantic_id: partner.liabilities_from_lower_tier_partnerships
+    region: part_ii
+    reader: independent_checkbox
+    anchors:
+      governing_label: "liability amounts from lower-tier partnerships"
+      # CORRECTED 2026-07-29. Measured: frame at x0=294.40 top=578.50, left-band
+      # text is
+      #   'K2 Check this box if item K1 includes liability amounts from lower-tier partnerships'
+      # and its right-band text is empty. The label precedes the box.
+      label_association: nearest_left
+    value_type: boolean
+    cardinality: 1
+
+  item_k3:
+    semantic_id: partner.liabilities_subject_to_guarantees_or_payment_obligations
+    region: part_ii
+    reader: independent_checkbox
+    anchors:
+      governing_label: "subject to guarantees or other payment obligations"
+      # CORRECTED 2026-07-29. Measured: frame at x0=294.40 top=600.25; its
+      # right-band text is '22 More than one activity for at-risk purposes*',
+      # which belongs to a different field entirely. The label precedes the box.
+      #
+      # NOTE: direction alone is NOT sufficient here. The left-band text at that
+      # baseline is only
+      #   'payment obligations by the partner. See instructions . . . . .'
+      # because the printed sentence WRAPS -- the declared phrase spans two
+      # physical bands. Same defect class as D3 (Qualified nonrecourse /
+      # financing) recurring on the checkbox path; requires multi-band label
+      # reassembly in the binder, not a shortened label here.
+      label_association: nearest_left
+    value_type: boolean
+    cardinality: 1
+
+  item_l:
+    semantic_id: partner.capital_account_analysis
+    region: part_ii
+    reader: ledger
+    anchors:
+      row_header_top_hint: 616.02
+      rows:
+        - id: beginning
+          anchor: "Beginning capital account"
+        - id: contributions
+          anchor: "Capital contributed during the year"
+        - id: current_year_net_income_loss
+          anchor: "Current year net income (loss)"
+        - id: other_increase_decrease
+          anchor: "Other increase (decrease)"
+        - id: withdrawals_distributions
+          anchors: ["Withdrawals and distributions", "Withdrawals & distributions"]
+        - id: ending
+          anchor: "Ending capital account"
+    value_type: object
+    cardinality: 1
+    constraints:
+      - id: item_l_continuity
+        expression: >
+          beginning + contributions + current_year_net_income_loss +
+          other_increase_decrease - withdrawals_distributions == ending
+
+  item_l.basis_method:
+    semantic_id: null
+    region: part_ii
+    reader: not_printed
+    anchors:
+      absence_probe_tokens:
+        - "tax basis"
+        - "gaap"
+        - "704(b)"
+        - "other (explain"
+    value_type: enum
+    cardinality: 1
+    taxonomy_gap: true
+    excluded_not_taxpayer_data: false
+    notes: >
+      NOT OBSERVED ON THE 2025 FACE. Empirically confirmed: all 5
+      basis-method tokens ("tax basis", "gaap", "704(b)", "section 704(b)",
+      "other (explain") returned False across 23/23 sampled documents,
+      both 2019 and 2025 form years. The current pipeline emits
+      capital_account.basis_method = "tax" as an INFERENCE from the
+      post-2020 tax-basis reporting mandate, not a face observation. Under
+      OTD's no-fabrication rule this reader should always emit status
+      "missing" (field not printed on this form revision) with the
+      inferred value carried separately as a derived/provenance-marked
+      field, never merged into the observed evidence envelope as if
+      it were read from the page. Flagged for Tom's decision; not
+      resolved unilaterally by this grammar.
+
+  item_m:
+    semantic_id: partner.contributed_property_built_in_gain_loss
+    region: part_ii
+    reader: exclusive_choice_pair
+    anchors:
+      frame_row_top_hint: 710.0
+      option_left:
+        governing_label: "Yes"
+        frame_x0_hint: 57.6
+      option_right:
+        governing_label: "No"
+        frame_x0_hint: 100.8
+      label_association: nearest_right
+    value_type: enum
+    options: ["yes", "no"]
+    cardinality: 1
+    yes_requires_statement: true
+    notes: >
+      Confirmed empirically: checked frame at x0=100.8 top=710.0 governed
+      by right-neighbor "No" on a real sampled document. Using left-nearest
+      ("Yes") would have inverted this read -- the decisive proof for the
+      nearest_right label-association rule.
+
+  item_n:
+    semantic_id: partner.net_unrecognized_section_704c_gain_loss
+    region: part_ii
+    reader: ledger
+    anchors:
+      # Empirically confirmed: Item N is TWO independently-labeled rows
+      # ("Beginning . . . $", "Ending . . . $"), not one row with
+      # side-by-side columns. Reusing item_l's proven ledger pattern.
+      # row_header_top_hint disambiguates from Item J/K1's "Beginning"/
+      # "Ending" COLUMN headers (top~434/518), which share the same text.
+      row_header_top_hint: 740
+      rows:
+        - id: beginning
+          anchor: "Beginning"
+        - id: ending
+          anchor: "Ending"
+    value_type: object
+    cardinality: 1
+
+# ---------------------------------------------------------------------------
+# PART III -- Partner's Share of Current Year Income, Deductions, Credits,
+#             and Other Items
+#
+# IMPORTANT: box numbers below are 2025-face labels ONLY. Confirmed
+# empirically that box numbering shifted between 2019 and 2025 (2019 box
+# 21/22 == 2025 box 22/23, after box 21 "foreign taxes" was inserted).
+# The semantic_id is the durable identity; the box number is year-scoped
+# metadata attached for provenance, never used as a lookup key across years.
+# ---------------------------------------------------------------------------
+  box_1:
+    semantic_id: ordinary_business_income
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "1"
+    anchors:
+      label: "Ordinary business income (loss)"
+    value_type: decimal
+    signed: true
+
+  box_2:
+    semantic_id: net_rental_real_estate_income
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "2"
+    anchors:
+      label: "Net rental real estate income (loss)"
+    value_type: decimal
+    signed: true
+
+  box_3:
+    semantic_id: other_net_rental_income
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "3"
+    anchors:
+      label: "Other net rental income (loss)"
+    value_type: decimal
+    signed: true
+
+  box_4a:
+    semantic_id: guaranteed_payments_services
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "4a"
+    anchors:
+      label: "Guaranteed payments for services"
+    value_type: decimal
+
+  box_4b:
+    semantic_id: guaranteed_payments_capital
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "4b"
+    anchors:
+      label: "Guaranteed payments for capital"
+    value_type: decimal
+
+  box_4c:
+    semantic_id: guaranteed_payments_total
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "4c"
+    anchors:
+      label: "Total guaranteed payments"
+    value_type: decimal
+    constraints:
+      - id: box_4c_sum
+        expression: "box_4c == box_4a + box_4b"
+
+  box_5:
+    semantic_id: interest_income
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "5"
+    anchors:
+      label: "Interest income"
+    value_type: decimal
+
+  box_6a:
+    semantic_id: ordinary_dividends
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "6a"
+    anchors:
+      label: "Ordinary dividends"
+    value_type: decimal
+
+  box_6b:
+    semantic_id: qualified_dividends
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "6b"
+    anchors:
+      label: "Qualified dividends"
+    value_type: decimal
+    constraints:
+      - id: box_6b_relationship
+        expression: "box_6b <= box_6a"
+
+  box_6c:
+    semantic_id: dividend_equivalents
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "6c"
+    anchors:
+      label: "Dividend equivalents"
+    value_type: decimal
+
+  box_7:
+    semantic_id: royalties
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "7"
+    anchors:
+      label: "Royalties"
+    value_type: decimal
+
+  box_8:
+    semantic_id: net_short_term_capital_gain
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "8"
+    anchors:
+      label: "Net short-term capital gain (loss)"
+    value_type: decimal
+    signed: true
+
+  box_9a:
+    semantic_id: net_long_term_capital_gain
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "9a"
+    anchors:
+      label: "Net long-term capital gain (loss)"
+    value_type: decimal
+    signed: true
+
+  box_9b:
+    semantic_id: collectibles_gain
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "9b"
+    anchors:
+      label: "Collectibles (28%) gain (loss)"
+    value_type: decimal
+    signed: true
+
+  box_9c:
+    semantic_id: unrecaptured_section_1250_gain
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "9c"
+    anchors:
+      label: "Unrecaptured section 1250 gain"
+    value_type: decimal
+
+  box_10:
+    semantic_id: net_section_1231_gain
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "10"
+    anchors:
+      label: "Net section 1231 gain (loss)"
+    value_type: decimal
+    signed: true
+
+  box_11:
+    semantic_id: other_income
+    region: part_iii
+    reader: coded_rows
+    box_number_2025: "11"
+    face_slots: 2
+    overflow: unbounded
+    codes_ref: taxonomy
+    value_type: coded
+
+  box_12:
+    semantic_id: section_179_deduction
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "12"
+    anchors:
+      label: "Section 179 deduction"
+    value_type: decimal
+
+  box_13:
+    semantic_id: other_deductions
+    region: part_iii
+    reader: coded_rows
+    box_number_2025: "13"
+    face_slots: 3
+    overflow: unbounded
+    codes_ref: taxonomy
+    value_type: coded
+
+  box_14:
+    semantic_id: self_employment
+    region: part_iii
+    reader: coded_rows
+    box_number_2025: "14"
+    face_slots: 2
+    overflow: unbounded
+    codes_ref: taxonomy
+    value_type: coded
+
+  box_15:
+    semantic_id: credits
+    region: part_iii
+    reader: coded_rows
+    box_number_2025: "15"
+    face_slots: 2
+    overflow: unbounded
+    codes_ref: taxonomy
+    value_type: coded
+
+  box_16:
+    semantic_id: international_transactions
+    region: part_iii
+    reader: attachment_reference
+    box_number_2025: "16"
+    target_form: irs-k3-1065-2025
+    assert_only_when_checked: true
+    anchors:
+        frame_row_top_hint: 180.5
+        frame_x0_hint: 562.0
+    value_type: reference
+
+  box_17:
+    semantic_id: amt_items
+    region: part_iii
+    reader: coded_rows
+    box_number_2025: "17"
+    face_slots: 3
+    overflow: unbounded
+    codes_ref: taxonomy
+    value_type: coded
+
+  box_18:
+    semantic_id: tax_exempt_nondeductible
+    region: part_iii
+    reader: coded_rows
+    box_number_2025: "18"
+    face_slots: 3
+    overflow: unbounded
+    codes_ref: taxonomy
+    value_type: coded
+
+  box_19:
+    semantic_id: distributions
+    region: part_iii
+    reader: coded_rows
+    box_number_2025: "19"
+    face_slots: 2
+    overflow: unbounded
+    codes_ref: taxonomy
+    value_type: coded
+
+  box_20:
+    semantic_id: other_information
+    region: part_iii
+    reader: coded_rows
+    box_number_2025: "20"
+    face_slots: 4
+    overflow: unbounded
+    codes_ref: taxonomy
+    value_type: coded
+    notes: >
+      Several taxonomy entries under other_information.* have no
+      value_type declared (e.g. reserved_ba, fuel_tax_credit, section_199a,
+      section_453Ac, section_179_dispositions, depletion_oil_gas). The
+      coded_rows reader must treat an undeclared value_type as "expect a
+      statement reference," not as a scalar amount defect -- consistent
+      with the completeness review's Box 20.Z statement-schema finding.
+
+  box_21:
+    semantic_id: foreign_taxes_paid_accrued
+    region: part_iii
+    reader: scalar_cell
+    box_number_2025: "21"
+    anchors:
+      label: "Foreign taxes paid or accrued"
+    value_type: decimal
+    may_attach_statement: true
+    notes: >
+      2025-only box position. NOT present at this number on the 2019 face
+      (2019 box numbering runs 1..22 without a foreign-taxes box at 21;
+      confirmed empirically that 2019's frame layout has 15 checkbox
+      frames vs 2025's 18, and box 21/22 in 2019 map to 22/23 in 2025).
+
+  box_22:
+    semantic_id: at_risk_activities
+    region: part_iii
+    reader: independent_checkbox
+    box_number_2025: "22"
+    anchors:
+      # NESTED 2026-07-29. These two keys were declared as direct children of
+      # the field, but locate_checkbox_frame reads anchors.get("governing_label")
+      # -- so a correct label sitting one level too high was silently invisible
+      # and this field reported no_label_no_unique_hint. The grammar has no
+      # shape validation, which is why a misplaced key failed silently (D16).
+      governing_label: "More than one activity for at-risk purposes"
+      label_association: nearest_right
+    value_type: boolean
+    notes: "2019 equivalent is box 21 at this same semantic_id. Do not cross-reference by number across years."
+
+  box_23:
+    semantic_id: passive_activities
+    region: part_iii
+    reader: independent_checkbox
+    box_number_2025: "23"
+    anchors:
+      # NESTED 2026-07-29 -- same defect as box_22 above.
+      governing_label: "More than one activity for passive activity purposes"
+      label_association: nearest_right
+    value_type: boolean
+    notes: "2019 equivalent is box 22 at this same semantic_id. Do not cross-reference by number across years."
+
+validation:
+  downstream_only: true
+  may_repair_observation: false
+  posture: hard_error
+  posture_override_allowed: true
+  posture_must_be_recorded_in_output: true
+  notes: >
+    Per Tom's directive: disagreement/validation failures default to hard
+    error. A lower posture may be used for expedience, but the posture in
+    effect MUST be recorded in the emitted document so a lenient run is
+    self-identifying downstream, forever.
+
+agent_review:
+  may_overwrite_deterministic_output: false
+  proposal_required_fields:
+    - proposal_id
+    - target_field
+    - proposed_value
+    - evidence_ids
+    - reason
+    - review_state

@@ -294,6 +294,8 @@ def make_coded_entry(box_key, raw_entry, statement=None):
     if raw.get("statement_ref") and statement is None:
         node["source_statement_ref"] = raw["statement_ref"]
     reasons = []
+    if raw.get("requires_human_review") and raw.get("reason"):
+        reasons.append(str(raw["reason"]))
     if "value" not in raw and "amount" not in raw:
         reasons.append(f"{box_key} Code {code or 'UNKNOWN'} has no extracted value")
     if unresolved_identity:
@@ -332,14 +334,51 @@ def count_leaves(obj):
     return 1 if obj is not None else 0
 
 
-def as_list(obj):
-    """Extract a list from various fragment response shapes."""
+STATEMENT_LIST_KEYS = ("footnotes", "statements", "items", "entries")
+
+
+def as_list(obj, source="fragment"):
+    """Extract the statement list from a fragment. STRICT BY DESIGN.
+
+    The prior implementation returned the FIRST non-empty list found among a
+    dict's values, regardless of key. Any incidental list-valued metadata key
+    therefore BECAME the statement collection. A fragment carrying
+    `_source_pages_not_processed: [2, 3, 4, 5, ...]` produced 22 phantom
+    statement nodes -- attachments the source document never contained -- and
+    inflated the emitted document by 216 fields. On a tax document that is
+    node fabrication, which is precisely what this format exists to prevent.
+
+    Rules now:
+      * a bare list is accepted as-is
+      * a dict must declare its list under one of STATEMENT_LIST_KEYS
+      * a dict with NO recognised key but a non-empty list somewhere is
+        REJECTED, not guessed at -- that is the exact defect above
+      * an empty or list-free dict yields no statements (a fragment may
+        legitimately contain only metadata)
+    """
     if isinstance(obj, list):
         return obj
-    if isinstance(obj, dict):
-        for v in obj.values():
-            if isinstance(v, list) and v:
-                return v
+    if not isinstance(obj, dict):
+        return []
+    for key in STATEMENT_LIST_KEYS:
+        v = obj.get(key)
+        if isinstance(v, list):
+            return v
+        if v is not None:
+            raise SystemExit(
+                "ERROR: %s key %r must be a list, got %s"
+                % (source, key, type(v).__name__))
+    stray = [k for k, v in obj.items()
+             if isinstance(v, list) and v and not k.startswith("_")]
+    if stray:
+        raise SystemExit(
+            "ERROR: %s contains list-valued key(s) %s but declares no "
+            "statement list under any of %s.\n"
+            "       Refusing to guess which list holds statements: guessing "
+            "here previously fabricated 22 statement nodes that had no "
+            "counterpart in the source document.\n"
+            "       Declare the list explicitly, e.g. {\"footnotes\": [...]}."
+            % (source, stray, list(STATEMENT_LIST_KEYS)))
     return []
 
 
@@ -407,14 +446,40 @@ def main():
     fm  = face.get("form_metadata", {}) or {}
     fb  = face.get("part_iii_face", {}) or {}
     ov  = (ov_raw.get("part_iii_overflow", {}) or {}) if isinstance(ov_raw, dict) else {}
+    excluded_overflow = (
+        ov_raw.get("_excluded_from_overflow_entries", [])
+        if isinstance(ov_raw, dict) else []
+    )
+    if excluded_overflow is None:
+        excluded_overflow = []
+    if not isinstance(excluded_overflow, list):
+        raise SystemExit(
+            "ERROR: _excluded_from_overflow_entries must be a list, not %s"
+            % type(excluded_overflow).__name__)
+    if any(not isinstance(entry, dict) for entry in excluded_overflow):
+        raise SystemExit(
+            "ERROR: every _excluded_from_overflow_entries member must be an object")
 
     # ── Statements ────────────────────────────────────────────────────────
     statements_root = []
     statement_map = {}
 
 
-    for i, raw_fn in enumerate(as_list(fn_a) + as_list(fn_b), 1):
-        fn = raw_fn if isinstance(raw_fn, dict) else {}
+    for i, raw_fn in enumerate(as_list(fn_a, "footnotes_a.json")
+                               + as_list(fn_b, "footnotes_b.json"), 1):
+        # A non-dict member is NOT an empty statement. Coercing it to {} is
+        # how integers from a page-number list became 22 statement nodes with
+        # blank labels, empty content, and classification
+        # 'unclassified_requires_review' -- each one asserting an attachment
+        # the source never contained. Fail loudly instead.
+        if not isinstance(raw_fn, dict):
+            raise SystemExit(
+                "ERROR: statement #%d is %s (%r), not an object.\n"
+                "       A statement must be an object describing a real "
+                "attachment. Coercing a non-object into an empty statement "
+                "fabricates an attachment that does not exist in the source "
+                "document." % (i, type(raw_fn).__name__, raw_fn))
+        fn = raw_fn
         node = {
             "type": "statement",
             "semantic": {
@@ -452,9 +517,13 @@ def main():
         box_num = box_key.replace("box_", "")
         face_list = as_list(fb.get(box_key, []))
         ov_list = as_list(ov.get(box_key, []))
+        excluded_list = [
+            dict(entry) for entry in excluded_overflow
+            if str(entry.get("box", "")) in {box_key, box_num}
+        ]
 
         merged_dict = {}
-        for raw_entry in face_list + ov_list:
+        for raw_entry in face_list + ov_list + excluded_list:
             if not isinstance(raw_entry, dict):
                 continue
             code = str(raw_entry.get("code", "")).upper()
@@ -525,7 +594,22 @@ def main():
     # Box 16 — International transactions; branches on the extracted checkbox
     # state. IRS: checked -> attached K-3 reference; unchecked -> required
     # non-furnishing notification; unknown -> explicit human-review flag.
+    # Prefer deterministic face reader evidence; fall back to manual fragment.
+    evidence_path = fd / "face_reader.evidence.json"
     box_16_checked = fb.get("box_16_checked")
+    if evidence_path.exists():
+        try:
+            ev = json.loads(evidence_path.read_text(encoding="utf-8-sig"))
+            b16_ev = (ev.get("fields") or {}).get("box_16", {})
+            b16_status = b16_ev.get("status")
+            if b16_status == "present":
+                box_16_checked = True
+            elif b16_status == "verified_absent":
+                box_16_checked = False
+            elif b16_status is not None:
+                box_16_checked = None
+        except (json.JSONDecodeError, OSError):
+            pass  # fall back to fragment value
     b16 = {
         "type": "reference",
         "semantic": {"id": "international_transactions", "label": "International Transactions"},

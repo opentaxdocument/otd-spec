@@ -1561,7 +1561,7 @@ nodes:
           AN:
             semantic_id: "other_information.farming_fishing"
             label: "Farming and fishing business"
-            value_type: boolean
+            value_type: decimal
           AO:
             semantic_id: "other_information.ptp"
             label: "PTP information"
