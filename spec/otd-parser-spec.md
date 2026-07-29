@@ -379,15 +379,19 @@ pass it through as a value.
 
 ---
 
-## 8. Round-Trip Guarantee
+## 8. Round-Trip Canonicalization Requirement
 
-The ultimate quality test: given any valid OTD document:
+For documents within an implementation's supported profile, the canonical
+quality test is:
 
 ```
 parse(document) → TaxDocument
 emit(TaxDocument) → document'
-document == document'  # Byte-identical after normalization
+normalize(document) == normalize(document')
 ```
+
+This is normalized serialization equivalence, not a claim that the raw source
+bytes remain identical before normalization.
 
 
 Normalization includes:
@@ -401,7 +405,8 @@ Normalization includes:
 - Consistent date formatting (ISO 8601)
 - Consistent indentation (2 spaces)
 
-If round-trip fidelity fails, either the emitter or parser has a bug.
+If canonical round-trip fidelity fails for a supported valid document,
+either the emitter, parser, or normalization implementation has a bug.
 
 ---
 

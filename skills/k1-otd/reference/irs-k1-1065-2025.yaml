@@ -20,6 +20,7 @@
 taxonomy:
   id: "irs-k1-1065-2025"
   version: "2025.1.0"
+  form_id: "k1-1065"
   form_number: "Schedule K-1"
   parent_form: "Form 1065"
   tax_year: 2025

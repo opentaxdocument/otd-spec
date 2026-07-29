@@ -5,7 +5,7 @@
 **Version:** 0.2 RC-1 | **Date:** April 2, 2026
 **Authors:** Tom O'Sullivan, Crimson Tree Software
 **License:** Creative Commons Attribution 4.0 International (CC BY 4.0)
-**Status:** Release candidate seeking multi-firm review and adoption
+**Status:** Public draft seeking multi-firm review; not conformance-certified
 
 ---
 
@@ -46,25 +46,36 @@ in YAML. It is designed so that:
    human reviewer can traverse the document by *meaning* ("what is the
    QBI?") or by *form position* ("what's in Box 20, Code Z?").
 
-4. **Round-trip fidelity is guaranteed** — emit a K-1 as OTD YAML,
-   parse it back, re-emit it: byte-identical output. Zero data loss.
+4. **Canonical round-trip fidelity is a design requirement** — an
+   implementation should preserve information across parse and re-emission
+   under a declared normalization profile. The bundled proof demonstrates
+   normalized equivalence for one structured K-1 fixture, not universal
+   conformance or PDF extraction.
 
-5. **Form production is built in** — every node carries enough metadata
-   to reconstruct the physical printed form (box, line, code, column),
-   not just the data.
+5. **Form-production metadata is modelled** — nodes can carry box, line, code,
+   and column context intended to support renderers. A general printed-form or
+   e-file production engine is not yet demonstrated.
 
 ## What's In This Package
 
 | Document | Purpose |
 |----------|---------|
 | `spec/otd-spec-v0.2.yaml` | **Core TaxNode specification** — the six TaxNode primitives (scalar, coded, grid, recordset, statement, reference), document envelope, and real examples |
-| `taxonomies/irs-k1-1065-2025.yaml` | **Complete K-1 taxonomy** — every box, every code (200+), every cross-reference, derived from 2025 IRS instructions |
+| `taxonomies/irs-k1-1065-2025.yaml` | **Draft K-1 taxonomy** — broad 2025 box/code coverage derived from IRS instructions and still awaiting practitioner validation |
 | `spec/otd-derivation-spec.md` | **Taxonomy derivation rules** — how to generate a taxonomy for *any* IRS form from its instructions, making the standard self-perpetuating |
 | `spec/otd-emitter-spec.md` | **Emitter guide** — how to build software that produces OTD documents |
 | `spec/otd-parser-spec.md` | **Parser guide** — how to build software that consumes OTD documents |
-| `proof/otd_round_trip_proof.py` | **Working proof-of-concept** — Python script that emits, parses, validates, queries, and round-trips a realistic K-1 |
-| `proof/proof-emitted.otd.yaml` | **Example output** — a realistic K-1 OTD document with §199A, Form 926, and multi-code boxes |
-| `proof/proof-results.txt` | **Test results** — all five phases passed, including byte-identical round-trip |
+| `proof/otd_round_trip_proof.py` | **Bounded proof-of-concept** — starts from an in-memory structured K-1 fixture; it does not test PDF extraction or the production assembler |
+| `proof/proof-emitted.otd.yaml` | **Example output** — a realistic synthetic K-1 OTD document with §199A, Form 926, and multi-code boxes |
+| `proof/proof-results.txt` | **Proof snapshot** — five bounded phases passed, including normalized serialization equivalence |
+
+### Current Assurance Boundary
+
+The tracked validator matrix has 19 blocking checks and 12 strict expected
+failures recording deferred contract work. PDF extraction regression coverage
+is limited to two machine-local 2025 K-1 fixtures. The project is suitable for
+draft design and controlled human-reviewed experiments, but is not yet
+certified for unattended extraction or general OTD conformance.
 
 ## Key Design Decisions
 
@@ -109,9 +120,9 @@ partnership tax expertise. Specifically:
 3. **Adoption interest** — Would your firm's compliance tools benefit
    from emitting and/or consuming OTD? What would adoption look like?
 
-4. **K-3 stress test** — We have scouted the K-3 instructions and
-   designed the grid and recordset primitives for it. A K-3 taxonomy
-   derivation is the next milestone.
+4. **K-3 implementation stress test** — A draft K-3 taxonomy exists, but
+   it has no proof, fixture, or validator exercise. Implementation evidence is
+   the next milestone.
 
 ## Why Open Standard?
 

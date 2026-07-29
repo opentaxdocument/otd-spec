@@ -2,7 +2,7 @@
 # Open Tax Document — Roadmap
 
 **Status:** Draft — public, actively changing
-**Updated:** 2026-07-28
+**Updated:** 2026-07-29
 **Authors:** Tom O'Sullivan, Crimson Tree Software
 
 > This project is built in the open. This roadmap states what is actually
@@ -13,26 +13,27 @@
 
 ## Where The Project Stands
 
-The core standard — TaxNode specification, K-1 and K-3 taxonomies, and the
-emitter, parser, and derivation specifications — is structurally complete and
-has survived repeated adversarial review.
+The repository contains substantial draft TaxNode, K-1/K-3 taxonomy,
+emitter, parser, and derivation artifacts. They have benefited from repeated
+adversarial review, but they are not conformance-certified or implementation-
+complete. K-3 remains declarative only.
 
-The significant change since the last roadmap is that **validation is now
-taxonomy-driven rather than hand-coded**. `skills/k1-otd/scripts/constraint_engine.py`
-reads its rules from the taxonomy YAML, so a rule added to the taxonomy takes
-effect on the next run without new Python. It enforces:
+Validation is increasingly taxonomy-driven, but its coverage is bounded.
+`validate_otd.py` now establishes root, metadata, taxonomy, form, version, and
+year trust boundaries before invoking `constraint_engine.py`. The CLI returns
+`0` for a document passing implemented checks, `1` for an invalid document, and
+`2` when the validator or governing taxonomy cannot operate.
 
-- **Schema binding** — a node the taxonomy declares must match its declared
-  type, semantic identity, form placement, and value type
-- **Physical completeness** — every declared field must be present
-- **Constraints** — `sum`, `range`, `required_field`, `conditional_required`,
-  with the null/absent algebra of parser-spec §4.7
-- **Statement schemas** — required classification and record fields
-- **Coded-entry uniqueness** — no duplicate codes within a box
-- **Capital-account integrity** — completeness, alias ambiguity, continuity
+The constraint engine implements arithmetic/range rules, selected schema
+binding and completeness checks, statement requirements, coded-entry
+uniqueness, and capital-account integrity. It does not yet recursively enforce
+every type, enum, placement, extension, or rule-path contract.
 
-Test coverage is **33 tracked cases across three suites**, plus a mirror-parity
-checker and a deliberately non-conforming fixture at `tests/fixtures/hostile-k1/`.
+Tracked executable coverage is listed by suite rather than a brittle aggregate:
+`test_validator_contract.py`, `test_constraint_engine.py`,
+`test_rectification.py`, `test_direct_documents.py`, `test_face_reader.py`, and
+`check_mirrors.py`. The validator matrix currently reports 19 blocking passes
+and 12 strict `XFAIL`s; the face-reader suite depends on two machine-local PDFs.
 
 ### Review History
 
@@ -45,7 +46,7 @@ evidence, each remediated:
 | 1 | Production assembler emitted IRS-nonconforming Box 16, Item M, Item K3 | Remediated |
 | 2 | Validation was presence-only; content never checked | Remediated |
 | 3 | Range rules failed open; shipped sum rules were inert; mirror staleness | Remediated |
-| 4 | No taxonomy-schema binding; a misspelled rule path silently disabled its rule | Binding remediated; path preflight **open** |
+| 4 | No taxonomy-schema binding; a misspelled rule path silently disabled its rule | Trust-boundary binding remediated; recursive binding and path preflight **open** |
 
 Earlier rounds against v0.2 were conducted by a different reviewer. The
 attribution in the previous version of this roadmap was out of date.
@@ -79,6 +80,20 @@ constraint, because the node is present. The engine currently treats a null
 value as missing. The likely resolution is a declarative `non_null: true` on
 constraints that genuinely require a value, rather than silently redefining
 generic required semantics. Under review.
+
+### Deferred validator contracts are executable, not hidden
+
+`tests/test_validator_contract.py` preserves 12 unresolved behaviors as strict
+expected failures: four rule-path cases, nested enum/type/placement checks,
+unknown-extension forward compatibility, three statement/reference truth
+rules, and related schema debt. An unexpected pass fails the suite until the
+case is reviewed and promoted.
+
+### The extraction fit gate and corpus are incomplete
+
+`template_match.py` is not yet wired into one fail-closed extraction
+orchestrator. Face-reader regression coverage uses one 2025 grammar and two
+machine-local PDFs, with no explicit deskew path or broad vendor/year corpus.
 
 ### K-3 has no implementation coverage
 

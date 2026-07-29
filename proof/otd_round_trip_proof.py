@@ -3,12 +3,17 @@
 Open Tax Document (OTD) — Round-Trip Proof of Concept
 =====================================================
 
-Demonstrates the complete OTD lifecycle:
-  1. EMIT:      Source data → OTD YAML document
+Demonstrates a bounded structured-data lifecycle for one in-memory K-1
+fixture:
+  1. EMIT:      Structured fixture → OTD YAML document
   2. PARSE:     OTD YAML → Queryable TaxDocument tree
-  3. VALIDATE:  Run taxonomy constraints against parsed data
+  3. VALIDATE:  Run selected taxonomy constraints against parsed data
   4. QUERY:     Semantic lookup, form lookup, statement flattening
-  5. ROUND-TRIP: Re-emit from parsed tree → diff against original
+  5. ROUND-TRIP: Re-emit → compare after whitespace/newline normalization
+
+This proof does not ingest a PDF, invoke page/face extraction, or exercise the
+production assembler. It is evidence for this fixture, not universal OTD
+conformance.
 
 This script is self-contained and requires only:
   - Python 3.9+
@@ -20,7 +25,6 @@ License: CC BY 4.0 | Authors: Tom O'Sullivan, Second Wind | 2026-04-02
 import sys
 import json
 import hashlib
-import datetime
 import uuid
 import io
 import difflib
@@ -144,6 +148,8 @@ def display_path(path: Path) -> str:
 # Based on a realistic partnership scenario with complex Box 20 entries.
 
 SOURCE_DATA = {
+    # Fixed fixture metadata keeps tracked proof evidence reproducible.
+    "created": "2026-07-28T03:33:16Z",
     "partnership": {
         "name": "Greenfield Capital Partners LP",
         "address": "100 Park Avenue, Suite 2400, New York, NY 10017",
@@ -408,7 +414,7 @@ class OTDEmitter:
         envelope = CommentedMap()
         envelope["version"] = "0.1"
         envelope["document_id"] = str(uuid.uuid5(uuid.NAMESPACE_URL, f"otd-proof-{p['ein']}-{pr['ssn']}"))
-        envelope["created"] = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        envelope["created"] = source["created"]
         producer = CommentedMap([("name", "OTD Round-Trip Proof"), ("version", "0.1.0")])
         envelope["producer"] = producer
         taxonomy = CommentedMap()
@@ -954,7 +960,7 @@ def validate(doc: TaxDocument) -> list:
 # ============================================================================
 
 def normalize_yaml(text: str) -> str:
-    """Normalize YAML for comparison: strip trailing whitespace, ensure final newline."""
+    """Normalize only trailing whitespace and the final newline for comparison."""
     lines = [line.rstrip() for line in text.splitlines()]
     return "\n".join(lines) + "\n"
 
@@ -982,7 +988,7 @@ def round_trip_test(original_text: str, re_emit_path: Path) -> tuple:
     norm_re = normalize_yaml(re_emitted)
 
     if norm_orig == norm_re:
-        return True, "PASS — Byte-identical after normalization"
+        return True, "PASS — Normalized serialization equivalent"
 
     # Generate diff for debugging
     diff = list(difflib.unified_diff(
@@ -1107,7 +1113,7 @@ def main():
     log(f"  Parse:      ✓ ({len(doc.list_all_ids())} nodes indexed)")
     log(f"  Validate:   {'✓ All passed' if all_passed else '✗ Failures detected'}")
     log(f"  Query:      ✓ (semantic, value, type, statement, reference)")
-    log(f"  Round-trip: {'✓ Byte-identical' if passed else '✗ Differences found'}")
+    log(f"  Round-trip: {'✓ Normalized-equivalent' if passed else '✗ Differences found'}")
     log("")
 
     # Save results

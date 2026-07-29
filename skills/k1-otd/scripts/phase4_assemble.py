@@ -684,6 +684,7 @@ def main():
         },
         "body": {
             "form_id": "k1-1065",
+            "tax_year": fm.get("tax_year"),
             "part_i": {
                 "item_a": field(pi, "partnership_ein", "partnership.ein", "Partnership's EIN", "Part I, Item A", "A"),
                 "item_b": field(pi, "partnership_name", "partnership.name_address", "Partnership's name, address", "Part I, Item B", "B"),

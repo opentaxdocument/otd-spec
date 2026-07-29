@@ -129,10 +129,10 @@ PHASE 4: QUERY DEMO
 
 PHASE 5: ROUND-TRIP
 ----------------------------------------
-  PASS — Byte-identical after normalization
+  PASS — Normalized serialization equivalent
   Re-emitted: proof/generated/proof-re-emitted.otd.yaml
-  SHA256 (original, normalized):   2ab918b3d6ba72aa
-  SHA256 (re-emitted, normalized): 2ab918b3d6ba72aa
+  SHA256 (original, normalized):   3dc90089738f3cf2
+  SHA256 (re-emitted, normalized): 3dc90089738f3cf2
   Match: True
 
 ========================================================================
@@ -142,4 +142,4 @@ SUMMARY
   Parse:      ✓ (70 nodes indexed)
   Validate:   ✓ All passed
   Query:      ✓ (semantic, value, type, statement, reference)
-  Round-trip: ✓ Byte-identical
+  Round-trip: ✓ Normalized-equivalent

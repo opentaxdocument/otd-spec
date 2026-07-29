@@ -44,12 +44,15 @@ is designed so that:
    structured, queryable objects — not text blobs
 3. **Any AI agent can reason about it** — traverse by *meaning* ("what is the
    QBI?") or by *form position* ("what's in Box 20, Code Z?")
-4. **Round-trip fidelity is guaranteed** — emit → parse → re-emit produces
-   byte-identical output
-5. **Form production is built in** — every node carries enough metadata to
-   reconstruct the physical form
-6. **The taxonomy is normative, not advisory** — validation reads its rules
-   from the taxonomy file itself, so a new rule takes effect without new code
+4. **Canonical round-trip fidelity is a design requirement** — supported
+   implementations must preserve information and reproduce equivalent normalized
+   YAML. The current proof demonstrates this for one structured K-1 fixture,
+   not for every valid OTD document or for PDF extraction.
+5. **Form-production metadata is modelled** — nodes can carry form placement,
+   but a general PDF or e-file renderer is not yet demonstrated.
+6. **The taxonomy is a governing validation input** — the reference validator
+   fails closed unless it can load an operative taxonomy matching the document.
+   Remaining rule and schema gaps are listed below.
 
 
 ## What An OTD Document Looks Like
@@ -77,6 +80,7 @@ form_metadata:
 
 body:
   form_id: k1-1065
+  tax_year: 2025
   part_i:
     item_a:
       type: scalar
@@ -182,9 +186,11 @@ pip install ruamel.yaml
 python proof/otd_round_trip_proof.py
 ```
 
-Emits a realistic K-1 as OTD YAML, parses it back, validates against
-taxonomy constraints, demonstrates the query interface, and confirms
-byte-identical round-trip fidelity.
+Runs a bounded structured-data proof for one in-memory K-1 fixture:
+emit YAML, parse it, exercise selected taxonomy constraints and queries, and
+compare the re-emission after trailing-whitespace and final-newline
+normalization. It does not exercise PDF extraction or the production assembler,
+and it is not a universal conformance proof.
 
 ### Validate a document
 
@@ -192,17 +198,30 @@ byte-identical round-trip fidelity.
 python skills/k1-otd/scripts/validate_otd.py --input proof/proof-emitted.otd.yaml
 ```
 
-The taxonomy is located automatically. If it cannot be resolved, validation
-**fails** rather than reporting success with rules unenforced.
+The taxonomy is located automatically. If it cannot be resolved, loaded, or
+matched to the document, validation fails closed. CLI exit codes are stable:
+
+| Exit | Meaning |
+|---:|---|
+| `0` | Document passed the implemented conformance checks |
+| `1` | Document is invalid |
+| `2` | Validator, taxonomy, dependency, or configuration failure |
 
 ### Run the test suites
 
 ```bash
-python tests/test_constraint_engine.py    # engine-level regressions
-python tests/test_rectification.py        # end-to-end through the pipeline
-python tests/test_direct_documents.py     # malformed documents → validator
+python tests/test_validator_contract.py   # 19 blocking checks + 12 strict XFAILs
+python tests/test_constraint_engine.py    # engine-level rule regressions
+python tests/test_rectification.py        # assembler → validator regression matrix
+python tests/test_direct_documents.py     # direct malformed-document mutations
+python tests/test_face_reader.py          # two pinned local PDF fixtures (non-portable)
 python tests/check_mirrors.py             # reference/ mirror parity
 ```
+
+`test_validator_contract.py` treats deferred behavior as strict debt: an
+unexpected pass fails the suite until that case is reviewed and promoted.
+`test_face_reader.py` requires the two machine-local PDFs named in that test;
+the repository does not yet ship a portable PDF corpus.
 
 ### Reproduce the hostile fixture
 
@@ -225,21 +244,21 @@ Parsing and validation have deliberately opposite dispositions
 | **Parse** | Lenient — MUST NOT reject | Unknown nodes preserved; forward compatibility |
 | **Validate** | Strict — SHOULD reject | Conformance of *declared* nodes to the taxonomy |
 
-`constraint_engine.py` reads its rules from the taxonomy YAML rather than
-hard-coding them, and enforces:
+Before rule evaluation, `validate_otd.py` now requires the OTD envelope,
+legal metadata, physical body identity, and a non-empty governing taxonomy. It
+binds taxonomy ID, taxonomy version, form ID, and tax year, and distinguishes an
+invalid document (`1`) from a validator/configuration failure (`2`).
 
-- **Schema binding** — declared nodes must match their declared type,
-  semantic identity, form placement, and value type
-- **Physical completeness** — every taxonomy-declared field must be present
-- **Constraints** — `sum`, `range`, `required_field`, `conditional_required`,
-  with the null/absent algebra of §4.7
-- **Statement schemas** — required classification and record fields
-- **Coded-entry uniqueness** — no duplicate codes within a box
-- **Capital-account integrity** — completeness, alias ambiguity, continuity
+`constraint_engine.py` then applies the taxonomy-driven checks it currently
+implements, including arithmetic/range rules, selected schema binding and
+physical-completeness checks, statement requirements, coded-entry uniqueness,
+and capital-account integrity. Coverage is not complete: recursive nested types,
+closed enums, some form-placement checks, full rule-path preflight, extension
+forward compatibility, and several §7.1 truth-preservation rules remain strict
+`XFAIL`s in `tests/test_validator_contract.py`.
 
-Four rules go beyond what the taxonomy can express on its own. They are
-documented in `spec/otd-parser-spec.md` §7.1 so third-party implementations
-can match, and are proposed for promotion to normative in v0.3.
+The §7.1 reference profile is proposed for promotion to normative in v0.3 so
+third-party validators can implement the same dispositions.
 
 ## Design Highlights
 
@@ -298,9 +317,15 @@ Honest status of open items:
 
 | Gap | Impact |
 |---|---|
-| A misspelled path in a taxonomy constraint resolves as "absent" and silently skips that rule | A typo can disable a rule without any error. Fix in progress: preflight every rule path against the taxonomy; undeclared → error. |
-| §4.7's `required` column (null counts as present) is not reconciled with the engine's `required_field` behaviour | Present-null may be treated as missing. Under review. |
-| K-3 taxonomy is present but has no proof, fixtures, or validation coverage | K-3 support is declarative only. |
+| Constraint operands, targets, and predicates are not fully preflighted against the taxonomy | A misspelled path can silently skip or weaken a rule; four cases remain strict `XFAIL`s. |
+| Recursive nested types, closed enums, and some form-placement declarations are not fully enforced | Structurally incompatible declared nodes can still validate; three cases remain strict `XFAIL`s. |
+| Parser forward compatibility and validator node-type checking are not yet separated correctly | An undeclared future extension is currently rejected instead of preserved and reported informationally. |
+| Several §7.1 truth/statement/reference rules are incomplete | `_unverified` facts, statement attachment/classification, and Box 16 reference consistency remain explicit `XFAIL`s. |
+| §4.7 `required` semantics are not reconciled with `required_field` behavior | Present-null may be treated as missing. |
+| The template fit checker is not wired into a single extraction orchestrator | Callers can invoke face extraction without first proving form/year fit. |
+| Face extraction uses one 2025 grammar and two machine-local PDF fixtures | Vendor, year, skew/rotation, scan, corruption, and hybrid AcroForm coverage are not established. |
+| K-3 has a taxonomy but no proof, fixture, or implementation exercise | K-3 support is declarative only. |
+| Validation rewrites an adjacent `output.confidence.json` when present | Validation has an implicit write side effect that should become opt-in. |
 | The §7.1 validation profile is implementation-specific, not yet normative | A conforming third-party validator may be more permissive. |
 
 ## Why Open Standard?
