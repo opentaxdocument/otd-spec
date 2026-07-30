@@ -1,0 +1,1519 @@
+{
+  "schema_version": "otd-extraction-projection/1.0",
+  "profile_id": "k1-1065-2025-face-and-numeric-details/1.0",
+  "source": {
+    "pdf_name": "source.pdf",
+    "sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac"
+  },
+  "source_artifacts": {
+    "evidence_receipt_sha256": "584fe210da648cf97225f7ac85a55f444d22d1793f5f57e7a0281c068f05294a",
+    "face_evidence_canonical_sha256": "542042e6005ccb2ed631e03d4083ae5c0096270a9c258a474c3a8ee7582bcc10",
+    "line_details_sha256": "f6ae17c8aa337d760c8c9404c508b17815f3d30128ffbd8b7b84cc332519f892",
+    "page_manifest_sha256": "c438201996fffcbdfcb25504431c1f31b3986d2dc21d6c9e74791e7406888c6f",
+    "section_manifest_sha256": "42310f24955b7873e155fd1be08a4a226c14939941d8f75322e40ff493af292b",
+    "state_attempt_sha256": "ca748007696958efe0891a73ac446fa91773d9573018346c94cefeabeb6bebbf"
+  },
+  "fragment_sha256": {
+    "face_page.json": "562d366510932f1d9be8532e83fa84094586dc200b28c04764b89bdb9249916f",
+    "footnotes_a.json": "f426eaadddd093673b152975e5890365abd3e0dd80fd09903b7ce295b44bbea8",
+    "footnotes_b.json": "f426eaadddd093673b152975e5890365abd3e0dd80fd09903b7ce295b44bbea8",
+    "overflow_statements.json": "0f1ff2405508012444d25ac0510e5d2d2e4015e2d0fd9d470c1ef43c72b17b8b",
+    "state_schedules.json": "4cca31969948262e2b9e4be29ba9d5080c011489c0acb480cdca3439a7585d31"
+  },
+  "scope": {
+    "face_fields": true,
+    "taxonomy_safe_numeric_detail_totals": true,
+    "detail_components": false,
+    "investor_statements": false,
+    "state_schedules": false,
+    "full_source_document": false
+  },
+  "counts": {
+    "source_face_fields": 53,
+    "projected_face_fields": 52,
+    "omitted_face_fields": 1,
+    "source_detail_records": 21,
+    "projected_detail_records": 6,
+    "omission_entries": 82,
+    "partially_consumed_sections": 23,
+    "derived_facts": 1
+  },
+  "projected_face_fields": [
+    {
+      "source_field": "header.final_k1",
+      "output_paths": [
+        "form_metadata.final"
+      ],
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        324.0,
+        37.999000000000024,
+        332.0,
+        45.999000000000024
+      ],
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "method": "label_match_outside_region+interior_verified_empty",
+      "rule_id": "header.final_k1",
+      "transformations": [
+        "verified checkbox absence preserved as false"
+      ]
+    },
+    {
+      "source_field": "header.amended_k1",
+      "output_paths": [
+        "form_metadata.amended",
+        "form_metadata.filing_status"
+      ],
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        403.2,
+        37.999000000000024,
+        411.2,
+        45.999000000000024
+      ],
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "method": "label_match_adjacent_outside_region+interior_verified_empty",
+      "rule_id": "header.amended_k1",
+      "transformations": [
+        "verified checkbox absence preserved as false",
+        "filing status derived"
+      ]
+    },
+    {
+      "source_field": "header.tax_year_begin",
+      "output_paths": [
+        "form_metadata.fiscal_year_begin",
+        "form_metadata.fiscal_year"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        71.03500000000005,
+        97.42999999999995,
+        441.189,
+        107.4960000000001
+      ],
+      "raw_text": "1/1/2025",
+      "normalized_value": "1/1/2025",
+      "method": "beginning_ending_row_parsed",
+      "rule_id": "header.tax_year_begin",
+      "transformations": [
+        "M/D/YYYY normalized to ISO-8601",
+        "calendar/fiscal indicator derived"
+      ]
+    },
+    {
+      "source_field": "header.tax_year_end",
+      "output_paths": [
+        "form_metadata.fiscal_year_end",
+        "form_metadata.tax_year",
+        "form_metadata.fiscal_year"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        71.03500000000005,
+        97.42999999999995,
+        441.189,
+        107.4960000000001
+      ],
+      "raw_text": "12/31/2025",
+      "normalized_value": "12/31/2025",
+      "method": "beginning_ending_row_parsed",
+      "rule_id": "header.tax_year_end",
+      "transformations": [
+        "M/D/YYYY normalized to ISO-8601",
+        "tax year derived from ending date",
+        "calendar/fiscal indicator derived"
+      ]
+    },
+    {
+      "source_field": "item_a",
+      "output_paths": [
+        "part_i.partnership_ein"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        38.0,
+        169.7065,
+        82.35549999999999,
+        179.2065
+      ],
+      "raw_text": "**-**65189",
+      "normalized_value": "**-**65189",
+      "method": "overlay_font_bounded_identity",
+      "rule_id": "item_a",
+      "transformations": []
+    },
+    {
+      "source_field": "item_b",
+      "output_paths": [
+        "part_i.partnership_name"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        40.0,
+        196.8265,
+        234.24649999999997,
+        227.60649999999998
+      ],
+      "raw_text": "COPPERLEAF REAL ESTATE FUND V, L.P.\n5255 LAKE CIR\nST LOUIS, MO 63150",
+      "normalized_value": "COPPERLEAF REAL ESTATE FUND V, L.P.\n5255 LAKE CIR\nST LOUIS, MO 63150",
+      "method": "overlay_font_address_block",
+      "rule_id": "item_b",
+      "transformations": []
+    },
+    {
+      "source_field": "item_c",
+      "output_paths": [
+        "part_i.irs_center"
+      ],
+      "status": "blank",
+      "page": 1,
+      "bbox": [
+        0.0,
+        224.50650000000002,
+        306.0,
+        242.49700000000007
+      ],
+      "raw_text": null,
+      "normalized_value": null,
+      "method": "overlay_font_window_verified_empty",
+      "rule_id": "item_c",
+      "transformations": []
+    },
+    {
+      "source_field": "item_d",
+      "output_paths": [
+        "part_i.publicly_traded"
+      ],
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        57.6,
+        241.75,
+        65.6,
+        249.75
+      ],
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "method": "label_match+interior_verified_empty",
+      "rule_id": "item_d",
+      "transformations": []
+    },
+    {
+      "source_field": "item_e",
+      "output_paths": [
+        "part_ii.partner_tin"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        38.0,
+        277.7065,
+        93.97399999999999,
+        287.2065
+      ],
+      "raw_text": "XX-XXX8572",
+      "normalized_value": "XX-XXX8572",
+      "method": "overlay_font_bounded_identity",
+      "rule_id": "item_e",
+      "transformations": []
+    },
+    {
+      "source_field": "item_f",
+      "output_paths": [
+        "part_ii.partner_name"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        40.0,
+        304.8265,
+        250.60549999999995,
+        335.6065
+      ],
+      "raw_text": "MERIDIAN REAL ASSETS AGGREGATOR, L.P.\n5981 JUNIPER RD\nROCHESTER, NY 14633",
+      "normalized_value": "MERIDIAN REAL ASSETS AGGREGATOR, L.P.\n5981 JUNIPER RD\nROCHESTER, NY 14633",
+      "method": "overlay_font_address_block",
+      "rule_id": "item_f",
+      "transformations": []
+    },
+    {
+      "source_field": "item_g",
+      "output_paths": [
+        "part_ii.general_or_limited"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        57.6,
+        337.998,
+        188.0,
+        345.998
+      ],
+      "raw_text": null,
+      "normalized_value": "limited_or_other_member",
+      "method": "interior_vector",
+      "rule_id": "item_g",
+      "transformations": []
+    },
+    {
+      "source_field": "item_h1",
+      "output_paths": [
+        "part_ii.domestic_or_foreign"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        57.6,
+        361.999,
+        188.0,
+        369.999
+      ],
+      "raw_text": null,
+      "normalized_value": "domestic",
+      "method": "interior_vector",
+      "rule_id": "item_h1",
+      "transformations": []
+    },
+    {
+      "source_field": "item_h2",
+      "output_paths": [
+        "part_ii.disregarded_entity_info"
+      ],
+      "status": "blank",
+      "page": 1,
+      "bbox": [
+        57.6,
+        373.998,
+        65.6,
+        381.998
+      ],
+      "raw_text": "interior_verified_empty",
+      "normalized_value": null,
+      "method": "conditional_record_governing_checkbox_unchecked",
+      "rule_id": "item_h2",
+      "transformations": []
+    },
+    {
+      "source_field": "item_i1",
+      "output_paths": [
+        "part_ii.entity_type"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        175.25,
+        397.7065,
+        290.3045,
+        407.2065
+      ],
+      "raw_text": "PARTNERSHIP (LIMITED)",
+      "normalized_value": "partnership",
+      "method": "overlay_font_bounded_text+value_alias",
+      "rule_id": "item_i1",
+      "transformations": []
+    },
+    {
+      "source_field": "item_i2",
+      "output_paths": [
+        "part_ii.retirement_plan"
+      ],
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        294.4,
+        410.998,
+        302.4,
+        418.998
+      ],
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "method": "label_match+interior_verified_empty",
+      "rule_id": "item_i2",
+      "transformations": []
+    },
+    {
+      "source_field": "item_k2",
+      "output_paths": [
+        "part_ii.item_k2"
+      ],
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        294.4,
+        578.499,
+        302.4,
+        586.499
+      ],
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "method": "label_match+interior_verified_empty",
+      "rule_id": "item_k2",
+      "transformations": []
+    },
+    {
+      "source_field": "item_k3",
+      "output_paths": [
+        "part_ii.item_k3"
+      ],
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        294.4,
+        600.249,
+        302.4,
+        608.249
+      ],
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "method": "label_match_adjacent_wrapped+interior_verified_empty",
+      "rule_id": "item_k3",
+      "transformations": []
+    },
+    {
+      "source_field": "item_j",
+      "output_paths": [
+        "part_ii.share_percentages"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        57.6,
+        444.7065,
+        394.75,
+        479.492
+      ],
+      "raw_text": null,
+      "normalized_value": {
+        "profit": {
+          "beginning": {
+            "status": "present",
+            "value": 100.0,
+            "raw_text": "100.000000"
+          },
+          "ending": {
+            "status": "present",
+            "value": 100.0,
+            "raw_text": "100.000000"
+          }
+        },
+        "loss": {
+          "beginning": {
+            "status": "present",
+            "value": 100.0,
+            "raw_text": "100.000000"
+          },
+          "ending": {
+            "status": "present",
+            "value": 100.0,
+            "raw_text": "100.000000"
+          }
+        },
+        "capital": {
+          "beginning": {
+            "status": "present",
+            "value": 100.0,
+            "raw_text": "100.000000"
+          },
+          "ending": {
+            "status": "present",
+            "value": 100.0,
+            "raw_text": "100.000000"
+          }
+        }
+      },
+      "method": "two_column_grid",
+      "rule_id": "item_j",
+      "transformations": [
+        "nested evidence cells flattened",
+        "percentage points divided by 100"
+      ]
+    },
+    {
+      "source_field": "item_j.decrease_reason",
+      "output_paths": [
+        "part_ii.share_percentages.decrease_due_to_sale",
+        "part_ii.share_percentages.decrease_due_to_exchange"
+      ],
+      "status": "blank",
+      "page": 1,
+      "bbox": [
+        57.6,
+        494.0,
+        108.8,
+        502.0
+      ],
+      "raw_text": null,
+      "normalized_value": {
+        "sale": {
+          "status": "verified_absent",
+          "value": false
+        },
+        "exchange": {
+          "status": "verified_absent",
+          "value": false
+        }
+      },
+      "method": "multi_checkbox_set",
+      "rule_id": "item_j.decrease_reason",
+      "transformations": [
+        "verified checkbox absence preserved as false"
+      ]
+    },
+    {
+      "source_field": "item_k1",
+      "output_paths": [
+        "part_ii.liabilities"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        57.6,
+        529.7065,
+        388.534,
+        575.2065
+      ],
+      "raw_text": null,
+      "normalized_value": {
+        "nonrecourse": {
+          "beginning": {
+            "status": "present",
+            "value": 39700.0,
+            "raw_text": "39,700"
+          },
+          "ending": {
+            "status": "present",
+            "value": 51600.0,
+            "raw_text": "51,600"
+          }
+        },
+        "qualified_nonrecourse_financing": {
+          "beginning": {
+            "status": "present",
+            "value": 10000.0,
+            "raw_text": "10,000"
+          },
+          "ending": {
+            "status": "present",
+            "value": 52600.0,
+            "raw_text": "52,600"
+          }
+        },
+        "recourse": {
+          "beginning": {
+            "status": "present",
+            "value": 80000.0,
+            "raw_text": "80,000"
+          },
+          "ending": {
+            "status": "present",
+            "value": 5100.0,
+            "raw_text": "5,100"
+          }
+        }
+      },
+      "method": "two_column_grid",
+      "rule_id": "item_k1",
+      "transformations": [
+        "nested evidence cells flattened"
+      ]
+    },
+    {
+      "source_field": "item_l",
+      "output_paths": [
+        "part_ii.capital_account"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        57.597999999999985,
+        625.7065,
+        522.664,
+        695.889
+      ],
+      "raw_text": null,
+      "normalized_value": {
+        "beginning": {
+          "status": "present",
+          "value": 113000.0,
+          "raw_text": "113,000"
+        },
+        "contributions": {
+          "status": "present",
+          "value": 168000.0,
+          "raw_text": "168,000"
+        },
+        "current_year_net_income_loss": {
+          "status": "present",
+          "value": 7206200.0,
+          "raw_text": "7,206,200"
+        },
+        "other_increase_decrease": {
+          "status": "blank",
+          "value": null
+        },
+        "withdrawals_distributions": {
+          "status": "present",
+          "value": -27000.0,
+          "raw_text": "(27,000)"
+        },
+        "ending": {
+          "status": "present",
+          "value": 7460200.0,
+          "raw_text": "7,460,200"
+        }
+      },
+      "method": "ledger",
+      "rule_id": "item_l",
+      "transformations": [
+        "nested evidence cells flattened",
+        "partial observed blank quarantined"
+      ]
+    },
+    {
+      "source_field": "item_m",
+      "output_paths": [
+        "part_ii.item_m"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        57.6,
+        710.0,
+        108.8,
+        718.0
+      ],
+      "raw_text": null,
+      "normalized_value": "no",
+      "method": "interior_vector",
+      "rule_id": "item_m",
+      "transformations": [
+        "exclusive-choice text normalized to boolean"
+      ]
+    },
+    {
+      "source_field": "item_n",
+      "output_paths": [
+        "part_ii.item_n"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        57.6,
+        733.7065,
+        300.391,
+        755.2065
+      ],
+      "raw_text": null,
+      "normalized_value": {
+        "beginning": {
+          "status": "present",
+          "value": 30900.0,
+          "raw_text": "30,900"
+        },
+        "ending": {
+          "status": "present",
+          "value": 11800.0,
+          "raw_text": "11,800"
+        }
+      },
+      "method": "ledger",
+      "rule_id": "item_n",
+      "transformations": [
+        "nested evidence cells flattened"
+      ]
+    },
+    {
+      "source_field": "box_1",
+      "output_paths": [
+        "part_iii_face.box_1"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        409.31,
+        84.7065,
+        443.643,
+        94.2065
+      ],
+      "raw_text": "556,000",
+      "normalized_value": 556000.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "rule_id": "box_1",
+      "transformations": []
+    },
+    {
+      "source_field": "box_2",
+      "output_paths": [
+        "part_iii_face.box_2"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        414.59,
+        108.7065,
+        443.64099999999996,
+        118.2065
+      ],
+      "raw_text": "28,800",
+      "normalized_value": 28800.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_2",
+      "transformations": []
+    },
+    {
+      "source_field": "box_3",
+      "output_paths": [
+        "part_iii_face.box_3"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        419.87,
+        132.66650000000004,
+        443.639,
+        142.16650000000004
+      ],
+      "raw_text": "4,800",
+      "normalized_value": 4800.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "rule_id": "box_3",
+      "transformations": []
+    },
+    {
+      "source_field": "box_4a",
+      "output_paths": [
+        "part_iii_face.box_4a"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        427.79999999999995,
+        156.7065,
+        443.64599999999996,
+        166.2065
+      ],
+      "raw_text": "500",
+      "normalized_value": 500.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_4a",
+      "transformations": []
+    },
+    {
+      "source_field": "box_4b",
+      "output_paths": [
+        "part_iii_face.box_4b"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        427.79999999999995,
+        180.7065,
+        443.64599999999996,
+        190.2065
+      ],
+      "raw_text": "500",
+      "normalized_value": 500.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "rule_id": "box_4b",
+      "transformations": []
+    },
+    {
+      "source_field": "box_4c",
+      "output_paths": [
+        "part_iii_face.box_4c"
+      ],
+      "status": "blank",
+      "page": 1,
+      "bbox": [
+        316.445,
+        194.495,
+        574.0491,
+        201.5229999999999
+      ],
+      "raw_text": "4c Total guaranteed payments 17 Alternative minimum tax (AMT) items",
+      "normalized_value": null,
+      "method": "row_located_no_numeric_token(segment_bounded_no_value)",
+      "rule_id": "box_4c",
+      "transformations": [
+        "observed blank preserved as null in the OTD",
+        "taxonomy-declared sum retained only as derivation evidence"
+      ]
+    },
+    {
+      "source_field": "box_5",
+      "output_paths": [
+        "part_iii_face.box_5"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        409.31,
+        228.7065,
+        443.643,
+        238.2065
+      ],
+      "raw_text": "434,000",
+      "normalized_value": 434000.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_5",
+      "transformations": []
+    },
+    {
+      "source_field": "box_6a",
+      "output_paths": [
+        "part_iii_face.box_6a"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        409.31,
+        252.7065,
+        443.643,
+        262.2065
+      ],
+      "raw_text": "253,000",
+      "normalized_value": 253000.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_6a",
+      "transformations": []
+    },
+    {
+      "source_field": "box_6b",
+      "output_paths": [
+        "part_iii_face.box_6b"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        409.31,
+        276.6965,
+        443.643,
+        286.1965
+      ],
+      "raw_text": "123,500",
+      "normalized_value": 123500.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "rule_id": "box_6b",
+      "transformations": []
+    },
+    {
+      "source_field": "box_6c",
+      "output_paths": [
+        "part_iii_face.box_6c"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        414.59,
+        300.7065,
+        443.64099999999996,
+        310.2065
+      ],
+      "raw_text": "52,700",
+      "normalized_value": 52700.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_6c",
+      "transformations": []
+    },
+    {
+      "source_field": "box_7",
+      "output_paths": [
+        "part_iii_face.box_7"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        427.79999999999995,
+        324.7065,
+        443.64599999999996,
+        334.2065
+      ],
+      "raw_text": "800",
+      "normalized_value": 800.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_7",
+      "transformations": []
+    },
+    {
+      "source_field": "box_8",
+      "output_paths": [
+        "part_iii_face.box_8"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        414.59,
+        348.6965,
+        443.64099999999996,
+        358.1965
+      ],
+      "raw_text": "94,000",
+      "normalized_value": 94000.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_8",
+      "transformations": []
+    },
+    {
+      "source_field": "box_9a",
+      "output_paths": [
+        "part_iii_face.box_9a"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        409.31,
+        372.7065,
+        443.643,
+        382.2065
+      ],
+      "raw_text": "897,700",
+      "normalized_value": 897700.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_9a",
+      "transformations": []
+    },
+    {
+      "source_field": "box_9b",
+      "output_paths": [
+        "part_iii_face.box_9b"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        409.31,
+        396.7065,
+        443.643,
+        406.2065
+      ],
+      "raw_text": "394,600",
+      "normalized_value": 394600.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_9b",
+      "transformations": []
+    },
+    {
+      "source_field": "box_9c",
+      "output_paths": [
+        "part_iii_face.box_9c"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        414.59,
+        420.6965,
+        443.64099999999996,
+        430.1965
+      ],
+      "raw_text": "95,300",
+      "normalized_value": 95300.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_9c",
+      "transformations": []
+    },
+    {
+      "source_field": "box_10",
+      "output_paths": [
+        "part_iii_face.box_10"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        414.59,
+        444.7065,
+        443.64099999999996,
+        454.2065
+      ],
+      "raw_text": "16,100",
+      "normalized_value": 16100.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_10",
+      "transformations": []
+    },
+    {
+      "source_field": "box_12",
+      "output_paths": [
+        "part_iii_face.box_12"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        414.59,
+        516.7065,
+        443.64099999999996,
+        526.2065
+      ],
+      "raw_text": "75,000",
+      "normalized_value": 75000.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "rule_id": "box_12",
+      "transformations": []
+    },
+    {
+      "source_field": "box_21",
+      "output_paths": [
+        "part_iii_face.box_21"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        537.66,
+        516.7065,
+        571.993,
+        526.2065
+      ],
+      "raw_text": "267,500",
+      "normalized_value": 267500.0,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=region_edge))",
+      "rule_id": "box_21",
+      "transformations": []
+    },
+    {
+      "source_field": "box_22",
+      "output_paths": [
+        "part_iii_face.box_22"
+      ],
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        331.2,
+        602.0,
+        339.2,
+        610.0
+      ],
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "method": "label_match_adjacent+interior_verified_empty",
+      "rule_id": "box_22",
+      "transformations": []
+    },
+    {
+      "source_field": "box_23",
+      "output_paths": [
+        "part_iii_face.box_23"
+      ],
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        331.2,
+        613.999,
+        339.2,
+        621.999
+      ],
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "method": "label_match+interior_verified_empty",
+      "rule_id": "box_23",
+      "transformations": []
+    },
+    {
+      "source_field": "box_16",
+      "output_paths": [
+        "part_iii_face.box_16_checked"
+      ],
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        562.0,
+        180.49900000000002,
+        570.0,
+        188.49900000000002
+      ],
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "method": "attachment_reference+interior_verified_empty",
+      "rule_id": "box_16",
+      "transformations": [
+        "reference checkbox status normalized to boolean"
+      ]
+    },
+    {
+      "source_field": "box_11",
+      "output_paths": [
+        "part_iii_face.box_11"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        316.97,
+        468.7065,
+        443.643,
+        497.1965
+      ],
+      "raw_text": "A 600,700\n* STMT",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 600700.0,
+          "statement_reference": false,
+          "raw_text": "A 600,700",
+          "bbox": [
+            316.97,
+            468.7065,
+            443.643,
+            478.2065
+          ]
+        },
+        {
+          "code": "*",
+          "value": null,
+          "statement_reference": true,
+          "raw_text": "* STMT",
+          "bbox": [
+            318.55,
+            487.6965,
+            443.639,
+            497.1965
+          ]
+        }
+      ],
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_11",
+      "transformations": []
+    },
+    {
+      "source_field": "box_13",
+      "output_paths": [
+        "part_iii_face.box_13"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        316.97,
+        540.7065,
+        443.64099999999996,
+        593.2065
+      ],
+      "raw_text": "A 29,400\nB 56,300\n* STMT",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 29400.0,
+          "statement_reference": false,
+          "raw_text": "A 29,400",
+          "bbox": [
+            316.97,
+            540.7065,
+            443.64099999999996,
+            550.2065
+          ]
+        },
+        {
+          "code": "B",
+          "value": 56300.0,
+          "statement_reference": false,
+          "raw_text": "B 56,300",
+          "bbox": [
+            316.97,
+            559.6965,
+            443.64099999999996,
+            569.1965
+          ]
+        },
+        {
+          "code": "*",
+          "value": null,
+          "statement_reference": true,
+          "raw_text": "* STMT",
+          "bbox": [
+            318.55,
+            583.7065,
+            443.639,
+            593.2065
+          ]
+        }
+      ],
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_13",
+      "transformations": []
+    },
+    {
+      "source_field": "box_14",
+      "output_paths": [
+        "part_iii_face.box_14"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        453.77,
+        84.7065,
+        571.9989999999999,
+        113.2065
+      ],
+      "raw_text": "A 104,600\n* STMT",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 104600.0,
+          "statement_reference": false,
+          "raw_text": "A 104,600",
+          "bbox": [
+            453.77,
+            84.7065,
+            571.993,
+            94.2065
+          ]
+        },
+        {
+          "code": "*",
+          "value": null,
+          "statement_reference": true,
+          "raw_text": "* STMT",
+          "bbox": [
+            455.34999999999997,
+            103.7065,
+            571.9989999999999,
+            113.2065
+          ]
+        }
+      ],
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_14",
+      "transformations": []
+    },
+    {
+      "source_field": "box_15",
+      "output_paths": [
+        "part_iii_face.box_15"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        453.77,
+        132.69650000000001,
+        571.999,
+        161.2065
+      ],
+      "raw_text": "A 1,800\n* STMT",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 1800.0,
+          "statement_reference": false,
+          "raw_text": "A 1,800",
+          "bbox": [
+            453.77,
+            132.69650000000001,
+            571.999,
+            142.19650000000001
+          ]
+        },
+        {
+          "code": "*",
+          "value": null,
+          "statement_reference": true,
+          "raw_text": "* STMT",
+          "bbox": [
+            455.34999999999997,
+            151.7065,
+            571.9989999999999,
+            161.2065
+          ]
+        }
+      ],
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_15",
+      "transformations": []
+    },
+    {
+      "source_field": "box_17",
+      "output_paths": [
+        "part_iii_face.box_17"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        453.77,
+        204.69650000000001,
+        571.9989999999999,
+        257.2065
+      ],
+      "raw_text": "A 79,000\nB 17,200\n* STMT",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 79000.0,
+          "statement_reference": false,
+          "raw_text": "A 79,000",
+          "bbox": [
+            453.77,
+            204.69650000000001,
+            571.9910000000001,
+            214.19650000000001
+          ]
+        },
+        {
+          "code": "B",
+          "value": 17200.0,
+          "statement_reference": false,
+          "raw_text": "B 17,200",
+          "bbox": [
+            453.77,
+            223.7065,
+            571.9910000000001,
+            233.2065
+          ]
+        },
+        {
+          "code": "*",
+          "value": null,
+          "statement_reference": true,
+          "raw_text": "* STMT",
+          "bbox": [
+            455.34999999999997,
+            247.7065,
+            571.9989999999999,
+            257.2065
+          ]
+        }
+      ],
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_17",
+      "transformations": []
+    },
+    {
+      "source_field": "box_18",
+      "output_paths": [
+        "part_iii_face.box_18"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        453.77,
+        289.6965,
+        571.993,
+        317.1965
+      ],
+      "raw_text": "A 118,800\nC 41,200",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 118800.0,
+          "statement_reference": false,
+          "raw_text": "A 118,800",
+          "bbox": [
+            453.77,
+            289.6965,
+            571.993,
+            299.2065
+          ]
+        },
+        {
+          "code": "C",
+          "value": 41200.0,
+          "statement_reference": false,
+          "raw_text": "C 41,200",
+          "bbox": [
+            453.77,
+            307.6965,
+            571.9910000000001,
+            317.1965
+          ]
+        }
+      ],
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_18",
+      "transformations": []
+    },
+    {
+      "source_field": "box_19",
+      "output_paths": [
+        "part_iii_face.box_19"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        453.77,
+        360.7065,
+        571.9910000000001,
+        370.2065
+      ],
+      "raw_text": "A 27,000",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 27000.0,
+          "statement_reference": false,
+          "raw_text": "A 27,000",
+          "bbox": [
+            453.77,
+            360.7065,
+            571.9910000000001,
+            370.2065
+          ]
+        }
+      ],
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_19",
+      "transformations": []
+    },
+    {
+      "source_field": "box_20",
+      "output_paths": [
+        "part_iii_face.box_20"
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        453.77,
+        414.6965,
+        571.9989999999999,
+        497.1965
+      ],
+      "raw_text": "A 2,317,700\nB (112,600)\nC 104,300\n* STMT",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 2317700.0,
+          "statement_reference": false,
+          "raw_text": "A 2,317,700",
+          "bbox": [
+            453.77,
+            414.6965,
+            571.9960000000001,
+            424.1965
+          ]
+        },
+        {
+          "code": "B",
+          "value": -112600.0,
+          "statement_reference": false,
+          "raw_text": "B (112,600)",
+          "bbox": [
+            453.77,
+            439.7065,
+            571.99,
+            449.2065
+          ]
+        },
+        {
+          "code": "C",
+          "value": 104300.0,
+          "statement_reference": false,
+          "raw_text": "C 104,300",
+          "bbox": [
+            453.77,
+            463.7065,
+            571.993,
+            473.2065
+          ]
+        },
+        {
+          "code": "*",
+          "value": null,
+          "statement_reference": true,
+          "raw_text": "* STMT",
+          "bbox": [
+            455.34999999999997,
+            487.6965,
+            571.9989999999999,
+            497.1965
+          ]
+        }
+      ],
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_20",
+      "transformations": []
+    }
+  ],
+  "projected_detail_records": [
+    {
+      "id": "detail-page_07-txt-11c",
+      "kind": "line_item_detail",
+      "source_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+      "source_page": "page_07.txt",
+      "line_token": "11C",
+      "box_key": "box_11",
+      "code": "C",
+      "printed_total": 218800.0,
+      "disposition": "projected_overflow",
+      "output_path": "part_iii_overflow.box_11[C]",
+      "reason_code": "taxonomy_safe_numeric_total"
+    },
+    {
+      "id": "detail-page_08-txt-11s",
+      "kind": "line_item_detail",
+      "source_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+      "source_page": "page_08.txt",
+      "line_token": "11S",
+      "box_key": "box_11",
+      "code": "S",
+      "printed_total": 738700.0,
+      "disposition": "projected_overflow",
+      "output_path": "part_iii_overflow.box_11[S]",
+      "reason_code": "taxonomy_safe_numeric_total"
+    },
+    {
+      "id": "detail-page_09-txt-13ae",
+      "kind": "line_item_detail",
+      "source_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+      "source_page": "page_09.txt",
+      "line_token": "13AE",
+      "box_key": "box_13",
+      "code": "AE",
+      "printed_total": -290600.0,
+      "disposition": "projected_overflow",
+      "output_path": "part_iii_overflow.box_13[AE]",
+      "reason_code": "taxonomy_safe_numeric_total"
+    },
+    {
+      "id": "detail-page_09-txt-13h",
+      "kind": "line_item_detail",
+      "source_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+      "source_page": "page_09.txt",
+      "line_token": "13H",
+      "box_key": "box_13",
+      "code": "H",
+      "printed_total": -313000.0,
+      "disposition": "projected_overflow",
+      "output_path": "part_iii_overflow.box_13[H]",
+      "reason_code": "taxonomy_safe_numeric_total"
+    },
+    {
+      "id": "detail-page_09-txt-13r",
+      "kind": "line_item_detail",
+      "source_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+      "source_page": "page_09.txt",
+      "line_token": "13R",
+      "box_key": "box_13",
+      "code": "R",
+      "printed_total": -52200.0,
+      "disposition": "projected_overflow",
+      "output_path": "part_iii_overflow.box_13[R]",
+      "reason_code": "taxonomy_safe_numeric_total"
+    },
+    {
+      "id": "detail-page_10-txt-20ag",
+      "kind": "line_item_detail",
+      "source_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+      "source_page": "page_10.txt",
+      "line_token": "20AG",
+      "box_key": "box_20",
+      "code": "AG",
+      "printed_total": 390500.0,
+      "disposition": "projected_overflow",
+      "output_path": "part_iii_overflow.box_20[AG]",
+      "reason_code": "taxonomy_safe_numeric_total"
+    }
+  ],
+  "derived_facts": [
+    {
+      "output_path": "part_iii_face.box_4c",
+      "operation": "sum",
+      "taxonomy_constraint": "box_4c_equals_4a_plus_4b",
+      "operands": {
+        "part_iii_face.box_4a": 500.0,
+        "part_iii_face.box_4b": 500.0
+      },
+      "result": 1000.0
+    }
+  ]
+}

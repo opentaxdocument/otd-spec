@@ -1,0 +1,10 @@
+{
+  "_profile_id": "k1-1065-2025-face-and-numeric-details/1.0",
+  "_source_pdf_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+  "_evidence_receipt_sha256": "584fe210da648cf97225f7ac85a55f444d22d1793f5f57e7a0281c068f05294a",
+  "activity_schedule": {},
+  "state_grids": [],
+  "state_tax_summary": [],
+  "_escalate": true,
+  "_escalation_reason": "No state values were emitted; deterministic state-grid extraction requires pdfplumber bounding-box layout evidence."
+}

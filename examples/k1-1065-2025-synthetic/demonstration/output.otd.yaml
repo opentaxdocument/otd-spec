@@ -1,0 +1,647 @@
+otd:
+  version: '0.1'
+  document_id: f5038fa0-ea0a-56d1-ba13-dfeac4403491
+  created: '2026-07-30T00:00:00Z'
+  producer:
+    name: SecondWind K-1 OTD Extractor
+    version: 1.1.0
+  taxonomy:
+    id: irs-k1-1065-2025
+    version: 2025.1.0
+    source: IRS Instructions for Schedule K-1 (Form 1065), 2025
+  source_document:
+    sha256: db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac
+    extraction_method: ai_structured
+    extraction_date: '2026-07-30T00:00:00Z'
+  coverage:
+    profile_id: k1-1065-2025-face-and-numeric-details/1.0
+    full_source_document: false
+    scope:
+      face_fields: true
+      taxonomy_safe_numeric_detail_totals: true
+      detail_components: false
+      investor_statements: false
+      state_schedules: false
+    companion_artifacts:
+      evidence_receipt:
+        path: evidence-receipt.json
+        sha256: 584fe210da648cf97225f7ac85a55f444d22d1793f5f57e7a0281c068f05294a
+      projection_manifest:
+        path: projection-manifest.json
+        sha256: 174371af469594177ef0eb004e38c62fa7cb7a747e9a15e8aee73a1e6f76ab7d
+      disposition_ledger:
+        path: disposition-ledger.json
+        sha256: 1a5cc17b124cd1429d40de9ac3547d9b963733894b49759a3f944bddc9928c11
+form_metadata:
+  tax_year: 2025
+  fiscal_year: false
+  fiscal_year_begin: '2025-01-01'
+  fiscal_year_end: '2025-12-31'
+  amended: false
+  final: false
+  supersedes_document_id:
+  filing_status: original
+  form_revision_date: '2025'
+body:
+  form_id: k1-1065
+  tax_year: 2025
+  part_i:
+    item_a:
+      type: scalar
+      semantic:
+        id: partnership.ein
+        label: Partnership's EIN
+      form:
+        form_id: k1-1065
+        location: Part I, Item A
+        box: A
+      value: '**-**65189'
+    item_b:
+      type: scalar
+      semantic:
+        id: partnership.name_address
+        label: Partnership's name, address
+      form:
+        form_id: k1-1065
+        location: Part I, Item B
+        box: B
+      value: "COPPERLEAF REAL ESTATE FUND V, L.P.\n5255 LAKE CIR\nST LOUIS, MO 63150"
+    item_c:
+      type: scalar
+      semantic:
+        id: partnership.irs_center
+        label: IRS Center
+      form:
+        form_id: k1-1065
+        location: Part I, Item C
+        box: C
+      value:
+      _unverified: 'HUMAN REVIEW REQUIRED: Part I, Item C was not extracted from the source document'
+    item_d:
+      type: scalar
+      semantic:
+        id: partnership.publicly_traded
+        label: Publicly Traded Partnership
+      form:
+        form_id: k1-1065
+        location: Part I, Item D
+        box: D
+      value: false
+  part_ii:
+    item_e:
+      type: scalar
+      semantic:
+        id: partner.identifying_number
+        label: Partner's identifying number
+      form:
+        form_id: k1-1065
+        location: Part II, Item E
+        box: E
+      value: XX-XXX8572
+    item_f:
+      type: scalar
+      semantic:
+        id: partner.name_address
+        label: Partner's name, address
+      form:
+        form_id: k1-1065
+        location: Part II, Item F
+        box: F
+      value: "MERIDIAN REAL ASSETS AGGREGATOR, L.P.\n5981 JUNIPER RD\nROCHESTER, NY 14633"
+    item_g:
+      type: scalar
+      semantic:
+        id: partner.general_or_limited
+        label: General or Limited
+      form:
+        form_id: k1-1065
+        location: Part II, Item G
+        box: G
+      value: limited_or_other_member
+    item_h1:
+      type: scalar
+      semantic:
+        id: partner.domestic_or_foreign
+        label: Domestic or Foreign Partner
+      form:
+        form_id: k1-1065
+        location: Part II, Item H1
+        box: H1
+      value: domestic
+    item_h2:
+      type: scalar
+      semantic:
+        id: partner.disregarded_entity_info
+        label: Disregarded Entity Info
+      form:
+        form_id: k1-1065
+        location: Part II, Item H2
+        box: H2
+      value:
+      _unverified: 'HUMAN REVIEW REQUIRED: Part II, Item H2 was not extracted from the source document'
+    item_i1:
+      type: scalar
+      semantic:
+        id: partner.entity_type
+        label: Entity type
+      form:
+        form_id: k1-1065
+        location: Part II, Item I1
+        box: I1
+      value: partnership
+    item_i2:
+      type: scalar
+      semantic:
+        id: partner.retirement_plan
+        label: Retirement Plan Partner
+      form:
+        form_id: k1-1065
+        location: Part II, Item I2
+        box: I2
+      value: false
+    item_j:
+      type: scalar
+      semantic:
+        id: partner.share_percentages
+        label: Share percentages
+      form:
+        form_id: k1-1065
+        location: Part II, Item J
+        box: J
+      value:
+        profit_beginning: 1.0
+        profit_ending: 1.0
+        loss_beginning: 1.0
+        loss_ending: 1.0
+        capital_beginning: 1.0
+        capital_ending: 1.0
+        decrease_due_to_sale: false
+        decrease_due_to_exchange: false
+    item_k1:
+      type: scalar
+      semantic:
+        id: partner.share_of_liabilities
+        label: Liabilities
+      form:
+        form_id: k1-1065
+        location: Part II, Item K1
+        box: K1
+      value:
+        nonrecourse_beginning: 39700.0
+        nonrecourse_ending: 51600.0
+        qualified_nonrecourse_financing_beginning: 10000.0
+        qualified_nonrecourse_financing_ending: 52600.0
+        recourse_beginning: 80000.0
+        recourse_ending: 5100.0
+    item_k2:
+      type: scalar
+      semantic:
+        id: partner.liabilities_from_lower_tier_partnerships
+        label: Lower-Tier Liabilities
+      form:
+        form_id: k1-1065
+        location: Part II, Item K2
+        box: K2
+      value: false
+    item_k3:
+      type: scalar
+      semantic:
+        id: partner.liabilities_subject_to_guarantees_or_payment_obligations
+        label: Payment Obligation Liabilities
+      form:
+        form_id: k1-1065
+        location: Part II, Item K3
+        box: K3
+      value: false
+    item_l:
+      type: scalar
+      semantic:
+        id: partner.capital_account_analysis
+        label: Capital account analysis
+      form:
+        form_id: k1-1065
+        location: Part II, Item L
+        box: L
+      value:
+      _unverified: 'HUMAN REVIEW REQUIRED: Item L contains observed blank component(s): other_increase_decrease; capital continuity is not asserted'
+    item_m:
+      type: scalar
+      semantic:
+        id: partner.contributed_property_built_in_gain_loss
+        label: Contributed Property with Built-In Gain or Loss
+      form:
+        form_id: k1-1065
+        location: Part II, Item M
+        box: M
+      value: false
+    item_n:
+      type: scalar
+      semantic:
+        id: partner.net_unrecognized_section_704c_gain_loss
+        label: Net Unrecognized 704(c) Gain/Loss
+      form:
+        form_id: k1-1065
+        location: Part II, Item N
+        box: N
+      value:
+        beginning: 30900.0
+        ending: 11800.0
+  part_iii:
+    box_1:
+      type: scalar
+      semantic:
+        id: ordinary_business_income
+        label: Ordinary Business Income (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 1
+        box: 1
+      value: 556000.0
+    box_2:
+      type: scalar
+      semantic:
+        id: net_rental_real_estate_income
+        label: Net Rental Real Estate Income (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 2
+        box: 2
+      value: 28800.0
+    box_3:
+      type: scalar
+      semantic:
+        id: other_net_rental_income
+        label: Other Net Rental Income (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 3
+        box: 3
+      value: 4800.0
+    box_4a:
+      type: scalar
+      semantic:
+        id: guaranteed_payments_services
+        label: Guaranteed Payments for Services
+      form:
+        form_id: k1-1065
+        location: Part III, Box 4a
+        box: 4a
+      value: 500.0
+    box_4b:
+      type: scalar
+      semantic:
+        id: guaranteed_payments_capital
+        label: Guaranteed Payments for Capital
+      form:
+        form_id: k1-1065
+        location: Part III, Box 4b
+        box: 4b
+      value: 500.0
+    box_4c:
+      type: scalar
+      semantic:
+        id: guaranteed_payments_total
+        label: Total Guaranteed Payments
+      form:
+        form_id: k1-1065
+        location: Part III, Box 4c
+        box: 4c
+      value:
+      _unverified: 'HUMAN REVIEW REQUIRED: printed Box 4c was observed blank; no source value is asserted. A taxonomy-derived comparison is retained separately in the projection manifest.'
+    box_5:
+      type: scalar
+      semantic:
+        id: interest_income
+        label: Interest Income
+      form:
+        form_id: k1-1065
+        location: Part III, Box 5
+        box: 5
+      value: 434000.0
+    box_6a:
+      type: scalar
+      semantic:
+        id: ordinary_dividends
+        label: Ordinary Dividends
+      form:
+        form_id: k1-1065
+        location: Part III, Box 6a
+        box: 6a
+      value: 253000.0
+    box_6b:
+      type: scalar
+      semantic:
+        id: qualified_dividends
+        label: Qualified Dividends
+      form:
+        form_id: k1-1065
+        location: Part III, Box 6b
+        box: 6b
+      value: 123500.0
+    box_6c:
+      type: scalar
+      semantic:
+        id: dividend_equivalents
+        label: Dividend Equivalents
+      form:
+        form_id: k1-1065
+        location: Part III, Box 6c
+        box: 6c
+      value: 52700.0
+    box_7:
+      type: scalar
+      semantic:
+        id: royalties
+        label: Royalties
+      form:
+        form_id: k1-1065
+        location: Part III, Box 7
+        box: 7
+      value: 800.0
+    box_8:
+      type: scalar
+      semantic:
+        id: net_short_term_capital_gain
+        label: Net Short-Term Capital Gain (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 8
+        box: 8
+      value: 94000.0
+    box_9a:
+      type: scalar
+      semantic:
+        id: net_long_term_capital_gain
+        label: Net Long-Term Capital Gain (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 9a
+        box: 9a
+      value: 897700.0
+    box_9b:
+      type: scalar
+      semantic:
+        id: collectibles_gain
+        label: Collectibles (28%) Gain (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 9b
+        box: 9b
+      value: 394600.0
+    box_9c:
+      type: scalar
+      semantic:
+        id: unrecaptured_section_1250_gain
+        label: Unrecaptured Section 1250 Gain
+      form:
+        form_id: k1-1065
+        location: Part III, Box 9c
+        box: 9c
+      value: 95300.0
+    box_10:
+      type: scalar
+      semantic:
+        id: net_section_1231_gain
+        label: Net Section 1231 Gain (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 10
+        box: 10
+      value: 16100.0
+    box_11:
+      type: coded
+      semantic:
+        id: other_income
+        label: Other Income (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 11
+        box: 11
+      entries:
+        - code: A
+          semantic:
+            id: other_income.portfolio
+            label: Other portfolio income (loss)
+          value: 600700.0
+        - code: C
+          semantic:
+            id: other_income.section_1256_contracts
+            label: Section 1256 contracts and straddles
+          value: 218800.0
+        - code: S
+          semantic:
+            id: other_income.non_portfolio_capital
+            label: Non-portfolio capital gain (loss)
+          value: 738700.0
+    box_12:
+      type: scalar
+      semantic:
+        id: section_179_deduction
+        label: Section 179 Deduction
+      form:
+        form_id: k1-1065
+        location: Part III, Box 12
+        box: 12
+      value: 75000.0
+    box_13:
+      type: coded
+      semantic:
+        id: other_deductions
+        label: Other Deductions
+      form:
+        form_id: k1-1065
+        location: Part III, Box 13
+        box: 13
+      entries:
+        - code: A
+          semantic:
+            id: other_deductions.cash_contributions_60
+            label: Cash contributions (60%)
+          value: 29400.0
+        - code: B
+          semantic:
+            id: other_deductions.cash_contributions_30
+            label: Cash contributions (30%)
+          value: 56300.0
+        - code: AE
+          semantic:
+            id: other_deductions.portfolio_deductions
+            label: Deductions — portfolio income
+          value: -290600.0
+        - code: H
+          semantic:
+            id: other_deductions.investment_interest
+            label: Investment interest expense
+          value: -313000.0
+        - code: R
+          semantic:
+            id: other_deductions.pensions_iras
+            label: Pensions and IRAs
+          value: -52200.0
+    box_14:
+      type: coded
+      semantic:
+        id: self_employment
+        label: Self-Employment Earnings (Loss)
+      form:
+        form_id: k1-1065
+        location: Part III, Box 14
+        box: 14
+      entries:
+        - code: A
+          semantic:
+            id: self_employment.net_earnings
+            label: Net earnings (loss) from self-employment
+          value: 104600.0
+    box_15:
+      type: coded
+      semantic:
+        id: credits
+        label: Credits
+      form:
+        form_id: k1-1065
+        location: Part III, Box 15
+        box: 15
+      entries:
+        - code: A
+          semantic:
+            id: credits.zero_emission_nuclear
+            label: Zero-emission nuclear power production credit
+          value: 1800.0
+    box_16:
+      type: reference
+      semantic:
+        id: international_transactions
+        label: International Transactions
+      form:
+        form_id: k1-1065
+        location: Part III, Box 16
+        box: 16
+      checked: false
+      notification:
+        type: statement
+        semantic:
+          id: stmt_k3_not_attached_notification
+          label: K3 Not Attached Notification
+          classification: k3_not_attached_notification
+          role: investor_footnote
+        form:
+          attachment: true
+        content:
+          notification_text: The partner will not receive Schedule K-3 unless the partner requests the schedule.
+    box_17:
+      type: coded
+      semantic:
+        id: amt_items
+        label: AMT Items
+      form:
+        form_id: k1-1065
+        location: Part III, Box 17
+        box: 17
+      entries:
+        - code: A
+          semantic:
+            id: amt.depreciation_adjustment
+            label: Post-1986 depreciation adjustment
+          value: 79000.0
+        - code: B
+          semantic:
+            id: amt.adjusted_gain_loss
+            label: Adjusted gain or loss
+          value: 17200.0
+    box_18:
+      type: coded
+      semantic:
+        id: tax_exempt_nondeductible
+        label: Tax-Exempt Income and Nondeductible Expenses
+      form:
+        form_id: k1-1065
+        location: Part III, Box 18
+        box: 18
+      entries:
+        - code: A
+          semantic:
+            id: tax_exempt.interest
+            label: Tax-exempt interest income
+          value: 118800.0
+        - code: C
+          semantic:
+            id: nondeductible.expenses
+            label: Nondeductible expenses
+          value: 41200.0
+    box_19:
+      type: coded
+      semantic:
+        id: distributions
+        label: Distributions
+      form:
+        form_id: k1-1065
+        location: Part III, Box 19
+        box: 19
+      entries:
+        - code: A
+          semantic:
+            id: distributions.cash_marketable_securities
+            label: Cash and marketable securities other than for services
+          value: 27000.0
+    box_20:
+      type: coded
+      semantic:
+        id: other_information
+        label: Other Information
+      form:
+        form_id: k1-1065
+        location: Part III, Box 20
+        box: 20
+      entries:
+        - code: A
+          semantic:
+            id: other_information.investment_income
+            label: Investment income
+          value: 2317700.0
+        - code: B
+          semantic:
+            id: other_information.investment_expenses
+            label: Investment expenses
+          value: -112600.0
+        - code: AG
+          semantic:
+            id: other_information.gross_receipts_448c
+            label: Gross receipts for section 448(c)
+          value: 390500.0
+    box_21:
+      type: scalar
+      semantic:
+        id: foreign_taxes_paid_accrued
+        label: Foreign Taxes Paid or Accrued
+      form:
+        form_id: k1-1065
+        location: Part III, Box 21
+        box: 21
+      value: 267500.0
+    box_22:
+      type: scalar
+      semantic:
+        id: at_risk_activities
+        label: More Than One At-Risk Activity
+      form:
+        form_id: k1-1065
+        location: Part III, Box 22
+        box: 22
+      value: false
+    box_23:
+      type: scalar
+      semantic:
+        id: passive_activities
+        label: More Than One Passive Activity
+      form:
+        form_id: k1-1065
+        location: Part III, Box 23
+        box: 23
+      value: false
+statements: []
+redaction:
+  policy: partial
+  fields_redacted:
+    - body.part_i.item_a
+    - body.part_ii.item_e

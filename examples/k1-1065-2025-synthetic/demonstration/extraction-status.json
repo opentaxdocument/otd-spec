@@ -1,0 +1,41 @@
+{
+  "schema_version": "otd-bounded-demo-status/1.0",
+  "profile_id": "k1-1065-2025-face-and-numeric-details/1.0",
+  "outcome": "successful_bounded_pdf_to_otd",
+  "source": {
+    "pdf_name": "source.pdf",
+    "sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+    "page_count": 27,
+    "synthetic_and_fictitious": true
+  },
+  "claims": {
+    "started_from_pdf_bytes": true,
+    "face_evidence_projected": true,
+    "otd_assembled": true,
+    "otd_conformance_validated": true,
+    "supported_profile_face_detail_reconciled": true,
+    "all_source_detail_records_reconciled": false,
+    "full_source_document_extraction": false,
+    "unsupported_sections_inferred_or_defaulted": false,
+    "historical_fragments_or_expected_values_used": false
+  },
+  "counts": {
+    "face_statuses": {
+      "verified_absent": 9,
+      "present": 39,
+      "blank": 4,
+      "missing": 1
+    },
+    "projected_face_fields": 52,
+    "source_detail_records": 21,
+    "projected_detail_records": 6,
+    "disposition_ledger_entries": 120,
+    "omission_entries": 82,
+    "unresolved_sections": 4,
+    "reconciliation": {
+      "match": 15,
+      "not_applicable": 3,
+      "face_missing": 3
+    }
+  }
+}

@@ -1,0 +1,150 @@
+{
+  "_profile_id": "k1-1065-2025-face-and-numeric-details/1.0",
+  "_source_pdf_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+  "_evidence_receipt_sha256": "584fe210da648cf97225f7ac85a55f444d22d1793f5f57e7a0281c068f05294a",
+  "form_metadata": {
+    "tax_year": 2025,
+    "fiscal_year": false,
+    "fiscal_year_begin": "2025-01-01",
+    "fiscal_year_end": "2025-12-31",
+    "amended": false,
+    "final": false,
+    "filing_status": "original",
+    "form_revision_date": "2025"
+  },
+  "part_i": {
+    "partnership_ein": "**-**65189",
+    "partnership_name": "COPPERLEAF REAL ESTATE FUND V, L.P.\n5255 LAKE CIR\nST LOUIS, MO 63150",
+    "irs_center": null,
+    "publicly_traded": false,
+    "_partnership_ein_masked": true
+  },
+  "part_ii": {
+    "partner_tin": "XX-XXX8572",
+    "partner_name": "MERIDIAN REAL ASSETS AGGREGATOR, L.P.\n5981 JUNIPER RD\nROCHESTER, NY 14633",
+    "general_or_limited": "limited_or_other_member",
+    "domestic_or_foreign": "domestic",
+    "disregarded_entity_info": null,
+    "entity_type": "partnership",
+    "retirement_plan": false,
+    "item_k2": false,
+    "item_k3": false,
+    "_partner_tin_masked": true,
+    "share_percentages": {
+      "profit_beginning": 1.0,
+      "profit_ending": 1.0,
+      "loss_beginning": 1.0,
+      "loss_ending": 1.0,
+      "capital_beginning": 1.0,
+      "capital_ending": 1.0,
+      "decrease_due_to_sale": false,
+      "decrease_due_to_exchange": false
+    },
+    "liabilities": {
+      "nonrecourse_beginning": 39700.0,
+      "nonrecourse_ending": 51600.0,
+      "qualified_nonrecourse_financing_beginning": 10000.0,
+      "qualified_nonrecourse_financing_ending": 52600.0,
+      "recourse_beginning": 80000.0,
+      "recourse_ending": 5100.0
+    },
+    "capital_account": {
+      "_unverified": "HUMAN REVIEW REQUIRED: Item L contains observed blank component(s): other_increase_decrease; capital continuity is not asserted"
+    },
+    "item_m": false,
+    "item_n": {
+      "beginning": 30900.0,
+      "ending": 11800.0
+    }
+  },
+  "part_iii_face": {
+    "_unverified_fields": {
+      "box_4c": "HUMAN REVIEW REQUIRED: printed Box 4c was observed blank; no source value is asserted. A taxonomy-derived comparison is retained separately in the projection manifest."
+    },
+    "box_1": 556000.0,
+    "box_2": 28800.0,
+    "box_3": 4800.0,
+    "box_4a": 500.0,
+    "box_4b": 500.0,
+    "box_4c": null,
+    "box_5": 434000.0,
+    "box_6a": 253000.0,
+    "box_6b": 123500.0,
+    "box_6c": 52700.0,
+    "box_7": 800.0,
+    "box_8": 94000.0,
+    "box_9a": 897700.0,
+    "box_9b": 394600.0,
+    "box_9c": 95300.0,
+    "box_10": 16100.0,
+    "box_12": 75000.0,
+    "box_21": 267500.0,
+    "box_22": false,
+    "box_23": false,
+    "box_16_checked": false,
+    "box_11": [
+      {
+        "code": "A",
+        "value": 600700.0
+      }
+    ],
+    "box_13": [
+      {
+        "code": "A",
+        "value": 29400.0
+      },
+      {
+        "code": "B",
+        "value": 56300.0
+      }
+    ],
+    "box_14": [
+      {
+        "code": "A",
+        "value": 104600.0
+      }
+    ],
+    "box_15": [
+      {
+        "code": "A",
+        "value": 1800.0
+      }
+    ],
+    "box_17": [
+      {
+        "code": "A",
+        "value": 79000.0
+      },
+      {
+        "code": "B",
+        "value": 17200.0
+      }
+    ],
+    "box_18": [
+      {
+        "code": "A",
+        "value": 118800.0
+      },
+      {
+        "code": "C",
+        "value": 41200.0
+      }
+    ],
+    "box_19": [
+      {
+        "code": "A",
+        "value": 27000.0
+      }
+    ],
+    "box_20": [
+      {
+        "code": "A",
+        "value": 2317700.0
+      },
+      {
+        "code": "B",
+        "value": -112600.0
+      }
+    ]
+  }
+}

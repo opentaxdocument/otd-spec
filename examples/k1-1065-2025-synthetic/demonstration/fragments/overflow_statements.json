@@ -1,0 +1,38 @@
+{
+  "_profile_id": "k1-1065-2025-face-and-numeric-details/1.0",
+  "_source_pdf_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+  "_evidence_receipt_sha256": "584fe210da648cf97225f7ac85a55f444d22d1793f5f57e7a0281c068f05294a",
+  "part_iii_overflow": {
+    "box_11": [
+      {
+        "code": "C",
+        "value": 218800.0
+      },
+      {
+        "code": "S",
+        "value": 738700.0
+      }
+    ],
+    "box_13": [
+      {
+        "code": "AE",
+        "value": -290600.0
+      },
+      {
+        "code": "H",
+        "value": -313000.0
+      },
+      {
+        "code": "R",
+        "value": -52200.0
+      }
+    ],
+    "box_20": [
+      {
+        "code": "AG",
+        "value": 390500.0
+      }
+    ]
+  },
+  "_excluded_from_overflow_entries": []
+}

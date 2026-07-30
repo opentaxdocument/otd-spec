@@ -1,0 +1,12 @@
+{
+  "schema_version": "otd-evidence-receipt/1.0",
+  "profile_id": "k1-1065-2025-face-and-numeric-details/1.0",
+  "source_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+  "artifacts": {
+    "face_evidence": "9e29bffb7e7bd238501eb01ce0a1879786661e710d3c2a99ce46be2b1bff14ad",
+    "line_details": "f6ae17c8aa337d760c8c9404c508b17815f3d30128ffbd8b7b84cc332519f892",
+    "page_manifest": "c438201996fffcbdfcb25504431c1f31b3986d2dc21d6c9e74791e7406888c6f",
+    "section_manifest": "42310f24955b7873e155fd1be08a4a226c14939941d8f75322e40ff493af292b",
+    "state_attempt": "ca748007696958efe0891a73ac446fa91773d9573018346c94cefeabeb6bebbf"
+  }
+}

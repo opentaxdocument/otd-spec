@@ -1,0 +1,21 @@
+{
+  "document_id": "f5038fa0-ea0a-56d1-ba13-dfeac4403491",
+  "extraction_date": "2026-07-30T00:00:00Z",
+  "total_fields": 450,
+  "unverified_count": 4,
+  "unverified_fields": [
+    "body.part_i.item_c",
+    "body.part_ii.item_h2",
+    "body.part_ii.item_l",
+    "body.part_iii.box_4c"
+  ],
+  "confidence_overall": 0.991,
+  "adversary_recommendation": "PENDING",
+  "validation_passes": true,
+  "validation_errors": [],
+  "profile_id": "k1-1065-2025-face-and-numeric-details/1.0",
+  "source_pdf_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+  "omission_count": 82,
+  "full_source_document_extraction": false,
+  "unsupported_sections_inferred_or_defaulted": false
+}
