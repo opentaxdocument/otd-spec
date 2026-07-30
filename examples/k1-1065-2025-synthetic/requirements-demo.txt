@@ -1,0 +1,4 @@
+PyYAML==6.0.3
+ruamel.yaml==0.19.1
+pdfplumber==0.11.7
+pypdf==6.1.1

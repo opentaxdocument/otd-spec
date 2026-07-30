@@ -304,6 +304,16 @@ def main():
           field(cl_result, "box_10")["normalized_value"], 16100.0, cl_failures)
     check("box_12.value", field(cl_result, "box_12")["normalized_value"], 75000.0, cl_failures)
     check("box_21.value", field(cl_result, "box_21")["normalized_value"], 267500.0, cl_failures)
+    box_12_bbox = field(cl_result, "box_12").get("bbox")
+    box_21_bbox = field(cl_result, "box_21").get("bbox")
+    check("box_12/box_21 value glyph bboxes are distinct",
+          box_12_bbox != box_21_bbox, True, cl_failures)
+    check("box_12 value glyph remains in its left scalar cell",
+          box_12_bbox[2] < box_21_bbox[0], True, cl_failures)
+    check("box_12 bbox is value-specific, not the merged label row",
+          box_12_bbox[1] > 513.5, True, cl_failures)
+    check("box_21 bbox is value-specific, not the merged label row",
+          box_21_bbox[1] > 513.5, True, cl_failures)
     check("box_4c.status (genuine blank on this doc too)",
           field(cl_result, "box_4c")["status"], "blank", cl_failures)
     check("header.tax_year_begin.value",

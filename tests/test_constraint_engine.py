@@ -11,6 +11,7 @@ Coverage map (third adversarial review findings):
   F3  null/absent algebra (parser-spec 4.7)    -> algebra_* cases
   F4  duplicate coded entries were invisible   -> duplicate_* cases
   F5  missing `semantic` bypassed required_field -> required_field_* cases
+  F6  quarantined facts became numeric zero     -> algebra_quarantined_* cases
 
 The algebra_null_* pair exists to make an otherwise unobservable branch
 observable. A present-but-null operand and an absent operand are handled
@@ -40,11 +41,14 @@ from constraint_engine import (  # noqa: E402
 # Minimal node builders -- structurally valid TaxNodes, nothing more
 # ---------------------------------------------------------------------------
 
-def scalar(sem_id, value):
-    return {"type": "scalar",
+def scalar(sem_id, value, unverified=None):
+    node = {"type": "scalar",
             "semantic": {"id": sem_id, "label": sem_id},
             "form": {"form_id": "k1-1065", "location": "Part III"},
             "value": value}
+    if unverified is not None:
+        node["_unverified"] = unverified
+    return node
 
 
 def coded(sem_id, entries):
@@ -188,6 +192,24 @@ CASES = [
          SUM_RULE),
      True),
 
+    ("algebra_quarantined_sum_target_skips",
+     constraints_case(
+         {"part_iii": {"box_4a": scalar("gp_services", 100.0),
+                       "box_4b": scalar("gp_capital", 100.0),
+                       "box_4c": scalar(
+                           "gp_total", None, "printed field was not observed")}},
+         SUM_RULE),
+     False),
+
+    ("algebra_quarantined_sum_operand_skips",
+     constraints_case(
+         {"part_iii": {"box_4a": scalar(
+                           "gp_services", None, "printed field was not observed"),
+                       "box_4b": scalar("gp_capital", 100.0),
+                       "box_4c": scalar("gp_total", 100.0)}},
+         SUM_RULE),
+     False),
+
     ("algebra_absent_sum_operand_is_zero",
      constraints_case(
          {"part_iii": {"box_4a": scalar("gp_services", 100.0),
@@ -217,6 +239,24 @@ CASES = [
      constraints_case(
          {"part_iii": {"box_6a": scalar("ordinary_dividends", None),
                        "box_6b": scalar("qualified_dividends", 0.0)}},
+         RANGE_RULE),
+     False),
+
+    ("algebra_quarantined_range_target_skips",
+     constraints_case(
+         {"part_iii": {"box_6a": scalar("ordinary_dividends", 100.0),
+                       "box_6b": scalar(
+                           "qualified_dividends", None,
+                           "printed field was not observed")}},
+         RANGE_RULE),
+     False),
+
+    ("algebra_quarantined_range_operand_skips",
+     constraints_case(
+         {"part_iii": {"box_6a": scalar(
+                           "ordinary_dividends", None,
+                           "printed field was not observed"),
+                       "box_6b": scalar("qualified_dividends", 500.0)}},
          RANGE_RULE),
      False),
 

@@ -565,7 +565,10 @@ def extract_last_numeric(band, exclude_leading_token=None):
     return (last["text"], val)
 
 def extract_numeric_bounded(band, own_box_number, boundary_tokens, label=None, row_bands=None, value_line_offset=10.21):
-    """Bound numeric-token search to THIS box's segment of a row band that
+    """Return ((raw text, value, value bbox), method) for one scalar cell.
+
+    The bbox belongs to the selected numeric glyph, not the potentially merged
+    label band. Bound numeric-token search to THIS box's segment of a row band that
     may contain multiple box entries concatenated (Part III's dense
     multi-box-per-row grid places two unrelated boxes in one y-band --
     confirmed empirically: box_1's band also contains box_14's label,
@@ -692,14 +695,24 @@ def extract_numeric_bounded(band, own_box_number, boundary_tokens, label=None, r
             if cb_numeric:
                 last = cb_numeric[-1]
                 val = parse_numeric(last["text"])
-                return (last["text"], val), \
-                    "segment_bounded_next_line(edge=%s)" % edge_source
+                value_bbox = [
+                    last["x0"], last["top"], last["x1"], last["bottom"]
+                ]
+                return (
+                    (last["text"], val, value_bbox),
+                    "segment_bounded_next_line(edge=%s)" % edge_source,
+                )
 
     if numeric_words:
         last = numeric_words[-1]
         val = parse_numeric(last["text"])
-        return (last["text"], val), \
-            "segment_bounded_same_line(edge=%s)" % edge_source
+        value_bbox = [
+            last["x0"], last["top"], last["x1"], last["bottom"]
+        ]
+        return (
+            (last["text"], val, value_bbox),
+            "segment_bounded_same_line(edge=%s)" % edge_source,
+        )
 
     return None, "segment_bounded_no_value"
 
@@ -975,9 +988,9 @@ def read_scalar_cell(field_key, field_def, ctx):
         return envelope(sem, "blank", raw_text=band["text"],
                          method="row_located_no_numeric_token(%s)" % seg_method,
                          rule_id=field_key, bbox=bbox)
-    raw, val = numeric
+    raw, val, value_bbox = numeric
     return envelope(sem, "present", raw_text=raw, normalized_value=val,
-                     method="row_label_anchor(%s)" % seg_method, rule_id=field_key, bbox=bbox)
+                     method="row_label_anchor(%s)" % seg_method, rule_id=field_key, bbox=value_bbox)
 
 def extract_ledger_value(band, row_bands, window=12.0):
     """Return (raw_text, value) for a ledger row's dollar value. Checks the
@@ -1767,7 +1780,7 @@ def read_not_printed(field_key, field_def, ctx):
 READERS["not_printed"] = read_not_printed
 
 
-def read_face(pdf_path, grammar_path):
+def read_face(pdf_path, grammar_path, extraction_timestamp_utc=None):
     with open(grammar_path, "r", encoding="utf-8") as fh:
         grammar = yaml.safe_load(fh)
 
@@ -1855,7 +1868,9 @@ def read_face(pdf_path, grammar_path):
         "source_pdf": Path(pdf_path).name,
         "source_pdf_sha256": pdf_sha256,
         "extraction_timestamp_utc": (
-            datetime.datetime.now(datetime.timezone.utc)
+            extraction_timestamp_utc
+            if extraction_timestamp_utc is not None
+            else datetime.datetime.now(datetime.timezone.utc)
             .isoformat()
             .replace("+00:00", "Z")
         ),
@@ -1888,8 +1903,13 @@ def main(argv=None):
         "--out",
         help="Write JSON to this path instead of standard output",
     )
+    parser.add_argument(
+        "--extraction-timestamp",
+        default=None,
+        help="Override extraction timestamp (ISO UTC) for reproducible runs",
+    )
     args = parser.parse_args(argv)
-    result = read_face(args.pdf, args.grammar)
+    result = read_face(args.pdf, args.grammar, args.extraction_timestamp)
     payload = json.dumps(result, indent=2, default=str)
 
     if args.out:

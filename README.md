@@ -217,6 +217,7 @@ python -B tests/test_direct_documents.py     # direct malformed-document mutatio
 python -B tests/test_face_reader.py          # two repository-local PDF fixtures
 python -B tests/test_workflow_contract.py     # portable extraction workflow contracts
 python -B tests/test_diagnostic_renderer.py
+python -B tests/test_synthetic_pdf_to_otd.py  # bounded PDF-to-OTD demonstration
 python -B tests/check_mirrors.py             # reference/ mirror parity
 ```
 
@@ -224,16 +225,31 @@ python -B tests/check_mirrors.py             # reference/ mirror parity
 the suite instead of disappearing into an `XFAIL`. The face-reader suite uses
 the repository-local blank IRS form and approved synthetic K-1 example.
 
-### Synthetic incomplete-aware extraction example
+### Synthetic bounded PDF-to-OTD demonstration
 
 `examples/k1-1065-2025-synthetic/` contains an approved fictitious K-1 package
-and current-source extraction evidence. Its machine-readable status and review
-ledger distinguish present facts, verified absence, blanks, missing values,
-unimplemented readers, unresolved sections, and the state-grid escalation.
+and a source-dependent, one-command demonstration for the declared
+`k1-1065-2025-face-and-numeric-details/1.0` profile:
 
-The example intentionally does **not** contain `output.otd.yaml`: current face
-evidence is not a normalized assembler fragment, and assembly, reconciliation,
-and OTD conformance were not claimed.
+```bash
+python -B examples/k1-1065-2025-synthetic/run_demo.py \
+  --out artifact-root/synthetic-demo \
+  --created 2026-07-30T00:00:00Z
+```
+
+The runner starts from PDF bytes, validates the grammar and template fit,
+extracts page text, face evidence, and line-item details, projects only
+supported facts, invokes the production assembler and taxonomy validator, and
+runs the hard-error reconciliation gate. It publishes `output.otd.yaml`
+together with source/tool hashes, a projection manifest, evidence disposition
+ledger, confidence result, reconciliation report, and bounded claim status.
+The ledger distinguishes projected, partially consumed, and omitted evidence.
+
+This is **not** a whole-document extraction claim. Supplemental statements,
+state grids, classification-dependent facts, and four unresolved logical
+sections remain excluded and machine-readably ledgered rather than inferred.
+A reproducible snapshot is committed under
+`examples/k1-1065-2025-synthetic/demonstration/`.
 
 ### Render extraction diagnostics
 

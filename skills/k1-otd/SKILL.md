@@ -7,7 +7,11 @@ description: Extract, inspect, assemble, repair, and validate Schedule K-1 (Form
 
 Use this skill for Schedule K-1 (Form 1065) extraction and OTD validation work.
 
-The implementation is a staged toolkit, not a single-command extractor. Deterministic scripts handle text extraction, section classification, grammar/geometry-based face reading, assembly, reconciliation, and validation. Overflow statements, footnotes, unsupported layouts, and ambiguous evidence still require agent judgment.
+The implementation is a staged toolkit. Deterministic scripts handle text
+extraction, section classification, grammar/geometry-based face reading,
+projection, assembly, reconciliation, and validation. A one-command path exists
+only for the approved bounded synthetic profile. Overflow statements, footnotes,
+unsupported layouts, and ambiguous evidence still require agent judgment.
 
 Read [README.md](README.md) for architecture, setup, script descriptions, evidence, and limitations.
 
@@ -25,7 +29,7 @@ Read [README.md](README.md) for architecture, setup, script descriptions, eviden
 
 ### Do not imply
 
-- one-command PDF-to-OTD orchestration;
+- general-purpose one-command PDF-to-OTD orchestration beyond a declared profile;
 - general support for every preparer, form year, scan, rotation, or skew;
 - broad K-3 extraction coverage;
 - that warnings are equivalent to conformance;
@@ -139,11 +143,16 @@ python skills/k1-otd/scripts/face_reader.py \
   --out artifact-root/evidence/face_page.json
 ```
 
-`evidence/face_page.json` is the face reader's evidence envelope. It is not the
-normalized `face_page.json` consumed by `assemble_otd.py`, and the toolkit does
-not currently provide an automatic projection between those contracts. Keep
-raw face evidence under `evidence/`; stop before assembly unless a separately
-reviewed normalized face fragment exists.
+`evidence/face_page.json` is the face reader's evidence envelope, not the
+normalized `face_page.json` consumed by `assemble_otd.py`. The
+`project_extraction_evidence.py` bridge supports the declared synthetic
+face-and-safe-numeric-detail profile and emits projection and omission
+manifests with all five assembler fragments.
+
+For any other package, keep raw face evidence under `evidence/` and stop before
+assembly unless a supported profile or separately reviewed normalized
+projection exists. Never feed the raw envelope directly to the assembler; its
+hard rejection of that shape is an intentional no-silent-data-loss boundary.
 
 State schedules, when present:
 

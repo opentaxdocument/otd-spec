@@ -1,7 +1,8 @@
-# Synthetic 2025 K-1 extraction example
+# Synthetic 2025 K-1 bounded PDF-to-OTD demonstration
 
 This directory contains an approved, fictitious Schedule K-1 package for
-portable extraction tests and human-review diagnostics.
+portable extraction tests, human-review diagnostics, and a source-dependent
+bounded OTD demonstration.
 
 ## Source
 
@@ -14,10 +15,17 @@ portable extraction tests and human-review diagnostics.
 
 ## Claim boundary
 
-This is a successful **incomplete-aware extraction** example. Success means
-source identity, commands, evidence, statuses, review outcomes, and escalations
-are explicit. It does not mean that an OTD document was assembled or found
-conformant.
+This is a successful **bounded PDF-to-OTD** example for profile
+`k1-1065-2025-face-and-numeric-details/1.0`. The generated OTD contains resolved
+face facts, taxonomy-safe numeric detail totals, and one transparent
+taxonomy-declared derivation. It passes the production assembler, validator,
+and supported-profile reconciliation gate.
+
+It is not a complete-document extraction. Supplemental statements, state
+grids, classification-dependent facts, and four unresolved logical sections
+are excluded and recorded in `disposition-ledger.json`; they are never
+defaulted or inferred. The ledger also distinguishes detail sections whose
+safe numeric total was consumed while their components remain excluded.
 
 At the current parser revision, the face artifact reports:
 
@@ -33,6 +41,34 @@ The page/section classifier still records four explicit review outcomes, and
 state-grid extraction escalates because the current deterministic worker needs
 layout evidence beyond its implemented contract. Those outcomes are successful
 fail-closed behavior, not fabricated completion.
+
+## Run the bounded demonstration
+
+Run from the repository root:
+
+```bash
+python -B examples/k1-1065-2025-synthetic/run_demo.py \
+  --out artifact-root/synthetic-demo \
+  --created 2026-07-30T00:00:00Z
+```
+
+The runner reads the PDF, grammar, taxonomy, and repository tools. It does not
+read the committed `evidence/`, `expected/`, `diagnostics/`, or prior
+demonstration output. Successful publication produces:
+
+- `output.otd.yaml` and `output.confidence.json`;
+- `projection-manifest.json` and `disposition-ledger.json`;
+- `reconciliation.json`;
+- five explicit assembler fragments under `fragments/`;
+- `extraction-status.json`, with the bounded claim boundary;
+- `run-manifest.json`, with source, grammar, taxonomy, orchestrator, and
+  executed-tool hashes.
+
+The committed [`demonstration/`](demonstration/) directory is a reproducible
+snapshot generated with the pinned creation time above. The contract test runs
+twice from renamed PDF copies, compares deterministic outputs, and verifies
+that a different PDF renamed `synthetic-k1.pdf` cannot bypass source-byte
+identity.
 
 ## Reproduce extraction evidence
 
@@ -63,8 +99,9 @@ python -B skills/k1-otd/scripts/face_reader.py \
   --out artifact-root/face_page.json
 ```
 
-`face_page.json` is an evidence envelope, not one of the five normalized inputs
-accepted by `assemble_otd.py`.
+`face_page.json` is an evidence envelope, not an assembler fragment. The
+bounded runner passes it through `project_extraction_evidence.py`; feeding the
+raw envelope directly to `assemble_otd.py` remains a hard error.
 
 ## Render review diagnostics
 
@@ -84,7 +121,8 @@ the page sidebar.
 
 ## Included evidence package
 
-The committed package is self-contained and reviewable:
+The committed `evidence/` package preserves the earlier extraction-only
+snapshot and remains self-contained and reviewable:
 
 - [`evidence/source-sha256.txt`](evidence/source-sha256.txt) — immutable source identity
 - [`evidence/commands.json`](evidence/commands.json) — capability-based reproduction commands
@@ -100,6 +138,17 @@ The committed package is self-contained and reviewable:
 - [`expected/expected-face-facts.json`](expected/expected-face-facts.json) — manually verified regression subset
 - [`diagnostics/diagnostic-index.json`](diagnostics/diagnostic-index.json) — portable annotation index
 
+The bounded OTD snapshot adds:
+
+- [`demonstration/output.otd.yaml`](demonstration/output.otd.yaml);
+- [`demonstration/output.confidence.json`](demonstration/output.confidence.json);
+- [`demonstration/projection-manifest.json`](demonstration/projection-manifest.json);
+- [`demonstration/disposition-ledger.json`](demonstration/disposition-ledger.json);
+- [`demonstration/reconciliation.json`](demonstration/reconciliation.json);
+- [`demonstration/extraction-status.json`](demonstration/extraction-status.json);
+- [`demonstration/run-manifest.json`](demonstration/run-manifest.json);
+- [`demonstration/fragments/`](demonstration/fragments/) — all five assembler inputs.
+
 Annotated page images:
 
 - [`page_001.png`](diagnostics/page_001.png), [`page_002.png`](diagnostics/page_002.png), [`page_003.png`](diagnostics/page_003.png), [`page_004.png`](diagnostics/page_004.png), [`page_005.png`](diagnostics/page_005.png), [`page_006.png`](diagnostics/page_006.png), [`page_007.png`](diagnostics/page_007.png), [`page_008.png`](diagnostics/page_008.png), [`page_009.png`](diagnostics/page_009.png)
@@ -112,4 +161,5 @@ Annotated page images:
 python -B tests/test_face_reader.py
 python -B tests/test_workflow_contract.py
 python -B tests/test_diagnostic_renderer.py
+python -B tests/test_synthetic_pdf_to_otd.py
 ```

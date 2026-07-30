@@ -158,6 +158,21 @@ def _unwrap_value(val):
     return val
 
 
+def _path_is_quarantined(body, path):
+    """True only for an explicit null + _unverified TaxNode.
+
+    Plain null retains parser-spec 4.7 arithmetic semantics. Quarantine means
+    the value was not observed, so treating it as numeric zero would convert
+    uncertainty into a factual assertion.
+    """
+    node_path = path[:-6] if path.endswith(".value") else path
+    found, node, _ = resolve_path(body, node_path)
+    return (
+        found and isinstance(node, dict)
+        and node.get("value") is None and "_unverified" in node
+    )
+
+
 # Containers that hold a TaxNode's parts rather than naming an entity.
 # A required_field target like `part_iii.box_20.ZZ.semantic.classification`
 # qualifies the ZZ entry, not the `semantic` sub-dictionary, so these are
@@ -188,6 +203,8 @@ def _eval_range_rule(rule, value, body, taxonomy):
     """
     def _sub(match):
         path = match.group(0)
+        if _path_is_quarantined(body, path):
+            raise RangeRuleSkip(path)
         found, val, _ = resolve_path(body, path)
         if not found:
             # 4.7: an absent operand skips the constraint rather than
@@ -277,6 +294,9 @@ def run_constraints(body, constraints, taxonomy):
         if ctype == "sum":
             target = c.get("target")
             operands = c.get("operands", [])
+            if (_path_is_quarantined(body, target)
+                    or any(_path_is_quarantined(body, op) for op in operands)):
+                continue
             tolerance = c.get("tolerance", 0.0)
             t_found, t_val, _ = resolve_path(body, target)
             t_val = _unwrap_value(t_val) if t_found else None
@@ -305,8 +325,12 @@ def run_constraints(body, constraints, taxonomy):
         elif ctype == "range":
             target = c.get("target")
             rule = c.get("rule", "")
+            if _path_is_quarantined(body, target):
+                continue
             if target.endswith(".*"):
                 base_path = target[:-2]
+                if _path_is_quarantined(body, base_path):
+                    continue
                 found, val, _ = resolve_path(body, target)
                 if not found or not isinstance(val, dict):
                     continue

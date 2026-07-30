@@ -30,6 +30,24 @@ def load(path):
         return json.load(f)
 
 
+def is_sha256(value):
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and all(ch in "0123456789abcdef" for ch in value.lower())
+    )
+
+
+
+def sha256_file(path):
+    import hashlib
+
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
 
 CLASSIFICATION_ALIASES = {
     "section_199a": "section_199a_detail",
@@ -76,7 +94,7 @@ def _is_unknown_sentinel(value):
     return isinstance(value, str) and value.strip().lower() in _UNKNOWN_SENTINELS
 
 
-def field(src, key, sem_id, label, loc, box):
+def field(src, key, sem_id, label, loc, box, unverified_reason=None):
     """Emit a scalar from a source mapping without fabricating defaults.
 
     A key the extraction pipeline never populated -- whether the key is
@@ -91,9 +109,15 @@ def field(src, key, sem_id, label, loc, box):
     """
     if (not isinstance(src, dict) or key not in src
             or src.get(key) is None or _is_unknown_sentinel(src.get(key))):
+        reason = unverified_reason or (
+            f"HUMAN REVIEW REQUIRED: {loc} was not extracted from the source "
+            "document"
+        )
         return scalar(
             sem_id, label, loc, box, None,
-            unverified=f"HUMAN REVIEW REQUIRED: {loc} was not extracted from the source document")
+            unverified=reason)
+    if unverified_reason:
+        raise ValueError(f"{loc} has both a factual value and an uncertainty reason")
     return scalar(sem_id, label, loc, box, src.get(key))
 
 
@@ -187,13 +211,23 @@ def normalize_capital_account(pii):
         return scalar(sem_id, label, loc, box, raw,
                       unverified="HUMAN REVIEW REQUIRED: Part II, Item L is not an object")
     value = dict(raw)
+    source_unverified = value.pop("_unverified", None)
+    if source_unverified and not value:
+        return scalar(sem_id, label, loc, box, None, unverified=source_unverified)
     if "current_year_increase_decrease" in value and "current_year_net" in value:
         return scalar(
             sem_id, label, loc, box, value,
             unverified="HUMAN REVIEW REQUIRED: Item L contains both current-year field aliases")
     if "current_year_increase_decrease" not in value and "current_year_net" in value:
         value["current_year_increase_decrease"] = value.pop("current_year_net")
-    return scalar(sem_id, label, loc, box, value)
+    return scalar(
+        sem_id,
+        label,
+        loc,
+        box,
+        value,
+        unverified=source_unverified,
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -432,9 +466,34 @@ def main():
     p.add_argument("--fragments", required=True, help="Path to fragments/ directory")
     p.add_argument("--out", required=True, help="Output OTD YAML path")
     p.add_argument("--sha256", default="not_computed", help="Source PDF SHA-256")
+    p.add_argument("--document-id", default=None,
+                   help="Optional deterministic document UUID")
+    p.add_argument("--created", default=None,
+                   help="Optional deterministic ISO UTC creation timestamp")
+    p.add_argument("--profile-id", default=None,
+                   help="Strict bounded-profile identity")
+    p.add_argument("--evidence-receipt", default=None)
+    p.add_argument("--projection-manifest", default=None)
+    p.add_argument("--disposition-ledger", default=None)
     args = p.parse_args()
 
     fd = Path(args.fragments)
+    fragment_names = (
+        "face_page.json",
+        "overflow_statements.json",
+        "footnotes_a.json",
+        "footnotes_b.json",
+        "state_schedules.json",
+    )
+    strict_profile = any((
+        args.profile_id,
+        args.evidence_receipt,
+        args.projection_manifest,
+        args.disposition_ledger,
+    ))
+    if strict_profile and any(not (fd / name).is_file() for name in fragment_names):
+        raise SystemExit("ERROR: strict profile assembly requires all five fragments")
+
     face   = load(fd / "face_page.json")
     if isinstance(face, dict) and "fields" in face and not any(
             key in face
@@ -451,6 +510,85 @@ def main():
     fn_a   = load(fd / "footnotes_a.json")
     fn_b   = load(fd / "footnotes_b.json")
     states = load(fd / "state_schedules.json")
+
+    if strict_profile:
+        if not args.profile_id or not all((
+            args.evidence_receipt,
+            args.projection_manifest,
+            args.disposition_ledger,
+        )):
+            raise SystemExit(
+                "ERROR: strict profile assembly requires profile and companion files"
+            )
+        if not is_sha256(args.sha256):
+            raise SystemExit("ERROR: --sha256 must be a SHA-256 digest")
+
+        companion_paths = {
+            "evidence receipt": Path(args.evidence_receipt),
+            "projection manifest": Path(args.projection_manifest),
+            "disposition ledger": Path(args.disposition_ledger),
+        }
+        missing_companions = [
+            name for name, path in companion_paths.items() if not path.is_file()
+        ]
+        if missing_companions:
+            raise SystemExit(
+                "ERROR: strict profile assembly is missing companion files: %s"
+                % ", ".join(missing_companions)
+            )
+        receipt = load(companion_paths["evidence receipt"])
+        projection = load(companion_paths["projection manifest"])
+        ledger = load(companion_paths["disposition ledger"])
+        receipt_sha = sha256_file(companion_paths["evidence receipt"])
+        projection_sha = sha256_file(companion_paths["projection manifest"])
+        ledger_sha = sha256_file(companion_paths["disposition ledger"])
+
+        if (
+            receipt.get("profile_id") != args.profile_id
+            or receipt.get("source_sha256") != args.sha256.lower()
+        ):
+            raise SystemExit("ERROR: evidence receipt identity mismatch")
+        if (
+            projection.get("profile_id") != args.profile_id
+            or projection.get("source", {}).get("sha256") != args.sha256.lower()
+            or projection.get("source_artifacts", {}).get(
+                "evidence_receipt_sha256"
+            ) != receipt_sha
+        ):
+            raise SystemExit("ERROR: projection manifest identity mismatch")
+        if (
+            ledger.get("profile_id") != args.profile_id
+            or ledger.get("source_sha256") != args.sha256.lower()
+            or ledger.get("evidence_receipt_sha256") != receipt_sha
+        ):
+            raise SystemExit("ERROR: disposition ledger identity mismatch")
+
+        loaded_fragments = {
+            "face_page.json": face,
+            "overflow_statements.json": ov_raw,
+            "footnotes_a.json": fn_a,
+            "footnotes_b.json": fn_b,
+            "state_schedules.json": states,
+        }
+        declared_fragment_hashes = projection.get("fragment_sha256")
+        if not isinstance(declared_fragment_hashes, dict):
+            raise SystemExit("ERROR: projection manifest has no fragment hashes")
+        for name, fragment in loaded_fragments.items():
+            if (
+                declared_fragment_hashes.get(name)
+                != sha256_file(fd / name)
+            ):
+                raise SystemExit("ERROR: %s content hash mismatch" % name)
+            if not isinstance(fragment, dict):
+                raise SystemExit("ERROR: %s must contain an object" % name)
+            if fragment.get("_profile_id") != args.profile_id:
+                raise SystemExit("ERROR: %s profile identity mismatch" % name)
+            if fragment.get("_source_pdf_sha256") != args.sha256.lower():
+                raise SystemExit("ERROR: %s source identity mismatch" % name)
+            if (
+                fragment.get("_evidence_receipt_sha256") != receipt_sha
+            ):
+                raise SystemExit("ERROR: %s evidence receipt mismatch" % name)
 
     pi  = face.get("part_i", {}) or {}
     pii = face.get("part_ii", {}) or {}
@@ -519,9 +657,20 @@ def main():
             statements_root.append(node)
 
     # Part III scalars. Absent source keys are flagged, never defaulted.
+    face_unverified = fb.get("_unverified_fields", {})
+    if not isinstance(face_unverified, dict):
+        raise SystemExit("ERROR: part_iii_face._unverified_fields must be an object")
+    known_scalar_keys = {item[0] for item in SCALAR_BOXES}
+    unknown_reasons = set(face_unverified) - known_scalar_keys
+    if unknown_reasons:
+        raise SystemExit(
+            "ERROR: uncertainty reasons reference unknown scalar fields: %s"
+            % sorted(unknown_reasons))
     part_iii = {}
     for box_key, sem_id, label, loc, box in SCALAR_BOXES:
-        part_iii[box_key] = field(fb, box_key, sem_id, label, loc, box)
+        part_iii[box_key] = field(
+            fb, box_key, sem_id, label, loc, box,
+            unverified_reason=face_unverified.get(box_key))
 
 
     for box_key, label in CODED_BOXES.items():
@@ -580,8 +729,8 @@ def main():
         statements_root.extend(remaining_list)
 
     # ── Document ─────────────────────────────────────────────────────────
-    run_id = str(uuid.uuid4())
-    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    run_id = args.document_id or str(uuid.uuid4())
+    now = args.created or datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     # Normalize filing_status against spec enum (original | amended | superseded | void)
     raw_status = fm.get("filing_status")
@@ -723,6 +872,33 @@ def main():
         },
         "statements": statements_root
     }
+
+    if strict_profile:
+        doc["otd"]["coverage"] = {
+            "profile_id": args.profile_id,
+            "full_source_document": False,
+            "scope": {
+                "face_fields": True,
+                "taxonomy_safe_numeric_detail_totals": True,
+                "detail_components": False,
+                "investor_statements": False,
+                "state_schedules": False,
+            },
+            "companion_artifacts": {
+                "evidence_receipt": {
+                    "path": "evidence-receipt.json",
+                    "sha256": receipt_sha,
+                },
+                "projection_manifest": {
+                    "path": "projection-manifest.json",
+                    "sha256": projection_sha,
+                },
+                "disposition_ledger": {
+                    "path": "disposition-ledger.json",
+                    "sha256": ledger_sha,
+                },
+            },
+        }
 
     if redacted_fields:
         doc["redaction"] = {

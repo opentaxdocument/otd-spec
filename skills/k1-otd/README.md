@@ -10,7 +10,7 @@ This directory contains the K-1-specific operational layer of the [Open Tax Docu
 |---|---|
 | Document family | Schedule K-1 (Form 1065) |
 | Deterministic face grammar | Tax year 2025 |
-| Workflow | Staged; no single end-to-end orchestrator |
+| Workflow | Staged generally; bounded synthetic profile has an end-to-end orchestrator |
 | Face extraction | Grammar and geometry based |
 | Package classification | Deterministic logical-section classification |
 | Overflow and footnotes | Agent-guided extraction with deterministic validation |
@@ -29,6 +29,7 @@ The toolkit is useful for controlled, evidence-backed K-1 work. It is not a clai
 - Validates a 2025 K-1 face grammar.
 - Checks whether a grammar fits a candidate PDF before face values are trusted.
 - Reads face-page fields and checkboxes into evidence envelopes.
+- Projects supported evidence into five fragments with an evidence disposition ledger.
 - Extracts selected state grids and line-item detail tables.
 - Supports agent-reviewed overflow statements and footnotes.
 - Assembles five canonical fragments into OTD YAML plus a confidence manifest.
@@ -37,12 +38,30 @@ The toolkit is useful for controlled, evidence-backed K-1 work. It is not a clai
 
 ## What it does not do
 
-- It does not provide a single-command PDF-to-OTD pipeline.
+- It does not provide a general-purpose single-command pipeline for arbitrary K-1s.
+- Its one-command demonstration is bounded to the approved synthetic 2025 profile.
 - It does not automatically resolve ambiguous or unsupported layouts.
 - It does not certify all preparers, form years, scanned PDFs, rotations, or skew.
 - It does not provide broad K-3 extraction coverage.
 - It does not make warnings disappear. Every warning and `_unverified` marker requires disposition.
-- It does not make the standalone template-fit gate part of face extraction automatically; operators must run and inspect it.
+- Outside the bounded runner, operators must still run and inspect the standalone template-fit gate.
+
+## Bounded synthetic end-to-end demonstration
+
+The approved synthetic package has a source-dependent orchestrator:
+
+```bash
+python -B examples/k1-1065-2025-synthetic/run_demo.py \
+  --out artifact-root/synthetic-demo \
+  --created 2026-07-30T00:00:00Z
+```
+
+It invokes the production extraction, projection, assembly, validation, and
+reconciliation tools. Unsupported statements, state grids,
+classification-dependent facts, and unresolved sections are published in an
+evidence disposition ledger rather than fabricated. The ledger separates
+projected, partially consumed, and omitted evidence. Do not generalize this
+fixture-scoped proof into broad preparer or document support.
 
 ## Repository layout
 
@@ -159,10 +178,14 @@ python skills/k1-otd/scripts/build_line_item_details.py \
   --out work/evidence/line-item-details.json
 ```
 
-These files are extraction evidence, not assembler fragments. Preserve every
-unresolved reader, unresolved section, and escalation. Overflow statements and
-footnotes are not fully automated; extract them from classified sections with
-explicit evidence and never infer a plausible value.
+These files are extraction evidence, not assembler fragments. For the declared
+synthetic profile, `project_extraction_evidence.py` creates normalized
+fragments plus projection and omission manifests. For other packages, stop
+unless a supported profile or separately reviewed projection exists.
+
+Preserve every unresolved reader, unresolved section, and escalation. Overflow
+statements and footnotes are not fully automated; extract them from classified
+sections with explicit evidence and never infer a plausible value.
 
 ### 5. Satisfy the assembler fragment contract
 
