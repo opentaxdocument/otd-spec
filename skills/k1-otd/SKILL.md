@@ -85,7 +85,7 @@ artifact-root/
 ### 2. Extract text
 
 ```bash
-python skills/k1-otd/scripts/phase1_extract_text.py \
+python skills/k1-otd/scripts/extract_pdf_text.py \
   --pdf path/to/package.pdf \
   --out artifact-root
 ```
@@ -119,14 +119,14 @@ Stop for `partial`, `mismatch`, `unverified`, no recommendation, or ambiguity.
 ### 4. Classify logical sections
 
 ```bash
-python skills/k1-otd/scripts/phase2_classify.py \
+python skills/k1-otd/scripts/build_section_manifests.py \
   --index artifact-root/text_blocks/page_index.json \
   --text-dir artifact-root/text_blocks \
   --out artifact-root/fragments/page_manifest.json \
   --section-out artifact-root/fragments/section_manifest.json
 ```
 
-Do not use `--legacy-heuristics` in normal work. Review every unresolved section before continuing.
+Logical-section classification is the supported path. Review every unresolved section before continuing.
 
 ### 5. Produce extraction fragments
 
@@ -136,8 +136,14 @@ Face page:
 python skills/k1-otd/scripts/face_reader.py \
   path/to/package.pdf \
   skills/k1-otd/grammars/k1-1065-2025.grammar.yaml \
-  > artifact-root/fragments/face_page.json
+  --out artifact-root/evidence/face_page.json
 ```
+
+`evidence/face_page.json` is the face reader's evidence envelope. It is not the
+normalized `face_page.json` consumed by `assemble_otd.py`, and the toolkit does
+not currently provide an automatic projection between those contracts. Keep
+raw face evidence under `evidence/`; stop before assembly unless a separately
+reviewed normalized face fragment exists.
 
 State schedules, when present:
 
@@ -159,7 +165,7 @@ python skills/k1-otd/scripts/build_line_item_details.py \
 
 Produce overflow and footnote fragments through evidence-backed review of the classified source sections. Preserve source text, form location, classifications, and uncertainty.
 
-Before assembly, the fragment directory must contain:
+Before assembly, a separately reviewed normalized fragment directory must contain:
 
 ```text
 face_page.json
@@ -172,7 +178,7 @@ state_schedules.json
 ### 6. Assemble
 
 ```bash
-python skills/k1-otd/scripts/phase4_assemble.py \
+python skills/k1-otd/scripts/assemble_otd.py \
   --fragments artifact-root/fragments \
   --out artifact-root/output.otd.yaml \
   --sha256 SOURCE_PDF_SHA256
@@ -265,9 +271,9 @@ python -B tests/test_face_reader.py
 python -B tests/check_mirrors.py
 ```
 
-The current contract matrix has 33 blocking cases and zero deferred cases.
+The current contract matrix has 34 blocking cases and zero deferred cases.
 
-`tests/test_face_reader.py` requires two machine-local 2025 PDFs. If those fixtures are absent, report the suite as not runnable; never count a skipped or missing-fixture run as a pass.
+`tests/test_face_reader.py` uses two repository-local 2025 PDFs: the official blank IRS form and the approved synthetic package. A missing fixture is a test failure, never a skipped pass.
 
 ## Stop and escalate when
 
@@ -280,6 +286,18 @@ The current contract matrix has 33 blocking cases and zero deferred cases.
 - reconciliation does not tie;
 - warnings or `_unverified` facts cannot be dispositioned;
 - requested claims exceed the evidence.
+
+## Portable example and diagnostics
+
+- [Synthetic 2025 K-1 example](../../examples/k1-1065-2025-synthetic/README.md)
+  contains the approved fictitious source and its reproducible extraction claim.
+- [Blank IRS K-1 fixture](../../tests/fixtures/pdf/irs-k1-1065-2025-blank.pdf)
+  proves abstention and verified absence without machine-local dependencies.
+- `scripts/render_extraction_diagnostics.py` renders labeled, color-coded page
+  evidence plus a portable diagnostic index.
+- `../../tests/test_workflow_contract.py` and
+  `../../tests/test_diagnostic_renderer.py` enforce the current workflow and
+  renderer contracts.
 
 ## References
 

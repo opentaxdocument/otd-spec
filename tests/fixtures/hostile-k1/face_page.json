@@ -6,7 +6,7 @@
     "partner_tin": "987-65-4321",
     "_partner_tin_masked": false,
     "entity_type": "individual",
-    "general_or_limited": "limited_partner",
+    "general_or_limited": "limited_or_other_member",
     "domestic_or_foreign": "domestic",
     "disregarded_entity_info": {"is_disregarded_entity": false, "partner_tin": null, "partner_name": null},
     "retirement_plan": false,

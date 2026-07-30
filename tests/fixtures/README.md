@@ -2,8 +2,35 @@
 # Test Fixtures
 
 Input fragments for exercising the production assembly and validation
-pipeline (`skills/k1-otd/scripts/phase4_assemble.py` ->
+pipeline (`skills/k1-otd/scripts/assemble_otd.py` ->
 `skills/k1-otd/scripts/validate_otd.py`).
+
+## `pdf/`
+
+Portable PDF inputs for deterministic extraction regressions.
+
+### `irs-k1-1065-2025-blank.pdf`
+
+Official blank 2025 IRS Schedule K-1 (Form 1065). It proves abstention,
+verified absence, and empty coded-row behavior without machine-local paths.
+
+SHA-256:
+
+```text
+66098d4d48537ce2dac1f093d6351567957896e5843d8c524823b380068f6547
+```
+
+The filled regression source is the explicitly fictitious
+[synthetic K-1 package](../../examples/k1-1065-2025-synthetic/source/synthetic-k1.pdf).
+Its names, addresses, and identifiers are synthetic.
+
+Run the portable PDF contracts from the repository root:
+
+```bash
+python -B tests/test_face_reader.py
+python -B tests/test_workflow_contract.py
+python -B tests/test_diagnostic_renderer.py
+```
 
 ## `hostile-k1/`
 
@@ -35,7 +62,7 @@ without a machine-local path.
 ### Running it
 
 ```bash
-python skills/k1-otd/scripts/phase4_assemble.py \
+python skills/k1-otd/scripts/assemble_otd.py \
   --fragments tests/fixtures/hostile-k1 \
   --out /tmp/hostile.otd.yaml
 

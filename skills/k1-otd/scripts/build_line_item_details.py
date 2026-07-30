@@ -95,7 +95,7 @@ def parse_amount(text):
 def parse_page(text):
     """Extract every 'LINE <token> - <label> DETAIL' block from raw page
     text. Returns a list of {line_token, label, components, total}."""
-    # Phase 1 appends a "=== TABLES ===" section that re-renders the same
+    # Text extraction appends a "=== TABLES ===" section that re-renders the same
     # blocks via pdfplumber's table extraction. Without truncating here, the
     # LAST heading block on a page has no next-match boundary and its
     # "end" runs to len(text), swallowing that entire duplicate section as

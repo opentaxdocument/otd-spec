@@ -41,43 +41,48 @@ preserve tabular structure when PDF extraction produces aligned columns.
 
 ### 1.3 Document Position
 
+Investor footnotes use ordinary `statement` nodes in the document's
+`statements` collection. There is no separate `footnotes` wire collection.
+
 ```yaml
 otd: { ... }
 form_metadata: { ... }
 body: { ... }
-statements: [ ... ]
-footnotes:               # Investor-level footnotes
-  - type: footnote
+statements:
+  - type: statement
+    semantic:
+      role: investor_footnote
     ...
 ```
 
 ---
 
-## 2. Footnote Node Structure
+## 2. Investor-Footnote Statement Structure
 
 ```yaml
-- type: footnote
-  id: "fn-001"                              # Unique within document
-  classification: "{footnote_type}"         # REQUIRED
-  extension_ref: null                       # Set if using Extension Registry type
+- type: statement
   semantic:
-    id: "{classification}.{document_id}"
+    id: "fn-001"                              # Unique within document
     label: "Human-readable title"
+    classification: "{footnote_type}"         # REQUIRED
+    role: investor_footnote                   # REQUIRED
     description: "Brief description"
   form:
     attachment: true
     attachment_sequence: 1
   cross_references:
     - "part_iii.box_20.U"
-  tax_year: 2025
-  supersedes_id: null                       # ID of prior footnote this replaces
-  amendment_scope: "original"               # original | full_replacement ONLY
-  structured:
-    { ... }
+  content:
+    extension_ref: null                       # Set for Extension Registry types
+    tax_year: 2025
+    supersedes_id: null                       # Prior statement this replaces
+    amendment_scope: "original"               # original | full_replacement ONLY
+    structured:
+      { ... }
   source_text: |
     Original footnote text verbatim.
   confidence: 0.95
-  extraction_method: "ai_structured"        # manual | ai_structured | rule_based
+  extraction_method: "ai_structured"          # manual | ai_structured | rule_based
 ```
 
 ### 2.1 Amendment Versioning

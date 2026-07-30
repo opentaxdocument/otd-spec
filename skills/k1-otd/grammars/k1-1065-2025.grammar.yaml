@@ -8,8 +8,12 @@ form:
   form_number_context: "651123"
 
 source_evidence:
-  golden_pdf_path: "D:/SecondWind/Artifacts/20260727-k1-face-form-grammar/irs/f1065sk1.pdf"
-  instructions_path: "D:/SecondWind/Artifacts/20260727-k1-face-form-grammar/irs/i1065sk1.pdf"
+  golden_pdf_name: "f1065sk1.pdf"
+  golden_pdf_sha256: "66098d4d48537ce2dac1f093d6351567957896e5843d8c524823b380068f6547"
+  golden_pdf_url: "https://www.irs.gov/pub/irs-pdf/f1065sk1.pdf"
+  instructions_name: "i1065sk1.pdf"
+  instructions_sha256: "659063e0aaa36e445cc58409c164c3376054eeb05f9184ef142392942bf2cfbb"
+  instructions_url: "https://www.irs.gov/pub/irs-pdf/i1065sk1.pdf"
   instructions_reconciled: true
   derivation_method: "empirical layout probe (pdfplumber geometry + checkbox containment) + IRS instruction reconciliation"
   derivation_date: "2026-07-28"
@@ -242,6 +246,8 @@ fields:
     anchors:
       label: "What type of entity is this partner?"
     value_type: enum
+    value_aliases:
+      "PARTNERSHIP (LIMITED)": partnership
     cardinality: 1
     notes: "Open-vocabulary with known aliases per completeness review; not a fixed enum."
 

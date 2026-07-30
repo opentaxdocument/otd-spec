@@ -16,7 +16,7 @@ def main():
         "state_grids": [],
         "state_tax_summary": [],
         "_escalate": True,
-        "_escalation_reason": "Deterministic state grid extraction requires pdfplumber bounding box layout. Escaling to Inline AI."
+        "_escalation_reason": "No state values were emitted; deterministic state-grid extraction requires pdfplumber bounding-box layout evidence."
     }
 
     out_path = Path(args.out)

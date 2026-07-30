@@ -153,9 +153,9 @@ otd-spec/
 │   ├── README.md                         # Operator guide
 │   ├── reference/                        # Mirrored specs + taxonomy (LOAD FIRST)
 │   └── scripts/
-│       ├── phase1_extract_text.py        # PDF → page text
-│       ├── phase2_classify.py            # Page classification
-│       ├── phase4_assemble.py            # Fragments → OTD document
+│       ├── extract_pdf_text.py        # PDF → page text
+│       ├── build_section_manifests.py            # Page classification
+│       ├── assemble_otd.py            # Fragments → OTD document
 │       ├── constraint_engine.py          # Taxonomy-driven validation engine
 │       ├── validate_otd.py               # Validator CLI
 │       ├── extract_state_grids.py        # State schedule extraction
@@ -210,23 +210,56 @@ matched to the document, validation fails closed. CLI exit codes are stable:
 ### Run the test suites
 
 ```bash
-python tests/test_validator_contract.py   # 19 blocking checks + 12 strict XFAILs
-python tests/test_constraint_engine.py    # engine-level rule regressions
-python tests/test_rectification.py        # assembler → validator regression matrix
-python tests/test_direct_documents.py     # direct malformed-document mutations
-python tests/test_face_reader.py          # two pinned local PDF fixtures (non-portable)
-python tests/check_mirrors.py             # reference/ mirror parity
+python -B tests/test_validator_contract.py   # 34 blocking validator contracts
+python -B tests/test_constraint_engine.py    # engine-level rule regressions
+python -B tests/test_rectification.py        # assembler → validator regression matrix
+python -B tests/test_direct_documents.py     # direct malformed-document mutations
+python -B tests/test_face_reader.py          # two repository-local PDF fixtures
+python -B tests/test_workflow_contract.py     # portable extraction workflow contracts
+python -B tests/test_diagnostic_renderer.py
+python -B tests/check_mirrors.py             # reference/ mirror parity
 ```
 
-`test_validator_contract.py` treats deferred behavior as strict debt: an
-unexpected pass fails the suite until that case is reviewed and promoted.
-`test_face_reader.py` requires the two machine-local PDFs named in that test;
-the repository does not yet ship a portable PDF corpus.
+`test_validator_contract.py` has no deferred cases. An unexpected change fails
+the suite instead of disappearing into an `XFAIL`. The face-reader suite uses
+the repository-local blank IRS form and approved synthetic K-1 example.
+
+### Synthetic incomplete-aware extraction example
+
+`examples/k1-1065-2025-synthetic/` contains an approved fictitious K-1 package
+and current-source extraction evidence. Its machine-readable status and review
+ledger distinguish present facts, verified absence, blanks, missing values,
+unimplemented readers, unresolved sections, and the state-grid escalation.
+
+The example intentionally does **not** contain `output.otd.yaml`: current face
+evidence is not a normalized assembler fragment, and assembly, reconciliation,
+and OTD conformance were not claimed.
+
+### Render extraction diagnostics
+
+`skills/k1-otd/scripts/render_extraction_diagnostics.py` renders each PDF page
+with labeled, color-coded evidence and classification boxes. Items without
+defensible geometry remain visible in a warning/error sidebar, and
+`diagnostic-index.json` preserves the same result in portable machine-readable
+form.
+
+```bash
+python -B skills/k1-otd/scripts/render_extraction_diagnostics.py \
+  --pdf examples/k1-1065-2025-synthetic/source/synthetic-k1.pdf \
+  --face-evidence artifact-root/face_page.json \
+  --page-manifest artifact-root/page_manifest.json \
+  --section-manifest artifact-root/section_manifest.json \
+  --text-dir artifact-root/text_blocks \
+  --out artifact-root/diagnostics
+```
+
+The renderer contract is exercised by
+`tests/test_diagnostic_renderer.py`.
 
 ### Reproduce the hostile fixture
 
 ```bash
-python skills/k1-otd/scripts/phase4_assemble.py \
+python skills/k1-otd/scripts/assemble_otd.py \
   --fragments tests/fixtures/hostile-k1 --out /tmp/hostile.otd.yaml
 python skills/k1-otd/scripts/validate_otd.py --input /tmp/hostile.otd.yaml
 ```
@@ -250,12 +283,15 @@ binds taxonomy ID, taxonomy version, form ID, and tax year, and distinguishes an
 invalid document (`1`) from a validator/configuration failure (`2`).
 
 `constraint_engine.py` then applies the taxonomy-driven checks it currently
-implements, including arithmetic/range rules, selected schema binding and
-physical-completeness checks, statement requirements, coded-entry uniqueness,
-and capital-account integrity. Coverage is not complete: recursive nested types,
-closed enums, some form-placement checks, full rule-path preflight, extension
-forward compatibility, and several §7.1 truth-preservation rules remain strict
-`XFAIL`s in `tests/test_validator_contract.py`.
+implements, including arithmetic/range rules, schema binding and physical
+completeness, statement requirements, coded-entry uniqueness, and
+capital-account integrity. `tests/test_validator_contract.py` currently runs
+34 blocking cases with no deferred cases.
+
+That green matrix is evidence for the implemented checks, not universal
+conformance. Extension-registry interoperability, broad recursive taxonomy
+coverage, cross-implementation parity, and extraction across additional years
+and layouts remain open.
 
 The §7.1 reference profile is proposed for promotion to normative in v0.3 so
 third-party validators can implement the same dispositions.
@@ -317,13 +353,9 @@ Honest status of open items:
 
 | Gap | Impact |
 |---|---|
-| Constraint operands, targets, and predicates are not fully preflighted against the taxonomy | A misspelled path can silently skip or weaken a rule; four cases remain strict `XFAIL`s. |
-| Recursive nested types, closed enums, and some form-placement declarations are not fully enforced | Structurally incompatible declared nodes can still validate; three cases remain strict `XFAIL`s. |
-| Parser forward compatibility and validator node-type checking are not yet separated correctly | An undeclared future extension is currently rejected instead of preserved and reported informationally. |
-| Several §7.1 truth/statement/reference rules are incomplete | `_unverified` facts, statement attachment/classification, and Box 16 reference consistency remain explicit `XFAIL`s. |
-| §4.7 `required` semantics are not reconciled with `required_field` behavior | Present-null may be treated as missing. |
-| The template fit checker is not wired into a single extraction orchestrator | Callers can invoke face extraction without first proving form/year fit. |
-| Face extraction uses one 2025 grammar and two machine-local PDF fixtures | Vendor, year, skew/rotation, scan, corruption, and hybrid AcroForm coverage are not established. |
+| Validator coverage is broader but still bounded | The blocking contract matrix covers current trust boundaries and known counterexamples; it is not a substitute for cross-implementation conformance testing. |
+| The template-fit checker is not wired into a single extraction orchestrator | Callers can invoke face extraction without first proving form/year fit. |
+| Face extraction ships one 2025 grammar and two repository-local PDF fixtures | The blank IRS form and approved synthetic package make regression portable, but vendor, year, skew/rotation, scan, corruption, and hybrid AcroForm breadth is not established. |
 | K-3 has a taxonomy but no proof, fixture, or implementation exercise | K-3 support is declarative only. |
 | Validation rewrites an adjacent `output.confidence.json` when present | Validation has an implicit write side effect that should become opt-in. |
 | The §7.1 validation profile is implementation-specific, not yet normative | A conforming third-party validator may be more permissive. |

@@ -1,0 +1,53 @@
+[
+  {
+    "pdf_path": "synthetic-k1.pdf",
+    "page_number": 1,
+    "evaluable": true,
+    "evaluation_error": null,
+    "candidates": [
+      {
+        "grammar_id": "K-1 (Form 1065)-2025",
+        "verdict": "match",
+        "score": 1.0,
+        "required_text": {
+          "pass": true,
+          "detail": [
+            {
+              "entry": "Schedule K-1 (Form 1065) 2025",
+              "matched_alt": "schedule k-1 (form 1065) 2025",
+              "pass": true
+            }
+          ]
+        },
+        "page_size": {
+          "expected": [
+            612,
+            792
+          ],
+          "observed": [
+            612.0,
+            792.0
+          ],
+          "pass": true
+        },
+        "frame_count": {
+          "expected": 18,
+          "observed": 18,
+          "pass": true
+        },
+        "ocr_catalog_token_present": true,
+        "frame_signature_observed": "fbd45c9f8045"
+      }
+    ],
+    "recommended_grammar_id": "K-1 (Form 1065)-2025",
+    "overall_verdict": "match",
+    "ambiguous_tie": false,
+    "document_evidence": {
+      "page_width": 612.0,
+      "page_height": 792.0,
+      "char_count": 3782,
+      "frame_count": 18,
+      "frame_signature": "fbd45c9f8045"
+    }
+  }
+]

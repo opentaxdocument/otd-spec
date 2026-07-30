@@ -1,0 +1,147 @@
+{
+  "total_pages": 27,
+  "method": "section_level",
+  "sections": [
+    {
+      "name": "face_page",
+      "pages": [
+        1
+      ],
+      "type": "face_page",
+      "worker": "A"
+    },
+    {
+      "name": "overflow_statements",
+      "pages": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "type": "overflow_statement",
+      "worker": "B"
+    },
+    {
+      "name": "line_item_details",
+      "pages": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "type": "line_item_detail",
+      "worker": "F"
+    },
+    {
+      "name": "footnotes_a",
+      "pages": [
+        14,
+        15,
+        16,
+        17
+      ],
+      "type": "footnote",
+      "worker": "C"
+    },
+    {
+      "name": "footnotes_b",
+      "pages": [
+        18,
+        19,
+        20,
+        27
+      ],
+      "type": "footnote",
+      "worker": "D"
+    },
+    {
+      "name": "activity_schedule",
+      "pages": [
+        21
+      ],
+      "type": "activity_schedule",
+      "worker": "E"
+    },
+    {
+      "name": "state_schedules",
+      "pages": [
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "type": "state_schedule",
+      "worker": "E"
+    },
+    {
+      "name": "unresolved_requires_review",
+      "pages": [
+        10,
+        27
+      ],
+      "type": "unresolved",
+      "worker": "R"
+    }
+  ],
+  "classification_notes": "Section-level deterministic classification (build_section_manifests.py -> section_segmenter.py + section_classifier.py). 95 logical sections across 27 pages; 4 unresolved. Roles derive from row-shape histograms, not from page adjacency or char counts. Pages carrying more than one role appear under each; see section_manifest.json for exact line ranges.",
+  "multi_role_pages": {
+    "10": [
+      "line_item_details",
+      "unresolved_requires_review"
+    ],
+    "27": [
+      "footnotes",
+      "state_schedules",
+      "unresolved_requires_review"
+    ]
+  },
+  "unresolved_sections": [
+    {
+      "page": 10,
+      "index": 4,
+      "rows": 5,
+      "dominant_shape": "GRID_ROW",
+      "reasons": [
+        "no structural signal met its minimum"
+      ]
+    },
+    {
+      "page": 27,
+      "index": 1,
+      "rows": 1,
+      "dominant_shape": "LABEL_AMOUNT",
+      "reasons": [
+        "no structural signal met its minimum"
+      ]
+    },
+    {
+      "page": 27,
+      "index": 5,
+      "rows": 2,
+      "dominant_shape": "LABEL_AMOUNT",
+      "reasons": [
+        "2 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "NO subtotal row and NO scope heading: an uncorroborated label/amount list is not a decomposition of any box",
+        "score 0.45 below minimum role confidence 0.50: evidence is too weak to assert a role even though no other role competed"
+      ]
+    },
+    {
+      "page": 27,
+      "index": 8,
+      "rows": 4,
+      "dominant_shape": "LABEL_AMOUNT",
+      "reasons": [
+        "4 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "NO subtotal row and NO scope heading: an uncorroborated label/amount list is not a decomposition of any box",
+        "score 0.45 below minimum role confidence 0.50: evidence is too weak to assert a role even though no other role competed"
+      ]
+    }
+  ]
+}

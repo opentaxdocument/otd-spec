@@ -1,0 +1,7 @@
+{
+  "activity_schedule": {},
+  "state_grids": [],
+  "state_tax_summary": [],
+  "_escalate": true,
+  "_escalation_reason": "No state values were emitted; deterministic state-grid extraction requires pdfplumber bounding-box layout evidence."
+}

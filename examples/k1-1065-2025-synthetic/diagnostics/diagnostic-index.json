@@ -1,0 +1,6758 @@
+{
+  "schema_version": "otd-diagnostic/1.0",
+  "source_pdf": "synthetic-k1.pdf",
+  "resolution_dpi": 144,
+  "coordinate_frame": "pdf_top_left_origin_points",
+  "color_legend": {
+    "Present / matched / resolved": "#16a34a",
+    "Verified absent": "#2563eb",
+    "Blank / not applicable": "#6b7280",
+    "Missing / unresolved / review": "#d97706",
+    "Invalid / exception / hard error": "#dc2626",
+    "Structural classification": "#7c3aed"
+  },
+  "summary": {
+    "total_item_count": 179,
+    "boxed_item_count": 178,
+    "sidebar_item_count": 1,
+    "status_counts": {
+      "blank": 4,
+      "classification": 120,
+      "missing": 1,
+      "present": 39,
+      "unresolved": 6,
+      "verified_absent": 9
+    },
+    "rendered_page_count": 27
+  },
+  "pages": [
+    {
+      "page": 1,
+      "image": "page_001.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 61,
+      "sidebar_item_count": 1,
+      "item_count": 62
+    },
+    {
+      "page": 2,
+      "image": "page_002.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 4,
+      "sidebar_item_count": 0,
+      "item_count": 4
+    },
+    {
+      "page": 3,
+      "image": "page_003.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 5,
+      "sidebar_item_count": 0,
+      "item_count": 5
+    },
+    {
+      "page": 4,
+      "image": "page_004.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 5,
+      "sidebar_item_count": 0,
+      "item_count": 5
+    },
+    {
+      "page": 5,
+      "image": "page_005.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 3,
+      "sidebar_item_count": 0,
+      "item_count": 3
+    },
+    {
+      "page": 6,
+      "image": "page_006.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 7,
+      "sidebar_item_count": 0,
+      "item_count": 7
+    },
+    {
+      "page": 7,
+      "image": "page_007.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 5,
+      "sidebar_item_count": 0,
+      "item_count": 5
+    },
+    {
+      "page": 8,
+      "image": "page_008.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 3,
+      "sidebar_item_count": 0,
+      "item_count": 3
+    },
+    {
+      "page": 9,
+      "image": "page_009.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 5,
+      "sidebar_item_count": 0,
+      "item_count": 5
+    },
+    {
+      "page": 10,
+      "image": "page_010.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 8,
+      "sidebar_item_count": 0,
+      "item_count": 8
+    },
+    {
+      "page": 11,
+      "image": "page_011.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 2,
+      "sidebar_item_count": 0,
+      "item_count": 2
+    },
+    {
+      "page": 12,
+      "image": "page_012.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 4,
+      "sidebar_item_count": 0,
+      "item_count": 4
+    },
+    {
+      "page": 13,
+      "image": "page_013.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 3,
+      "sidebar_item_count": 0,
+      "item_count": 3
+    },
+    {
+      "page": 14,
+      "image": "page_014.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 9,
+      "sidebar_item_count": 0,
+      "item_count": 9
+    },
+    {
+      "page": 15,
+      "image": "page_015.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 8,
+      "sidebar_item_count": 0,
+      "item_count": 8
+    },
+    {
+      "page": 16,
+      "image": "page_016.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 5,
+      "sidebar_item_count": 0,
+      "item_count": 5
+    },
+    {
+      "page": 17,
+      "image": "page_017.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 4,
+      "sidebar_item_count": 0,
+      "item_count": 4
+    },
+    {
+      "page": 18,
+      "image": "page_018.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 3,
+      "sidebar_item_count": 0,
+      "item_count": 3
+    },
+    {
+      "page": 19,
+      "image": "page_019.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 4,
+      "sidebar_item_count": 0,
+      "item_count": 4
+    },
+    {
+      "page": 20,
+      "image": "page_020.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 3,
+      "sidebar_item_count": 0,
+      "item_count": 3
+    },
+    {
+      "page": 21,
+      "image": "page_021.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 4,
+      "sidebar_item_count": 0,
+      "item_count": 4
+    },
+    {
+      "page": 22,
+      "image": "page_022.png",
+      "pdf_size_points": [
+        792.0,
+        612.0
+      ],
+      "raster_size_pixels": [
+        1584,
+        1224
+      ],
+      "canvas_size_pixels": [
+        2084,
+        1224
+      ],
+      "boxed_item_count": 2,
+      "sidebar_item_count": 0,
+      "item_count": 2
+    },
+    {
+      "page": 23,
+      "image": "page_023.png",
+      "pdf_size_points": [
+        792.0,
+        612.0
+      ],
+      "raster_size_pixels": [
+        1584,
+        1224
+      ],
+      "canvas_size_pixels": [
+        2084,
+        1224
+      ],
+      "boxed_item_count": 2,
+      "sidebar_item_count": 0,
+      "item_count": 2
+    },
+    {
+      "page": 24,
+      "image": "page_024.png",
+      "pdf_size_points": [
+        792.0,
+        612.0
+      ],
+      "raster_size_pixels": [
+        1584,
+        1224
+      ],
+      "canvas_size_pixels": [
+        2084,
+        1224
+      ],
+      "boxed_item_count": 2,
+      "sidebar_item_count": 0,
+      "item_count": 2
+    },
+    {
+      "page": 25,
+      "image": "page_025.png",
+      "pdf_size_points": [
+        792.0,
+        612.0
+      ],
+      "raster_size_pixels": [
+        1584,
+        1224
+      ],
+      "canvas_size_pixels": [
+        2084,
+        1224
+      ],
+      "boxed_item_count": 2,
+      "sidebar_item_count": 0,
+      "item_count": 2
+    },
+    {
+      "page": 26,
+      "image": "page_026.png",
+      "pdf_size_points": [
+        792.0,
+        612.0
+      ],
+      "raster_size_pixels": [
+        1584,
+        1224
+      ],
+      "canvas_size_pixels": [
+        2084,
+        1224
+      ],
+      "boxed_item_count": 2,
+      "sidebar_item_count": 0,
+      "item_count": 2
+    },
+    {
+      "page": 27,
+      "image": "page_027.png",
+      "pdf_size_points": [
+        612.0,
+        792.0
+      ],
+      "raster_size_pixels": [
+        1224,
+        1584
+      ],
+      "canvas_size_pixels": [
+        1724,
+        1584
+      ],
+      "boxed_item_count": 13,
+      "sidebar_item_count": 0,
+      "item_count": 13
+    }
+  ],
+  "items": [
+    {
+      "source": "page_manifest",
+      "id": "page-1-face_page",
+      "label": "PAGE | face_page | worker=A",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 1,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "face_page"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-1-overflow_statements",
+      "label": "PAGE | overflow_statements | worker=B",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 1,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "overflow_statement"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        8.0,
+        8.0,
+        604.0,
+        784.0
+      ],
+      "bbox_pixels": [
+        16,
+        16,
+        1208,
+        1568
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p1-section-1",
+      "label": "SECTION #1 | face_page | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 1,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 63,
+        "row_count": 52,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "form identity marker present",
+          "3 part headings"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 64,
+          "matched_line_count": 64,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        36.0,
+        24.205,
+        576.001,
+        754.496
+      ],
+      "bbox_pixels": [
+        72,
+        48,
+        1152,
+        1509
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p1-section-2",
+      "label": "SECTION #2 | face_page | score=0.80",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 1,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 64,
+        "line_end": 66,
+        "row_count": 2,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "page 1 carries the form face; every section on a face page belongs to the face artifact and must not route elsewhere"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 3,
+          "matched_line_count": 3,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        116.15,
+        84.707,
+        571.999,
+        113.207
+      ],
+      "bbox_pixels": [
+        232,
+        169,
+        1144,
+        226
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p1-section-3",
+      "label": "SECTION #3 | face_page | score=0.80",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 1,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 67,
+        "line_end": 83,
+        "row_count": 14,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "page 1 carries the form face; every section on a face page belongs to the face artifact and must not route elsewhere"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 17,
+          "matched_line_count": 17,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        38.0,
+        103.707,
+        571.999,
+        317.197
+      ],
+      "bbox_pixels": [
+        76,
+        207,
+        1144,
+        634
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p1-section-4",
+      "label": "SECTION #4 | face_page | score=0.80",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 1,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 84,
+        "line_end": 85,
+        "row_count": 2,
+        "dominant_shape": "GRID_ROW",
+        "reasons": [
+          "page 1 carries the form face; every section on a face page belongs to the face artifact and must not route elsewhere"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 2,
+          "matched_line_count": 2,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        315.466,
+        443.646,
+        335.606
+      ],
+      "bbox_pixels": [
+        80,
+        631,
+        887,
+        671
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p1-section-5",
+      "label": "SECTION #5 | face_page | score=0.80",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 1,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 86,
+        "line_end": 96,
+        "row_count": 10,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "page 1 carries the form face; every section on a face page belongs to the face artifact and must not route elsewhere"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 11,
+          "matched_line_count": 11,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        127.81,
+        348.697,
+        571.996,
+        479.207
+      ],
+      "bbox_pixels": [
+        256,
+        697,
+        1144,
+        958
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p1-section-6",
+      "label": "SECTION #6 | face_page | score=0.83",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 1,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 97,
+        "line_end": 104,
+        "row_count": 7,
+        "dominant_shape": "GRID_ROW",
+        "reasons": [
+          "page 1 carries the form face; every section on a face page belongs to the face artifact and must not route elsewhere"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 8,
+          "matched_line_count": 8,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        184.19,
+        103.707,
+        571.999,
+        575.207
+      ],
+      "bbox_pixels": [
+        368,
+        207,
+        1144,
+        1150
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p1-section-7",
+      "label": "SECTION #7 | face_page | score=0.80",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 1,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 105,
+        "line_end": 113,
+        "row_count": 8,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "page 1 carries the form face; every section on a face page belongs to the face artifact and must not route elsewhere"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 8,
+          "matched_line_count": 8,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        36.0,
+        625.707,
+        576.002,
+        767.524
+      ],
+      "bbox_pixels": [
+        72,
+        1251,
+        1152,
+        1535
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_1",
+      "label": "box_1 | present | ordinary_business_income",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "ordinary_business_income",
+        "rule_id": "box_1",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        318.454,
+        73.023,
+        571.219,
+        81.524
+      ],
+      "bbox_pixels": [
+        637,
+        146,
+        1142,
+        163
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_10",
+      "label": "box_10 | present | net_section_1231_gain",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "net_section_1231_gain",
+        "rule_id": "box_10",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        229.799,
+        434.024,
+        420.678,
+        441.524
+      ],
+      "bbox_pixels": [
+        460,
+        868,
+        841,
+        883
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_11",
+      "label": "box_11 | present | other_income",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "overlay_font_coded_rows",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "other_income",
+        "rule_id": "box_11",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        316.97,
+        468.707,
+        443.643,
+        497.197
+      ],
+      "bbox_pixels": [
+        634,
+        937,
+        887,
+        994
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_12",
+      "label": "box_12 | present | section_179_deduction",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "section_179_deduction",
+        "rule_id": "box_12",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        316.508,
+        506.496,
+        564.597,
+        513.524
+      ],
+      "bbox_pixels": [
+        633,
+        1013,
+        1129,
+        1027
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_13",
+      "label": "box_13 | present | other_deductions",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "overlay_font_coded_rows",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "other_deductions",
+        "rule_id": "box_13",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        316.97,
+        540.707,
+        443.641,
+        593.207
+      ],
+      "bbox_pixels": [
+        634,
+        1081,
+        887,
+        1186
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_14",
+      "label": "box_14 | present | self_employment",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "overlay_font_coded_rows",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "self_employment",
+        "rule_id": "box_14",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        453.77,
+        84.707,
+        571.999,
+        113.207
+      ],
+      "bbox_pixels": [
+        908,
+        169,
+        1144,
+        226
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_15",
+      "label": "box_15 | present | credits",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "overlay_font_coded_rows",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "credits",
+        "rule_id": "box_15",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        453.77,
+        132.697,
+        571.999,
+        161.207
+      ],
+      "bbox_pixels": [
+        908,
+        265,
+        1144,
+        322
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_16",
+      "label": "box_16 | verified_absent | international_transactions",
+      "status": "verified_absent",
+      "severity": "info",
+      "color": "#2563eb",
+      "page": 1,
+      "method": "attachment_reference+interior_verified_empty",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "international_transactions",
+        "rule_id": "box_16",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        562.0,
+        180.499,
+        570.0,
+        188.499
+      ],
+      "bbox_pixels": [
+        1124,
+        361,
+        1140,
+        377
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_17",
+      "label": "box_17 | present | amt_items",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "overlay_font_coded_rows",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "amt_items",
+        "rule_id": "box_17",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        453.77,
+        204.697,
+        571.999,
+        257.207
+      ],
+      "bbox_pixels": [
+        908,
+        409,
+        1144,
+        514
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_18",
+      "label": "box_18 | present | tax_exempt_nondeductible",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "overlay_font_coded_rows",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "tax_exempt_nondeductible",
+        "rule_id": "box_18",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        453.77,
+        289.697,
+        571.993,
+        317.197
+      ],
+      "bbox_pixels": [
+        908,
+        579,
+        1144,
+        634
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_19",
+      "label": "box_19 | present | distributions",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "overlay_font_coded_rows",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "distributions",
+        "rule_id": "box_19",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        453.77,
+        360.707,
+        571.991,
+        370.207
+      ],
+      "bbox_pixels": [
+        908,
+        721,
+        1144,
+        740
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_2",
+      "label": "box_2 | present | net_rental_real_estate_income",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "net_rental_real_estate_income",
+        "rule_id": "box_2",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        71.035,
+        97.43,
+        441.189,
+        107.496
+      ],
+      "bbox_pixels": [
+        142,
+        195,
+        882,
+        215
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_20",
+      "label": "box_20 | present | other_information",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "overlay_font_coded_rows",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "other_information",
+        "rule_id": "box_20",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        453.77,
+        414.697,
+        571.999,
+        497.197
+      ],
+      "bbox_pixels": [
+        908,
+        829,
+        1144,
+        994
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_21",
+      "label": "box_21 | present | foreign_taxes_paid_accrued",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=region_edge))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "foreign_taxes_paid_accrued",
+        "rule_id": "box_21",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        316.508,
+        506.496,
+        564.597,
+        513.524
+      ],
+      "bbox_pixels": [
+        633,
+        1013,
+        1129,
+        1027
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_22",
+      "label": "box_22 | verified_absent | at_risk_activities",
+      "status": "verified_absent",
+      "severity": "info",
+      "color": "#2563eb",
+      "page": 1,
+      "method": "label_match_adjacent+interior_verified_empty",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "at_risk_activities",
+        "rule_id": "box_22",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        331.2,
+        602.0,
+        339.2,
+        610.0
+      ],
+      "bbox_pixels": [
+        662,
+        1204,
+        678,
+        1220
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_23",
+      "label": "box_23 | verified_absent | passive_activities",
+      "status": "verified_absent",
+      "severity": "info",
+      "color": "#2563eb",
+      "page": 1,
+      "method": "label_match+interior_verified_empty",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "passive_activities",
+        "rule_id": "box_23",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        331.2,
+        613.999,
+        339.2,
+        621.999
+      ],
+      "bbox_pixels": [
+        662,
+        1228,
+        678,
+        1244
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_3",
+      "label": "box_3 | present | other_net_rental_income",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "other_net_rental_income",
+        "rule_id": "box_3",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        318.454,
+        122.418,
+        493.554,
+        129.523
+      ],
+      "bbox_pixels": [
+        637,
+        245,
+        987,
+        259
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_4a",
+      "label": "box_4a | present | guaranteed_payments_services",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "guaranteed_payments_services",
+        "rule_id": "box_4a",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        48.425,
+        145.319,
+        441.678,
+        155.319
+      ],
+      "bbox_pixels": [
+        97,
+        291,
+        883,
+        311
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_4b",
+      "label": "box_4b | present | guaranteed_payments_capital",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "guaranteed_payments_capital",
+        "rule_id": "box_4b",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        316.316,
+        169.707,
+        556.539,
+        177.525
+      ],
+      "bbox_pixels": [
+        633,
+        339,
+        1113,
+        355
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_4c",
+      "label": "box_4c | blank | guaranteed_payments_total",
+      "status": "blank",
+      "severity": "info",
+      "color": "#6b7280",
+      "page": 1,
+      "method": "row_located_no_numeric_token(segment_bounded_no_value)",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "guaranteed_payments_total",
+        "rule_id": "box_4c",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        316.445,
+        194.495,
+        574.049,
+        201.523
+      ],
+      "bbox_pixels": [
+        633,
+        389,
+        1148,
+        403
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_5",
+      "label": "box_5 | present | interest_income",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "interest_income",
+        "rule_id": "box_5",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        318.454,
+        218.106,
+        382.563,
+        225.524
+      ],
+      "bbox_pixels": [
+        637,
+        436,
+        765,
+        451
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_6a",
+      "label": "box_6a | present | ordinary_dividends",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "ordinary_dividends",
+        "rule_id": "box_6a",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        316.445,
+        242.497,
+        393.196,
+        249.525
+      ],
+      "bbox_pixels": [
+        633,
+        485,
+        786,
+        499
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_6b",
+      "label": "box_6b | present | qualified_dividends",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "qualified_dividends",
+        "rule_id": "box_6b",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.932,
+        266.495,
+        547.244,
+        275.522
+      ],
+      "bbox_pixels": [
+        82,
+        533,
+        1094,
+        551
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_6c",
+      "label": "box_6c | present | dividend_equivalents",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "dividend_equivalents",
+        "rule_id": "box_6c",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        41.125,
+        289.697,
+        571.993,
+        299.523
+      ],
+      "bbox_pixels": [
+        82,
+        579,
+        1144,
+        599
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_7",
+      "label": "box_7 | present | royalties",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "royalties",
+        "rule_id": "box_7",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        318.454,
+        314.497,
+        362.844,
+        321.525
+      ],
+      "bbox_pixels": [
+        637,
+        629,
+        726,
+        643
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_8",
+      "label": "box_8 | present | net_short_term_capital_gain",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "net_short_term_capital_gain",
+        "rule_id": "box_8",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.544,
+        338.495,
+        436.099,
+        346.855
+      ],
+      "bbox_pixels": [
+        81,
+        677,
+        872,
+        694
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_9a",
+      "label": "box_9a | present | net_long_term_capital_gain",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "net_long_term_capital_gain",
+        "rule_id": "box_9a",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        38.661,
+        360.707,
+        460.629,
+        371.495
+      ],
+      "bbox_pixels": [
+        77,
+        721,
+        921,
+        743
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_9b",
+      "label": "box_9b | present | collectibles_gain",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "collectibles_gain",
+        "rule_id": "box_9b",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        316.316,
+        386.497,
+        424.29,
+        393.525
+      ],
+      "bbox_pixels": [
+        633,
+        773,
+        849,
+        787
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "box_9c",
+      "label": "box_9c | present | unrecaptured_section_1250_gain",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "unrecaptured_section_1250_gain",
+        "rule_id": "box_9c",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.222,
+        410.495,
+        434.559,
+        419.523
+      ],
+      "bbox_pixels": [
+        80,
+        821,
+        869,
+        839
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "header.amended_k1",
+      "label": "header.amended_k1 | verified_absent | form.amended",
+      "status": "verified_absent",
+      "severity": "info",
+      "color": "#2563eb",
+      "page": 1,
+      "method": "label_match_adjacent_outside_region+interior_verified_empty",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "form.amended",
+        "rule_id": "header.amended_k1",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        403.2,
+        37.999,
+        411.2,
+        45.999
+      ],
+      "bbox_pixels": [
+        806,
+        76,
+        822,
+        92
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "header.final_k1",
+      "label": "header.final_k1 | verified_absent | form.final",
+      "status": "verified_absent",
+      "severity": "info",
+      "color": "#2563eb",
+      "page": 1,
+      "method": "label_match_outside_region+interior_verified_empty",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "form.final",
+        "rule_id": "header.final_k1",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        324.0,
+        37.999,
+        332.0,
+        45.999
+      ],
+      "bbox_pixels": [
+        648,
+        76,
+        664,
+        92
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "header.tax_year_begin",
+      "label": "header.tax_year_begin | present | form.fiscal_year_begin",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "beginning_ending_row_parsed",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "form.fiscal_year_begin",
+        "rule_id": "header.tax_year_begin",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        71.035,
+        97.43,
+        441.189,
+        107.496
+      ],
+      "bbox_pixels": [
+        142,
+        195,
+        882,
+        215
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "header.tax_year_end",
+      "label": "header.tax_year_end | present | form.fiscal_year_end",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "beginning_ending_row_parsed",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "form.fiscal_year_end",
+        "rule_id": "header.tax_year_end",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        71.035,
+        97.43,
+        441.189,
+        107.496
+      ],
+      "bbox_pixels": [
+        142,
+        195,
+        882,
+        215
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_a",
+      "label": "item_a | present | partnership.ein",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "overlay_font_bounded_identity",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partnership.ein",
+        "rule_id": "item_a",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        38.0,
+        169.707,
+        82.355,
+        179.207
+      ],
+      "bbox_pixels": [
+        76,
+        339,
+        165,
+        358
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_b",
+      "label": "item_b | present | partnership.name_address",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "overlay_font_address_block",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partnership.name_address",
+        "rule_id": "item_b",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        196.827,
+        234.246,
+        227.606
+      ],
+      "bbox_pixels": [
+        80,
+        394,
+        468,
+        455
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_c",
+      "label": "item_c | blank | partnership.irs_center",
+      "status": "blank",
+      "severity": "info",
+      "color": "#6b7280",
+      "page": 1,
+      "method": "overlay_font_window_verified_empty",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partnership.irs_center",
+        "rule_id": "item_c",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        0.0,
+        224.507,
+        306.0,
+        242.497
+      ],
+      "bbox_pixels": [
+        0,
+        449,
+        612,
+        485
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_d",
+      "label": "item_d | verified_absent | partnership.publicly_traded",
+      "status": "verified_absent",
+      "severity": "info",
+      "color": "#2563eb",
+      "page": 1,
+      "method": "label_match+interior_verified_empty",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partnership.publicly_traded",
+        "rule_id": "item_d",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        57.6,
+        241.75,
+        65.6,
+        249.75
+      ],
+      "bbox_pixels": [
+        115,
+        484,
+        131,
+        500
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_e",
+      "label": "item_e | present | partner.identifying_number",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "overlay_font_bounded_identity",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partner.identifying_number",
+        "rule_id": "item_e",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        38.0,
+        277.707,
+        93.974,
+        287.207
+      ],
+      "bbox_pixels": [
+        76,
+        555,
+        188,
+        574
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_f",
+      "label": "item_f | present | partner.name_address",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "overlay_font_address_block",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partner.name_address",
+        "rule_id": "item_f",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        304.827,
+        250.605,
+        335.606
+      ],
+      "bbox_pixels": [
+        80,
+        610,
+        501,
+        671
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_g",
+      "label": "item_g | present | partner.general_or_limited",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "interior_vector",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partner.general_or_limited",
+        "rule_id": "item_g",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        57.6,
+        337.998,
+        188.0,
+        345.998
+      ],
+      "bbox_pixels": [
+        115,
+        676,
+        376,
+        692
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_h1",
+      "label": "item_h1 | present | partner.domestic_or_foreign",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "interior_vector",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partner.domestic_or_foreign",
+        "rule_id": "item_h1",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        57.6,
+        361.999,
+        188.0,
+        369.999
+      ],
+      "bbox_pixels": [
+        115,
+        724,
+        376,
+        740
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_h2",
+      "label": "item_h2 | blank | partner.disregarded_entity_info",
+      "status": "blank",
+      "severity": "info",
+      "color": "#6b7280",
+      "page": 1,
+      "method": "conditional_record_governing_checkbox_unchecked",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partner.disregarded_entity_info",
+        "rule_id": "item_h2",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        57.6,
+        373.998,
+        65.6,
+        381.998
+      ],
+      "bbox_pixels": [
+        115,
+        748,
+        131,
+        764
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_i1",
+      "label": "item_i1 | present | partner.entity_type",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "overlay_font_bounded_text+value_alias",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partner.entity_type",
+        "rule_id": "item_i1",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        175.25,
+        397.707,
+        290.305,
+        407.207
+      ],
+      "bbox_pixels": [
+        350,
+        795,
+        581,
+        814
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_i2",
+      "label": "item_i2 | verified_absent | partner.retirement_plan",
+      "status": "verified_absent",
+      "severity": "info",
+      "color": "#2563eb",
+      "page": 1,
+      "method": "label_match+interior_verified_empty",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partner.retirement_plan",
+        "rule_id": "item_i2",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        294.4,
+        410.998,
+        302.4,
+        418.998
+      ],
+      "bbox_pixels": [
+        589,
+        822,
+        605,
+        838
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_j",
+      "label": "item_j | present | partner.share_percentages",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "two_column_grid",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partner.share_percentages",
+        "rule_id": "item_j",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        57.6,
+        444.707,
+        394.75,
+        479.492
+      ],
+      "bbox_pixels": [
+        115,
+        889,
+        790,
+        959
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_j.decrease_reason",
+      "label": "item_j.decrease_reason | blank",
+      "status": "blank",
+      "severity": "info",
+      "color": "#6b7280",
+      "page": 1,
+      "method": "multi_checkbox_set",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": null,
+        "rule_id": "item_j.decrease_reason",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        57.6,
+        494.0,
+        108.8,
+        502.0
+      ],
+      "bbox_pixels": [
+        115,
+        988,
+        218,
+        1004
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_k1",
+      "label": "item_k1 | present | partner.share_of_liabilities",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "two_column_grid",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partner.share_of_liabilities",
+        "rule_id": "item_k1",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        57.6,
+        529.707,
+        388.534,
+        575.207
+      ],
+      "bbox_pixels": [
+        115,
+        1059,
+        777,
+        1150
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_k2",
+      "label": "item_k2 | verified_absent | partner.liabilities_from_lower_tier_partnerships",
+      "status": "verified_absent",
+      "severity": "info",
+      "color": "#2563eb",
+      "page": 1,
+      "method": "label_match+interior_verified_empty",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partner.liabilities_from_lower_tier_partnerships",
+        "rule_id": "item_k2",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        294.4,
+        578.499,
+        302.4,
+        586.499
+      ],
+      "bbox_pixels": [
+        589,
+        1157,
+        605,
+        1173
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_k3",
+      "label": "item_k3 | verified_absent | partner.liabilities_subject_to_guarantees_or_payment_obligations",
+      "status": "verified_absent",
+      "severity": "info",
+      "color": "#2563eb",
+      "page": 1,
+      "method": "label_match_adjacent_wrapped+interior_verified_empty",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partner.liabilities_subject_to_guarantees_or_payment_obligations",
+        "rule_id": "item_k3",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        294.4,
+        600.249,
+        302.4,
+        608.249
+      ],
+      "bbox_pixels": [
+        589,
+        1200,
+        605,
+        1216
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_l",
+      "label": "item_l | present | partner.capital_account_analysis",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "ledger",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partner.capital_account_analysis",
+        "rule_id": "item_l",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        57.598,
+        625.707,
+        522.664,
+        695.889
+      ],
+      "bbox_pixels": [
+        115,
+        1251,
+        1045,
+        1392
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_l.basis_method",
+      "label": "item_l.basis_method | missing",
+      "status": "missing",
+      "severity": "warning",
+      "color": "#d97706",
+      "page": 1,
+      "method": "verified_absent_from_form_revision",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": null,
+        "rule_id": "item_l.basis_method",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "sidebar",
+      "bbox_pdf": null,
+      "bbox_pixels": null
+    },
+    {
+      "source": "face_page",
+      "id": "item_m",
+      "label": "item_m | present | partner.contributed_property_built_in_gain_loss",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "interior_vector",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partner.contributed_property_built_in_gain_loss",
+        "rule_id": "item_m",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        57.6,
+        710.0,
+        108.8,
+        718.0
+      ],
+      "bbox_pixels": [
+        115,
+        1420,
+        218,
+        1436
+      ]
+    },
+    {
+      "source": "face_page",
+      "id": "item_n",
+      "label": "item_n | present | partner.net_unrecognized_section_704c_gain_loss",
+      "status": "present",
+      "severity": "ok",
+      "color": "#16a34a",
+      "page": 1,
+      "method": "ledger",
+      "layer": "face_evidence",
+      "details": {
+        "semantic_id": "partner.net_unrecognized_section_704c_gain_loss",
+        "rule_id": "item_n",
+        "coordinate_frame": "pdf_top_left_origin_points"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        57.6,
+        733.707,
+        300.391,
+        755.207
+      ],
+      "bbox_pixels": [
+        115,
+        1467,
+        601,
+        1510
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-2-overflow_statements",
+      "label": "PAGE | overflow_statements | worker=B",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 2,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "overflow_statement"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p2-section-1",
+      "label": "SECTION #1 | coded_overflow | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 2,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 12,
+        "row_count": 13,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "9 coded-entry rows (box+code+one amount), 100% of data",
+          "9 codes across 1 box(es) = 9.0 codes/box (enumeration within a box)",
+          "no subtotal rows (an overflow list does not total)",
+          "title corroborates ('overflow statement', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 13,
+          "matched_line_count": 13,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        -25.144,
+        591.998,
+        209.892
+      ],
+      "bbox_pixels": [
+        80,
+        0,
+        1184,
+        420
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p2-section-2",
+      "label": "SECTION #2 | coded_overflow | score=0.94",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 2,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 14,
+        "line_end": 26,
+        "row_count": 9,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "8 coded-entry rows (box+code+one amount), 100% of data",
+          "8 codes across 1 box(es) = 8.0 codes/box (enumeration within a box)",
+          "no subtotal rows (an overflow list does not total)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 13,
+          "matched_line_count": 13,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        43.25,
+        210.792,
+        563.748,
+        335.652
+      ],
+      "bbox_pixels": [
+        86,
+        422,
+        1127,
+        671
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p2-section-3",
+      "label": "SECTION #3 | coded_overflow | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 2,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 27,
+        "line_end": 51,
+        "row_count": 24,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "22 coded-entry rows (box+code+one amount), 100% of data",
+          "22 codes across 1 box(es) = 22.0 codes/box (enumeration within a box)",
+          "no subtotal rows (an overflow list does not total)",
+          "title corroborates ('overflow', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 24,
+          "matched_line_count": 24,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        77.735,
+        563.75,
+        690.652
+      ],
+      "bbox_pixels": [
+        80,
+        155,
+        1128,
+        1381
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-3-overflow_statements",
+      "label": "PAGE | overflow_statements | worker=B",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 3,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "overflow_statement"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p3-section-1",
+      "label": "SECTION #1 | coded_overflow | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 3,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 6,
+        "row_count": 7,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "5 coded-entry rows (box+code+one amount), 100% of data",
+          "5 codes across 1 box(es) = 5.0 codes/box (enumeration within a box)",
+          "no subtotal rows (an overflow list does not total)",
+          "title corroborates ('overflow statement', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 7,
+          "matched_line_count": 7,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        43.25,
+        -25.144,
+        591.998,
+        118.282
+      ],
+      "bbox_pixels": [
+        86,
+        0,
+        1184,
+        237
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p3-section-2",
+      "label": "SECTION #2 | coded_overflow | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 3,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 7,
+        "line_end": 10,
+        "row_count": 4,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "2 coded-entry rows (box+code+one amount), 100% of data",
+          "2 codes across 1 box(es) = 2.0 codes/box (enumeration within a box)",
+          "no subtotal rows (an overflow list does not total)",
+          "title corroborates ('overflow', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 4,
+          "matched_line_count": 4,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        131.749,
+        563.748,
+        193.282
+      ],
+      "bbox_pixels": [
+        80,
+        263,
+        1127,
+        387
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p3-section-3",
+      "label": "SECTION #3 | coded_overflow | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 3,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 11,
+        "line_end": 27,
+        "row_count": 17,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "15 coded-entry rows (box+code+one amount), 100% of data",
+          "15 codes across 1 box(es) = 15.0 codes/box (enumeration within a box)",
+          "no subtotal rows (an overflow list does not total)",
+          "title corroborates ('overflow', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 17,
+          "matched_line_count": 17,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        157.735,
+        563.748,
+        448.892
+      ],
+      "bbox_pixels": [
+        80,
+        315,
+        1127,
+        898
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p3-section-4",
+      "label": "SECTION #4 | coded_overflow | score=0.94",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 3,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 29,
+        "line_end": 48,
+        "row_count": 15,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "14 coded-entry rows (box+code+one amount), 100% of data",
+          "14 codes across 1 box(es) = 14.0 codes/box (enumeration within a box)",
+          "no subtotal rows (an overflow list does not total)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 19,
+          "matched_line_count": 19,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        43.25,
+        446.342,
+        563.748,
+        658.652
+      ],
+      "bbox_pixels": [
+        86,
+        893,
+        1127,
+        1317
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-4-overflow_statements",
+      "label": "PAGE | overflow_statements | worker=B",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 4,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "overflow_statement"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p4-section-1",
+      "label": "SECTION #1 | coded_overflow | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 4,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 25,
+        "row_count": 26,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "23 coded-entry rows (box+code+one amount), 96% of data",
+          "24 codes across 1 box(es) = 24.0 codes/box (enumeration within a box)",
+          "no subtotal rows (an overflow list does not total)",
+          "title corroborates ('overflow statement', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 26,
+          "matched_line_count": 26,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        43.25,
+        -25.144,
+        591.998,
+        384.282
+      ],
+      "bbox_pixels": [
+        86,
+        0,
+        1184,
+        769
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p4-section-2",
+      "label": "SECTION #2 | coded_overflow | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 4,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 26,
+        "line_end": 26,
+        "row_count": 1,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "unresolved 1-row fragment absorbed into adjacent section 1 (role coded_overflow, score 1.00) on the same page"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 1,
+          "matched_line_count": 1,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        43.25,
+        392.282,
+        563.748,
+        398.282
+      ],
+      "bbox_pixels": [
+        86,
+        785,
+        1127,
+        797
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p4-section-3",
+      "label": "SECTION #3 | coded_overflow | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 4,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 27,
+        "line_end": 32,
+        "row_count": 6,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "4 coded-entry rows (box+code+one amount), 100% of data",
+          "4 codes across 1 box(es) = 4.0 codes/box (enumeration within a box)",
+          "no subtotal rows (an overflow list does not total)",
+          "title corroborates ('overflow', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 6,
+          "matched_line_count": 6,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        411.749,
+        563.748,
+        501.282
+      ],
+      "bbox_pixels": [
+        80,
+        823,
+        1127,
+        1003
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p4-section-4",
+      "label": "SECTION #4 | coded_overflow | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 4,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 33,
+        "line_end": 47,
+        "row_count": 14,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "12 coded-entry rows (box+code+one amount), 100% of data",
+          "12 codes across 1 box(es) = 12.0 codes/box (enumeration within a box)",
+          "no subtotal rows (an overflow list does not total)",
+          "title corroborates ('overflow', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 14,
+          "matched_line_count": 14,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        437.735,
+        563.748,
+        716.282
+      ],
+      "bbox_pixels": [
+        80,
+        875,
+        1127,
+        1433
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-5-overflow_statements",
+      "label": "PAGE | overflow_statements | worker=B",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 5,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "overflow_statement"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p5-section-1",
+      "label": "SECTION #1 | coded_overflow | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 5,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 29,
+        "row_count": 30,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "28 coded-entry rows (box+code+one amount), 100% of data",
+          "28 codes across 1 box(es) = 28.0 codes/box (enumeration within a box)",
+          "no subtotal rows (an overflow list does not total)",
+          "title corroborates ('overflow statement', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 30,
+          "matched_line_count": 30,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        43.25,
+        -25.144,
+        591.998,
+        440.282
+      ],
+      "bbox_pixels": [
+        86,
+        0,
+        1184,
+        881
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p5-section-2",
+      "label": "SECTION #2 | coded_overflow | score=0.94",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 5,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 30,
+        "line_end": 40,
+        "row_count": 10,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "9 coded-entry rows (box+code+one amount), 100% of data",
+          "10 codes across 1 box(es) = 10.0 codes/box (enumeration within a box)",
+          "no subtotal rows (an overflow list does not total)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 10,
+          "matched_line_count": 10,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        43.25,
+        448.282,
+        563.748,
+        580.282
+      ],
+      "bbox_pixels": [
+        86,
+        897,
+        1127,
+        1161
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-6-line_item_details",
+      "label": "PAGE | line_item_details | worker=F",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 6,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "line_item_detail"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p6-section-1",
+      "label": "SECTION #1 | line_item_detail | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 6,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 8,
+        "row_count": 9,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "4 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line",
+          "title corroborates ('line item detail', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 9,
+          "matched_line_count": 9,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        -25.144,
+        591.998,
+        155.282
+      ],
+      "bbox_pixels": [
+        80,
+        0,
+        1184,
+        311
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p6-section-2",
+      "label": "SECTION #2 | line_item_detail | score=0.80",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 6,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 9,
+        "line_end": 15,
+        "row_count": 7,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "5 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 7,
+          "matched_line_count": 7,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        77.735,
+        563.748,
+        272.282
+      ],
+      "bbox_pixels": [
+        80,
+        155,
+        1127,
+        545
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p6-section-3",
+      "label": "SECTION #3 | line_item_detail | score=0.80",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 6,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 16,
+        "line_end": 20,
+        "row_count": 5,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "3 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 5,
+          "matched_line_count": 5,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        43.25,
+        280.282,
+        563.748,
+        342.282
+      ],
+      "bbox_pixels": [
+        86,
+        561,
+        1127,
+        685
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p6-section-4",
+      "label": "SECTION #4 | line_item_detail | score=0.98",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 6,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 21,
+        "line_end": 26,
+        "row_count": 6,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "3 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 6,
+          "matched_line_count": 6,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        77.735,
+        563.748,
+        445.282
+      ],
+      "bbox_pixels": [
+        80,
+        155,
+        1127,
+        891
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p6-section-5",
+      "label": "SECTION #5 | line_item_detail | score=0.98",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 6,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 27,
+        "line_end": 32,
+        "row_count": 6,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "3 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 6,
+          "matched_line_count": 6,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        77.735,
+        563.748,
+        548.282
+      ],
+      "bbox_pixels": [
+        80,
+        155,
+        1127,
+        1097
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p6-section-6",
+      "label": "SECTION #6 | line_item_detail | score=0.98",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 6,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 33,
+        "line_end": 39,
+        "row_count": 6,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "3 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 6,
+          "matched_line_count": 6,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        77.735,
+        563.748,
+        651.282
+      ],
+      "bbox_pixels": [
+        80,
+        155,
+        1127,
+        1303
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-7-line_item_details",
+      "label": "PAGE | line_item_details | worker=F",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 7,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "line_item_detail"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p7-section-1",
+      "label": "SECTION #1 | line_item_detail | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 7,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 17,
+        "row_count": 18,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "13 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line",
+          "title corroborates ('line item detail', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 18,
+          "matched_line_count": 18,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        -25.144,
+        591.998,
+        281.282
+      ],
+      "bbox_pixels": [
+        80,
+        0,
+        1184,
+        563
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p7-section-2",
+      "label": "SECTION #2 | line_item_detail | score=0.98",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 7,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 18,
+        "line_end": 22,
+        "row_count": 5,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "2 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 5,
+          "matched_line_count": 5,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        77.735,
+        563.748,
+        370.282
+      ],
+      "bbox_pixels": [
+        80,
+        155,
+        1127,
+        741
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p7-section-3",
+      "label": "SECTION #3 | line_item_detail | score=0.98",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 7,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 23,
+        "line_end": 34,
+        "row_count": 12,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "9 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 12,
+          "matched_line_count": 12,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        77.735,
+        563.748,
+        557.282
+      ],
+      "bbox_pixels": [
+        80,
+        155,
+        1127,
+        1115
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p7-section-4",
+      "label": "SECTION #4 | line_item_detail | score=0.98",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 7,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 35,
+        "line_end": 42,
+        "row_count": 7,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "4 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 7,
+          "matched_line_count": 7,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        77.735,
+        563.748,
+        674.282
+      ],
+      "bbox_pixels": [
+        80,
+        155,
+        1127,
+        1349
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-8-line_item_details",
+      "label": "PAGE | line_item_details | worker=F",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 8,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "line_item_detail"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p8-section-1",
+      "label": "SECTION #1 | line_item_detail | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 8,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 13,
+        "row_count": 14,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "9 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line",
+          "title corroborates ('line item detail', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 14,
+          "matched_line_count": 14,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        -25.144,
+        591.998,
+        225.282
+      ],
+      "bbox_pixels": [
+        80,
+        0,
+        1184,
+        451
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p8-section-2",
+      "label": "SECTION #2 | line_item_detail | score=0.80",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 8,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 14,
+        "line_end": 44,
+        "row_count": 30,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "28 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 30,
+          "matched_line_count": 30,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        77.735,
+        563.748,
+        664.282
+      ],
+      "bbox_pixels": [
+        80,
+        155,
+        1127,
+        1329
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-9-line_item_details",
+      "label": "PAGE | line_item_details | worker=F",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 9,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "line_item_detail"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p9-section-1",
+      "label": "SECTION #1 | line_item_detail | score=0.92",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 9,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 20,
+        "row_count": 21,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "18 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "title corroborates ('line item detail', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 21,
+          "matched_line_count": 21,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        43.25,
+        -25.144,
+        591.998,
+        314.282
+      ],
+      "bbox_pixels": [
+        86,
+        0,
+        1184,
+        629
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p9-section-2",
+      "label": "SECTION #2 | line_item_detail | score=0.98",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 9,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 21,
+        "line_end": 27,
+        "row_count": 7,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "4 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 7,
+          "matched_line_count": 7,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        327.749,
+        563.75,
+        431.282
+      ],
+      "bbox_pixels": [
+        80,
+        655,
+        1128,
+        863
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p9-section-3",
+      "label": "SECTION #3 | line_item_detail | score=0.98",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 9,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 28,
+        "line_end": 35,
+        "row_count": 8,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "5 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 8,
+          "matched_line_count": 8,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        353.735,
+        563.75,
+        562.282
+      ],
+      "bbox_pixels": [
+        80,
+        707,
+        1128,
+        1125
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p9-section-4",
+      "label": "SECTION #4 | line_item_detail | score=0.98",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 9,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 36,
+        "line_end": 45,
+        "row_count": 9,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "6 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 9,
+          "matched_line_count": 9,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        353.735,
+        563.748,
+        707.282
+      ],
+      "bbox_pixels": [
+        80,
+        707,
+        1127,
+        1415
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-10-line_item_details",
+      "label": "PAGE | line_item_details | worker=F",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 10,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "line_item_detail"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-10-unresolved_requires_review",
+      "label": "PAGE | unresolved_requires_review | worker=R",
+      "status": "unresolved",
+      "severity": "warning",
+      "color": "#d97706",
+      "page": 10,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "unresolved"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        8.0,
+        8.0,
+        604.0,
+        784.0
+      ],
+      "bbox_pixels": [
+        16,
+        16,
+        1208,
+        1568
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p10-section-1",
+      "label": "SECTION #1 | line_item_detail | score=0.89",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 10,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 11,
+        "row_count": 12,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "7 label/line-ref component rows, 88% of ALL rows (prose included in denominator)",
+          "1 scope heading(s) naming a single line",
+          "title corroborates ('line item detail', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 12,
+          "matched_line_count": 12,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        -25.144,
+        591.998,
+        197.282
+      ],
+      "bbox_pixels": [
+        80,
+        0,
+        1184,
+        395
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p10-section-2",
+      "label": "SECTION #2 | line_item_detail | score=0.89",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 10,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 12,
+        "line_end": 13,
+        "row_count": 2,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "unresolved 2-row fragment absorbed into adjacent section 1 (role line_item_detail, score 0.89) on the same page"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 2,
+          "matched_line_count": 2,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        43.25,
+        205.282,
+        563.75,
+        225.282
+      ],
+      "bbox_pixels": [
+        86,
+        411,
+        1128,
+        451
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p10-section-3",
+      "label": "SECTION #3 | line_item_detail | score=0.60",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 10,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 14,
+        "line_end": 16,
+        "row_count": 3,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "every confident section on page 10 carries role line_item_detail (29 rows); this 3-row fragment has no independent candidate and belongs to that section"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 3,
+          "matched_line_count": 3,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        77.735,
+        563.748,
+        286.282
+      ],
+      "bbox_pixels": [
+        80,
+        155,
+        1127,
+        573
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p10-section-4",
+      "label": "SECTION #4 | unresolved | score=0.00",
+      "status": "unresolved",
+      "severity": "warning",
+      "color": "#d97706",
+      "page": 10,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 17,
+        "line_end": 21,
+        "row_count": 5,
+        "dominant_shape": "GRID_ROW",
+        "reasons": [
+          "no structural signal met its minimum"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 5,
+          "matched_line_count": 5,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        43.25,
+        294.282,
+        563.748,
+        356.282
+      ],
+      "bbox_pixels": [
+        86,
+        589,
+        1127,
+        713
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p10-section-5",
+      "label": "SECTION #5 | line_item_detail | score=0.98",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 10,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 22,
+        "line_end": 27,
+        "row_count": 6,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "3 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 6,
+          "matched_line_count": 6,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        77.735,
+        563.748,
+        459.282
+      ],
+      "bbox_pixels": [
+        80,
+        155,
+        1127,
+        919
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p10-section-6",
+      "label": "SECTION #6 | line_item_detail | score=0.98",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 10,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 28,
+        "line_end": 39,
+        "row_count": 11,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "8 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 11,
+          "matched_line_count": 11,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        77.735,
+        563.748,
+        632.282
+      ],
+      "bbox_pixels": [
+        80,
+        155,
+        1127,
+        1265
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-11-line_item_details",
+      "label": "PAGE | line_item_details | worker=F",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 11,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "line_item_detail"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p11-section-1",
+      "label": "SECTION #1 | line_item_detail | score=0.92",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 11,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 43,
+        "row_count": 43,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "39 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 scope heading(s) naming a single line",
+          "title corroborates ('line item detail', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 43,
+          "matched_line_count": 43,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        -25.144,
+        591.998,
+        631.282
+      ],
+      "bbox_pixels": [
+        80,
+        0,
+        1184,
+        1263
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-12-line_item_details",
+      "label": "PAGE | line_item_details | worker=F",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 12,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "line_item_detail"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p12-section-1",
+      "label": "SECTION #1 | line_item_detail | score=0.57",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 12,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 9,
+        "row_count": 10,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "7 label/line-ref component rows, 88% of ALL rows (prose included in denominator)",
+          "NO subtotal row and NO scope heading: an uncorroborated label/amount list is not a decomposition of any box",
+          "title corroborates ('line item detail', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 10,
+          "matched_line_count": 10,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        43.25,
+        -25.144,
+        591.998,
+        148.342
+      ],
+      "bbox_pixels": [
+        86,
+        0,
+        1184,
+        297
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p12-section-2",
+      "label": "SECTION #2 | line_item_detail | score=0.80",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 12,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 10,
+        "line_end": 36,
+        "row_count": 26,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "24 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 27,
+          "matched_line_count": 27,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        43.25,
+        145.792,
+        563.748,
+        490.532
+      ],
+      "bbox_pixels": [
+        86,
+        292,
+        1127,
+        981
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p12-section-3",
+      "label": "SECTION #3 | line_item_detail | score=0.80",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 12,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 37,
+        "line_end": 52,
+        "row_count": 15,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "13 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 15,
+          "matched_line_count": 15,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        503.999,
+        563.748,
+        719.532
+      ],
+      "bbox_pixels": [
+        80,
+        1008,
+        1127,
+        1439
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-13-line_item_details",
+      "label": "PAGE | line_item_details | worker=F",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 13,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "line_item_detail"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p13-section-1",
+      "label": "SECTION #1 | line_item_detail | score=0.57",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 13,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 3,
+        "row_count": 4,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "2 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "NO subtotal row and NO scope heading: an uncorroborated label/amount list is not a decomposition of any box",
+          "title corroborates ('line item detail', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 4,
+          "matched_line_count": 4,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        43.25,
+        -25.144,
+        591.998,
+        76.282
+      ],
+      "bbox_pixels": [
+        86,
+        0,
+        1184,
+        153
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p13-section-2",
+      "label": "SECTION #2 | line_item_detail | score=0.98",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 13,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 4,
+        "line_end": 10,
+        "row_count": 6,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "3 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "1 subtotal row(s): components sum to a box value",
+          "1 scope heading(s) naming a single line"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 6,
+          "matched_line_count": 6,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        40.0,
+        89.749,
+        563.748,
+        179.282
+      ],
+      "bbox_pixels": [
+        80,
+        179,
+        1127,
+        359
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-14-footnotes_a",
+      "label": "PAGE | footnotes_a | worker=C",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 14,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "footnote"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p14-section-1",
+      "label": "SECTION #1 | narrative_footnote | score=0.74",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 14,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 8,
+        "row_count": 9,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "4 codes across 3 distinct boxes = 1.3 codes/box",
+          "references many boxes with one code each: a footnote citing form lines, NOT an enumeration of one box's codes"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 9,
+          "matched_line_count": 9,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        86.152,
+        510.413,
+        179.767
+      ],
+      "bbox_pixels": [
+        118,
+        172,
+        1021,
+        360
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p14-section-2",
+      "label": "SECTION #2 | narrative_footnote | score=0.60",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 14,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 9,
+        "line_end": 12,
+        "row_count": 4,
+        "dominant_shape": "LINE_REF_AMOUNT",
+        "reasons": [
+          "every confident section on page 14 carries role narrative_footnote (36 rows); this 4-row fragment has no independent candidate and belongs to that section"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 4,
+          "matched_line_count": 4,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        190.906,
+        510.406,
+        240.873
+      ],
+      "bbox_pixels": [
+        118,
+        382,
+        1021,
+        482
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p14-section-3",
+      "label": "SECTION #3 | narrative_footnote | score=0.74",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 14,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 13,
+        "line_end": 19,
+        "row_count": 7,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "3 codes across 2 distinct boxes = 1.5 codes/box",
+          "references many boxes with one code each: a footnote citing form lines, NOT an enumeration of one box's codes"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 7,
+          "matched_line_count": 7,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        147.258,
+        510.413,
+        310.709
+      ],
+      "bbox_pixels": [
+        118,
+        295,
+        1021,
+        621
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p14-section-4",
+      "label": "SECTION #4 | narrative_footnote | score=0.74",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 14,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 20,
+        "line_end": 24,
+        "row_count": 5,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "2 codes across 2 distinct boxes = 1.0 codes/box",
+          "references many boxes with one code each: a footnote citing form lines, NOT an enumeration of one box's codes"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 5,
+          "matched_line_count": 5,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        155.988,
+        510.413,
+        380.545
+      ],
+      "bbox_pixels": [
+        118,
+        312,
+        1021,
+        761
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p14-section-5",
+      "label": "SECTION #5 | narrative_footnote | score=0.68",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 14,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 25,
+        "line_end": 27,
+        "row_count": 3,
+        "dominant_shape": "LINE_REF_AMOUNT",
+        "reasons": [
+          "1 data rows vs 0 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 3,
+          "matched_line_count": 3,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        409.143,
+        512.748,
+        441.652
+      ],
+      "bbox_pixels": [
+        118,
+        818,
+        1025,
+        883
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p14-section-6",
+      "label": "SECTION #6 | narrative_footnote | score=0.71",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 14,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 28,
+        "line_end": 32,
+        "row_count": 5,
+        "dominant_shape": "LINE_REF_AMOUNT",
+        "reasons": [
+          "1 data rows vs 0 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 5,
+          "matched_line_count": 5,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        138.529,
+        512.748,
+        485.299
+      ],
+      "bbox_pixels": [
+        118,
+        277,
+        1025,
+        971
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p14-section-7",
+      "label": "SECTION #7 | narrative_footnote | score=0.74",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 14,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 33,
+        "line_end": 36,
+        "row_count": 4,
+        "dominant_shape": "CODED_ENTRY",
+        "reasons": [
+          "4 codes across 3 distinct boxes = 1.3 codes/box",
+          "references many boxes with one code each: a footnote citing form lines, NOT an enumeration of one box's codes"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 4,
+          "matched_line_count": 4,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        487.709,
+        512.748,
+        520.217
+      ],
+      "bbox_pixels": [
+        118,
+        975,
+        1025,
+        1040
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p14-section-8",
+      "label": "SECTION #8 | narrative_footnote | score=0.68",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 14,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 37,
+        "line_end": 40,
+        "row_count": 3,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "1 data rows vs 0 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 3,
+          "matched_line_count": 3,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        531.356,
+        510.406,
+        563.865
+      ],
+      "bbox_pixels": [
+        118,
+        1063,
+        1021,
+        1128
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-15-footnotes_a",
+      "label": "PAGE | footnotes_a | worker=C",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 15,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "footnote"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p15-section-1",
+      "label": "SECTION #1 | narrative_footnote | score=0.60",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 15,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 8,
+        "row_count": 9,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "every confident section on page 15 carries role narrative_footnote (8 rows); this 9-row fragment has no independent candidate and belongs to that section"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 9,
+          "matched_line_count": 9,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        86.152,
+        510.413,
+        179.767
+      ],
+      "bbox_pixels": [
+        118,
+        172,
+        1021,
+        360
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p15-section-2",
+      "label": "SECTION #2 | narrative_footnote | score=0.60",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 15,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 9,
+        "line_end": 12,
+        "row_count": 4,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "every confident section on page 15 carries role narrative_footnote (8 rows); this 4-row fragment has no independent candidate and belongs to that section"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 4,
+          "matched_line_count": 4,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        190.906,
+        510.406,
+        240.873
+      ],
+      "bbox_pixels": [
+        118,
+        382,
+        1021,
+        482
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p15-section-3",
+      "label": "SECTION #3 | narrative_footnote | score=0.60",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 15,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 13,
+        "line_end": 19,
+        "row_count": 7,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "every confident section on page 15 carries role narrative_footnote (8 rows); this 7-row fragment has no independent candidate and belongs to that section"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 7,
+          "matched_line_count": 7,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        147.258,
+        510.413,
+        310.709
+      ],
+      "bbox_pixels": [
+        118,
+        295,
+        1021,
+        621
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p15-section-4",
+      "label": "SECTION #4 | narrative_footnote | score=0.68",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 15,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 20,
+        "line_end": 24,
+        "row_count": 5,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "unresolved 5-row fragment absorbed into adjacent section 5 (role narrative_footnote, score 0.68) on the same page"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 5,
+          "matched_line_count": 5,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        155.988,
+        510.413,
+        380.545
+      ],
+      "bbox_pixels": [
+        118,
+        312,
+        1021,
+        761
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p15-section-5",
+      "label": "SECTION #5 | narrative_footnote | score=0.68",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 15,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 25,
+        "line_end": 27,
+        "row_count": 3,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "1 data rows vs 0 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 3,
+          "matched_line_count": 3,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        409.143,
+        512.748,
+        441.652
+      ],
+      "bbox_pixels": [
+        118,
+        818,
+        1025,
+        883
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p15-section-6",
+      "label": "SECTION #6 | narrative_footnote | score=0.71",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 15,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 28,
+        "line_end": 32,
+        "row_count": 5,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "1 data rows vs 0 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 5,
+          "matched_line_count": 5,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        138.529,
+        512.748,
+        485.299
+      ],
+      "bbox_pixels": [
+        118,
+        277,
+        1025,
+        971
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p15-section-7",
+      "label": "SECTION #7 | narrative_footnote | score=0.71",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 15,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 33,
+        "line_end": 37,
+        "row_count": 4,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "unresolved 4-row fragment absorbed into adjacent section 6 (role narrative_footnote, score 0.71) on the same page"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 4,
+          "matched_line_count": 4,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        487.709,
+        512.748,
+        520.217
+      ],
+      "bbox_pixels": [
+        118,
+        975,
+        1025,
+        1040
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-16-footnotes_a",
+      "label": "PAGE | footnotes_a | worker=C",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 16,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "footnote"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p16-section-1",
+      "label": "SECTION #1 | narrative_footnote | score=0.84",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 16,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 7,
+        "row_count": 8,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "1 data rows vs 6 prose/heading rows",
+          "title corroborates ('footnote', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 8,
+          "matched_line_count": 8,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        86.152,
+        514.051,
+        179.767
+      ],
+      "bbox_pixels": [
+        118,
+        172,
+        1028,
+        360
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p16-section-2",
+      "label": "SECTION #2 | narrative_footnote | score=0.84",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 16,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 8,
+        "line_end": 11,
+        "row_count": 4,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "unresolved 4-row fragment absorbed into adjacent section 1 (role narrative_footnote, score 0.84) on the same page"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 4,
+          "matched_line_count": 4,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        190.906,
+        514.051,
+        232.144
+      ],
+      "bbox_pixels": [
+        118,
+        382,
+        1028,
+        464
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p16-section-3",
+      "label": "SECTION #3 | narrative_footnote | score=0.67",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 16,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 12,
+        "line_end": 26,
+        "row_count": 15,
+        "dominant_shape": "GRID_ROW",
+        "reasons": [
+          "6 data rows vs 5 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 15,
+          "matched_line_count": 15,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        243.283,
+        513.933,
+        415.463
+      ],
+      "bbox_pixels": [
+        118,
+        487,
+        1028,
+        831
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p16-section-4",
+      "label": "SECTION #4 | narrative_footnote | score=0.71",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 16,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 27,
+        "line_end": 44,
+        "row_count": 16,
+        "dominant_shape": "LINE_REF_AMOUNT",
+        "reasons": [
+          "3 data rows vs 9 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 17,
+          "matched_line_count": 17,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        426.602,
+        511.709,
+        642.43
+      ],
+      "bbox_pixels": [
+        118,
+        853,
+        1023,
+        1285
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-17-footnotes_a",
+      "label": "PAGE | footnotes_a | worker=C",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 17,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "footnote"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p17-section-1",
+      "label": "SECTION #1 | narrative_footnote | score=0.73",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 17,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 23,
+        "row_count": 23,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "2 data rows vs 18 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 24,
+          "matched_line_count": 24,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        86.152,
+        512.906,
+        363.086
+      ],
+      "bbox_pixels": [
+        118,
+        172,
+        1026,
+        726
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p17-section-2",
+      "label": "SECTION #2 | narrative_footnote | score=0.71",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 17,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 24,
+        "line_end": 37,
+        "row_count": 14,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "3 data rows vs 7 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 14,
+          "matched_line_count": 14,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        374.225,
+        490.954,
+        528.947
+      ],
+      "bbox_pixels": [
+        118,
+        748,
+        982,
+        1058
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p17-section-3",
+      "label": "SECTION #3 | narrative_footnote | score=0.67",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 17,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 38,
+        "line_end": 43,
+        "row_count": 5,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "2 data rows vs 2 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 5,
+          "matched_line_count": 5,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        540.086,
+        512.906,
+        598.783
+      ],
+      "bbox_pixels": [
+        118,
+        1080,
+        1026,
+        1198
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-18-footnotes_b",
+      "label": "PAGE | footnotes_b | worker=D",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 18,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "footnote"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p18-section-1",
+      "label": "SECTION #1 | narrative_footnote | score=0.71",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 18,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 4,
+        "row_count": 5,
+        "dominant_shape": "LINE_REF_AMOUNT",
+        "reasons": [
+          "1 data rows vs 3 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 5,
+          "matched_line_count": 5,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        86.152,
+        512.905,
+        144.849
+      ],
+      "bbox_pixels": [
+        118,
+        172,
+        1026,
+        290
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p18-section-2",
+      "label": "SECTION #2 | narrative_footnote | score=0.75",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 18,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 5,
+        "line_end": 15,
+        "row_count": 10,
+        "dominant_shape": null,
+        "reasons": [
+          "0 data rows vs 8 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 10,
+          "matched_line_count": 10,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        155.988,
+        500.261,
+        267.062
+      ],
+      "bbox_pixels": [
+        118,
+        312,
+        1001,
+        534
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-19-footnotes_b",
+      "label": "PAGE | footnotes_b | worker=D",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 19,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "footnote"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p19-section-1",
+      "label": "SECTION #1 | narrative_footnote | score=0.83",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 19,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 14,
+        "row_count": 15,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "3 data rows vs 10 prose/heading rows",
+          "title corroborates ('footnote', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 15,
+          "matched_line_count": 15,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        86.152,
+        496.737,
+        267.062
+      ],
+      "bbox_pixels": [
+        118,
+        172,
+        993,
+        534
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p19-section-2",
+      "label": "SECTION #2 | narrative_footnote | score=0.83",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 19,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 15,
+        "line_end": 16,
+        "row_count": 2,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "unresolved 2-row fragment absorbed into adjacent section 1 (role narrative_footnote, score 0.83) on the same page"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 2,
+          "matched_line_count": 2,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        278.201,
+        304.306,
+        293.25
+      ],
+      "bbox_pixels": [
+        118,
+        556,
+        609,
+        587
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p19-section-3",
+      "label": "SECTION #3 | narrative_footnote | score=0.86",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 19,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 17,
+        "line_end": 37,
+        "row_count": 20,
+        "dominant_shape": "ROSTER_ROW",
+        "reasons": [
+          "1 data rows vs 13 prose/heading rows",
+          "title corroborates ('footnote', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 20,
+          "matched_line_count": 20,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        295.66,
+        476.003,
+        572.594
+      ],
+      "bbox_pixels": [
+        118,
+        591,
+        952,
+        1145
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-20-footnotes_b",
+      "label": "PAGE | footnotes_b | worker=D",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 20,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "footnote"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p20-section-1",
+      "label": "SECTION #1 | narrative_footnote | score=0.73",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 20,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 9,
+        "row_count": 9,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "1 data rows vs 6 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 10,
+          "matched_line_count": 10,
+          "confidence": 0.9926
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        86.152,
+        514.051,
+        197.226
+      ],
+      "bbox_pixels": [
+        118,
+        172,
+        1028,
+        394
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p20-section-2",
+      "label": "SECTION #2 | narrative_footnote | score=0.74",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 20,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 10,
+        "line_end": 39,
+        "row_count": 23,
+        "dominant_shape": "LINE_REF_AMOUNT",
+        "reasons": [
+          "1 data rows vs 9 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 29,
+          "matched_line_count": 29,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        208.365,
+        457.793,
+        502.758
+      ],
+      "bbox_pixels": [
+        118,
+        417,
+        916,
+        1006
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-21-activity_schedule",
+      "label": "PAGE | activity_schedule | worker=E",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 21,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "activity_schedule"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p21-section-1",
+      "label": "SECTION #1 | activity_schedule | score=0.72",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 21,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 5,
+        "row_count": 6,
+        "dominant_shape": "ROSTER_ROW",
+        "reasons": [
+          "4 roster rows (entity list with yes/no flags), no amounts",
+          "title corroborates ('schedule of activities', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 6,
+          "matched_line_count": 6,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.248,
+        86.152,
+        509.224,
+        144.849
+      ],
+      "bbox_pixels": [
+        118,
+        172,
+        1018,
+        290
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p21-section-2",
+      "label": "SECTION #2 | activity_schedule | score=0.97",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 21,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 6,
+        "line_end": 56,
+        "row_count": 37,
+        "dominant_shape": "GRID_ROW",
+        "reasons": [
+          "35 grid rows with 4 amounts each (one per column)",
+          "no jurisdiction column",
+          "19 rows keyed by form box number",
+          "1 roster rows (activity list with flags)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 38,
+          "matched_line_count": 37,
+          "confidence": 0.9725
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        62.995,
+        155.988,
+        514.678,
+        494.029
+      ],
+      "bbox_pixels": [
+        126,
+        312,
+        1029,
+        988
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p21-section-3",
+      "label": "SECTION #3 | activity_schedule | score=0.92",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 21,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 57,
+        "line_end": 73,
+        "row_count": 4,
+        "dominant_shape": "GRID_ROW",
+        "reasons": [
+          "4 grid rows with 4 amounts each (one per column)",
+          "no jurisdiction column",
+          "2 rows keyed by form box number"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 11,
+          "matched_line_count": 11,
+          "confidence": 0.9845
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.248,
+        138.529,
+        514.674,
+        562.594
+      ],
+      "bbox_pixels": [
+        118,
+        277,
+        1029,
+        1125
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-22-state_schedules",
+      "label": "PAGE | state_schedules | worker=E",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 22,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "state_schedule"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        788.0,
+        608.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1576,
+        1216
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p22-section-1",
+      "label": "SECTION #1 | state_jurisdiction_grid | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 22,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 53,
+        "row_count": 51,
+        "dominant_shape": "JURISDICTION_ROW",
+        "reasons": [
+          "47 jurisdiction rows",
+          "columns keyed to form lines (per-line state allocation)",
+          "title corroborates ('state source income', 1.00)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 53,
+          "matched_line_count": 53,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        77.975,
+        720.436,
+        547.038
+      ],
+      "bbox_pixels": [
+        118,
+        156,
+        1441,
+        1094
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-23-state_schedules",
+      "label": "PAGE | state_schedules | worker=E",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 23,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "state_schedule"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        788.0,
+        608.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1576,
+        1216
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p23-section-1",
+      "label": "SECTION #1 | state_jurisdiction_grid | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 23,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 51,
+        "row_count": 51,
+        "dominant_shape": "JURISDICTION_ROW",
+        "reasons": [
+          "48 jurisdiction rows",
+          "columns keyed to form lines (per-line state allocation)",
+          "title corroborates ('distributive share of state', 0.85)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 51,
+          "matched_line_count": 51,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        78.568,
+        707.269,
+        530.092
+      ],
+      "bbox_pixels": [
+        118,
+        157,
+        1415,
+        1060
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-24-state_schedules",
+      "label": "PAGE | state_schedules | worker=E",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 24,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "state_schedule"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        788.0,
+        608.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1576,
+        1216
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p24-section-1",
+      "label": "SECTION #1 | state_jurisdiction_grid | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 24,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 51,
+        "row_count": 51,
+        "dominant_shape": "JURISDICTION_ROW",
+        "reasons": [
+          "48 jurisdiction rows",
+          "columns keyed to form lines (per-line state allocation)",
+          "title corroborates ('distributive share of state', 0.85)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 51,
+          "matched_line_count": 51,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        78.568,
+        707.269,
+        530.092
+      ],
+      "bbox_pixels": [
+        118,
+        157,
+        1415,
+        1060
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-25-state_schedules",
+      "label": "PAGE | state_schedules | worker=E",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 25,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "state_schedule"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        788.0,
+        608.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1576,
+        1216
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p25-section-1",
+      "label": "SECTION #1 | state_jurisdiction_grid | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 25,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 51,
+        "row_count": 51,
+        "dominant_shape": "JURISDICTION_ROW",
+        "reasons": [
+          "48 jurisdiction rows",
+          "columns keyed to form lines (per-line state allocation)",
+          "title corroborates ('distributive share of state', 0.85)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 51,
+          "matched_line_count": 51,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        78.568,
+        707.269,
+        530.092
+      ],
+      "bbox_pixels": [
+        118,
+        157,
+        1415,
+        1060
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-26-state_schedules",
+      "label": "PAGE | state_schedules | worker=E",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 26,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "state_schedule"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        788.0,
+        608.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1576,
+        1216
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p26-section-1",
+      "label": "SECTION #1 | state_jurisdiction_grid | score=1.00",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 26,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 51,
+        "row_count": 51,
+        "dominant_shape": "JURISDICTION_ROW",
+        "reasons": [
+          "48 jurisdiction rows",
+          "columns keyed to form lines (per-line state allocation)"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 51,
+          "matched_line_count": 51,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        78.568,
+        707.269,
+        530.092
+      ],
+      "bbox_pixels": [
+        118,
+        157,
+        1415,
+        1060
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-27-footnotes_b",
+      "label": "PAGE | footnotes_b | worker=D",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 27,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "footnote"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        4.0,
+        4.0,
+        608.0,
+        788.0
+      ],
+      "bbox_pixels": [
+        8,
+        8,
+        1216,
+        1576
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-27-state_schedules",
+      "label": "PAGE | state_schedules | worker=E",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 27,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "state_schedule"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        8.0,
+        8.0,
+        604.0,
+        784.0
+      ],
+      "bbox_pixels": [
+        16,
+        16,
+        1208,
+        1568
+      ]
+    },
+    {
+      "source": "page_manifest",
+      "id": "page-27-unresolved_requires_review",
+      "label": "PAGE | unresolved_requires_review | worker=R",
+      "status": "unresolved",
+      "severity": "warning",
+      "color": "#d97706",
+      "page": 27,
+      "method": null,
+      "layer": "page_classification",
+      "details": {
+        "whole_page": true,
+        "type": "unresolved"
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        12.0,
+        12.0,
+        600.0,
+        780.0
+      ],
+      "bbox_pixels": [
+        24,
+        24,
+        1200,
+        1560
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p27-section-1",
+      "label": "SECTION #1 | unresolved | score=0.00",
+      "status": "unresolved",
+      "severity": "warning",
+      "color": "#d97706",
+      "page": 27,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 0,
+        "line_end": 0,
+        "row_count": 1,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "no structural signal met its minimum"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 1,
+          "matched_line_count": 1,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.248,
+        84.374,
+        216.091,
+        90.694
+      ],
+      "bbox_pixels": [
+        118,
+        169,
+        432,
+        181
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p27-section-10",
+      "label": "SECTION #10 | narrative_footnote | score=0.75",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 27,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 43,
+        "line_end": 56,
+        "row_count": 13,
+        "dominant_shape": null,
+        "reasons": [
+          "0 data rows vs 12 prose/heading rows"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 13,
+          "matched_line_count": 13,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.13,
+        477.241,
+        462.23,
+        614.504
+      ],
+      "bbox_pixels": [
+        118,
+        954,
+        924,
+        1229
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p27-section-2",
+      "label": "SECTION #2 | state_tax_summary | score=0.81",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 27,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 1,
+        "line_end": 10,
+        "row_count": 10,
+        "dominant_shape": "JURISDICTION_ROW",
+        "reasons": [
+          "6 jurisdiction rows",
+          "columns are summary measures, not form lines"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 10,
+          "matched_line_count": 10,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.248,
+        103.264,
+        497.585,
+        186.758
+      ],
+      "bbox_pixels": [
+        118,
+        207,
+        995,
+        374
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p27-section-3",
+      "label": "SECTION #3 | state_tax_summary | score=0.81",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 27,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 11,
+        "line_end": 14,
+        "row_count": 4,
+        "dominant_shape": "JURISDICTION_ROW",
+        "reasons": [
+          "3 jurisdiction rows",
+          "columns are summary measures, not form lines"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 4,
+          "matched_line_count": 4,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.248,
+        189.168,
+        443.944,
+        221.676
+      ],
+      "bbox_pixels": [
+        118,
+        378,
+        888,
+        443
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p27-section-4",
+      "label": "SECTION #4 | state_tax_summary | score=0.88",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 27,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 15,
+        "line_end": 17,
+        "row_count": 3,
+        "dominant_shape": "JURISDICTION_ROW",
+        "reasons": [
+          "3 jurisdiction rows",
+          "columns are summary measures, not form lines"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 3,
+          "matched_line_count": 3,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.248,
+        224.086,
+        497.585,
+        247.865
+      ],
+      "bbox_pixels": [
+        118,
+        448,
+        995,
+        496
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p27-section-5",
+      "label": "SECTION #5 | unresolved | score=0.45",
+      "status": "unresolved",
+      "severity": "warning",
+      "color": "#d97706",
+      "page": 27,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 18,
+        "line_end": 19,
+        "row_count": 2,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "2 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "NO subtotal row and NO scope heading: an uncorroborated label/amount list is not a decomposition of any box",
+          "score 0.45 below minimum role confidence 0.50: evidence is too weak to assert a role even though no other role competed"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 2,
+          "matched_line_count": 2,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.248,
+        250.274,
+        281.917,
+        265.324
+      ],
+      "bbox_pixels": [
+        118,
+        501,
+        564,
+        531
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p27-section-6",
+      "label": "SECTION #6 | state_tax_summary | score=0.81",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 27,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 20,
+        "line_end": 28,
+        "row_count": 9,
+        "dominant_shape": "JURISDICTION_ROW",
+        "reasons": [
+          "7 jurisdiction rows",
+          "columns are summary measures, not form lines"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 9,
+          "matched_line_count": 9,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.248,
+        267.733,
+        443.944,
+        343.889
+      ],
+      "bbox_pixels": [
+        118,
+        535,
+        888,
+        688
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p27-section-7",
+      "label": "SECTION #7 | state_tax_summary | score=0.85",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 27,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 29,
+        "line_end": 37,
+        "row_count": 9,
+        "dominant_shape": "JURISDICTION_ROW",
+        "reasons": [
+          "8 jurisdiction rows",
+          "columns are summary measures, not form lines"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 9,
+          "matched_line_count": 9,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.248,
+        346.299,
+        443.944,
+        422.455
+      ],
+      "bbox_pixels": [
+        118,
+        693,
+        888,
+        845
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p27-section-8",
+      "label": "SECTION #8 | unresolved | score=0.45",
+      "status": "unresolved",
+      "severity": "warning",
+      "color": "#d97706",
+      "page": 27,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 38,
+        "line_end": 41,
+        "row_count": 4,
+        "dominant_shape": "LABEL_AMOUNT",
+        "reasons": [
+          "4 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+          "NO subtotal row and NO scope heading: an uncorroborated label/amount list is not a decomposition of any box",
+          "score 0.45 below minimum role confidence 0.50: evidence is too weak to assert a role even though no other role competed"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 4,
+          "matched_line_count": 4,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.248,
+        424.864,
+        283.574,
+        457.373
+      ],
+      "bbox_pixels": [
+        118,
+        850,
+        567,
+        915
+      ]
+    },
+    {
+      "source": "section_manifest",
+      "id": "p27-section-9",
+      "label": "SECTION #9 | state_tax_summary | score=0.60",
+      "status": "classification",
+      "severity": "structural",
+      "color": "#7c3aed",
+      "page": 27,
+      "method": null,
+      "layer": "section_classification",
+      "details": {
+        "line_start": 42,
+        "line_end": 42,
+        "row_count": 1,
+        "dominant_shape": "JURISDICTION_ROW",
+        "reasons": [
+          "every confident section on page 27 carries role state_tax_summary (35 rows); this 1-row fragment has no independent candidate and belongs to that section"
+        ],
+        "derive_from_lines": true,
+        "geometry": {
+          "eligible_line_count": 1,
+          "matched_line_count": 1,
+          "confidence": 1.0
+        }
+      },
+      "placement": "box",
+      "bbox_pdf": [
+        59.248,
+        459.782,
+        495.928,
+        466.102
+      ],
+      "bbox_pixels": [
+        118,
+        920,
+        992,
+        932
+      ]
+    }
+  ]
+}

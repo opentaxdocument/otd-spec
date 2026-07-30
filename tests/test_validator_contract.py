@@ -352,6 +352,22 @@ def build_cases():
         add_unknown_extension,
     )
 
+    def use_legacy_footnote_wire_type(document):
+        statement = first_statement(document)
+        if statement is None:
+            raise RuntimeError("baseline has no statement")
+        statement["type"] = "footnote"
+
+
+    add_case(
+        cases,
+        "legacy_footnote_wire_type_rejected",
+        "Legacy type: footnote requires migration to a canonical statement node.",
+        EXIT_INVALID_DOCUMENT,
+        use_legacy_footnote_wire_type,
+    )
+
+
     def add_unknown_statement_classification(document):
         document.setdefault("statements", []).append(
             {
@@ -581,7 +597,7 @@ def main():
             print(f"  {name}")
         return 1
 
-    print("ALL 33 CONTRACT CASES PASSED; NO DEFERRED CASES REMAIN.")
+    print(f"ALL {len(cases)} CONTRACT CASES PASSED; NO DEFERRED CASES REMAIN.")
     return 0
 
 

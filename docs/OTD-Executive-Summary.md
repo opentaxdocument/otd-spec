@@ -67,15 +67,18 @@ in YAML. It is designed so that:
 | `spec/otd-parser-spec.md` | **Parser guide** — how to build software that consumes OTD documents |
 | `proof/otd_round_trip_proof.py` | **Bounded proof-of-concept** — starts from an in-memory structured K-1 fixture; it does not test PDF extraction or the production assembler |
 | `proof/proof-emitted.otd.yaml` | **Example output** — a realistic synthetic K-1 OTD document with §199A, Form 926, and multi-code boxes |
-| `proof/proof-results.txt` | **Proof snapshot** — five bounded phases passed, including normalized serialization equivalence |
+| `proof/proof-results.txt` | **Proof snapshot** — five bounded operations passed, including normalized serialization equivalence |
 
 ### Current Assurance Boundary
 
-The tracked validator matrix has 19 blocking checks and 12 strict expected
-failures recording deferred contract work. PDF extraction regression coverage
-is limited to two machine-local 2025 K-1 fixtures. The project is suitable for
-draft design and controlled human-reviewed experiments, but is not yet
-certified for unattended extraction or general OTD conformance.
+The tracked validator matrix has 34 blocking cases and no deferred cases.
+PDF extraction regression coverage uses two repository-local 2025 K-1 fixtures:
+an official blank IRS form and an approved synthetic 27-page package. The
+diagnostic renderer produces color-coded page evidence and a portable index.
+
+The project is suitable for draft design and controlled human-reviewed
+experiments, but this bounded corpus does not certify unattended extraction,
+all preparer layouts, or general OTD conformance.
 
 ## Key Design Decisions
 

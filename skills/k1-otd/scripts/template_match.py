@@ -59,7 +59,7 @@ FRAME_MAX = 9.5
 FRAME_COUNT_TOLERANCE = 1
 PAGE_SIZE_TOLERANCE_PT = 2.0
 TIE_SCORE_EPSILON = 0.01
-DEFAULT_OUTDIR = "D:/SecondWind/Artifacts/20260727-otd-k1-alignment/probes/out"
+DEFAULT_OUTDIR = "template-fit"
 
 
 def load_grammar_fit_signals(path):
@@ -76,7 +76,7 @@ def load_grammar_fit_signals(path):
     fit = doc.get("fit_signals", {}) or {}
 
     return {
-        "grammar_path": str(path),
+        "grammar_path": Path(path).name,
         "grammar_id": "%s-%s" % (form.get("form_name", "?"), form.get("tax_year", "?")),
         "schema_version": doc.get("schema_version"),
         "tax_year": form.get("tax_year"),
@@ -314,7 +314,7 @@ def evaluate_document(pdf_path, grammar_paths, page_number=1):
     evidence, error = extract_document_evidence(pdf_path, page_number)
 
     report = {
-        "pdf_path": str(pdf_path),
+        "pdf_path": Path(pdf_path).name,
         "page_number": page_number,
         "evaluable": evidence is not None,
         "evaluation_error": error,

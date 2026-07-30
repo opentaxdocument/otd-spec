@@ -1,0 +1,2944 @@
+{
+  "total_pages": 27,
+  "total_sections": 95,
+  "signatures": "page-signatures.yaml",
+  "sections": [
+    {
+      "page": 1,
+      "continued_pages": [],
+      "index": 1,
+      "section": "face_page",
+      "role": "face_page",
+      "score": 1.0,
+      "margin": 0.258,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 63,
+      "row_count": 52,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 0,
+      "heading": null,
+      "shapes": {
+        "LABEL_AMOUNT": 1,
+        "PROSE": 50,
+        "NOISE": 12,
+        "ROSTER_ROW": 1
+      },
+      "candidates": {
+        "face_page": 1.0,
+        "narrative_footnote": 0.742
+      },
+      "title_effect": null,
+      "reasons": [
+        "form identity marker present",
+        "3 part headings"
+      ]
+    },
+    {
+      "page": 1,
+      "continued_pages": [],
+      "index": 2,
+      "section": "face_page",
+      "role": "face_page",
+      "score": 0.8,
+      "margin": 0.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": true,
+      "line_start": 64,
+      "line_end": 66,
+      "row_count": 2,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": null,
+      "shapes": {
+        "LABEL_AMOUNT": 1,
+        "GRID_ROW": 1,
+        "NOISE": 1
+      },
+      "candidates": {},
+      "title_effect": null,
+      "reasons": [
+        "page 1 carries the form face; every section on a face page belongs to the face artifact and must not route elsewhere"
+      ]
+    },
+    {
+      "page": 1,
+      "continued_pages": [],
+      "index": 3,
+      "section": "face_page",
+      "role": "face_page",
+      "score": 0.8,
+      "margin": 0.45,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": true,
+      "line_start": 67,
+      "line_end": 83,
+      "row_count": 14,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": null,
+      "shapes": {
+        "LABEL_AMOUNT": 13,
+        "NOISE": 3,
+        "PROSE": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.45
+      },
+      "title_effect": null,
+      "reasons": [
+        "page 1 carries the form face; every section on a face page belongs to the face artifact and must not route elsewhere"
+      ]
+    },
+    {
+      "page": 1,
+      "continued_pages": [],
+      "index": 4,
+      "section": "face_page",
+      "role": "face_page",
+      "score": 0.8,
+      "margin": 0.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": true,
+      "line_start": 84,
+      "line_end": 85,
+      "row_count": 2,
+      "dominant_shape": "GRID_ROW",
+      "trailing_amount_mode": 2,
+      "heading": "5981 JUNIPER RD",
+      "shapes": {
+        "HEADING": 1,
+        "GRID_ROW": 1
+      },
+      "candidates": {},
+      "title_effect": null,
+      "reasons": [
+        "page 1 carries the form face; every section on a face page belongs to the face artifact and must not route elsewhere"
+      ]
+    },
+    {
+      "page": 1,
+      "continued_pages": [],
+      "index": 5,
+      "section": "face_page",
+      "role": "face_page",
+      "score": 0.8,
+      "margin": 0.45,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": true,
+      "line_start": 86,
+      "line_end": 96,
+      "row_count": 10,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": null,
+      "shapes": {
+        "LABEL_AMOUNT": 10,
+        "NOISE": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.45
+      },
+      "title_effect": null,
+      "reasons": [
+        "page 1 carries the form face; every section on a face page belongs to the face artifact and must not route elsewhere"
+      ]
+    },
+    {
+      "page": 1,
+      "continued_pages": [],
+      "index": 6,
+      "section": "face_page",
+      "role": "face_page",
+      "score": 0.833,
+      "margin": 0.833,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": true,
+      "line_start": 97,
+      "line_end": 104,
+      "row_count": 7,
+      "dominant_shape": "GRID_ROW",
+      "trailing_amount_mode": 2,
+      "heading": "* STMT * STMT",
+      "shapes": {
+        "HEADING": 1,
+        "GRID_ROW": 4,
+        "LABEL_AMOUNT": 2,
+        "NOISE": 1
+      },
+      "candidates": {
+        "activity_schedule": 0.833
+      },
+      "title_effect": null,
+      "reasons": [
+        "page 1 carries the form face; every section on a face page belongs to the face artifact and must not route elsewhere"
+      ]
+    },
+    {
+      "page": 1,
+      "continued_pages": [],
+      "index": 7,
+      "section": "face_page",
+      "role": "face_page",
+      "score": 0.8,
+      "margin": 0.45,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": true,
+      "line_start": 105,
+      "line_end": 113,
+      "row_count": 8,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": null,
+      "shapes": {
+        "LABEL_AMOUNT": 7,
+        "PROSE": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.45
+      },
+      "title_effect": null,
+      "reasons": [
+        "page 1 carries the form face; every section on a face page belongs to the face artifact and must not route elsewhere"
+      ]
+    },
+    {
+      "page": 2,
+      "continued_pages": [],
+      "index": 1,
+      "section": "overflow_statements",
+      "role": "coded_overflow",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 12,
+      "row_count": 13,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "SCHEDULE K-1 FORM 1065 - OVERFLOW STATEMENTS | SCHEDULE K-1 FORM 1065 - OVERFLOW STATEMENTS | LINE 11 OVERFLOW | DESCRIPTION VALUE",
+      "shapes": {
+        "HEADING": 4,
+        "CODED_ENTRY": 9
+      },
+      "candidates": {
+        "coded_overflow": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "9 coded-entry rows (box+code+one amount), 100% of data",
+        "9 codes across 1 box(es) = 9.0 codes/box (enumeration within a box)",
+        "no subtotal rows (an overflow list does not total)",
+        "title corroborates ('overflow statement', 1.00)"
+      ]
+    },
+    {
+      "page": 2,
+      "continued_pages": [],
+      "index": 2,
+      "section": "overflow_statements",
+      "role": "coded_overflow",
+      "score": 0.94,
+      "margin": 0.94,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 14,
+      "line_end": 26,
+      "row_count": 9,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "DISTRIBUTIONS TREATED AS SALES OR EXCHANGES)",
+      "shapes": {
+        "HEADING": 1,
+        "CODED_ENTRY": 8,
+        "NOISE": 2
+      },
+      "candidates": {
+        "coded_overflow": 0.94
+      },
+      "title_effect": null,
+      "reasons": [
+        "8 coded-entry rows (box+code+one amount), 100% of data",
+        "8 codes across 1 box(es) = 8.0 codes/box (enumeration within a box)",
+        "no subtotal rows (an overflow list does not total)"
+      ]
+    },
+    {
+      "page": 2,
+      "continued_pages": [],
+      "index": 3,
+      "section": "overflow_statements",
+      "role": "coded_overflow",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 27,
+      "line_end": 51,
+      "row_count": 24,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 13 OVERFLOW | DESCRIPTION VALUE",
+      "shapes": {
+        "HEADING": 2,
+        "CODED_ENTRY": 22
+      },
+      "candidates": {
+        "coded_overflow": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "22 coded-entry rows (box+code+one amount), 100% of data",
+        "22 codes across 1 box(es) = 22.0 codes/box (enumeration within a box)",
+        "no subtotal rows (an overflow list does not total)",
+        "title corroborates ('overflow', 1.00)"
+      ]
+    },
+    {
+      "page": 3,
+      "continued_pages": [],
+      "index": 1,
+      "section": "overflow_statements",
+      "role": "coded_overflow",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 6,
+      "row_count": 7,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "SCHEDULE K-1 FORM 1065 - OVERFLOW STATEMENTS | SCHEDULE K-1 FORM 1065 - OVERFLOW STATEMENTS",
+      "shapes": {
+        "HEADING": 2,
+        "CODED_ENTRY": 5
+      },
+      "candidates": {
+        "coded_overflow": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "5 coded-entry rows (box+code+one amount), 100% of data",
+        "5 codes across 1 box(es) = 5.0 codes/box (enumeration within a box)",
+        "no subtotal rows (an overflow list does not total)",
+        "title corroborates ('overflow statement', 1.00)"
+      ]
+    },
+    {
+      "page": 3,
+      "continued_pages": [],
+      "index": 2,
+      "section": "overflow_statements",
+      "role": "coded_overflow",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 7,
+      "line_end": 10,
+      "row_count": 4,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 14 OVERFLOW | DESCRIPTION VALUE",
+      "shapes": {
+        "HEADING": 2,
+        "CODED_ENTRY": 2
+      },
+      "candidates": {
+        "coded_overflow": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "2 coded-entry rows (box+code+one amount), 100% of data",
+        "2 codes across 1 box(es) = 2.0 codes/box (enumeration within a box)",
+        "no subtotal rows (an overflow list does not total)",
+        "title corroborates ('overflow', 1.00)"
+      ]
+    },
+    {
+      "page": 3,
+      "continued_pages": [],
+      "index": 3,
+      "section": "overflow_statements",
+      "role": "coded_overflow",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 11,
+      "line_end": 27,
+      "row_count": 17,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 15 OVERFLOW | DESCRIPTION VALUE",
+      "shapes": {
+        "HEADING": 2,
+        "CODED_ENTRY": 15
+      },
+      "candidates": {
+        "coded_overflow": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "15 coded-entry rows (box+code+one amount), 100% of data",
+        "15 codes across 1 box(es) = 15.0 codes/box (enumeration within a box)",
+        "no subtotal rows (an overflow list does not total)",
+        "title corroborates ('overflow', 1.00)"
+      ]
+    },
+    {
+      "page": 3,
+      "continued_pages": [],
+      "index": 4,
+      "section": "overflow_statements",
+      "role": "coded_overflow",
+      "score": 0.94,
+      "margin": 0.94,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 29,
+      "line_end": 48,
+      "row_count": 15,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "PROJECT CREDIT ALLOCATED FROM COOPERATIVES",
+      "shapes": {
+        "HEADING": 1,
+        "CODED_ENTRY": 14,
+        "NOISE": 2
+      },
+      "candidates": {
+        "coded_overflow": 0.94
+      },
+      "title_effect": null,
+      "reasons": [
+        "14 coded-entry rows (box+code+one amount), 100% of data",
+        "14 codes across 1 box(es) = 14.0 codes/box (enumeration within a box)",
+        "no subtotal rows (an overflow list does not total)"
+      ]
+    },
+    {
+      "page": 4,
+      "continued_pages": [],
+      "index": 1,
+      "section": "overflow_statements",
+      "role": "coded_overflow",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 25,
+      "row_count": 26,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "SCHEDULE K-1 FORM 1065 - OVERFLOW STATEMENTS | SCHEDULE K-1 FORM 1065 - OVERFLOW STATEMENTS",
+      "shapes": {
+        "HEADING": 2,
+        "CODED_ENTRY": 23,
+        "GRID_ROW": 1
+      },
+      "candidates": {
+        "coded_overflow": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "23 coded-entry rows (box+code+one amount), 96% of data",
+        "24 codes across 1 box(es) = 24.0 codes/box (enumeration within a box)",
+        "no subtotal rows (an overflow list does not total)",
+        "title corroborates ('overflow statement', 1.00)"
+      ]
+    },
+    {
+      "page": 4,
+      "continued_pages": [],
+      "index": 2,
+      "section": "overflow_statements",
+      "role": "coded_overflow",
+      "score": 1.0,
+      "margin": 0.0,
+      "score_source": "inherited_from_absorbing_section",
+      "absorbed_from": 1,
+      "collapsed_into_face": false,
+      "line_start": 26,
+      "line_end": 26,
+      "row_count": 1,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": null,
+      "shapes": {
+        "CODED_ENTRY": 1
+      },
+      "candidates": {},
+      "title_effect": null,
+      "reasons": [
+        "unresolved 1-row fragment absorbed into adjacent section 1 (role coded_overflow, score 1.00) on the same page"
+      ]
+    },
+    {
+      "page": 4,
+      "continued_pages": [],
+      "index": 3,
+      "section": "overflow_statements",
+      "role": "coded_overflow",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 27,
+      "line_end": 32,
+      "row_count": 6,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 17 OVERFLOW | DESCRIPTION VALUE",
+      "shapes": {
+        "HEADING": 2,
+        "CODED_ENTRY": 4
+      },
+      "candidates": {
+        "coded_overflow": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "4 coded-entry rows (box+code+one amount), 100% of data",
+        "4 codes across 1 box(es) = 4.0 codes/box (enumeration within a box)",
+        "no subtotal rows (an overflow list does not total)",
+        "title corroborates ('overflow', 1.00)"
+      ]
+    },
+    {
+      "page": 4,
+      "continued_pages": [],
+      "index": 4,
+      "section": "overflow_statements",
+      "role": "coded_overflow",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 33,
+      "line_end": 47,
+      "row_count": 14,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 20 OVERFLOW | DESCRIPTION VALUE",
+      "shapes": {
+        "HEADING": 2,
+        "CODED_ENTRY": 12
+      },
+      "candidates": {
+        "coded_overflow": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "12 coded-entry rows (box+code+one amount), 100% of data",
+        "12 codes across 1 box(es) = 12.0 codes/box (enumeration within a box)",
+        "no subtotal rows (an overflow list does not total)",
+        "title corroborates ('overflow', 1.00)"
+      ]
+    },
+    {
+      "page": 5,
+      "continued_pages": [],
+      "index": 1,
+      "section": "overflow_statements",
+      "role": "coded_overflow",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 29,
+      "row_count": 30,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "SCHEDULE K-1 FORM 1065 - OVERFLOW STATEMENTS | SCHEDULE K-1 FORM 1065 - OVERFLOW STATEMENTS",
+      "shapes": {
+        "HEADING": 2,
+        "CODED_ENTRY": 28
+      },
+      "candidates": {
+        "coded_overflow": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "28 coded-entry rows (box+code+one amount), 100% of data",
+        "28 codes across 1 box(es) = 28.0 codes/box (enumeration within a box)",
+        "no subtotal rows (an overflow list does not total)",
+        "title corroborates ('overflow statement', 1.00)"
+      ]
+    },
+    {
+      "page": 5,
+      "continued_pages": [],
+      "index": 2,
+      "section": "overflow_statements",
+      "role": "coded_overflow",
+      "score": 0.94,
+      "margin": 0.94,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 30,
+      "line_end": 40,
+      "row_count": 10,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 20AR - OTHER INFORMATION - IRA DISCLOSURE",
+      "shapes": {
+        "HEADING": 1,
+        "CODED_ENTRY": 9
+      },
+      "candidates": {
+        "coded_overflow": 0.94
+      },
+      "title_effect": null,
+      "reasons": [
+        "9 coded-entry rows (box+code+one amount), 100% of data",
+        "10 codes across 1 box(es) = 10.0 codes/box (enumeration within a box)",
+        "no subtotal rows (an overflow list does not total)"
+      ]
+    },
+    {
+      "page": 6,
+      "continued_pages": [],
+      "index": 1,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 8,
+      "row_count": 9,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE ITEM DETAILS | LINE ITEM DETAILS | LINE 01 - ORDINARY BUSINESS INCOME (LOSS) DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "HEADING": 3,
+        "SCOPE_HEADING": 1,
+        "LABEL_AMOUNT": 4,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "4 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line",
+        "title corroborates ('line item detail', 1.00)"
+      ]
+    },
+    {
+      "page": 6,
+      "continued_pages": [],
+      "index": 2,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.8,
+      "margin": 0.8,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 9,
+      "line_end": 15,
+      "row_count": 7,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 05 - INTEREST INCOME DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 5
+      },
+      "candidates": {
+        "line_item_detail": 0.8
+      },
+      "title_effect": null,
+      "reasons": [
+        "5 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 6,
+      "continued_pages": [],
+      "index": 3,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.8,
+      "margin": 0.8,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 16,
+      "line_end": 20,
+      "row_count": 5,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "INTEREST INCOME - TAX EXEMPT",
+      "shapes": {
+        "HEADING": 1,
+        "LABEL_AMOUNT": 3,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.8
+      },
+      "title_effect": null,
+      "reasons": [
+        "3 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value"
+      ]
+    },
+    {
+      "page": 6,
+      "continued_pages": [],
+      "index": 4,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.98,
+      "margin": 0.98,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 21,
+      "line_end": 26,
+      "row_count": 6,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 06A - ORDINARY DIVIDENDS DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 3,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.98
+      },
+      "title_effect": null,
+      "reasons": [
+        "3 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 6,
+      "continued_pages": [],
+      "index": 5,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.98,
+      "margin": 0.98,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 27,
+      "line_end": 32,
+      "row_count": 6,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 06B - QUALIFIED DIVIDENDS DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 3,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.98
+      },
+      "title_effect": null,
+      "reasons": [
+        "3 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 6,
+      "continued_pages": [],
+      "index": 6,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.98,
+      "margin": 0.98,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 33,
+      "line_end": 39,
+      "row_count": 6,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 08 - NET SHORT-TERM CAPITAL GAIN (LOSS) DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 3,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.98
+      },
+      "title_effect": null,
+      "reasons": [
+        "3 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 7,
+      "continued_pages": [],
+      "index": 1,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 17,
+      "row_count": 18,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE ITEM DETAILS | LINE ITEM DETAILS | LINE 09A - NET LONG-TERM CAPITAL GAIN (LOSS) DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "HEADING": 3,
+        "SCOPE_HEADING": 1,
+        "LABEL_AMOUNT": 13,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "13 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line",
+        "title corroborates ('line item detail', 1.00)"
+      ]
+    },
+    {
+      "page": 7,
+      "continued_pages": [],
+      "index": 2,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.98,
+      "margin": 0.98,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 18,
+      "line_end": 22,
+      "row_count": 5,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 09C - UNRECAPTURED SECTION 1250 GAIN DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 2,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.98
+      },
+      "title_effect": null,
+      "reasons": [
+        "2 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 7,
+      "continued_pages": [],
+      "index": 3,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.98,
+      "margin": 0.98,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 23,
+      "line_end": 34,
+      "row_count": 12,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 11A - OTHER INCOME (LOSS) - OTHER PORTFOLIO INCOME (LOSS) DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 9,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.98
+      },
+      "title_effect": null,
+      "reasons": [
+        "9 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 7,
+      "continued_pages": [],
+      "index": 4,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.98,
+      "margin": 0.98,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 35,
+      "line_end": 42,
+      "row_count": 7,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 11C - OTHER INCOME (LOSS) - SEC. 1256 CONTRACTS & STRADDLES DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 4,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.98
+      },
+      "title_effect": null,
+      "reasons": [
+        "4 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 8,
+      "continued_pages": [],
+      "index": 1,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 13,
+      "row_count": 14,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE ITEM DETAILS | LINE ITEM DETAILS | LINE 11S - OTHER INCOME (LOSS) - NON-PORTFOLIO CAPITAL GAIN (LOSS) DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "HEADING": 3,
+        "SCOPE_HEADING": 1,
+        "LABEL_AMOUNT": 9,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "9 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line",
+        "title corroborates ('line item detail', 1.00)"
+      ]
+    },
+    {
+      "page": 8,
+      "continued_pages": [],
+      "index": 2,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.8,
+      "margin": 0.8,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 14,
+      "line_end": 44,
+      "row_count": 30,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 11ZZ - OTHER INCOME (LOSS) - OTHER DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 28
+      },
+      "candidates": {
+        "line_item_detail": 0.8
+      },
+      "title_effect": null,
+      "reasons": [
+        "28 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 9,
+      "continued_pages": [],
+      "index": 1,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.92,
+      "margin": 0.92,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 20,
+      "row_count": 21,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE ITEM DETAILS | LINE ITEM DETAILS",
+      "shapes": {
+        "HEADING": 2,
+        "LABEL_AMOUNT": 18,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.92
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "18 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "title corroborates ('line item detail', 1.00)"
+      ]
+    },
+    {
+      "page": 9,
+      "continued_pages": [],
+      "index": 2,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.98,
+      "margin": 0.98,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 21,
+      "line_end": 27,
+      "row_count": 7,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 13AE - OTHER DEDUCTIONS - DEDUCTIONS - PORTFOLIO INCOME DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 4,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.98
+      },
+      "title_effect": "unsupported_by_structure",
+      "reasons": [
+        "4 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 9,
+      "continued_pages": [],
+      "index": 3,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.98,
+      "margin": 0.98,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 28,
+      "line_end": 35,
+      "row_count": 8,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 13H - OTHER DEDUCTIONS - INVESTMENT INTEREST EXPENSE DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 5,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.98
+      },
+      "title_effect": null,
+      "reasons": [
+        "5 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 9,
+      "continued_pages": [],
+      "index": 4,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.98,
+      "margin": 0.98,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 36,
+      "line_end": 45,
+      "row_count": 9,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 13R - OTHER DEDUCTIONS - PENSIONS AND IRAS DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 6,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.98
+      },
+      "title_effect": null,
+      "reasons": [
+        "6 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 10,
+      "continued_pages": [],
+      "index": 1,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.885,
+      "margin": 0.885,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 11,
+      "row_count": 12,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE ITEM DETAILS | LINE ITEM DETAILS | LINE 13ZZ - OTHER DEDUCTIONS - OTHER DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "HEADING": 3,
+        "SCOPE_HEADING": 1,
+        "LABEL_AMOUNT": 7,
+        "GRID_ROW": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.885
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "7 label/line-ref component rows, 88% of ALL rows (prose included in denominator)",
+        "1 scope heading(s) naming a single line",
+        "title corroborates ('line item detail', 1.00)"
+      ]
+    },
+    {
+      "page": 10,
+      "continued_pages": [],
+      "index": 2,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.885,
+      "margin": 0.0,
+      "score_source": "inherited_from_absorbing_section",
+      "absorbed_from": 1,
+      "collapsed_into_face": false,
+      "line_start": 12,
+      "line_end": 13,
+      "row_count": 2,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": null,
+      "shapes": {
+        "LABEL_AMOUNT": 1,
+        "TOTAL": 1
+      },
+      "candidates": {},
+      "title_effect": null,
+      "reasons": [
+        "unresolved 2-row fragment absorbed into adjacent section 1 (role line_item_detail, score 0.89) on the same page"
+      ]
+    },
+    {
+      "page": 10,
+      "continued_pages": [],
+      "index": 3,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.6,
+      "margin": 0.0,
+      "score_source": "page_dominant_unanimous",
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 14,
+      "line_end": 16,
+      "row_count": 3,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 20AG - OTHER INFORMATION - GROSS RECEIPTS FOR SECTION 448(C) DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 1
+      },
+      "candidates": {},
+      "title_effect": null,
+      "reasons": [
+        "every confident section on page 10 carries role line_item_detail (29 rows); this 3-row fragment has no independent candidate and belongs to that section"
+      ]
+    },
+    {
+      "page": 10,
+      "continued_pages": [],
+      "index": 4,
+      "section": "unresolved_requires_review",
+      "role": "unresolved",
+      "score": 0.0,
+      "margin": 0.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 17,
+      "line_end": 21,
+      "row_count": 5,
+      "dominant_shape": "GRID_ROW",
+      "trailing_amount_mode": 2,
+      "heading": null,
+      "shapes": {
+        "GRID_ROW": 4,
+        "TOTAL": 1
+      },
+      "candidates": {},
+      "title_effect": null,
+      "reasons": [
+        "no structural signal met its minimum"
+      ]
+    },
+    {
+      "page": 10,
+      "continued_pages": [],
+      "index": 5,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.98,
+      "margin": 0.98,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 22,
+      "line_end": 27,
+      "row_count": 6,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 20P - OTHER INFORMATION - SECTION 453A(C) INFORMATION DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 3,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.98
+      },
+      "title_effect": null,
+      "reasons": [
+        "3 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 10,
+      "continued_pages": [],
+      "index": 6,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.98,
+      "margin": 0.98,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 28,
+      "line_end": 39,
+      "row_count": 11,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 20T - OTHER INFORMATION - DEPLETION INFORMATION - OIL AND GAS DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 8,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.98
+      },
+      "title_effect": null,
+      "reasons": [
+        "8 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 11,
+      "continued_pages": [],
+      "index": 1,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.92,
+      "margin": 0.92,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 43,
+      "row_count": 43,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE ITEM DETAILS | LINE ITEM DETAILS | LINE 20V - OTHER INFORMATION - UNRELATED BUSINESS TAXABLE INCOME DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "HEADING": 3,
+        "SCOPE_HEADING": 1,
+        "LABEL_AMOUNT": 39
+      },
+      "candidates": {
+        "line_item_detail": 0.92
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "39 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 scope heading(s) naming a single line",
+        "title corroborates ('line item detail', 1.00)"
+      ]
+    },
+    {
+      "page": 12,
+      "continued_pages": [],
+      "index": 1,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.57,
+      "margin": 0.57,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 9,
+      "row_count": 10,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE ITEM DETAILS | LINE ITEM DETAILS",
+      "shapes": {
+        "HEADING": 2,
+        "LABEL_AMOUNT": 7,
+        "PROSE": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.57
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "7 label/line-ref component rows, 88% of ALL rows (prose included in denominator)",
+        "NO subtotal row and NO scope heading: an uncorroborated label/amount list is not a decomposition of any box",
+        "title corroborates ('line item detail', 1.00)"
+      ]
+    },
+    {
+      "page": 12,
+      "continued_pages": [],
+      "index": 2,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.8,
+      "margin": 0.8,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 10,
+      "line_end": 36,
+      "row_count": 26,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "DISTRIBUTIONS TREATED AS SALES OR EXCHANGES)",
+      "shapes": {
+        "HEADING": 1,
+        "LABEL_AMOUNT": 24,
+        "NOISE": 1,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.8
+      },
+      "title_effect": null,
+      "reasons": [
+        "24 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value"
+      ]
+    },
+    {
+      "page": 12,
+      "continued_pages": [],
+      "index": 3,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.8,
+      "margin": 0.8,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 37,
+      "line_end": 52,
+      "row_count": 15,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 20Z - OTHER INFORMATION - SECTION 199A INFORMATION DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 13
+      },
+      "candidates": {
+        "line_item_detail": 0.8
+      },
+      "title_effect": null,
+      "reasons": [
+        "13 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 13,
+      "continued_pages": [],
+      "index": 1,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.57,
+      "margin": 0.57,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 3,
+      "row_count": 4,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE ITEM DETAILS | LINE ITEM DETAILS",
+      "shapes": {
+        "HEADING": 2,
+        "LABEL_AMOUNT": 2
+      },
+      "candidates": {
+        "line_item_detail": 0.57
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "2 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "NO subtotal row and NO scope heading: an uncorroborated label/amount list is not a decomposition of any box",
+        "title corroborates ('line item detail', 1.00)"
+      ]
+    },
+    {
+      "page": 13,
+      "continued_pages": [],
+      "index": 2,
+      "section": "line_item_details",
+      "role": "line_item_detail",
+      "score": 0.98,
+      "margin": 0.98,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 4,
+      "line_end": 10,
+      "row_count": 6,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 21 - FOREIGN TAXES PAID OR ACCRUED DETAIL | DESCRIPTION VALUE",
+      "shapes": {
+        "SCOPE_HEADING": 1,
+        "HEADING": 1,
+        "LABEL_AMOUNT": 3,
+        "TOTAL": 1
+      },
+      "candidates": {
+        "line_item_detail": 0.98
+      },
+      "title_effect": null,
+      "reasons": [
+        "3 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "1 subtotal row(s): components sum to a box value",
+        "1 scope heading(s) naming a single line"
+      ]
+    },
+    {
+      "page": 14,
+      "continued_pages": [],
+      "index": 1,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.74,
+      "margin": 0.295,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 8,
+      "row_count": 9,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "EFFECTIVELY CONNECTED INCOME",
+      "shapes": {
+        "HEADING": 1,
+        "PROSE": 1,
+        "LINE_REF_AMOUNT": 3,
+        "CODED_ENTRY": 4
+      },
+      "candidates": {
+        "narrative_footnote": 0.74,
+        "line_item_detail": 0.445
+      },
+      "title_effect": null,
+      "reasons": [
+        "4 codes across 3 distinct boxes = 1.3 codes/box",
+        "references many boxes with one code each: a footnote citing form lines, NOT an enumeration of one box's codes"
+      ]
+    },
+    {
+      "page": 14,
+      "continued_pages": [],
+      "index": 2,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.6,
+      "margin": 0.0,
+      "score_source": "page_dominant_unanimous",
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 9,
+      "line_end": 12,
+      "row_count": 4,
+      "dominant_shape": "LINE_REF_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "FIXED, DETERMINABLE, ANNUAL PERIODICAL (FDAP) INCOME",
+      "shapes": {
+        "HEADING": 1,
+        "PROSE": 1,
+        "LINE_REF_AMOUNT": 1,
+        "CODED_ENTRY": 1
+      },
+      "candidates": {},
+      "title_effect": null,
+      "reasons": [
+        "every confident section on page 14 carries role narrative_footnote (36 rows); this 4-row fragment has no independent candidate and belongs to that section"
+      ]
+    },
+    {
+      "page": 14,
+      "continued_pages": [],
+      "index": 3,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.74,
+      "margin": 0.307,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 13,
+      "line_end": 19,
+      "row_count": 7,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "PASSIVE INCOME",
+      "shapes": {
+        "HEADING": 1,
+        "PROSE": 1,
+        "LINE_REF_AMOUNT": 2,
+        "CODED_ENTRY": 3
+      },
+      "candidates": {
+        "narrative_footnote": 0.74,
+        "line_item_detail": 0.433
+      },
+      "title_effect": null,
+      "reasons": [
+        "3 codes across 2 distinct boxes = 1.5 codes/box",
+        "references many boxes with one code each: a footnote citing form lines, NOT an enumeration of one box's codes"
+      ]
+    },
+    {
+      "page": 14,
+      "continued_pages": [],
+      "index": 4,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.74,
+      "margin": 0.74,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 20,
+      "line_end": 24,
+      "row_count": 5,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "UNRELATED BUSINESS TAXABLE INCOME - LINE 20 CODE V",
+      "shapes": {
+        "HEADING": 1,
+        "PROSE": 1,
+        "LINE_REF_AMOUNT": 1,
+        "CODED_ENTRY": 2
+      },
+      "candidates": {
+        "narrative_footnote": 0.74
+      },
+      "title_effect": null,
+      "reasons": [
+        "2 codes across 2 distinct boxes = 1.0 codes/box",
+        "references many boxes with one code each: a footnote citing form lines, NOT an enumeration of one box's codes"
+      ]
+    },
+    {
+      "page": 14,
+      "continued_pages": [],
+      "index": 5,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.683,
+      "margin": 0.683,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 25,
+      "line_end": 27,
+      "row_count": 3,
+      "dominant_shape": "LINE_REF_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "TABULAR SUMMARY OF ECI, UBTI, FDAP AND PASSIVE INCOME | LINE ECI UBTI FDAP PASSIVE",
+      "shapes": {
+        "HEADING": 2,
+        "LINE_REF_AMOUNT": 1
+      },
+      "candidates": {
+        "narrative_footnote": 0.683
+      },
+      "title_effect": null,
+      "reasons": [
+        "1 data rows vs 0 prose/heading rows"
+      ]
+    },
+    {
+      "page": 14,
+      "continued_pages": [],
+      "index": 6,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.71,
+      "margin": 0.71,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 28,
+      "line_end": 32,
+      "row_count": 5,
+      "dominant_shape": "LINE_REF_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 5 - INTEREST INCOME 401 - 178 - | LINE 6A - ORDINARY DIVIDENDS - - 1,516 - | LINE 6B - QUALIFIED DIVIDEND - - - - | LINE 9A - NET LONG-TERM CAPITAL GAIN/(LOSS) 3,662 - - -",
+      "shapes": {
+        "HEADING": 4,
+        "LINE_REF_AMOUNT": 1
+      },
+      "candidates": {
+        "narrative_footnote": 0.71
+      },
+      "title_effect": null,
+      "reasons": [
+        "1 data rows vs 0 prose/heading rows"
+      ]
+    },
+    {
+      "page": 14,
+      "continued_pages": [],
+      "index": 7,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.74,
+      "margin": 0.74,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 33,
+      "line_end": 36,
+      "row_count": 4,
+      "dominant_shape": "CODED_ENTRY",
+      "trailing_amount_mode": 1,
+      "heading": "LINE 11I - OTHER INCOME/(LOSS) 1 1 - -",
+      "shapes": {
+        "HEADING": 1,
+        "CODED_ENTRY": 3
+      },
+      "candidates": {
+        "narrative_footnote": 0.74
+      },
+      "title_effect": null,
+      "reasons": [
+        "4 codes across 3 distinct boxes = 1.3 codes/box",
+        "references many boxes with one code each: a footnote citing form lines, NOT an enumeration of one box's codes"
+      ]
+    },
+    {
+      "page": 14,
+      "continued_pages": [],
+      "index": 8,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.683,
+      "margin": 0.683,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 37,
+      "line_end": 40,
+      "row_count": 3,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "DIVIDENDS RECEIVED DEDUCTION (DRD) | YOUR SHARE OF DIVIDENDS QUALIFYING FOR THE 50% DIVIDENDS RECEIVED DEDUCTION INCLUDED ON",
+      "shapes": {
+        "HEADING": 2,
+        "LABEL_AMOUNT": 1
+      },
+      "candidates": {
+        "narrative_footnote": 0.683
+      },
+      "title_effect": null,
+      "reasons": [
+        "1 data rows vs 0 prose/heading rows"
+      ]
+    },
+    {
+      "page": 15,
+      "continued_pages": [],
+      "index": 1,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.6,
+      "margin": 0.45,
+      "score_source": "page_dominant_unanimous",
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 8,
+      "row_count": 9,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "EFFECTIVELY CONNECTED INCOME",
+      "shapes": {
+        "HEADING": 1,
+        "PROSE": 1,
+        "LABEL_AMOUNT": 7
+      },
+      "candidates": {
+        "line_item_detail": 0.45
+      },
+      "title_effect": null,
+      "reasons": [
+        "every confident section on page 15 carries role narrative_footnote (8 rows); this 9-row fragment has no independent candidate and belongs to that section"
+      ]
+    },
+    {
+      "page": 15,
+      "continued_pages": [],
+      "index": 2,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.6,
+      "margin": 0.45,
+      "score_source": "page_dominant_unanimous",
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 9,
+      "line_end": 12,
+      "row_count": 4,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "FIXED, DETERMINABLE, ANNUAL PERIODICAL (FDAP) INCOME",
+      "shapes": {
+        "HEADING": 1,
+        "PROSE": 1,
+        "LABEL_AMOUNT": 2
+      },
+      "candidates": {
+        "line_item_detail": 0.45
+      },
+      "title_effect": null,
+      "reasons": [
+        "every confident section on page 15 carries role narrative_footnote (8 rows); this 4-row fragment has no independent candidate and belongs to that section"
+      ]
+    },
+    {
+      "page": 15,
+      "continued_pages": [],
+      "index": 3,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.6,
+      "margin": 0.45,
+      "score_source": "page_dominant_unanimous",
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 13,
+      "line_end": 19,
+      "row_count": 7,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "PASSIVE INCOME",
+      "shapes": {
+        "HEADING": 1,
+        "PROSE": 1,
+        "LABEL_AMOUNT": 5
+      },
+      "candidates": {
+        "line_item_detail": 0.45
+      },
+      "title_effect": null,
+      "reasons": [
+        "every confident section on page 15 carries role narrative_footnote (8 rows); this 7-row fragment has no independent candidate and belongs to that section"
+      ]
+    },
+    {
+      "page": 15,
+      "continued_pages": [],
+      "index": 4,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.683,
+      "margin": 0.45,
+      "score_source": "inherited_from_absorbing_section",
+      "absorbed_from": 5,
+      "collapsed_into_face": false,
+      "line_start": 20,
+      "line_end": 24,
+      "row_count": 5,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "UNRELATED BUSINESS TAXABLE INCOME - LINE 20 CODE V",
+      "shapes": {
+        "HEADING": 1,
+        "PROSE": 1,
+        "LABEL_AMOUNT": 3
+      },
+      "candidates": {
+        "line_item_detail": 0.45
+      },
+      "title_effect": null,
+      "reasons": [
+        "unresolved 5-row fragment absorbed into adjacent section 5 (role narrative_footnote, score 0.68) on the same page"
+      ]
+    },
+    {
+      "page": 15,
+      "continued_pages": [],
+      "index": 5,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.683,
+      "margin": 0.683,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 25,
+      "line_end": 27,
+      "row_count": 3,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "TABULAR SUMMARY OF ECI, UBTI, FDAP AND PASSIVE INCOME | LINE ECI UBTI FDAP PASSIVE",
+      "shapes": {
+        "HEADING": 2,
+        "LABEL_AMOUNT": 1
+      },
+      "candidates": {
+        "narrative_footnote": 0.683
+      },
+      "title_effect": null,
+      "reasons": [
+        "1 data rows vs 0 prose/heading rows"
+      ]
+    },
+    {
+      "page": 15,
+      "continued_pages": [],
+      "index": 6,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.71,
+      "margin": 0.71,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 28,
+      "line_end": 32,
+      "row_count": 5,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "INTEREST INCOME 401 - 178 - | ORDINARY DIVIDENDS - - 1,516 - | QUALIFIED DIVIDEND - - - - | NET LONG-TERM CAPITAL GAIN/(LOSS) 3,662 - - -",
+      "shapes": {
+        "HEADING": 4,
+        "LABEL_AMOUNT": 1
+      },
+      "candidates": {
+        "narrative_footnote": 0.71
+      },
+      "title_effect": null,
+      "reasons": [
+        "1 data rows vs 0 prose/heading rows"
+      ]
+    },
+    {
+      "page": 15,
+      "continued_pages": [],
+      "index": 7,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.71,
+      "margin": 0.45,
+      "score_source": "inherited_from_absorbing_section",
+      "absorbed_from": 6,
+      "collapsed_into_face": false,
+      "line_start": 33,
+      "line_end": 37,
+      "row_count": 4,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "OTHER INCOME/(LOSS) 1 1 - -",
+      "shapes": {
+        "HEADING": 1,
+        "LABEL_AMOUNT": 3
+      },
+      "candidates": {
+        "line_item_detail": 0.45
+      },
+      "title_effect": null,
+      "reasons": [
+        "unresolved 4-row fragment absorbed into adjacent section 6 (role narrative_footnote, score 0.71) on the same page"
+      ]
+    },
+    {
+      "page": 16,
+      "continued_pages": [],
+      "index": 1,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.845,
+      "margin": 0.845,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 7,
+      "row_count": 8,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "ADDITIONAL DEPLETION FOOTNOTE",
+      "shapes": {
+        "HEADING": 1,
+        "PROSE": 6,
+        "LABEL_AMOUNT": 1
+      },
+      "candidates": {
+        "narrative_footnote": 0.845
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "1 data rows vs 6 prose/heading rows",
+        "title corroborates ('footnote', 1.00)"
+      ]
+    },
+    {
+      "page": 16,
+      "continued_pages": [],
+      "index": 2,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.845,
+      "margin": 0.45,
+      "score_source": "inherited_from_absorbing_section",
+      "absorbed_from": 1,
+      "collapsed_into_face": false,
+      "line_start": 8,
+      "line_end": 11,
+      "row_count": 4,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "INSTALLMENT SALE #1 | FUND NAME'S SHARE OF TOTAL DEFERRED GAIN FROM GOLDEN PARTNERS,LP",
+      "shapes": {
+        "HEADING": 2,
+        "LABEL_AMOUNT": 2
+      },
+      "candidates": {
+        "line_item_detail": 0.45
+      },
+      "title_effect": null,
+      "reasons": [
+        "unresolved 4-row fragment absorbed into adjacent section 1 (role narrative_footnote, score 0.84) on the same page"
+      ]
+    },
+    {
+      "page": 16,
+      "continued_pages": [],
+      "index": 3,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.67,
+      "margin": 0.67,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 12,
+      "line_end": 26,
+      "row_count": 15,
+      "dominant_shape": "GRID_ROW",
+      "trailing_amount_mode": 3,
+      "heading": "ITEM J - PROFITS, LOSS AND CAPITAL PERCENTAGES | ITEM L - PARTNER'S CAPITAL ACCOUNT | LIABILITIES BY ACTIVITY | ACTIVITY NONRECOURSE QUAL NONRECOURSE RECOURSE",
+      "shapes": {
+        "HEADING": 4,
+        "PROSE": 5,
+        "GRID_ROW": 6
+      },
+      "candidates": {
+        "narrative_footnote": 0.67
+      },
+      "title_effect": null,
+      "reasons": [
+        "6 data rows vs 5 prose/heading rows"
+      ]
+    },
+    {
+      "page": 16,
+      "continued_pages": [],
+      "index": 4,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.713,
+      "margin": 0.302,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 27,
+      "line_end": 44,
+      "row_count": 16,
+      "dominant_shape": "LINE_REF_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "NET INVESTMENT INCOME TAX | PUBLICLY TRADED PARTNERSHIPS | NAME: PTP ENTITY NAME | INFORMATION PROVIDED BY THE PARTNERSHIP'S UNDERLYUING INVESTMENTS",
+      "shapes": {
+        "HEADING": 4,
+        "PROSE": 9,
+        "NOISE": 1,
+        "LINE_REF_AMOUNT": 3
+      },
+      "candidates": {
+        "narrative_footnote": 0.713,
+        "line_item_detail": 0.41
+      },
+      "title_effect": null,
+      "reasons": [
+        "3 data rows vs 9 prose/heading rows"
+      ]
+    },
+    {
+      "page": 17,
+      "continued_pages": [],
+      "index": 1,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.733,
+      "margin": 0.365,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 23,
+      "row_count": 23,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "ELECTING INVESTMENT PARTNERSHIP (EIP) | INFORMATION FOR TRANSFERORS | INFORMATION FOR TRANSFEREES",
+      "shapes": {
+        "HEADING": 3,
+        "PROSE": 18,
+        "NOISE": 1,
+        "LABEL_AMOUNT": 2
+      },
+      "candidates": {
+        "narrative_footnote": 0.733,
+        "line_item_detail": 0.368
+      },
+      "title_effect": null,
+      "reasons": [
+        "2 data rows vs 18 prose/heading rows"
+      ]
+    },
+    {
+      "page": 17,
+      "continued_pages": [],
+      "index": 2,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.707,
+      "margin": 0.283,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 24,
+      "line_end": 37,
+      "row_count": 14,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "QUALIFIED SMALL BUSINESS TRANSACTION | COMPANY NAME SECONDARY HOLDINGS, LP | DATE ACQUIRED 7/1/2022 | DATE SOLD 9/1/2022",
+      "shapes": {
+        "HEADING": 4,
+        "PROSE": 7,
+        "LABEL_AMOUNT": 3
+      },
+      "candidates": {
+        "narrative_footnote": 0.707,
+        "line_item_detail": 0.424
+      },
+      "title_effect": null,
+      "reasons": [
+        "3 data rows vs 7 prose/heading rows"
+      ]
+    },
+    {
+      "page": 17,
+      "continued_pages": [],
+      "index": 3,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.67,
+      "margin": 0.22,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 38,
+      "line_end": 43,
+      "row_count": 5,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "FOREIGN QUALIFIED DIVIDENDS",
+      "shapes": {
+        "HEADING": 1,
+        "PROSE": 2,
+        "LABEL_AMOUNT": 2
+      },
+      "candidates": {
+        "narrative_footnote": 0.67,
+        "line_item_detail": 0.45
+      },
+      "title_effect": null,
+      "reasons": [
+        "2 data rows vs 2 prose/heading rows"
+      ]
+    },
+    {
+      "page": 18,
+      "continued_pages": [],
+      "index": 1,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.71,
+      "margin": 0.71,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 4,
+      "row_count": 5,
+      "dominant_shape": "LINE_REF_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "FIRPTA INFORMATION",
+      "shapes": {
+        "HEADING": 1,
+        "PROSE": 3,
+        "LINE_REF_AMOUNT": 1
+      },
+      "candidates": {
+        "narrative_footnote": 0.71
+      },
+      "title_effect": null,
+      "reasons": [
+        "1 data rows vs 3 prose/heading rows"
+      ]
+    },
+    {
+      "page": 18,
+      "continued_pages": [],
+      "index": 2,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.75,
+      "margin": 0.75,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 5,
+      "line_end": 15,
+      "row_count": 10,
+      "dominant_shape": null,
+      "trailing_amount_mode": null,
+      "heading": "LINE 17D, E, F | CARRIED INTEREST",
+      "shapes": {
+        "HEADING": 2,
+        "PROSE": 8
+      },
+      "candidates": {
+        "narrative_footnote": 0.75
+      },
+      "title_effect": null,
+      "reasons": [
+        "0 data rows vs 8 prose/heading rows"
+      ]
+    },
+    {
+      "page": 19,
+      "continued_pages": [],
+      "index": 1,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.83,
+      "margin": 0.425,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 14,
+      "row_count": 15,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "SECTION 1061 FOOTNOTE | SECTION 163(J) INFORMATION",
+      "shapes": {
+        "HEADING": 2,
+        "PROSE": 10,
+        "LABEL_AMOUNT": 3
+      },
+      "candidates": {
+        "narrative_footnote": 0.83,
+        "line_item_detail": 0.405
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "3 data rows vs 10 prose/heading rows",
+        "title corroborates ('footnote', 1.00)"
+      ]
+    },
+    {
+      "page": 19,
+      "continued_pages": [],
+      "index": 2,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.83,
+      "margin": 0.0,
+      "score_source": "inherited_from_absorbing_section",
+      "absorbed_from": 1,
+      "collapsed_into_face": false,
+      "line_start": 15,
+      "line_end": 16,
+      "row_count": 2,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "EXCESS BUSINESS INTEREST EXPENSE ATTRIBUTABLE TO ECI NONE",
+      "shapes": {
+        "HEADING": 1,
+        "LABEL_AMOUNT": 1
+      },
+      "candidates": {},
+      "title_effect": null,
+      "reasons": [
+        "unresolved 2-row fragment absorbed into adjacent section 1 (role narrative_footnote, score 0.83) on the same page"
+      ]
+    },
+    {
+      "page": 19,
+      "continued_pages": [],
+      "index": 3,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.86,
+      "margin": 0.86,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 17,
+      "line_end": 37,
+      "row_count": 20,
+      "dominant_shape": "ROSTER_ROW",
+      "trailing_amount_mode": 0,
+      "heading": "EXCESS BUSINESS INTEREST FROM ECI ACTIVITIES NONE | SECTION 212 EXPENSES | SECTION 461(L) | SECTION 469 DISCLOSURE | SECTION 754 ELECTION | FOOTNOTE THAT IS NOT CONFIGURED AS A FIRST CLASS ENTITY",
+      "shapes": {
+        "HEADING": 6,
+        "PROSE": 13,
+        "ROSTER_ROW": 1
+      },
+      "candidates": {
+        "narrative_footnote": 0.86
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "1 data rows vs 13 prose/heading rows",
+        "title corroborates ('footnote', 1.00)"
+      ]
+    },
+    {
+      "page": 20,
+      "continued_pages": [],
+      "index": 1,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.728,
+      "margin": 0.728,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 9,
+      "row_count": 9,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "FORM 8886 REPORTABLE TRANSACTIONS | DESCRIPTION OF INVESTMENT DISPOSAL DATE AMOUNT",
+      "shapes": {
+        "HEADING": 2,
+        "PROSE": 6,
+        "NOISE": 1,
+        "LABEL_AMOUNT": 1
+      },
+      "candidates": {
+        "narrative_footnote": 0.728
+      },
+      "title_effect": null,
+      "reasons": [
+        "1 data rows vs 6 prose/heading rows"
+      ]
+    },
+    {
+      "page": 20,
+      "continued_pages": [],
+      "index": 2,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.741,
+      "margin": 0.741,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 10,
+      "line_end": 39,
+      "row_count": 23,
+      "dominant_shape": "LINE_REF_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": "FORM 8938 INFORMATION: STATEMENT OF SPECIFIED FOREIGN FINANCIAL ASSETS | FORM 926 SUMMARY | DURING THE TAX YEAR ENDED DECEMBER 31, 2019, THE PARTNERSHIP MADE DIRECT AND/OR INDIRECT | TRANSFEREE FOREIGN CORPORATION INFORMATION | NAME: PHARMACEUTICAL COMPANY | IDENTIFYING NUMBER, IF ANY: N/A | ADDRESS: VRETEN 1, SOLNA, 12 65, SWEDEN | COUNTRY CODE OF INCORPORATION OR ORGANIZATION: SE | FOREIGN LAW CHARACTERIZATION: CORPORATION | CONTROLLED FOREIGN CORPORATION: NO | DATE OF TRANSFER: VARIOUS | DESCRIPTION OF PROPERTY TRANSFERRED: CASH | PARTNER'S SHARE OF AMOUNT TRANSFERRED: NONE",
+      "shapes": {
+        "HEADING": 13,
+        "PROSE": 9,
+        "NOISE": 6,
+        "LINE_REF_AMOUNT": 1
+      },
+      "candidates": {
+        "narrative_footnote": 0.741
+      },
+      "title_effect": null,
+      "reasons": [
+        "1 data rows vs 9 prose/heading rows"
+      ]
+    },
+    {
+      "page": 21,
+      "continued_pages": [],
+      "index": 1,
+      "section": "activity_schedule",
+      "role": "activity_schedule",
+      "score": 0.72,
+      "margin": 0.72,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 5,
+      "row_count": 6,
+      "dominant_shape": "ROSTER_ROW",
+      "trailing_amount_mode": 0,
+      "heading": "SCHEDULE OF ACTIVITIES | ACTIVITY ACTIVITY TYPE DISPOSED QLIH PTP PASS-THROUGH",
+      "shapes": {
+        "HEADING": 2,
+        "ROSTER_ROW": 4
+      },
+      "candidates": {
+        "activity_schedule": 0.72
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "4 roster rows (entity list with yes/no flags), no amounts",
+        "title corroborates ('schedule of activities', 1.00)"
+      ]
+    },
+    {
+      "page": 21,
+      "continued_pages": [],
+      "index": 2,
+      "section": "activity_schedule",
+      "role": "activity_schedule",
+      "score": 0.973,
+      "margin": 0.973,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 6,
+      "line_end": 56,
+      "row_count": 37,
+      "dominant_shape": "GRID_ROW",
+      "trailing_amount_mode": 4,
+      "heading": "A B C D",
+      "shapes": {
+        "COLUMN_HEADER": 1,
+        "GRID_ROW": 35,
+        "NOISE": 14,
+        "ROSTER_ROW": 1
+      },
+      "candidates": {
+        "activity_schedule": 0.973
+      },
+      "title_effect": null,
+      "reasons": [
+        "35 grid rows with 4 amounts each (one per column)",
+        "no jurisdiction column",
+        "19 rows keyed by form box number",
+        "1 roster rows (activity list with flags)"
+      ]
+    },
+    {
+      "page": 21,
+      "continued_pages": [],
+      "index": 3,
+      "section": "activity_schedule",
+      "role": "activity_schedule",
+      "score": 0.92,
+      "margin": 0.92,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 57,
+      "line_end": 73,
+      "row_count": 4,
+      "dominant_shape": "GRID_ROW",
+      "trailing_amount_mode": 4,
+      "heading": null,
+      "shapes": {
+        "GRID_ROW": 4,
+        "NOISE": 12
+      },
+      "candidates": {
+        "activity_schedule": 0.92
+      },
+      "title_effect": null,
+      "reasons": [
+        "4 grid rows with 4 amounts each (one per column)",
+        "no jurisdiction column",
+        "2 rows keyed by form box number"
+      ]
+    },
+    {
+      "page": 22,
+      "continued_pages": [],
+      "index": 1,
+      "section": "state_schedules",
+      "role": "state_jurisdiction_grid",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 53,
+      "row_count": 51,
+      "dominant_shape": "JURISDICTION_ROW",
+      "trailing_amount_mode": 5,
+      "heading": "LINE 1 LINE 2 LINE 5 LINE 8 LINE 9 LINE 10 13D",
+      "shapes": {
+        "PROSE": 3,
+        "NOISE": 2,
+        "COLUMN_HEADER": 1,
+        "JURISDICTION_ROW": 47
+      },
+      "candidates": {
+        "state_jurisdiction_grid": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "47 jurisdiction rows",
+        "columns keyed to form lines (per-line state allocation)",
+        "title corroborates ('state source income', 1.00)"
+      ]
+    },
+    {
+      "page": 23,
+      "continued_pages": [],
+      "index": 1,
+      "section": "state_schedules",
+      "role": "state_jurisdiction_grid",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 51,
+      "row_count": 51,
+      "dominant_shape": "JURISDICTION_ROW",
+      "trailing_amount_mode": 6,
+      "heading": "LINE 1 LINE 5 LINE 6A LINE 9A LINE 10 LINE 13W",
+      "shapes": {
+        "PROSE": 2,
+        "COLUMN_HEADER": 1,
+        "JURISDICTION_ROW": 48
+      },
+      "candidates": {
+        "state_jurisdiction_grid": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "48 jurisdiction rows",
+        "columns keyed to form lines (per-line state allocation)",
+        "title corroborates ('distributive share of state', 0.85)"
+      ]
+    },
+    {
+      "page": 24,
+      "continued_pages": [],
+      "index": 1,
+      "section": "state_schedules",
+      "role": "state_jurisdiction_grid",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 51,
+      "row_count": 51,
+      "dominant_shape": "JURISDICTION_ROW",
+      "trailing_amount_mode": 6,
+      "heading": "LINE 1 LINE 5 LINE 6A LINE 9A LINE 10 LINE 13W",
+      "shapes": {
+        "PROSE": 2,
+        "COLUMN_HEADER": 1,
+        "JURISDICTION_ROW": 48
+      },
+      "candidates": {
+        "state_jurisdiction_grid": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "48 jurisdiction rows",
+        "columns keyed to form lines (per-line state allocation)",
+        "title corroborates ('distributive share of state', 0.85)"
+      ]
+    },
+    {
+      "page": 25,
+      "continued_pages": [],
+      "index": 1,
+      "section": "state_schedules",
+      "role": "state_jurisdiction_grid",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 51,
+      "row_count": 51,
+      "dominant_shape": "JURISDICTION_ROW",
+      "trailing_amount_mode": 6,
+      "heading": "LINE 1 LINE 5 LINE 6A LINE 9A LINE 10 LINE 13W",
+      "shapes": {
+        "PROSE": 2,
+        "COLUMN_HEADER": 1,
+        "JURISDICTION_ROW": 48
+      },
+      "candidates": {
+        "state_jurisdiction_grid": 1.0
+      },
+      "title_effect": "corroborated",
+      "reasons": [
+        "48 jurisdiction rows",
+        "columns keyed to form lines (per-line state allocation)",
+        "title corroborates ('distributive share of state', 0.85)"
+      ]
+    },
+    {
+      "page": 26,
+      "continued_pages": [],
+      "index": 1,
+      "section": "state_schedules",
+      "role": "state_jurisdiction_grid",
+      "score": 1.0,
+      "margin": 1.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 51,
+      "row_count": 51,
+      "dominant_shape": "JURISDICTION_ROW",
+      "trailing_amount_mode": 6,
+      "heading": "LINE 1 LINE 5 LINE 6A LINE 9A LINE 10 LINE 13W",
+      "shapes": {
+        "PROSE": 2,
+        "COLUMN_HEADER": 1,
+        "JURISDICTION_ROW": 48
+      },
+      "candidates": {
+        "state_jurisdiction_grid": 1.0
+      },
+      "title_effect": null,
+      "reasons": [
+        "48 jurisdiction rows",
+        "columns keyed to form lines (per-line state allocation)"
+      ]
+    },
+    {
+      "page": 27,
+      "continued_pages": [],
+      "index": 1,
+      "section": "unresolved_requires_review",
+      "role": "unresolved",
+      "score": 0.0,
+      "margin": 0.0,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 0,
+      "line_end": 0,
+      "row_count": 1,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": null,
+      "shapes": {
+        "LABEL_AMOUNT": 1
+      },
+      "candidates": {},
+      "title_effect": "unsupported_by_structure",
+      "reasons": [
+        "no structural signal met its minimum"
+      ]
+    },
+    {
+      "page": 27,
+      "continued_pages": [],
+      "index": 2,
+      "section": "state_schedules",
+      "role": "state_tax_summary",
+      "score": 0.805,
+      "margin": 0.805,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 1,
+      "line_end": 10,
+      "row_count": 10,
+      "dominant_shape": "JURISDICTION_ROW",
+      "trailing_amount_mode": 3,
+      "heading": "STATE SOURCE STATE STATE STATE | STATE INCOME/(LOSS) WITHHOLDING COMPOSITE DEPLETION UBTI",
+      "shapes": {
+        "HEADING": 2,
+        "JURISDICTION_ROW": 6,
+        "LABEL_AMOUNT": 2
+      },
+      "candidates": {
+        "state_tax_summary": 0.805
+      },
+      "title_effect": null,
+      "reasons": [
+        "6 jurisdiction rows",
+        "columns are summary measures, not form lines"
+      ]
+    },
+    {
+      "page": 27,
+      "continued_pages": [],
+      "index": 3,
+      "section": "state_schedules",
+      "role": "state_tax_summary",
+      "score": 0.805,
+      "margin": 0.805,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 11,
+      "line_end": 14,
+      "row_count": 4,
+      "dominant_shape": "JURISDICTION_ROW",
+      "trailing_amount_mode": 2,
+      "heading": null,
+      "shapes": {
+        "JURISDICTION_ROW": 3,
+        "LABEL_AMOUNT": 1
+      },
+      "candidates": {
+        "state_tax_summary": 0.805
+      },
+      "title_effect": null,
+      "reasons": [
+        "3 jurisdiction rows",
+        "columns are summary measures, not form lines"
+      ]
+    },
+    {
+      "page": 27,
+      "continued_pages": [],
+      "index": 4,
+      "section": "state_schedules",
+      "role": "state_tax_summary",
+      "score": 0.88,
+      "margin": 0.88,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 15,
+      "line_end": 17,
+      "row_count": 3,
+      "dominant_shape": "JURISDICTION_ROW",
+      "trailing_amount_mode": 2,
+      "heading": null,
+      "shapes": {
+        "JURISDICTION_ROW": 3
+      },
+      "candidates": {
+        "state_tax_summary": 0.88
+      },
+      "title_effect": null,
+      "reasons": [
+        "3 jurisdiction rows",
+        "columns are summary measures, not form lines"
+      ]
+    },
+    {
+      "page": 27,
+      "continued_pages": [],
+      "index": 5,
+      "section": "unresolved_requires_review",
+      "role": "unresolved",
+      "score": 0.45,
+      "margin": 0.45,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 18,
+      "line_end": 19,
+      "row_count": 2,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": null,
+      "shapes": {
+        "LABEL_AMOUNT": 2
+      },
+      "candidates": {
+        "line_item_detail": 0.45
+      },
+      "title_effect": null,
+      "reasons": [
+        "2 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "NO subtotal row and NO scope heading: an uncorroborated label/amount list is not a decomposition of any box",
+        "score 0.45 below minimum role confidence 0.50: evidence is too weak to assert a role even though no other role competed"
+      ]
+    },
+    {
+      "page": 27,
+      "continued_pages": [],
+      "index": 6,
+      "section": "state_schedules",
+      "role": "state_tax_summary",
+      "score": 0.813,
+      "margin": 0.813,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 20,
+      "line_end": 28,
+      "row_count": 9,
+      "dominant_shape": "JURISDICTION_ROW",
+      "trailing_amount_mode": 2,
+      "heading": null,
+      "shapes": {
+        "JURISDICTION_ROW": 7,
+        "LABEL_AMOUNT": 2
+      },
+      "candidates": {
+        "state_tax_summary": 0.813
+      },
+      "title_effect": null,
+      "reasons": [
+        "7 jurisdiction rows",
+        "columns are summary measures, not form lines"
+      ]
+    },
+    {
+      "page": 27,
+      "continued_pages": [],
+      "index": 7,
+      "section": "state_schedules",
+      "role": "state_tax_summary",
+      "score": 0.847,
+      "margin": 0.847,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 29,
+      "line_end": 37,
+      "row_count": 9,
+      "dominant_shape": "JURISDICTION_ROW",
+      "trailing_amount_mode": 2,
+      "heading": null,
+      "shapes": {
+        "JURISDICTION_ROW": 8,
+        "LABEL_AMOUNT": 1
+      },
+      "candidates": {
+        "state_tax_summary": 0.847
+      },
+      "title_effect": null,
+      "reasons": [
+        "8 jurisdiction rows",
+        "columns are summary measures, not form lines"
+      ]
+    },
+    {
+      "page": 27,
+      "continued_pages": [],
+      "index": 8,
+      "section": "unresolved_requires_review",
+      "role": "unresolved",
+      "score": 0.45,
+      "margin": 0.45,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 38,
+      "line_end": 41,
+      "row_count": 4,
+      "dominant_shape": "LABEL_AMOUNT",
+      "trailing_amount_mode": 1,
+      "heading": null,
+      "shapes": {
+        "LABEL_AMOUNT": 4
+      },
+      "candidates": {
+        "line_item_detail": 0.45
+      },
+      "title_effect": null,
+      "reasons": [
+        "4 label/line-ref component rows, 100% of ALL rows (prose included in denominator)",
+        "NO subtotal row and NO scope heading: an uncorroborated label/amount list is not a decomposition of any box",
+        "score 0.45 below minimum role confidence 0.50: evidence is too weak to assert a role even though no other role competed"
+      ]
+    },
+    {
+      "page": 27,
+      "continued_pages": [],
+      "index": 9,
+      "section": "state_schedules",
+      "role": "state_tax_summary",
+      "score": 0.6,
+      "margin": 0.0,
+      "score_source": "page_dominant_unanimous",
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 42,
+      "line_end": 42,
+      "row_count": 1,
+      "dominant_shape": "JURISDICTION_ROW",
+      "trailing_amount_mode": 4,
+      "heading": null,
+      "shapes": {
+        "JURISDICTION_ROW": 1
+      },
+      "candidates": {},
+      "title_effect": null,
+      "reasons": [
+        "every confident section on page 27 carries role state_tax_summary (35 rows); this 1-row fragment has no independent candidate and belongs to that section"
+      ]
+    },
+    {
+      "page": 27,
+      "continued_pages": [],
+      "index": 10,
+      "section": "footnotes",
+      "role": "narrative_footnote",
+      "score": 0.75,
+      "margin": 0.75,
+      "score_source": null,
+      "absorbed_from": null,
+      "collapsed_into_face": false,
+      "line_start": 43,
+      "line_end": 56,
+      "row_count": 13,
+      "dominant_shape": null,
+      "trailing_amount_mode": null,
+      "heading": "STATE INFORMATION",
+      "shapes": {
+        "HEADING": 1,
+        "PROSE": 12
+      },
+      "candidates": {
+        "narrative_footnote": 0.75
+      },
+      "title_effect": null,
+      "reasons": [
+        "0 data rows vs 12 prose/heading rows"
+      ]
+    }
+  ]
+}

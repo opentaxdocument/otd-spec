@@ -1,0 +1,36 @@
+{
+  "schema_version": "otd-expected-face-facts/1.0",
+  "source_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+  "scope": "manually_verified_regression_subset",
+  "status_counts": {
+    "present": 39,
+    "verified_absent": 9,
+    "blank": 4,
+    "missing": 1,
+    "unresolved": 0
+  },
+  "fields": {
+    "item_a": {"status": "present", "normalized_value": "**-**65189"},
+    "item_b": {"status": "present", "normalized_value": "COPPERLEAF REAL ESTATE FUND V, L.P.\n5255 LAKE CIR\nST LOUIS, MO 63150"},
+    "item_c": {"status": "blank", "normalized_value": null},
+    "item_e": {"status": "present", "normalized_value": "XX-XXX8572"},
+    "item_f": {"status": "present", "normalized_value": "MERIDIAN REAL ASSETS AGGREGATOR, L.P.\n5981 JUNIPER RD\nROCHESTER, NY 14633"},
+    "item_g": {"status": "present", "normalized_value": "limited_or_other_member"},
+    "item_h1": {"status": "present", "normalized_value": "domestic"},
+    "item_h2": {"status": "blank", "normalized_value": null},
+    "item_i1": {"status": "present", "raw_text": "PARTNERSHIP (LIMITED)", "normalized_value": "partnership"},
+    "item_m": {"status": "present", "normalized_value": "no"},
+    "box_1": {"status": "present", "normalized_value": 556000.0},
+    "box_2": {"status": "present", "normalized_value": 28800.0},
+    "box_4c": {"status": "blank", "normalized_value": null},
+    "box_5": {"status": "present", "normalized_value": 434000.0},
+    "box_11": {"status": "present", "rows": [{"code": "A", "value": 600700.0}, {"code": "*", "statement_reference": true}]},
+    "box_13": {"status": "present", "rows": [{"code": "A", "value": 29400.0}, {"code": "B", "value": 56300.0}, {"code": "*", "statement_reference": true}]},
+    "box_14": {"status": "present", "rows": [{"code": "A", "value": 104600.0}, {"code": "*", "statement_reference": true}]},
+    "box_15": {"status": "present", "rows": [{"code": "A", "value": 1800.0}, {"code": "*", "statement_reference": true}]},
+    "box_17": {"status": "present", "rows": [{"code": "A", "value": 79000.0}, {"code": "B", "value": 17200.0}, {"code": "*", "statement_reference": true}]},
+    "box_18": {"status": "present", "rows": [{"code": "A", "value": 118800.0}, {"code": "C", "value": 41200.0}]},
+    "box_19": {"status": "present", "rows": [{"code": "A", "value": 27000.0}]},
+    "box_20": {"status": "present", "rows": [{"code": "A", "value": 2317700.0}, {"code": "B", "value": -112600.0}, {"code": "C", "value": 104300.0}, {"code": "*", "statement_reference": true}]}
+  }
+}

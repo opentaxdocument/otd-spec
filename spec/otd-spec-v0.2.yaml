@@ -91,8 +91,8 @@ form_metadata:
 #   - reference:  pointer to another node, form, or document
 # Footnotes are statement nodes with role investor_footnote.
 # They retain canonical classification, structured content, and source_text.
-# The legacy type footnote may be accepted on input, but emitters MUST
-# canonicalize it to type statement with role investor_footnote.
+# Legacy type: footnote nodes are rejected by the current validator.
+# Migrate them before validation to type: statement with role: investor_footnote.
 #
 # ────────────────────────────────────────────────────────────────────────────
 
@@ -551,7 +551,7 @@ body:
         id: "partner.general_or_limited"
         label: "General Partner, Limited Partner, or LLC Member"
       form: { form_id: "k1-1065", location: "Part II, Item G", box: "G" }
-      value: "limited_partner"
+      value: "limited_or_other_member"
     item_h1:
       type: scalar
       semantic: { id: "partner.domestic_or_foreign", label: "Domestic or Foreign Partner" }
@@ -780,7 +780,7 @@ body:
 # percentage   | 0.15                     | Decimal (0.15 = 15%), with format: "percentage"
 #              |                          | MUST use decimal-preserving serialization.
 # currency     | "USD"                    | ISO 4217
-# enum         | "limited_partner"        | Snake_case, defined by taxonomy
+# enum         | "limited_or_other_member"        | Snake_case, defined by taxonomy
 # null         | null                     | Explicit absence (not the same as omission)
 #
 # DECIMAL PRECISION RULE (MANDATORY):

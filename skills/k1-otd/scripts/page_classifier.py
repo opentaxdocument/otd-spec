@@ -3,7 +3,7 @@
 """Structural, producer-neutral page-role classifier for K-1 packages.
 
 WHY THIS EXISTS
-    The prior classifier (phase1_extract_text.py::classify) tested bare
+    The retired page-hint classifier tested bare
     lowercase substrings against whole-page text. Two matches were
     catastrophic:
 
@@ -85,7 +85,7 @@ def load_signatures(path=None):
                 "role_to_section", "face_markers"):
         if key not in sig:
             raise ValueError("page signatures missing required key: %s" % key)
-    sig["_path"] = str(p)
+    sig["_path"] = p.name
     sig["_jurisdictions"] = _flatten_jurisdictions(sig.get("jurisdiction_codes"))
     sig["_compiled"] = {
         name: [re.compile(pat) for pat in pats]
@@ -115,7 +115,7 @@ def _flatten_jurisdictions(raw):
 
 def split_sections(text):
     """Separate the raw text layer from the '=== TABLES ===' block that
-    phase 1 appends. Both are searched; keeping them apart lets us reason
+    text extraction appends. Both are searched; keeping them apart lets us reason
     about which channel produced a signal."""
     marker = "=== TABLES ==="
     if marker in text:
@@ -480,7 +480,7 @@ def main():
     ap = argparse.ArgumentParser(
         description="Structural page-role classifier for K-1 packages")
     ap.add_argument("--text-dir", required=True,
-                    help="Directory of page_NN.txt files from phase 1")
+                    help="Directory of page_NN.txt files from extracted page text")
     ap.add_argument("--signatures", default=None,
                     help="Path to page-signatures.yaml")
     ap.add_argument("--out", default=None,

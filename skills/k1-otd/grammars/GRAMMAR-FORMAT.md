@@ -180,6 +180,21 @@ Using the left-nearest word would have inverted the Item M read (reporting
 | `coded_rows` | Repeated code+amount rows, face slots + unbounded overflow, possible statement linkage | evidence-bearing coded entries, duplicates preserved |
 | `attachment_reference` | A checkbox that asserts an attachment exists | reference, asserted only when checked |
 
+### Grammar-declared value aliases
+
+A `bounded_text` field with `value_type: enum` may declare `value_aliases`
+when printed text must be normalized to a canonical taxonomy value:
+
+```yaml
+value_aliases:
+  "PARTNERSHIP (LIMITED)": partnership
+```
+
+Matching is case- and punctuation-insensitive. The evidence envelope retains the
+printed text in `raw_text`, emits the canonical value in `normalized_value`, and
+records alias use in `method` and `notes`. Alias maps must be non-empty
+string-to-string mappings; malformed or misplaced maps fail grammar validation.
+
 ## Evidence envelope (every field, every reader)
 
 ```text

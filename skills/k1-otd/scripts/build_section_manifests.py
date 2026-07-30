@@ -1,51 +1,11 @@
 
 #!/usr/bin/env python
-"""K-1 OTD Extraction Skill — Phase 2: Deterministic Section Classification
+"""Build deterministic logical-section and page-projection manifests.
 
-Classifies each LOGICAL SECTION of the package, then projects the result onto
-the page-level manifest the downstream workers already consume.
-
-WHY SECTIONS AND NOT PAGES
-    A page is a printing artifact. Real K-1 pages carry several unrelated
-    sections, and single sections span pages. Observed on a 27-page package:
-      * one page held THREE headed blocks (ECI / FDAP / PASSIVE) each
-        restating form lines under a different lens
-      * one page held an activity ROSTER above an activity MATRIX
-      * a detail block opened on one page and continued onto the next
-    A page-level classifier must pick ONE role per page and is therefore
-    forced to be wrong about the rest.
-
-DEFECTS THIS REPLACES (all measured on the same document)
-    1. Unanchored substring matching in the Phase 1 hint: `"state income" in
-       text` matched "real eSTATE INCOME", filing a page titled "LINE ITEM
-       DETAILS / LINE 20V - UNRELATED BUSINESS TAXABLE INCOME DETAIL" as a
-       state schedule. `"eci" in text` matched sp-ECI-fied and pr-ECI-ous.
-    2. Fail-open default `return "footnote"`: every page the classifier could
-       not understand silently became a footnote. That is how four pages
-       titled "SCHEDULE K-1 FORM 1065 - OVERFLOW STATEMENTS" were filed as
-       footnotes, and eight pages titled "LINE ITEM DETAILS" were scattered
-       across three unrelated fragments.
-    3. A char-count heuristic (`char_count < 3000 and page_num <= 6`) standing
-       in for reading the page's own content.
-    Prior classifier: ~10 of 27 pages correct, ZERO escalations.
-    Section classifier: 0 misroutings, escalations recorded explicitly.
-
-BACKWARD COMPATIBILITY (deliberate, verified against phase4_assemble.py)
-    * page_manifest.json keeps its exact shape: total_pages, sections[] of
-      {name, pages, type, worker}, classification_notes.
-    * The face page is still merged into the overflow page list — the
-      assembler relies on that for face-page coded-entry merging.
-    * Footnotes are still split A/B across parallel workers C and D.
-    * phase4_assemble.py loads FIXED fragment filenames, so adding sections
-      (line_item_details, unresolved_requires_review) cannot break it.
-
-FAIL-CLOSED BY DEFAULT
-    Section classification requires the extracted page text. If --text-dir is
-    absent the run ERRORS rather than silently falling back to the defective
-    heuristics; the legacy path must be requested explicitly with
-    --legacy-heuristics and is recorded in the manifest when used. A
-    classifier that quietly degrades to a known-broken path has not
-    classified anything.
+The classifier reads extracted page text, identifies logical sections using
+signatures and row-shape evidence, and writes both the detailed section
+manifest and the page-level projection consumed by downstream fragment
+workers. Ambiguous sections remain explicit review outcomes.
 """
 import argparse
 import json
@@ -57,7 +17,7 @@ sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 # Canonical emission order and worker assignment.
-# (pipeline section name, legacy `type` value, worker)  worker None => split.
+# (section name, manifest `type` value, worker)  worker None => split.
 SECTION_ORDER = [
     ("face_page",                  "face_page",         "A"),
     ("overflow_statements",        "overflow_statement", "B"),
@@ -67,27 +27,6 @@ SECTION_ORDER = [
     ("state_schedules",            "state_schedule",    "E"),
     ("unresolved_requires_review", "unresolved",        "R"),
 ]
-
-
-# ---------------------------------------------------------------------------
-# Legacy page heuristics — retained for explicit opt-in only.
-# ---------------------------------------------------------------------------
-
-def refine_type(hint, char_count, page_num):
-    """DEPRECATED page-level heuristics. Reachable only via
-    --legacy-heuristics. Preserved verbatim so a legacy run remains
-    reproducible, not because it is correct: the `return "footnote"`
-    fall-through is a fail-open default and the char-count rule is a proxy for
-    reading the page."""
-    if page_num == 1:
-        return "face_page"
-    if hint in ("activity_schedule", "state_tax_summary", "state_schedule"):
-        return hint
-    if hint == "overflow_statement":
-        return "overflow_statement"
-    if char_count < 3000 and page_num <= 6:
-        return "overflow_statement"
-    return "footnote"
 
 
 def split_footnotes(pages):
@@ -123,7 +62,7 @@ def classify(text_dir, signatures=None):
 
 
 def manifest_sections(secs):
-    """Project classified sections onto the legacy page-level section list.
+    """Project classified sections onto the page-level projection.
 
     A page is listed under EVERY role it carries. The projection is lossy at
     page granularity by construction -- section_manifest.json carries the
@@ -151,7 +90,7 @@ def manifest_sections(secs):
                             "type": ptype, "worker": "D"})
             continue
         if name == "overflow_statements" and face:
-            # Preserved behaviour: the assembler merges face-page coded
+            # Active contract: the assembler merges face-page coded
             # entries with the overflow list, so the face page must appear.
             pages = sorted(set(pages) | set(face))
         out.append({"name": name, "pages": pages,
@@ -161,7 +100,7 @@ def manifest_sections(secs):
 
 def main():
     p = argparse.ArgumentParser(
-        description="K-1 OTD Phase 2 — deterministic section classification")
+        description="K-1 OTD logical section manifest builder")
     p.add_argument("--index", required=True,
                    help="Path to text_blocks/page_index.json")
     p.add_argument("--out", required=True,
@@ -174,8 +113,6 @@ def main():
                         "(default: beside --out)")
     p.add_argument("--signatures", default=None,
                    help="Override signatures/page-signatures.yaml")
-    p.add_argument("--legacy-heuristics", action="store_true",
-                   help="Explicitly use the DEPRECATED page-level heuristics")
     args = p.parse_args()
 
     with open(args.index, encoding="utf-8") as f:
@@ -184,76 +121,13 @@ def main():
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
 
-    if not args.text_dir and not args.legacy_heuristics:
-        print("ERROR: --text-dir is required for section classification.\n"
-              "       Section classification needs the extracted page text; "
-              "page_index.json\n"
-              "       carries only char_count and a type_hint produced by "
-              "unanchored substring\n"
-              "       matching. Pass --text-dir text_blocks/, or request the "
-              "deprecated path\n"
-              "       explicitly with --legacy-heuristics.",
+    if not args.text_dir:
+        print("ERROR: --text-dir is required for logical section classification.\n"
+              "       It reads the extracted page text; page_index.json carries "
+              "page metadata only.\n"
+              "       Pass --text-dir text_blocks/.",
               file=sys.stderr)
         return 2
-
-    if args.legacy_heuristics:
-        classified = [{"page": pg["page"],
-                       "type": refine_type(pg.get("type_hint", "footnote"),
-                                           pg.get("char_count", 0),
-                                           pg["page"])}
-                      for pg in index["pages"]]
-
-        def pages_of(t):
-            return [c["page"] for c in classified if c["type"] == t]
-
-        face = pages_of("face_page")
-        overflow = pages_of("overflow_statement")
-        footnote = pages_of("footnote")
-        activity = pages_of("activity_schedule")
-        state = [c["page"] for c in classified
-                 if c["type"] in ("state_schedule", "state_tax_summary")]
-        fn_a, fn_b = split_footnotes(footnote)
-
-        sections = []
-        if face:
-            sections.append({"name": "face_page", "pages": face,
-                             "type": "face_page", "worker": "A"})
-        if overflow:
-            sections.append({"name": "overflow_statements",
-                             "pages": (face + overflow) if face else overflow,
-                             "type": "overflow_statement", "worker": "B"})
-        if fn_a:
-            sections.append({"name": "footnotes_a", "pages": fn_a,
-                             "type": "footnote", "worker": "C"})
-        if fn_b:
-            sections.append({"name": "footnotes_b", "pages": fn_b,
-                             "type": "footnote", "worker": "D"})
-        if activity:
-            sections.append({"name": "activity_schedule", "pages": activity,
-                             "type": "activity_schedule", "worker": "E"})
-        if state:
-            sections.append({"name": "state_schedules", "pages": state,
-                             "type": "state_schedule", "worker": "E"})
-
-        manifest = {
-            "total_pages": index["total_pages"],
-            "method": "legacy_page_heuristics",
-            "sections": sections,
-            "classification_notes": (
-                "DEPRECATED page-level heuristics used by explicit request "
-                "(--legacy-heuristics). Known defective: unanchored substring "
-                "matching and a fail-open 'footnote' default. "
-                "%d footnote pages split %d+%d across workers C/D."
-                % (len(footnote), len(fn_a), len(fn_b))),
-        }
-        out.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
-        print("WROTE %s" % out)
-        for s in sections:
-            print("  %-28s pages=%s  worker=%s"
-                  % (s["name"], s["pages"], s["worker"]))
-        print("\nPhase 2 complete (LEGACY): %d pages -> %d sections"
-              % (index["total_pages"], len(sections)))
-        return 0
 
     sig, pages, secs = classify(args.text_dir, args.signatures)
     sections = manifest_sections(secs)
@@ -275,7 +149,7 @@ def main():
         "sections": sections,
         "classification_notes": (
             "Section-level deterministic classification "
-            "(phase2_classify.py -> section_segmenter.py + "
+            "(build_section_manifests.py -> section_segmenter.py + "
             "section_classifier.py). %d logical sections across %d pages; "
             "%d unresolved. Roles derive from row-shape histograms, not from "
             "page adjacency or char counts. Pages carrying more than one role "
@@ -333,7 +207,7 @@ def main():
               % ", ".join("p%s#%s(%dr,%s)"
                           % (u["page"], u["index"], u["rows"],
                              u["dominant_shape"]) for u in unresolved))
-    print("\nPhase 2 complete: %d pages -> %d logical sections -> %d "
+    print("\nSection manifest build complete: %d pages -> %d logical sections -> %d "
           "pipeline sections" % (len(pages), len(secs), len(sections)))
     return 0
 

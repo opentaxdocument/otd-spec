@@ -2,13 +2,13 @@
 Open Tax Document (OTD) — Round-Trip Proof of Concept
 ========================================================================
 
-PHASE 1: EMIT
+EMIT: structured document
 ----------------------------------------
   Emitted: proof/generated/proof-emitted.otd.yaml
   Size: 18,908 bytes
   Redacted fields: ['body.part_i.item_a', 'body.part_ii.item_e']
 
-PHASE 2: PARSE
+PARSE: structured document
 ----------------------------------------
   Envelope version: 0.1
   Taxonomy: irs-k1-1065-2025
@@ -16,7 +16,7 @@ PHASE 2: PARSE
   Statements found: 5
   References found: 1
 
-PHASE 3: VALIDATE
+VALIDATE: selected constraints
 ----------------------------------------
   ✓ [ERROR] box_4c_equals_4a_plus_4b: Box 4c (100000.0) == Box 4a (75000.0) + Box 4b (25000.0) = 100000.0
   ✓ [ERROR] box_6b_lte_6a: Qualified dividends (28000.0) <= Ordinary dividends (32000.0)
@@ -26,7 +26,7 @@ PHASE 3: VALIDATE
 
   Validation: ALL PASSED
 
-PHASE 4: QUERY DEMO
+QUERY: demonstration
 ----------------------------------------
   4a. Semantic lookup: 'ordinary_business_income'
       → TaxNode(scalar, id=ordinary_business_income, value=150000.0)
@@ -127,7 +127,7 @@ PHASE 4: QUERY DEMO
       • tax_exempt_nondeductible
       • unrecaptured_section_1250_gain
 
-PHASE 5: ROUND-TRIP
+ROUND-TRIP: normalized equivalence
 ----------------------------------------
   PASS — Normalized serialization equivalent
   Re-emitted: proof/generated/proof-re-emitted.otd.yaml

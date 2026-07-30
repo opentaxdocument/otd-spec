@@ -93,7 +93,7 @@ body:
         form_id: k1-1065
         location: Part II, Item G
         box: G
-      value: limited_partner
+      value: limited_or_other_member
     item_h1:
       type: scalar
       semantic:

@@ -210,10 +210,8 @@ nodes:
         value_type: enum
         form_location: "Part II, Item G"
         values:
-          - "general_partner"
-          - "limited_partner"
-          - "llc_member_manager"
-          - "llc_member"
+          - "general_or_member_manager"
+          - "limited_or_other_member"
 
       item_h1:
         type: scalar

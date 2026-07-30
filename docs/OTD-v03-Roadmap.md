@@ -31,9 +31,11 @@ every type, enum, placement, extension, or rule-path contract.
 
 Tracked executable coverage is listed by suite rather than a brittle aggregate:
 `test_validator_contract.py`, `test_constraint_engine.py`,
-`test_rectification.py`, `test_direct_documents.py`, `test_face_reader.py`, and
-`check_mirrors.py`. The validator matrix currently reports 19 blocking passes
-and 12 strict `XFAIL`s; the face-reader suite depends on two machine-local PDFs.
+`test_rectification.py`, `test_direct_documents.py`, `test_face_reader.py`,
+`test_workflow_contract.py`, `test_diagnostic_renderer.py`, and
+`check_mirrors.py`. The validator matrix currently reports 34 blocking cases
+with no deferred cases. Face extraction runs against two repository-local PDFs,
+and the diagnostic renderer has focused box/label/sidebar/color/index coverage.
 
 ### Review History
 
@@ -63,23 +65,16 @@ which had a hand-written check.
 
 Open, in rough order of severity.
 
-### A misspelled path in a taxonomy constraint silently disables that rule
+### Validator trust boundaries are enforced; breadth remains bounded
 
-A rule referencing `part_iii.box_6a_typo` resolves as *absent* rather than
-*undeclared*, so it is skipped rather than reported. A spelling error can
-therefore disable a validation rule with no error, warning, or failure.
+Taxonomy constraint paths are preflighted, document/taxonomy identity is bound,
+and required/null behavior is exercised by the blocking contract matrix. The
+matrix currently has 34 passing cases and no deferred cases.
 
-This directly undercuts the generic-engine promise. Fix in progress: preflight
-every constraint path against the **taxonomy** before validating documents —
-declared-but-absent skips legitimately, undeclared is a hard error.
-
-### §4.7 `required` semantics are not reconciled
-
-Parser-spec §4.7 states that a present-null node **passes** a required
-constraint, because the node is present. The engine currently treats a null
-value as missing. The likely resolution is a declarative `non_null: true` on
-constraints that genuinely require a value, rather than silently redefining
-generic required semantics. Under review.
+The remaining validation gap is breadth rather than a known fail-open seam:
+cross-implementation parity, extension-registry interoperability, additional
+nested taxonomy shapes, and wider third-party document corpora still need
+independent exercise.
 
 ### Deferred validator contracts are executable, not hidden
 
@@ -89,11 +84,17 @@ unknown-extension forward compatibility, three statement/reference truth
 rules, and related schema debt. An unexpected pass fails the suite until the
 case is reviewed and promoted.
 
-### The extraction fit gate and corpus are incomplete
+### The extraction fit gate and corpus remain bounded
 
 `template_match.py` is not yet wired into one fail-closed extraction
-orchestrator. Face-reader regression coverage uses one 2025 grammar and two
-machine-local PDFs, with no explicit deskew path or broad vendor/year corpus.
+orchestrator. Face-reader regression coverage uses one 2025 grammar, an official
+blank IRS form, and one approved synthetic 27-page package stored in the
+repository. `render_extraction_diagnostics.py` makes evidence boxes,
+classifications, missing geometry, and errors reviewable page by page.
+
+This is portable evidence, not broad coverage: there is still no explicit
+deskew/OCR path or multi-year, multi-preparer, scanned, corrupted, and hybrid
+AcroForm corpus.
 
 ### K-3 has no implementation coverage
 

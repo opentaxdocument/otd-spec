@@ -1,0 +1,957 @@
+[
+  {
+    "source_page": "page_06.txt",
+    "line_token": "01",
+    "label": "ORDINARY BUSINESS INCOME (LOSS)",
+    "mode": "scalar",
+    "box_key": "box_1",
+    "code": null,
+    "components": [
+      {
+        "label": "ORDINARY BUSINESS INCOME (LOSS)",
+        "value": 394600.0
+      },
+      {
+        "label": "ORDINARY BUSINESS INCOME (LOSS) - MEALS EXPENSE",
+        "value": -41100.0
+      },
+      {
+        "label": "ORDINARY BUSINESS INCOME (LOSS) - NON-PASSIVE",
+        "value": 101300.0
+      },
+      {
+        "label": "ORDINARY BUSINESS INCOME (LOSS) - PASSIVE",
+        "value": 101200.0
+      }
+    ],
+    "total": 556000.0
+  },
+  {
+    "source_page": "page_06.txt",
+    "line_token": "05",
+    "label": "INTEREST INCOME",
+    "mode": "scalar",
+    "box_key": "box_5",
+    "code": null,
+    "components": [
+      {
+        "label": "INTEREST INCOME",
+        "value": 29700.0
+      },
+      {
+        "label": "INTEREST INCOME - FOREIGN",
+        "value": 56600.0
+      },
+      {
+        "label": "INTEREST INCOME - FOREIGN SOURCED INTEREST INCOME",
+        "value": 45800.0
+      },
+      {
+        "label": "INTEREST INCOME - ORIGINAL ISSUE DISCOUNT",
+        "value": 47700.0
+      },
+      {
+        "label": "INTEREST INCOME - OTHER INTEREST INCOME",
+        "value": 85700.0
+      },
+      {
+        "label": "INTEREST INCOME - US BANKS",
+        "value": 49400.0
+      },
+      {
+        "label": "INTEREST INCOME - US GOVERNMENT INTEREST INCOME",
+        "value": 63200.0
+      },
+      {
+        "label": "INTEREST INCOME - US PORTFOLIO INTEREST",
+        "value": 55900.0
+      }
+    ],
+    "total": 434000.0
+  },
+  {
+    "source_page": "page_06.txt",
+    "line_token": "06A",
+    "label": "ORDINARY DIVIDENDS",
+    "mode": "scalar",
+    "box_key": "box_6a",
+    "code": null,
+    "components": [
+      {
+        "label": "ORDINARY DIVIDENDS",
+        "value": 87800.0
+      },
+      {
+        "label": "ORDINARY DIVIDENDS - FOREIGN SOURCED",
+        "value": 87400.0
+      },
+      {
+        "label": "ORDINARY DIVIDENDS - US SOURCED",
+        "value": 77800.0
+      }
+    ],
+    "total": 253000.0
+  },
+  {
+    "source_page": "page_06.txt",
+    "line_token": "06B",
+    "label": "QUALIFIED DIVIDENDS",
+    "mode": "scalar",
+    "box_key": "box_6b",
+    "code": null,
+    "components": [
+      {
+        "label": "QUALIFIED DIVIDENDS",
+        "value": 24700.0
+      },
+      {
+        "label": "QUALIFIED DIVIDENDS - FOREIGN SOURCED",
+        "value": 84800.0
+      },
+      {
+        "label": "QUALIFIED DIVIDENDS - US SOURCED",
+        "value": 14000.0
+      }
+    ],
+    "total": 123500.0
+  },
+  {
+    "source_page": "page_06.txt",
+    "line_token": "08",
+    "label": "NET SHORT-TERM CAPITAL GAIN (LOSS)",
+    "mode": "scalar",
+    "box_key": "box_8",
+    "code": null,
+    "components": [
+      {
+        "label": "GROSS SHORT-TERM CAPITAL GAIN",
+        "value": 41300.0
+      },
+      {
+        "label": "GROSS SHORT-TERM CAPITAL LOSS",
+        "value": 21800.0
+      },
+      {
+        "label": "NET SHORT-TERM CAPITAL GAIN (LOSS)",
+        "value": 30900.0
+      }
+    ],
+    "total": 94000.0
+  },
+  {
+    "source_page": "page_07.txt",
+    "line_token": "09A",
+    "label": "NET LONG-TERM CAPITAL GAIN (LOSS)",
+    "mode": "scalar",
+    "box_key": "box_9a",
+    "code": null,
+    "components": [
+      {
+        "label": "GROSS LONG-TERM CAPITAL GAIN",
+        "value": 118500.0
+      },
+      {
+        "label": "GROSS LONG-TERM CAPITAL GAIN LESS THAN 3 YEARS",
+        "value": 99600.0
+      },
+      {
+        "label": "GROSS LONG-TERM CAPITAL GAIN MORE THAN 3 YEARS",
+        "value": 14900.0
+      },
+      {
+        "label": "GROSS LONG-TERM CAPITAL LOSS",
+        "value": 96600.0
+      },
+      {
+        "label": "GROSS LONG-TERM CAPITAL LOSS LESS THAN 3 YEARS",
+        "value": 56500.0
+      },
+      {
+        "label": "GROSS LONG-TERM CAPITAL LOSS MORE THAN 3 YEARS",
+        "value": 85500.0
+      },
+      {
+        "label": "NET LONG-TERM CAPITAL GAIN (LOSS)",
+        "value": 10000.0
+      },
+      {
+        "label": "NET LONG-TERM CAPITAL GAIN (LOSS) FROM QEF INCLUSION",
+        "value": 114200.0
+      },
+      {
+        "label": "NET LONG-TERM CAPITAL GAIN (LOSS) FROM REIT/RIC DIVIDEND",
+        "value": 25100.0
+      },
+      {
+        "label": "NET LONG-TERM CAPITAL GAIN (LOSS) LESS THAN 3 YEARS",
+        "value": 111600.0
+      },
+      {
+        "label": "NET LONG-TERM CAPITAL GAIN (LOSS) MORE THAN 3 YEARS",
+        "value": 30400.0
+      },
+      {
+        "label": "OPPORTUNITY ZONE INFORMATION",
+        "value": 52600.0
+      },
+      {
+        "label": "UNREALIZED GAIN/(LOSS) AND OTHER BOOK TO TAX DIFFERENCES",
+        "value": 82200.0
+      }
+    ],
+    "total": 897700.0
+  },
+  {
+    "source_page": "page_07.txt",
+    "line_token": "09C",
+    "label": "UNRECAPTURED SECTION 1250 GAIN",
+    "mode": "scalar",
+    "box_key": "box_9c",
+    "code": null,
+    "components": [
+      {
+        "label": "UNRECAPTURED SECTION 1250 GAIN",
+        "value": 28800.0
+      },
+      {
+        "label": "UNRECAPTURED SECTION 1250 GAIN HELD LESS THAN 3 YEARS",
+        "value": 66500.0
+      }
+    ],
+    "total": 95300.0
+  },
+  {
+    "source_page": "page_07.txt",
+    "line_token": "11A",
+    "label": "OTHER INCOME (LOSS) - OTHER PORTFOLIO INCOME (LOSS)",
+    "mode": "coded",
+    "box_key": "box_11",
+    "code": "A",
+    "components": [
+      {
+        "label": "OTHER INCOME (LOSS) - OTHER PORTFOLIO INCOME (LOSS)",
+        "value": 97800.0
+      },
+      {
+        "label": "OTHER PORTFOLIO INCOME (LOSS) - FOREIGN EXCHANGE GAIN (LOSS)",
+        "value": 50600.0
+      },
+      {
+        "label": "OTHER PORTFOLIO INCOME (LOSS) - NET SECTION 987 GAIN (LOSS)",
+        "value": 67500.0
+      },
+      {
+        "label": "OTHER PORTFOLIO INCOME (LOSS) - OTHER PORTFOLIO INCOME (LOSS)",
+        "value": 84800.0
+      },
+      {
+        "label": "OTHER PORTFOLIO INCOME (LOSS) - PFIC INCOME",
+        "value": 117300.0
+      },
+      {
+        "label": "OTHER PORTFOLIO INCOME (LOSS) - SECTION 1293 ORDINARY EARNINGS FROM A QEF",
+        "value": 35200.0
+      },
+      {
+        "label": "OTHER PORTFOLIO INCOME (LOSS) - SECTION 988 GAIN (LOSS)",
+        "value": 26100.0
+      },
+      {
+        "label": "OTHER PORTFOLIO INCOME (LOSS) - SUBPART F INCOME",
+        "value": 91800.0
+      },
+      {
+        "label": "OTHER PORTFOLIO INCOME (LOSS) - SWAP INCOME",
+        "value": 29600.0
+      }
+    ],
+    "total": 600700.0
+  },
+  {
+    "source_page": "page_07.txt",
+    "line_token": "11C",
+    "label": "OTHER INCOME (LOSS) - SEC. 1256 CONTRACTS & STRADDLES",
+    "mode": "coded",
+    "box_key": "box_11",
+    "code": "C",
+    "components": [
+      {
+        "label": "OTHER INCOME (LOSS) - SEC. 1256 CONTRACTS & STRADDLES",
+        "value": 93900.0
+      },
+      {
+        "label": "SECTION 1256 CONTRACTS & STRADDLES",
+        "value": 35100.0
+      },
+      {
+        "label": "SECTION 1256 CONTRACTS & STRADDLES - 1256 GAIN (LOSS)",
+        "value": 19300.0
+      },
+      {
+        "label": "SECTION 1256 CONTRACTS & STRADDLES - OTHER INCOME",
+        "value": 70500.0
+      }
+    ],
+    "total": 218800.0
+  },
+  {
+    "source_page": "page_08.txt",
+    "line_token": "11S",
+    "label": "OTHER INCOME (LOSS) - NON-PORTFOLIO CAPITAL GAIN (LOSS)",
+    "mode": "coded",
+    "box_key": "box_11",
+    "code": "S",
+    "components": [
+      {
+        "label": "OTHER INCOME - GROSS LONG-TERM CAPITAL GAIN",
+        "value": 21100.0
+      },
+      {
+        "label": "OTHER INCOME - GROSS LONG-TERM CAPITAL GAIN LESS THAN 3 YEARS",
+        "value": 55500.0
+      },
+      {
+        "label": "OTHER INCOME - GROSS LONG-TERM CAPITAL GAIN MORE THAN 3 YEARS",
+        "value": 109600.0
+      },
+      {
+        "label": "OTHER INCOME - GROSS LONG-TERM CAPITAL LOSS",
+        "value": 95700.0
+      },
+      {
+        "label": "OTHER INCOME - GROSS LONG-TERM CAPITAL LOSS LESS THAN 3 YEARS",
+        "value": 73800.0
+      },
+      {
+        "label": "OTHER INCOME - GROSS LONG-TERM CAPITAL LOSS MORE THAN 3 YEARS",
+        "value": 75000.0
+      },
+      {
+        "label": "OTHER INCOME - GROSS SHORT-TERM CAPITAL GAIN",
+        "value": 95900.0
+      },
+      {
+        "label": "OTHER INCOME - GROSS SHORT-TERM CAPITAL LOSS",
+        "value": 89200.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - NON-PORTFOLIO CAPITAL GAIN (LOSS)",
+        "value": 122900.0
+      }
+    ],
+    "total": 738700.0
+  },
+  {
+    "source_page": "page_08.txt",
+    "line_token": "11ZZ",
+    "label": "OTHER INCOME (LOSS) - OTHER",
+    "mode": "coded",
+    "box_key": "box_11",
+    "code": "ZZ",
+    "components": [
+      {
+        "label": "OTHER INCOME (LOSS) - ADDITIONAL LONG-TERM CAPITAL GAIN DUE TO SECTION 743(D) ADJUSTMENT",
+        "value": 109500.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - FOREIGN INTEREST INCOME",
+        "value": 74600.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - FORM 5471 SCHEDULE I INCOME",
+        "value": 26900.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - FROM PASS-THROUGH ENTITIES",
+        "value": 75000.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - INTEREST SUBJECT TO WITHHOLDING",
+        "value": 103700.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - MANAGEMENT FEE EXPENSE",
+        "value": 61100.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - MISCELLANEOUS INCOME (LOSS)",
+        "value": 68600.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - MIXED STRADDLE TRADING - LONG-TERM",
+        "value": 16600.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - MIXED STRADDLE TRADING - SHORT-TERM",
+        "value": 35500.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - NET LONG-TERM CAPITAL GAIN (LOSS)",
+        "value": 31200.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - NET SECTION 1254 GAIN (LOSS)",
+        "value": 82200.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - NET SECTION 1296 PFIC MARK TO MARKET INCOME",
+        "value": 23700.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - NET SECTION 956 GAIN (LOSS)",
+        "value": 119700.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - NET SHORT-TERM CAPITAL GAIN (LOSS)",
+        "value": 42100.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - NON-QUALIFIED FOREIGN DIVIDEND INCOME",
+        "value": 115000.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - NON-QUALIFIED US DIVIDEND INCOME",
+        "value": 48000.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - PFIC ORDINARY EARNINGS FOR ELECTING US INVESTORS",
+        "value": 29000.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - PORTFOLIO US SOURCE INTEREST",
+        "value": 77000.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - QUALIFIED BUSINESS STOCK",
+        "value": 14500.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - QUALIFIED FOREIGN DIVIDEND INCOME",
+        "value": 86100.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - QUALIFIED US DIVIDEND INCOME",
+        "value": 49200.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - REALIZED INVESTMENT GAIN (LOSS) - LONG TERM",
+        "value": 107500.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - SECTION 1092 LONG-TERM GAIN (LOSS)",
+        "value": 63400.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - SECTION 1092 SHORT-TERM GAIN (LOSS)",
+        "value": 107200.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - SECTION 1245 RECAPTURE FROM PARTNERSHIP INVESTMENTS",
+        "value": 44600.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - SECTION 1256 CONTRACTS FROM PARTNERSHIP INVESTMENTS",
+        "value": 95800.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - SECTION 1293 ORDINARY EARNINGS FROM A QEF ELECTION",
+        "value": 14500.0
+      },
+      {
+        "label": "OTHER INCOME (LOSS) - SECTION 475 INCOME (LOSS)",
+        "value": 106100.0
+      }
+    ],
+    "total": null
+  },
+  {
+    "source_page": "page_09.txt",
+    "line_token": "13AE",
+    "label": "OTHER DEDUCTIONS - DEDUCTIONS - PORTFOLIO INCOME",
+    "mode": "coded",
+    "box_key": "box_13",
+    "code": "AE",
+    "components": [
+      {
+        "label": "OTHER DEDUCTIONS - DEDUCTIONS - PORTFOLIO INCOME",
+        "value": 1600.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - PORTFOLIO INCOME - FUND EXPENSES",
+        "value": -80600.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - PORTFOLIO INCOME - MANAGEMENT FEE",
+        "value": -107300.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - PORTFOLIO INCOME - ORGANIZATIONAL COSTS",
+        "value": -104300.0
+      }
+    ],
+    "total": -290600.0
+  },
+  {
+    "source_page": "page_09.txt",
+    "line_token": "13H",
+    "label": "OTHER DEDUCTIONS - INVESTMENT INTEREST EXPENSE",
+    "mode": "coded",
+    "box_key": "box_13",
+    "code": "H",
+    "components": [
+      {
+        "label": "INVESTMENT INTEREST EXPENSE FROM INVESTMENTS",
+        "value": -83100.0
+      },
+      {
+        "label": "INVESTMENT INTEREST EXPENSE FROM TRADE OR BUSINESS",
+        "value": -119000.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - INVESTMENT INTEREST EXPENSE",
+        "value": 26300.0
+      },
+      {
+        "label": "SHORT DIVIDENDS & STOCK LOAN FEES FROM INVESTMENTS",
+        "value": -69400.0
+      },
+      {
+        "label": "SHORT DIVIDENDS & STOCK LOAN FEES FROM TRADE OR BUSINESS",
+        "value": -67800.0
+      }
+    ],
+    "total": -313000.0
+  },
+  {
+    "source_page": "page_09.txt",
+    "line_token": "13R",
+    "label": "OTHER DEDUCTIONS - PENSIONS AND IRAS",
+    "mode": "coded",
+    "box_key": "box_13",
+    "code": "R",
+    "components": [
+      {
+        "label": "OTHER DEDUCTIONS - PENSIONS AND IRAS",
+        "value": 101700.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - PENSIONS AND IRAS - 401 (K) PAYMENTS",
+        "value": -9500.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - PENSIONS AND IRAS - IRA PAYMENTS",
+        "value": -72300.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - PENSIONS AND IRAS - KEOGH PAYMENTS",
+        "value": -1000.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - PENSIONS AND IRAS - SEP PAYMENTS",
+        "value": -200.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - PENSIONS AND IRAS - SIMPLE PAYMENTS",
+        "value": -70900.0
+      }
+    ],
+    "total": -52200.0
+  },
+  {
+    "source_page": "page_10.txt",
+    "line_token": "13ZZ",
+    "label": "OTHER DEDUCTIONS - OTHER",
+    "mode": "coded",
+    "box_key": "box_13",
+    "code": "ZZ",
+    "components": [
+      {
+        "label": "OTHER DEDUCTIONS - INTEREST EXPENSE",
+        "value": -58200.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - INVESTMENT EXPENSES",
+        "value": -60800.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - MANAGEMENT FEE",
+        "value": -55800.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - MISCELLANEOUS FEE EXPENSE",
+        "value": -41800.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - OTHER",
+        "value": -32900.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - PROFESSIONAL FEES",
+        "value": -85600.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - STATE TAXES & FEES",
+        "value": -72300.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - TRADE OR BUSINESS EXPENSE (NOT SUBJECT TO SEC. 212)",
+        "value": -46700.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - TRADER DEDUCTIONS",
+        "value": -55000.0
+      }
+    ],
+    "total": -509100.0
+  },
+  {
+    "source_page": "page_10.txt",
+    "line_token": "20AG",
+    "label": "OTHER INFORMATION - GROSS RECEIPTS FOR SECTION 448(C)",
+    "mode": "coded",
+    "box_key": "box_20",
+    "code": "AG",
+    "components": [
+      {
+        "label": "OTHER INFORMATION - GROSS RECEIPTS FOR SECTION 448(C)",
+        "value": 78900.0
+      },
+      {
+        "label": "OTHER INFORMATION - OTHER INFORMATION - GROSS RECEIPTS FOR SECTION 448(C) - 2020",
+        "value": 107300.0
+      },
+      {
+        "label": "OTHER INFORMATION - OTHER INFORMATION - GROSS RECEIPTS FOR SECTION 448(C) - 2021",
+        "value": 97300.0
+      },
+      {
+        "label": "OTHER INFORMATION - OTHER INFORMATION - GROSS RECEIPTS FOR SECTION 448(C) - 2022",
+        "value": 67200.0
+      },
+      {
+        "label": "OTHER INFORMATION - OTHER INFORMATION - GROSS RECEIPTS FOR SECTION 448(C) - 2023",
+        "value": 39800.0
+      }
+    ],
+    "total": 390500.0
+  },
+  {
+    "source_page": "page_10.txt",
+    "line_token": "20P",
+    "label": "OTHER INFORMATION - SECTION 453A(C) INFORMATION",
+    "mode": "coded",
+    "box_key": "box_20",
+    "code": "P",
+    "components": [
+      {
+        "label": "OTHER DEDUCTIONS - DEFERRED CAPITAL GAIN",
+        "value": 105900.0
+      },
+      {
+        "label": "OTHER DEDUCTIONS - INSTALLMENT OBLIGATION",
+        "value": 115200.0
+      },
+      {
+        "label": "OTHER INFORMATION - SECTION 453A(C) INFORMATION",
+        "value": 91800.0
+      }
+    ],
+    "total": 312900.0
+  },
+  {
+    "source_page": "page_10.txt",
+    "line_token": "20T",
+    "label": "OTHER INFORMATION - DEPLETION INFORMATION - OIL AND GAS",
+    "mode": "coded",
+    "box_key": "box_20",
+    "code": "T",
+    "components": [
+      {
+        "label": "OTHER INFORMATION - DEPLETION INFORMATION - COST DEPLETION",
+        "value": 87200.0
+      },
+      {
+        "label": "OTHER INFORMATION - DEPLETION INFORMATION - DEPLETION IN EXCESS OF BASIS",
+        "value": 66100.0
+      },
+      {
+        "label": "OTHER INFORMATION - DEPLETION INFORMATION - INTANGIBLE DRILLING COSTS",
+        "value": 65600.0
+      },
+      {
+        "label": "OTHER INFORMATION - DEPLETION INFORMATION - NET EQUIVALENT BBLS OF PRODUCTION",
+        "value": 17200.0
+      },
+      {
+        "label": "OTHER INFORMATION - DEPLETION INFORMATION - OIL AND GAS",
+        "value": 107100.0
+      },
+      {
+        "label": "OTHER INFORMATION - DEPLETION INFORMATION - PERCENTAGE DEPLETION",
+        "value": 89200.0
+      },
+      {
+        "label": "OTHER INFORMATION - DEPLETION INFORMATION - PRODUCTION QUANTITIES",
+        "value": 117200.0
+      },
+      {
+        "label": "OTHER INFORMATION - DEPLETION INFORMATION - TOTAL PRODUCTION (BOE)",
+        "value": 98000.0
+      }
+    ],
+    "total": 647600.0
+  },
+  {
+    "source_page": "page_11.txt",
+    "line_token": "20V",
+    "label": "OTHER INFORMATION - UNRELATED BUSINESS TAXABLE INCOME",
+    "mode": "coded",
+    "box_key": "box_20",
+    "code": "V",
+    "components": [
+      {
+        "label": "OTHER INFORMATION - UNRELATED BUSINESS TAXABLE INCOME",
+        "value": 77200.0
+      },
+      {
+        "label": "UBTI - COLLECTIBLES (28%) GAIN (LOSS)",
+        "value": 63900.0
+      },
+      {
+        "label": "UBTI - DIVIDEND EQUIVALENTS",
+        "value": 93100.0
+      },
+      {
+        "label": "UBTI - FOREIGN TAXES ACCRUED",
+        "value": 79500.0
+      },
+      {
+        "label": "UBTI - FOREIGN TAXES PAID",
+        "value": 97200.0
+      },
+      {
+        "label": "UBTI - FOREIGN TAXES PAID OR ACCRUED",
+        "value": 101200.0
+      },
+      {
+        "label": "UBTI - GUARANTEED PAYMENT - CAPITAL",
+        "value": 54000.0
+      },
+      {
+        "label": "UBTI - GUARANTEED PAYMENT - SERVICES",
+        "value": 95900.0
+      },
+      {
+        "label": "UBTI - GUARANTEED PAYMENT - TOTAL",
+        "value": 30100.0
+      },
+      {
+        "label": "UBTI - INTEREST INCOME",
+        "value": 54400.0
+      },
+      {
+        "label": "UBTI - NET LONG-TERM CAPITAL GAIN (LOSS)",
+        "value": 56400.0
+      },
+      {
+        "label": "UBTI - NET RENTAL REAL ESTATE INCOME (LOSS)",
+        "value": 13300.0
+      },
+      {
+        "label": "UBTI - NET SECTION 1231 GAIN (LOSS)",
+        "value": 22100.0
+      },
+      {
+        "label": "UBTI - NET SHORT-TERM CAPITAL GAIN (LOSS)",
+        "value": 14200.0
+      },
+      {
+        "label": "UBTI - ORDINARY BUSINESS INCOME (LOSS)",
+        "value": 32900.0
+      },
+      {
+        "label": "UBTI - ORDINARY DIVIDENDS",
+        "value": 55900.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - AMOUNTS PAID FOR MEDICAL INSURANCE",
+        "value": 31200.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - CAPITAL GAIN PROPERTY (20%)",
+        "value": 58000.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - CAPITAL GAIN PROPERTY TO A 50% ORGANIZATION (30%)",
+        "value": 39500.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - CASH CONTRIBUTIONS (30%)",
+        "value": 19200.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - CASH CONTRIBUTIONS (60%)",
+        "value": 78400.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - CONTRIBUTIONS (100%)",
+        "value": 55000.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - CONTRIBUTIONS TO A CAPITAL CONSTRUCTION FUND (CCF)",
+        "value": 73800.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - DEDUCTIONS - PORTFOLIO INCOME (OTHER)",
+        "value": 37900.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - DEDUCTIONS - ROYALTY INCOME",
+        "value": 19800.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - DEDUCTIONS-PORTFOLIO INCOME",
+        "value": 80700.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - DEPENDENT CARE BENEFITS",
+        "value": 50600.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - EDUCATIONAL ASSISTANCE BENEFITS",
+        "value": 101400.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - EXCESS BUSINESS INTEREST EXPENSE",
+        "value": 44500.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - EXPENDITURES FOR REMOVAL OF BARRIERS",
+        "value": 39500.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - FILM, TELEVISION, AND THEATRICAL PRODUCTION EXPENDITURES",
+        "value": 61900.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - INTEREST EXPENSE ALLOCATED TO DEBT-FINANCED DISTRIBUTIONS",
+        "value": 16500.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - INTEREST EXPENSE ON WORKING INTEREST IN OIL OR GAS",
+        "value": 53500.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - INVESTMENT INTEREST EXPENSE",
+        "value": 74000.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - ITEMIZED DEDUCTIONS",
+        "value": 21100.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - NONCASH CONTRIBUTIONS (30%)",
+        "value": 20600.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - NONCASH CONTRIBUTIONS (50%)",
+        "value": 85100.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - OTHER",
+        "value": 54500.0
+      },
+      {
+        "label": "UBTI - OTHER DEDUCTIONS - PENALTY ON EARLY WITHDRAWAL OF SAVINGS",
+        "value": 96300.0
+      }
+    ],
+    "total": null
+  },
+  {
+    "source_page": "page_12.txt",
+    "line_token": "20Z",
+    "label": "OTHER INFORMATION - SECTION 199A INFORMATION",
+    "mode": "coded",
+    "box_key": "box_20",
+    "code": "Z",
+    "components": [
+      {
+        "label": "OTHER INFORMATION - SECTION 199A INFORMATION",
+        "value": 117000.0
+      },
+      {
+        "label": "OTHER INFORMATION - SECTION 199A INFORMATION - CHARITABLE CONTRIBUTIONS",
+        "value": 3400.0
+      },
+      {
+        "label": "OTHER INFORMATION - SECTION 199A INFORMATION - ORDINARY INCOME (LOSS)",
+        "value": 85200.0
+      },
+      {
+        "label": "OTHER INFORMATION - SECTION 199A INFORMATION - OTHER DEDUCTIONS",
+        "value": 86000.0
+      },
+      {
+        "label": "OTHER INFORMATION - SECTION 199A INFORMATION - OTHER INCOME (LOSS)",
+        "value": 50400.0
+      },
+      {
+        "label": "OTHER INFORMATION - SECTION 199A INFORMATION - PTP INCOME",
+        "value": 46100.0
+      },
+      {
+        "label": "OTHER INFORMATION - SECTION 199A INFORMATION - QUALIFIED BUSINESS INCOME FROM COOPERATIVES",
+        "value": 32200.0
+      },
+      {
+        "label": "OTHER INFORMATION - SECTION 199A INFORMATION - REIT",
+        "value": 119300.0
+      },
+      {
+        "label": "OTHER INFORMATION - SECTION 199A INFORMATION - RENTAL INCOME (LOSS)",
+        "value": 62900.0
+      },
+      {
+        "label": "OTHER INFORMATION - SECTION 199A INFORMATION - ROYALTY INCOME",
+        "value": 60700.0
+      },
+      {
+        "label": "OTHER INFORMATION - SECTION 199A INFORMATION - SECTION 1231 GAIN (LOSS)",
+        "value": 99200.0
+      },
+      {
+        "label": "OTHER INFORMATION - SECTION 199A INFORMATION - SECTION 179 DEDUCTION",
+        "value": 9100.0
+      },
+      {
+        "label": "OTHER INFORMATION - SECTION 199A INFORMATION - UNADJUSTED BASIS",
+        "value": 85300.0
+      }
+    ],
+    "total": null
+  },
+  {
+    "source_page": "page_13.txt",
+    "line_token": "21",
+    "label": "FOREIGN TAXES PAID OR ACCRUED",
+    "mode": "scalar",
+    "box_key": "box_21",
+    "code": null,
+    "components": [
+      {
+        "label": "FOREIGN TAXES ACCRUED",
+        "value": 46800.0
+      },
+      {
+        "label": "FOREIGN TAXES PAID",
+        "value": 113800.0
+      },
+      {
+        "label": "FOREIGN TAXES PAID OR ACCRUED",
+        "value": 106900.0
+      }
+    ],
+    "total": 267500.0
+  }
+]

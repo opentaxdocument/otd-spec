@@ -20,9 +20,10 @@ evidence showed a frame near the Part II/III column boundary
 (x0=294.4, top=411) picked up a Part III box label ("9c") as its
 nearest-right neighbor instead of its true governing text, because both
 sit at the same y across the gutter. Whether the Wave 4 lane-split fix
-resolves this is verified empirically in this module's self-test, not
+resolves this is verified empirically in tests/test_face_reader.py, not
 assumed.
 """
+import argparse
 import sys
 import re
 import json
@@ -48,6 +49,11 @@ from elastic_geometry import (
 
 FRAME_MATCH_TOLERANCE = 3.0
 NUMERIC_RE = re.compile(r"^\(?\$?-?[\d,]+\.?\d*\)?%?$")
+DEFAULT_GRAMMAR = (
+    Path(__file__).resolve().parent.parent
+    / "grammars"
+    / "k1-1065-2025.grammar.yaml"
+)
 
 
 def _norm(s):
@@ -1159,6 +1165,544 @@ def read_attachment_reference(field_key, field_def, ctx):
 READERS["attachment_reference"] = read_attachment_reference
 
 
+
+# ---------------------------------------------------------------------------
+# Overlay-only text, identity, conditional-record, and coded-row readers
+# ---------------------------------------------------------------------------
+
+
+def _field_anchor_phrase(field_def):
+    anchors = field_def.get("anchors") or {}
+    direct = (
+        anchors.get("label")
+        or anchors.get("governing_label")
+        or anchors.get("governing_checkbox_label")
+    )
+    if direct:
+        return direct
+
+    for option_name in ("option_left", "option_right"):
+        option = anchors.get(option_name)
+        if isinstance(option, dict) and option.get("governing_label"):
+            return option["governing_label"]
+
+    return None
+
+
+def _anchor_span(label, region, ctx):
+    """Find the smallest defensible printed anchor span."""
+    if not label:
+        return None
+
+    bounds = ctx["region_bounds"].get(region, {})
+    lower = bounds.get("top", 0.0) - ctx["row_tol"]
+    upper = bounds.get("bottom", ctx["page"].height) + ctx["row_tol"]
+    bands = sorted(
+        [
+            band for band in ctx["row_bands"]
+            if lower <= band["top"] <= upper
+        ],
+        key=lambda band: band["top"],
+    )
+    target = _norm(label)
+    target_words = target.split()
+    target_tokens = set(target_words)
+    exact_candidates = []
+    fuzzy_candidates = []
+
+    for index in range(len(bands)):
+        for width in range(1, min(4, len(bands) - index) + 1):
+            window = bands[index:index + width]
+            sample = _norm(" ".join(
+                band.get("text", "") for band in window
+            ))
+            span = {
+                "top": min(band["top"] for band in window),
+                "bottom": max(band["bottom"] for band in window),
+            }
+            height = span["bottom"] - span["top"]
+            extra_words = max(0, len(sample.split()) - len(target_words))
+
+            if target and target in sample:
+                exact_candidates.append(
+                    ((extra_words, height, width, span["top"]), span)
+                )
+                continue
+
+            sample_tokens = set(sample.split())
+            overlap = (
+                len(target_tokens & sample_tokens) / float(len(target_tokens))
+                if target_tokens else 0.0
+            )
+            if overlap >= 0.80:
+                fuzzy_candidates.append(
+                    (
+                        (-overlap, extra_words, height, width, span["top"]),
+                        span,
+                    )
+                )
+
+    if exact_candidates:
+        return min(exact_candidates, key=lambda candidate: candidate[0])[1]
+    if fuzzy_candidates:
+        return min(fuzzy_candidates, key=lambda candidate: candidate[0])[1]
+    return None
+
+
+def _next_anchor_field(field_key, field_def, ctx):
+    fields = ctx["grammar_fields"]
+    order = ctx["field_order"]
+    anchors = field_def.get("anchors") or {}
+    explicit = anchors.get("end_anchor_field")
+
+    if explicit:
+        target = fields.get(explicit)
+        return explicit, target if isinstance(target, dict) else None
+
+    try:
+        start = order.index(field_key)
+    except ValueError:
+        return None, None
+
+    region = field_def.get("region")
+    for candidate_key in order[start + 1:]:
+        candidate = fields[candidate_key]
+        if candidate.get("region") != region:
+            continue
+        if _field_anchor_phrase(candidate):
+            return candidate_key, candidate
+    return None, None
+
+
+def _value_window(field_key, field_def, ctx):
+    region = field_def.get("region")
+    label = (field_def.get("anchors") or {}).get("label")
+    start = _anchor_span(label, region, ctx)
+    if not start:
+        return None, "label_anchor_not_found"
+
+    next_key, next_field = _next_anchor_field(field_key, field_def, ctx)
+    if next_field:
+        end = _anchor_span(
+            _field_anchor_phrase(next_field), region, ctx
+        )
+        if not end:
+            hint = (next_field.get("anchors") or {}).get(
+                "frame_row_top_hint"
+            )
+            if hint is not None:
+                end = {"top": float(hint), "bottom": float(hint)}
+        if not end:
+            return None, "end_anchor_not_found:%s" % next_key
+        end_top = end["top"]
+    else:
+        end_top = ctx["region_bounds"].get(region, {}).get(
+            "bottom", ctx["page"].height
+        )
+
+    # Filled overlay text may share the printed label row. Because these
+    # readers accept data-font words only, widening to the row top cannot turn
+    # template labels into extracted values.
+    window_top = max(
+        ctx["region_bounds"].get(region, {}).get("top", 0.0),
+        start["top"] - ctx["row_tol"],
+    )
+    if end_top <= window_top:
+        return None, "nonpositive_value_window"
+    return (window_top, end_top), None
+
+
+def _lane_x_bounds(region, ctx):
+    lane = ctx["region_lanes"].get(region, "any")
+    width = float(ctx["page"].width)
+    midpoint = width / 2.0
+    if lane == "left":
+        return 0.0, midpoint
+    if lane == "right":
+        return midpoint, width
+    return 0.0, width
+
+
+def _overlay_words_in_window(region, top, bottom, ctx):
+    left, right = _lane_x_bounds(region, ctx)
+    tolerance = ctx["row_tol"]
+    return sorted(
+        [
+            word for word in ctx["data_words"]
+            if left <= (word["x0"] + word["x1"]) / 2.0 <= right
+            and word["top"] >= top - tolerance * 0.5
+            and word["top"] < bottom + tolerance * 1.5
+        ],
+        key=lambda word: (word["top"], word["x0"]),
+    )
+
+
+def _group_overlay_lines(words, tolerance):
+    lines = []
+    for word in sorted(words, key=lambda item: (item["top"], item["x0"])):
+        if not lines or abs(word["top"] - lines[-1]["top"]) > tolerance:
+            lines.append({"top": word["top"], "words": [word]})
+        else:
+            lines[-1]["words"].append(word)
+
+    for line in lines:
+        line["words"].sort(key=lambda item: item["x0"])
+    return lines
+
+
+def _words_bbox(words):
+    if not words:
+        return None
+    return [
+        min(word["x0"] for word in words),
+        min(word["top"] for word in words),
+        max(word["x1"] for word in words),
+        max(word["bottom"] for word in words),
+    ]
+
+
+def _line_text(line):
+    return " ".join(word["text"] for word in line["words"]).strip()
+
+
+def _read_overlay_text(field_key, field_def, ctx, mode):
+    sem = field_def.get("semantic_id")
+    region = field_def.get("region")
+    window, error = _value_window(field_key, field_def, ctx)
+    if error:
+        return envelope(
+            sem, "unresolved", method=error, rule_id=field_key,
+            notes="Could not derive a bounded overlay-text window from grammar anchors."
+        )
+
+    top, bottom = window
+    words = _overlay_words_in_window(region, top, bottom, ctx)
+    left, right = _lane_x_bounds(region, ctx)
+    window_bbox = [left, top, right, bottom]
+
+    if not words:
+        return envelope(
+            sem, "blank", normalized_value=None,
+            method="overlay_font_window_verified_empty",
+            rule_id=field_key, bbox=window_bbox,
+            notes="The printed field window was located and contains no data-font words."
+        )
+
+    lines = _group_overlay_lines(words, ctx["row_tol"])
+    line_texts = [_line_text(line) for line in lines if _line_text(line)]
+    raw_text = "\n".join(line_texts)
+    normalized = raw_text if mode == "address_block" else " ".join(line_texts)
+    alias_applied = False
+    value_aliases = field_def.get("value_aliases") or {}
+    for printed, canonical in value_aliases.items():
+        if _norm(printed) == _norm(normalized):
+            normalized = canonical
+            alias_applied = True
+            break
+
+    if mode == "bounded_identity" and not re.search(r"\d", normalized):
+        return envelope(
+            sem, "unresolved", raw_text=raw_text, normalized_value=None,
+            method="overlay_identity_not_recognized", rule_id=field_key,
+            bbox=_words_bbox(words),
+            notes="Overlay text was present, but it did not contain identifier digits."
+        )
+
+    method = "overlay_font_%s" % mode
+    notes = "Value derived only from data-font words inside grammar-bounded anchors."
+    if alias_applied:
+        method += "+value_alias"
+        notes += " Printed text was normalized through grammar-declared value_aliases."
+
+    return envelope(
+        sem, "present", raw_text=raw_text, normalized_value=normalized,
+        method=method, rule_id=field_key,
+        bbox=_words_bbox(words),
+        notes=notes
+    )
+
+
+def read_bounded_identity(field_key, field_def, ctx):
+    return _read_overlay_text(field_key, field_def, ctx, "bounded_identity")
+
+
+def read_address_block(field_key, field_def, ctx):
+    return _read_overlay_text(field_key, field_def, ctx, "address_block")
+
+
+def read_bounded_text(field_key, field_def, ctx):
+    return _read_overlay_text(field_key, field_def, ctx, "bounded_text")
+
+
+def read_conditional_record(field_key, field_def, ctx):
+    anchors = field_def.get("anchors") or {}
+    sem = field_def.get("semantic_id")
+    checkbox_def = dict(field_def)
+    checkbox_def["anchors"] = {
+        "governing_label": anchors.get("governing_checkbox_label"),
+        "frame_row_top_hint": anchors.get("frame_row_top_hint"),
+        "label_association": anchors.get("label_association", "nearest_right"),
+    }
+    probe = read_independent_checkbox(field_key, checkbox_def, ctx)
+
+    if probe["status"] == "unresolved":
+        return envelope(
+            sem, "unresolved", raw_text=probe.get("raw_text"),
+            normalized_value=None,
+            method="conditional_record+%s" % probe.get("method", "unresolved"),
+            rule_id=field_key, bbox=probe.get("bbox"),
+            notes=probe.get("notes"),
+        )
+
+    if probe["status"] == "verified_absent":
+        return envelope(
+            sem, "blank", raw_text=probe.get("raw_text"),
+            normalized_value=None,
+            method="conditional_record_governing_checkbox_unchecked",
+            rule_id=field_key, bbox=probe.get("bbox"),
+            notes="Governing checkbox was located and verified unchecked."
+        )
+
+    next_key, next_field = _next_anchor_field(field_key, field_def, ctx)
+    end = (
+        _anchor_span(_field_anchor_phrase(next_field), field_def.get("region"), ctx)
+        if next_field else None
+    )
+    start_top = (
+        probe["bbox"][3] if probe.get("bbox")
+        else anchors.get("frame_row_top_hint", 0.0)
+    )
+    end_top = (
+        end["top"] if end
+        else ctx["region_bounds"].get(field_def.get("region"), {}).get(
+            "bottom", ctx["page"].height
+        )
+    )
+    words = _overlay_words_in_window(
+        field_def.get("region"), start_top, end_top, ctx
+    )
+    lines = _group_overlay_lines(words, ctx["row_tol"])
+    line_texts = [_line_text(line) for line in lines if _line_text(line)]
+
+    if not line_texts:
+        return envelope(
+            sem, "unresolved", normalized_value={"checked": True},
+            method="conditional_record_checked_missing_dependents",
+            rule_id=field_key, bbox=probe.get("bbox"),
+            notes="Governing checkbox is checked, but no dependent overlay text was found."
+        )
+
+    dependent = list(anchors.get("dependent_fields") or [])
+    values = {"checked": True}
+    identifier_index = next(
+        (index for index, text in enumerate(line_texts) if re.search(r"\d", text)),
+        None,
+    )
+    if "tin" in dependent:
+        values["tin"] = (
+            line_texts[identifier_index] if identifier_index is not None else None
+        )
+    remaining = [
+        text for index, text in enumerate(line_texts)
+        if index != identifier_index
+    ]
+    if "name" in dependent:
+        values["name"] = " ".join(remaining) if remaining else None
+
+    missing = [name for name in dependent if not values.get(name)]
+    status = "unresolved" if missing else "present"
+    method = (
+        "conditional_record_overlay_partial"
+        if missing else "conditional_record_overlay_complete"
+    )
+    return envelope(
+        sem, status, raw_text="\n".join(line_texts),
+        normalized_value=values, method=method, rule_id=field_key,
+        bbox=_words_bbox(words) or probe.get("bbox"),
+        notes=(
+            "Missing checked dependent field(s): %s" % ", ".join(missing)
+            if missing else
+            "Checked record and dependent values derived from overlay-font evidence."
+        ),
+    )
+
+
+def _template_box_anchor(box_number, ctx):
+    region = ctx["region_bounds"].get("part_iii", {})
+    midpoint = float(ctx["page"].width) / 2.0
+    structural_starts = (midpoint, float(ctx["page"].width) * 0.73)
+    candidates = [
+        word for word in ctx["template_words"]
+        if str(word.get("text", "")).strip() == str(box_number)
+        and (word["x0"] + word["x1"]) / 2.0 >= midpoint
+        and word["top"] >= region.get("top", 0.0) - ctx["row_tol"]
+        and word["top"] <= region.get("bottom", ctx["page"].height)
+    ]
+    if not candidates:
+        return None
+    return min(
+        candidates,
+        key=lambda word: min(abs(word["x0"] - start) for start in structural_starts),
+    )
+
+
+def _coded_box_bounds(field_def, ctx):
+    anchor = _template_box_anchor(field_def.get("box_number_2025"), ctx)
+    if not anchor:
+        return None
+
+    width = float(ctx["page"].width)
+    midpoint = width / 2.0
+    split = width * 0.73
+    is_left_subcolumn = anchor["x0"] < split
+    column_left = midpoint if is_left_subcolumn else split
+    column_right = split if is_left_subcolumn else width
+
+    following = []
+    seen = set()
+    for candidate in ctx["grammar_fields"].values():
+        box_number = candidate.get("box_number_2025")
+        if not box_number or str(box_number) in seen:
+            continue
+        seen.add(str(box_number))
+        candidate_anchor = _template_box_anchor(box_number, ctx)
+        if not candidate_anchor:
+            continue
+        same_column = (candidate_anchor["x0"] < split) == is_left_subcolumn
+        if same_column and candidate_anchor["top"] > anchor["top"] + 0.5:
+            following.append(candidate_anchor["top"])
+
+    bottom = (
+        min(following) if following
+        else ctx["region_bounds"].get("part_iii", {}).get(
+            "bottom", ctx["page"].height
+        )
+    )
+    return {
+        "anchor": anchor,
+        "left": column_left,
+        "right": column_right,
+        "top": anchor["top"],
+        "bottom": bottom,
+    }
+
+
+def _parse_overlay_number(text):
+    value = str(text).strip().replace("$", "").replace(",", "")
+    if not value or value.upper() == "STMT":
+        return None
+    negative = value.startswith("(") and value.endswith(")")
+    if negative:
+        value = value[1:-1]
+    try:
+        number = float(value)
+    except ValueError:
+        return None
+    return -number if negative else number
+
+
+def read_coded_rows(field_key, field_def, ctx):
+    sem = field_def.get("semantic_id")
+    bounds = _coded_box_bounds(field_def, ctx)
+    if not bounds:
+        return envelope(
+            sem, "unresolved", method="coded_box_anchor_not_found",
+            rule_id=field_key,
+            notes="The printed box number could not be located in Part III."
+        )
+
+    words = sorted(
+        [
+            word for word in ctx["data_words"]
+            if bounds["left"] <= (word["x0"] + word["x1"]) / 2.0 <= bounds["right"]
+            and word["top"] >= bounds["top"] - ctx["row_tol"] * 0.5
+            and word["top"] < bounds["bottom"] - 0.1
+        ],
+        key=lambda word: (word["top"], word["x0"]),
+    )
+    box_bbox = [
+        bounds["left"], bounds["top"], bounds["right"], bounds["bottom"]
+    ]
+
+    if not words:
+        return envelope(
+            sem, "blank", normalized_value=[],
+            method="overlay_font_coded_rows_verified_empty",
+            rule_id=field_key, bbox=box_bbox,
+            notes="Printed coded-row box was located and contains no data-font words."
+        )
+
+    entries = []
+    unparsed = []
+    for line in _group_overlay_lines(words, ctx["row_tol"]):
+        line_words = line["words"]
+        tokens = [word["text"].strip() for word in line_words]
+        code = next(
+            (
+                token.upper() for token in tokens
+                if re.fullmatch(r"(?:[A-Za-z]{1,2}|\*)", token)
+                and token.upper() != "STMT"
+            ),
+            None,
+        )
+        statement_reference = any(
+            token.upper() == "STMT" for token in tokens
+        )
+        amount = next(
+            (
+                parsed for parsed in
+                (_parse_overlay_number(token) for token in reversed(tokens))
+                if parsed is not None
+            ),
+            None,
+        )
+
+        if code is None and not statement_reference:
+            unparsed.append(_line_text(line))
+            continue
+
+        entries.append({
+            "code": code,
+            "value": amount,
+            "statement_reference": statement_reference,
+            "raw_text": _line_text(line),
+            "bbox": _words_bbox(line_words),
+        })
+
+    if not entries:
+        return envelope(
+            sem, "unresolved",
+            raw_text="\n".join(_line_text(line) for line in _group_overlay_lines(
+                words, ctx["row_tol"]
+            )),
+            normalized_value=None,
+            method="coded_rows_overlay_unparsed", rule_id=field_key,
+            bbox=_words_bbox(words),
+            notes="Overlay words were present in the coded box, but no code/value row was recognized."
+        )
+
+    return envelope(
+        sem, "present",
+        raw_text="\n".join(entry["raw_text"] for entry in entries),
+        normalized_value=entries,
+        method="overlay_font_coded_rows", rule_id=field_key,
+        bbox=_words_bbox(words),
+        notes=(
+            "Parsed %d face row(s) from overlay-font evidence%s."
+            % (
+                len(entries),
+                "; ignored non-coded overlay row(s): %s" % " | ".join(unparsed)
+                if unparsed else "",
+            )
+        ),
+    )
+
+
+READERS["bounded_identity"] = read_bounded_identity
+READERS["address_block"] = read_address_block
+READERS["bounded_text"] = read_bounded_text
+READERS["conditional_record"] = read_conditional_record
+READERS["coded_rows"] = read_coded_rows
 # ---------------------------------------------------------------------------
 # Driver
 # ---------------------------------------------------------------------------
@@ -1257,6 +1801,16 @@ def read_face(pdf_path, grammar_path):
     region_bounds = derive_region_bounds(page, grammar["regions"], row_bands)
     frames = detect_checkbox_frames(page)
     fonts = classify_fonts(page)
+    all_words = page.extract_words(extra_attrs=["fontname"])
+    data_font_names = set(fonts["data_fonts"])
+    data_words = [
+        word for word in all_words
+        if word.get("fontname") in data_font_names
+    ]
+    template_words = [
+        word for word in all_words
+        if word.get("fontname") not in data_font_names
+    ]
 
     box_boundary_tokens = set()
     for fdef in grammar["fields"].values():
@@ -1268,6 +1822,14 @@ def read_face(pdf_path, grammar_path):
         "page": page, "row_bands": row_bands, "row_tol": row_tol,
         "region_bounds": region_bounds, "frames": frames,
         "box_boundary_tokens": box_boundary_tokens,
+        "data_words": data_words,
+        "template_words": template_words,
+        "grammar_fields": grammar["fields"],
+        "field_order": list(grammar["fields"].keys()),
+        "region_lanes": {
+            region["id"]: region.get("lane", "any")
+            for region in grammar["regions"]
+        },
     }
 
     fields_out = {}
@@ -1290,9 +1852,13 @@ def read_face(pdf_path, grammar_path):
         pdf_sha256 = hashlib.sha256(fh.read()).hexdigest()
 
     output = {
-        "source_pdf": str(pdf_path),
+        "source_pdf": Path(pdf_path).name,
         "source_pdf_sha256": pdf_sha256,
-        "extraction_timestamp_utc": datetime.datetime.utcnow().isoformat() + "Z",
+        "extraction_timestamp_utc": (
+            datetime.datetime.now(datetime.timezone.utc)
+            .isoformat()
+            .replace("+00:00", "Z")
+        ),
         "grammar_id": grammar["form"]["form_name"] + "-" + str(grammar["form"]["tax_year"]),
         "grammar_version": grammar["schema_version"],
         "posture": grammar.get("validation", {}).get("posture", "hard_error"),
@@ -1307,76 +1873,34 @@ def read_face(pdf_path, grammar_path):
     return output
 
 
-def _self_test():
-    grammar_path = "D:/Visual Studio Projects/otd-spec/skills/k1-otd/grammars/k1-1065-2025.grammar.yaml"
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="Extract evidence-enveloped K-1 face fields from one PDF."
+    )
+    parser.add_argument("pdf", help="Source K-1 PDF")
+    parser.add_argument(
+        "grammar",
+        nargs="?",
+        default=str(DEFAULT_GRAMMAR),
+        help="Face grammar YAML (default: shipped 2025 K-1 grammar)",
+    )
+    parser.add_argument(
+        "--out",
+        help="Write JSON to this path instead of standard output",
+    )
+    args = parser.parse_args(argv)
+    result = read_face(args.pdf, args.grammar)
+    payload = json.dumps(result, indent=2, default=str)
 
-    cases = [
-        {
-            "name": "IRS blank",
-            "pdf": "D:/SecondWind/Artifacts/20260727-k1-face-form-grammar/irs/f1065sk1.pdf",
-            "expect": {"item_g": "blank", "item_h1": "blank", "item_m": "blank"},
-        },
-        {
-            "name": "Copperleaf real preparer doc",
-            "pdf": "D:/SecondWind/Artifacts/20260714-otd-spec-refamiliarization/Examples/"
-                   "Copperleaf_Real_Estate_Fund_V_L_P-Meridian_Real_Assets_Aggregator_L_P-Federal-K1.pdf",
-            "expect": {"item_g": ("present", "limited_or_other_member"),
-                       "item_h1": ("present", "domestic"),
-                       "item_m": ("present", "no")},
-        },
-    ]
-
-    out_dir = Path("D:/SecondWind/Artifacts/20260727-otd-k1-alignment/probes/out")
-    out_dir.mkdir(parents=True, exist_ok=True)
-
-    all_pass = True
-    for case in cases:
-        print("=" * 100, flush=True)
-        print("CASE: %s" % case["name"], flush=True)
-        result = read_face(case["pdf"], grammar_path)
-
-        out_path = out_dir / ("face_page.%s.json" % re.sub(r"[^a-zA-Z0-9]+", "_", case["name"]))
-        with open(out_path, "w", encoding="utf-8") as fh:
-            json.dump(result, fh, indent=2, default=str)
-        print("WROTE %s" % out_path, flush=True)
-
-        print("status_counts: %s" % result["status_counts"], flush=True)
-        print("checkbox_frame_count: %d" % result["checkbox_frame_count"], flush=True)
-
-        case_ok = True
-        for fk, expected in case["expect"].items():
-            actual = result["fields"][fk]
-            if isinstance(expected, tuple):
-                exp_status, exp_val = expected
-                ok = actual["status"] == exp_status and actual.get("normalized_value") == exp_val
-            else:
-                ok = actual["status"] == expected
-            marker = "OK" if ok else "FAIL"
-            print("  [%s] %-12s status=%-10s value=%r  (expected %r)" % (
-                marker, fk, actual["status"], actual.get("normalized_value"), expected), flush=True)
-            case_ok = case_ok and ok
-
-        print("scalar box values (for review, no asserted ground truth this wave):", flush=True)
-        for box_key in ["box_1", "box_2", "box_5", "box_12", "box_21"]:
-            b = result["fields"].get(box_key, {})
-            print("  %-8s status=%-10s raw=%r value=%r" % (
-                box_key, b.get("status"), b.get("raw_text"), b.get("normalized_value")), flush=True)
-
-        print("RESULT: %s" % ("PASS" if case_ok else "FAIL"), flush=True)
-        all_pass = all_pass and case_ok
-
-    print("=" * 100, flush=True)
-    print("OVERALL: %s" % ("ALL PASS" if all_pass else "SOME FAILED"), flush=True)
-    return 0 if all_pass else 1
+    if args.out:
+        out_path = Path(args.out)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(payload + "\n", encoding="utf-8", newline="\n")
+        print("WROTE %s" % out_path.resolve())
+    else:
+        print(payload)
+    return 0
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1 and sys.argv[1] == "--self-test":
-        sys.exit(_self_test())
-    if len(sys.argv) > 2:
-        grammar_path = sys.argv[2] if len(sys.argv) > 2 else \
-            "D:/Visual Studio Projects/otd-spec/skills/k1-otd/grammars/k1-1065-2025.grammar.yaml"
-        result = read_face(sys.argv[1], grammar_path)
-        print(json.dumps(result, indent=2, default=str))
-    else:
-        sys.exit(_self_test())
+    sys.exit(main())

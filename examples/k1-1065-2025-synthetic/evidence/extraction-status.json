@@ -1,0 +1,60 @@
+{
+  "schema_version": "otd-extraction-status/1.0",
+  "outcome": "successful_incomplete_aware_extraction",
+  "source": {
+    "file": "source/synthetic-k1.pdf",
+    "sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+    "page_count": 27,
+    "synthetic_and_fictitious": true
+  },
+  "grammar": {
+    "id": "k1-1065-2025",
+    "validation_errors": 0,
+    "validation_warnings": 0
+  },
+  "template_fit": {
+    "evaluable": true,
+    "ambiguous_tie": false,
+    "verdict": "match",
+    "score": 1.0
+  },
+  "page_and_section_evidence": {
+    "logical_section_count": 95,
+    "unresolved_section_count": 4,
+    "unresolved_pages": [10, 27]
+  },
+  "face_evidence": {
+    "field_count": 53,
+    "status_counts": {
+      "present": 39,
+      "verified_absent": 9,
+      "blank": 4,
+      "missing": 1,
+      "unresolved": 0
+    },
+    "reader_not_implemented_count": 0,
+    "present_without_bbox_count": 0
+  },
+  "line_item_details": {
+    "block_count": 21,
+    "matched_block_count": 21,
+    "unmatched_block_count": 0,
+    "scalar_block_count": 8,
+    "coded_block_count": 13
+  },
+  "state_grid": {
+    "values_emitted": false,
+    "escalated": true
+  },
+  "diagnostics": {
+    "rendered_page_count": 27,
+    "boxed_item_count": 178,
+    "sidebar_item_count": 1
+  },
+  "claims": {
+    "otd_assembled": false,
+    "face_detail_reconciled": false,
+    "otd_conformance_validated": false,
+    "historical_fragments_used": false
+  }
+}

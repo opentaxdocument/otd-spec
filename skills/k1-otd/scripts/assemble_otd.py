@@ -1,6 +1,6 @@
 
 #!/usr/bin/env python
-"""K-1 OTD Extraction Skill — Phase 4: OTD Assembly from JSON Fragments
+"""K-1 OTD Extraction Skill — OTD Assembly from JSON Fragments
 Merges 5 extraction fragments into a compliant OTD YAML document + confidence manifest.
 """
 import sys
@@ -428,7 +428,7 @@ CODED_BOXES = {
 
 
 def main():
-    p = argparse.ArgumentParser(description="K-1 OTD Phase 4 — assemble fragments into OTD YAML")
+    p = argparse.ArgumentParser(description="K-1 OTD — assemble fragments into OTD YAML")
     p.add_argument("--fragments", required=True, help="Path to fragments/ directory")
     p.add_argument("--out", required=True, help="Output OTD YAML path")
     p.add_argument("--sha256", default="not_computed", help="Source PDF SHA-256")
@@ -436,6 +436,17 @@ def main():
 
     fd = Path(args.fragments)
     face   = load(fd / "face_page.json")
+    if isinstance(face, dict) and "fields" in face and not any(
+            key in face
+            for key in ("part_i", "part_ii", "form_metadata", "part_iii_face")
+    ):
+        print(
+            "ERROR: face_page.json is a face-reader evidence envelope, not an "
+            "assembler fragment. Project reviewed evidence into the five-fragment "
+            "contract before assembly; refusing silent data loss.",
+            file=sys.stderr,
+        )
+        return 2
     ov_raw = load(fd / "overflow_statements.json")
     fn_a   = load(fd / "footnotes_a.json")
     fn_b   = load(fd / "footnotes_b.json")
@@ -817,4 +828,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

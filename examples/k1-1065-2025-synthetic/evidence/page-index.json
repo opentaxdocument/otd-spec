@@ -1,0 +1,142 @@
+{
+  "pdf_name": "synthetic-k1.pdf",
+  "sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+  "total_pages": 27,
+  "pages": [
+    {
+      "page": 1,
+      "file": "page_01.txt",
+      "char_count": 8324
+    },
+    {
+      "page": 2,
+      "file": "page_02.txt",
+      "char_count": 6661
+    },
+    {
+      "page": 3,
+      "file": "page_03.txt",
+      "char_count": 5981
+    },
+    {
+      "page": 4,
+      "file": "page_04.txt",
+      "char_count": 6547
+    },
+    {
+      "page": 5,
+      "file": "page_05.txt",
+      "char_count": 5758
+    },
+    {
+      "page": 6,
+      "file": "page_06.txt",
+      "char_count": 2467
+    },
+    {
+      "page": 7,
+      "file": "page_07.txt",
+      "char_count": 3740
+    },
+    {
+      "page": 8,
+      "file": "page_08.txt",
+      "char_count": 5090
+    },
+    {
+      "page": 9,
+      "file": "page_09.txt",
+      "char_count": 4449
+    },
+    {
+      "page": 10,
+      "file": "page_10.txt",
+      "char_count": 3840
+    },
+    {
+      "page": 11,
+      "file": "page_11.txt",
+      "char_count": 4665
+    },
+    {
+      "page": 12,
+      "file": "page_12.txt",
+      "char_count": 6674
+    },
+    {
+      "page": 13,
+      "file": "page_13.txt",
+      "char_count": 658
+    },
+    {
+      "page": 14,
+      "file": "page_14.txt",
+      "char_count": 5259
+    },
+    {
+      "page": 15,
+      "file": "page_15.txt",
+      "char_count": 4313
+    },
+    {
+      "page": 16,
+      "file": "page_16.txt",
+      "char_count": 7566
+    },
+    {
+      "page": 17,
+      "file": "page_17.txt",
+      "char_count": 8166
+    },
+    {
+      "page": 18,
+      "file": "page_18.txt",
+      "char_count": 3261
+    },
+    {
+      "page": 19,
+      "file": "page_19.txt",
+      "char_count": 6814
+    },
+    {
+      "page": 20,
+      "file": "page_20.txt",
+      "char_count": 6080
+    },
+    {
+      "page": 21,
+      "file": "page_21.txt",
+      "char_count": 7248
+    },
+    {
+      "page": 22,
+      "file": "page_22.txt",
+      "char_count": 6347
+    },
+    {
+      "page": 23,
+      "file": "page_23.txt",
+      "char_count": 6351
+    },
+    {
+      "page": 24,
+      "file": "page_24.txt",
+      "char_count": 6360
+    },
+    {
+      "page": 25,
+      "file": "page_25.txt",
+      "char_count": 6380
+    },
+    {
+      "page": 26,
+      "file": "page_26.txt",
+      "char_count": 6391
+    },
+    {
+      "page": 27,
+      "file": "page_27.txt",
+      "char_count": 6271
+    }
+  ]
+}

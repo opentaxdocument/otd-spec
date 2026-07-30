@@ -45,6 +45,7 @@ DESIGN RULES
 
 import copy
 import sys
+from pathlib import Path
 
 try:
     import yaml
@@ -70,6 +71,7 @@ FIELD_OPTIONAL = {
     "overflow", "codes_ref", "signed", "constraints", "options",
     "taxonomy_gap", "excluded_not_taxpayer_data", "yes_requires_statement",
     "target_form", "assert_only_when_checked", "may_attach_statement",
+    "value_aliases",
 }
 FIELD_ALLOWED = FIELD_REQUIRED | FIELD_OPTIONAL
 
@@ -232,6 +234,29 @@ def validate_grammar(grammar, path="<memory>", known_readers=None):
                 "field will emit unresolved(reader_not_implemented)"
                 % (fkey, reader))
 
+        # ---- value aliases ----
+        value_aliases = fdef.get("value_aliases")
+        if value_aliases is not None:
+            if reader != "bounded_text" or fdef.get("value_type") != "enum":
+                errors.append(
+                    "%s: value_aliases requires reader 'bounded_text' and value_type 'enum'"
+                    % fkey)
+            if not isinstance(value_aliases, dict):
+                errors.append("%s: value_aliases is %s, expected a mapping"
+                              % (fkey, type(value_aliases).__name__))
+            elif not value_aliases:
+                errors.append("%s: value_aliases must not be empty" % fkey)
+            else:
+                for printed, canonical in value_aliases.items():
+                    if not isinstance(printed, str) or not printed.strip():
+                        errors.append(
+                            "%s: value_aliases contains an empty or non-string printed value"
+                            % fkey)
+                    if not isinstance(canonical, str) or not canonical.strip():
+                        errors.append(
+                            "%s: value_aliases[%r] has an empty or non-string canonical value"
+                            % (fkey, printed))
+
         # ---- anchors ----
         anchors = fdef.get("anchors")
         if anchors is None:
@@ -288,8 +313,11 @@ def validate_grammar_or_die(grammar, path="<memory>", known_readers=None):
 # Self-test: positive control + negative cases
 # --------------------------------------------------------------------------
 
-DEFAULT_GRAMMAR = ("D:/Visual Studio Projects/otd-spec/skills/k1-otd/"
-                   "grammars/k1-1065-2025.grammar.yaml")
+DEFAULT_GRAMMAR = str(
+    Path(__file__).resolve().parent.parent
+    / "grammars"
+    / "k1-1065-2025.grammar.yaml"
+)
 
 
 def _load(path):
@@ -407,6 +435,17 @@ def _selftest(path=DEFAULT_GRAMMAR):
     mutate("frame-bound reader with no binding signal",
            lambda g: g["fields"][cb].__setitem__("anchors", {}),
            "no binding signal")
+
+    # 10. Value aliases must be a non-empty string-to-string mapping.
+    mutate("value_aliases is not a mapping",
+           lambda g: g["fields"]["item_i1"].__setitem__(
+               "value_aliases", ["PARTNERSHIP (LIMITED)", "partnership"]),
+           "value_aliases is list")
+
+    mutate("value_aliases canonical value is blank",
+           lambda g: g["fields"]["item_i1"].__setitem__(
+               "value_aliases", {"PARTNERSHIP (LIMITED)": ""}),
+           "empty or non-string canonical value")
 
     print("=" * 92, flush=True)
     print("SELFTEST: %s" % ("ALL PASS" if ok else "FAILURES PRESENT"),

@@ -551,6 +551,13 @@ def validate_primitive_contracts(body, root_path="body"):
     def walk(node, path):
         if isinstance(node, dict):
             ntype = node.get("type")
+            if ntype == "footnote":
+                findings.append((
+                    "error",
+                    f"legacy_footnote_type:{path}",
+                    f"{path} uses obsolete type 'footnote'; use type 'statement' "
+                    "with semantic.role='investor_footnote'",
+                ))
 
             if "_unverified" in node:
                 for factual_key in ("value", "checked"):

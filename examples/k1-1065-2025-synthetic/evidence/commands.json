@@ -1,0 +1,54 @@
+{
+  "schema_version": "otd-extraction-commands/1.0",
+  "working_directory": "repository-root",
+  "tool_revision": "same commit as this evidence package",
+  "variables": {
+    "SOURCE_PDF": "examples/k1-1065-2025-synthetic/source/synthetic-k1.pdf",
+    "GRAMMAR": "skills/k1-otd/grammars/k1-1065-2025.grammar.yaml",
+    "ARTIFACT_ROOT": "user-supplied output directory"
+  },
+  "stages": [
+    {
+      "name": "grammar_validation",
+      "argv": ["python", "-B", "skills/k1-otd/scripts/grammar_validator.py", "${GRAMMAR}"],
+      "observed_exit_code": 0
+    },
+    {
+      "name": "pdf_text_extraction",
+      "argv": ["python", "-B", "skills/k1-otd/scripts/extract_pdf_text.py", "--pdf", "${SOURCE_PDF}", "--out", "${ARTIFACT_ROOT}"],
+      "observed_exit_code": 0
+    },
+    {
+      "name": "template_fit",
+      "argv": ["python", "-B", "skills/k1-otd/scripts/template_match.py", "--pdf", "${SOURCE_PDF}", "--grammar", "${GRAMMAR}", "--outdir", "${ARTIFACT_ROOT}/template-fit"],
+      "observed_exit_code": 0,
+      "decision_source": "${ARTIFACT_ROOT}/template-fit/template_fit_report.json"
+    },
+    {
+      "name": "section_manifests",
+      "argv": ["python", "-B", "skills/k1-otd/scripts/build_section_manifests.py", "--index", "${ARTIFACT_ROOT}/text_blocks/page_index.json", "--text-dir", "${ARTIFACT_ROOT}/text_blocks", "--out", "${ARTIFACT_ROOT}/page_manifest.json", "--section-out", "${ARTIFACT_ROOT}/section_manifest.json"],
+      "observed_exit_code": 0
+    },
+    {
+      "name": "face_evidence",
+      "argv": ["python", "-B", "skills/k1-otd/scripts/face_reader.py", "${SOURCE_PDF}", "${GRAMMAR}", "--out", "${ARTIFACT_ROOT}/face_page.json"],
+      "observed_exit_code": 0
+    },
+    {
+      "name": "state_grid_attempt",
+      "argv": ["python", "-B", "skills/k1-otd/scripts/extract_state_grids.py", "--input-dir", "${ARTIFACT_ROOT}/text_blocks", "--manifest", "${ARTIFACT_ROOT}/page_manifest.json", "--out", "${ARTIFACT_ROOT}/state_grid_attempt.json"],
+      "observed_exit_code": 0,
+      "semantic_outcome": "escalated_without_values"
+    },
+    {
+      "name": "line_item_details",
+      "argv": ["python", "-B", "skills/k1-otd/scripts/build_line_item_details.py", "--pages", "${ARTIFACT_ROOT}/text_blocks", "--grammar", "${GRAMMAR}", "--out", "${ARTIFACT_ROOT}/line_item_details.json"],
+      "observed_exit_code": 0
+    },
+    {
+      "name": "diagnostic_render",
+      "argv": ["python", "-B", "skills/k1-otd/scripts/render_extraction_diagnostics.py", "--pdf", "${SOURCE_PDF}", "--face-evidence", "${ARTIFACT_ROOT}/face_page.json", "--page-manifest", "${ARTIFACT_ROOT}/page_manifest.json", "--section-manifest", "${ARTIFACT_ROOT}/section_manifest.json", "--text-dir", "${ARTIFACT_ROOT}/text_blocks", "--out", "${ARTIFACT_ROOT}/diagnostics"],
+      "observed_exit_code": 0
+    }
+  ]
+}

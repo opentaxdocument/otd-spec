@@ -102,29 +102,16 @@ PROOF_CODE_IDS = {
     },
 }
 
-_PROOF_CODE_FALLBACK_PREFIX = {
-    "box_11": "other_income",
-    "box_13": "other_deductions",
-    "box_15": "credits",
-    "box_17": "amt",
-    "box_18": "tax_exempt",
-    "box_19": "distributions",
-    "box_20": "other_information",
-}
-
-
 def _proof_code_id(box_key, code):
-    """Taxonomy-declared semantic id for one coded entry.
-
-    Falls back to the historical positional form only for a code the map does
-    not cover, which the binding validator will then reject by name rather
-    than accept as declared fact.
-    """
-    declared = PROOF_CODE_IDS.get(box_key, {}).get(str(code).upper())
-    if declared:
-        return declared
-    prefix = _PROOF_CODE_FALLBACK_PREFIX.get(box_key, box_key)
-    return f"{prefix}.{str(code).lower()}"
+    """Return the proof's explicitly declared taxonomy semantic ID."""
+    normalized_code = str(code).upper()
+    declared = PROOF_CODE_IDS.get(box_key, {}).get(normalized_code)
+    if declared is None:
+        raise KeyError(
+            "proof semantic ID is not declared for %s code %s"
+            % (box_key, normalized_code)
+        )
+    return declared
 
 
 CLASSIFICATION_ALIASES = {
@@ -162,7 +149,7 @@ SOURCE_DATA = {
         "address": "42 Maple Lane, Greenwich, CT 06830",
         "ssn": "987-65-4321",
         "entity_type": "individual",
-        "general_or_limited": "limited_partner",
+        "general_or_limited": "limited_or_other_member",
         "domestic_or_foreign": "domestic",
         "share_percentages": {
             "profit_beginning": 0.15, "profit_ending": 0.15,
@@ -1016,8 +1003,8 @@ def main():
     log("=" * 72)
     log("")
 
-    # ── Phase 1: EMIT ───────────────────────────────────────────────────
-    log("PHASE 1: EMIT")
+    # ── Emit: structured document ───────────────────────────────────────────────────
+    log("EMIT: structured document")
     log("-" * 40)
     emitter = OTDEmitter(redaction_policy="partial")
     emitted_text = emitter.emit_to_file(SOURCE_DATA, EMITTED_FILE)
@@ -1026,8 +1013,8 @@ def main():
     log(f"  Redacted fields: {emitter.fields_redacted}")
     log("")
 
-    # ── Phase 2: PARSE ──────────────────────────────────────────────────
-    log("PHASE 2: PARSE")
+    # ── Parse: structured document ──────────────────────────────────────────────────
+    log("PARSE: structured document")
     log("-" * 40)
     yaml = YAML()
     raw = yaml.load(EMITTED_FILE.read_text(encoding="utf-8"))
@@ -1039,8 +1026,8 @@ def main():
     log(f"  References found: {len(doc.get_references())}")
     log("")
 
-    # ── Phase 3: VALIDATE ───────────────────────────────────────────────
-    log("PHASE 3: VALIDATE")
+    # ── Validate: selected constraints ───────────────────────────────────────────────
+    log("VALIDATE: selected constraints")
     log("-" * 40)
     results = validate(doc)
     all_passed = True
@@ -1053,8 +1040,8 @@ def main():
     log(f"\n  Validation: {'ALL PASSED' if all_passed else 'FAILURES DETECTED'}")
     log("")
 
-    # ── Phase 4: QUERY DEMO ─────────────────────────────────────────────
-    log("PHASE 4: QUERY DEMO")
+    # ── Query: demonstration ─────────────────────────────────────────────
+    log("QUERY: demonstration")
     log("-" * 40)
 
     # Semantic lookup
@@ -1090,8 +1077,8 @@ def main():
         log(f"      • {sid}")
     log("")
 
-    # ── Phase 5: ROUND-TRIP ─────────────────────────────────────────────
-    log("PHASE 5: ROUND-TRIP")
+    # ── Round-trip: normalized equivalence ─────────────────────────────────────────────
+    log("ROUND-TRIP: normalized equivalence")
     log("-" * 40)
     passed, message = round_trip_test(emitted_text, RE_EMITTED_FILE)
     log(f"  {message}")

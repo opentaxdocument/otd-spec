@@ -1,0 +1,1 @@
+db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac  ../source/synthetic-k1.pdf

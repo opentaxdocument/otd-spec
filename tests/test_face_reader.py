@@ -4,8 +4,8 @@
 Encodes ground truth manually confirmed during the face-extraction build
 session (2026-07-28/29): every value below was cross-checked against raw
 PDF word/curve evidence before being asserted here, not invented as an
-expected value and then coded to match. See:
-  D:/SecondWind/Artifacts/20260727-otd-k1-alignment/BUILD-PLAN-face-extraction.md
+expected value and then coded to match. The verified source PDFs are shipped
+as repository fixtures so this regression suite is portable.
 
 This suite exercises the deterministic face_reader.py pipeline end-to-end
 against two real documents:
@@ -34,11 +34,11 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 FACE_READER = REPO_ROOT / "skills/k1-otd/scripts/face_reader.py"
 GRAMMAR = REPO_ROOT / "skills/k1-otd/grammars/k1-1065-2025.grammar.yaml"
 
-IRS_BLANK_PDF = Path(
-    "D:/SecondWind/Artifacts/20260727-k1-face-form-grammar/irs/f1065sk1.pdf")
-COPPERLEAF_PDF = Path(
-    "D:/SecondWind/Artifacts/20260714-otd-spec-refamiliarization/Examples/"
-    "Copperleaf_Real_Estate_Fund_V_L_P-Meridian_Real_Assets_Aggregator_L_P-Federal-K1.pdf"
+IRS_BLANK_PDF = (
+    REPO_ROOT / "tests/fixtures/pdf/irs-k1-1065-2025-blank.pdf"
+)
+COPPERLEAF_PDF = (
+    REPO_ROOT / "examples/k1-1065-2025-synthetic/source/synthetic-k1.pdf"
 )
 
 
@@ -155,6 +155,22 @@ IRS_BLANK_CASES = [
 
 def main():
     all_pass = True
+    backfilled_fields = (
+        "item_a", "item_b", "item_c", "item_e", "item_f", "item_h2",
+        "item_i1", "box_11", "box_13", "box_14", "box_15", "box_17",
+        "box_18", "box_19", "box_20",
+    )
+
+    def coded_signature(result, key):
+        rows = field(result, key)["normalized_value"]
+        return [
+            (
+                row.get("code"),
+                row.get("value"),
+                bool(row.get("statement_reference")),
+            )
+            for row in rows
+        ]
 
     # ---- IRS blank: everything should be blank/verified_absent, nothing fabricated ----
     blank_result = run_face_reader(IRS_BLANK_PDF)
@@ -176,6 +192,15 @@ def main():
           "blank", blank_failures)
     check("header.tax_year_end.status", field(blank_result, "header.tax_year_end")["status"],
           "blank", blank_failures)
+    for key in backfilled_fields:
+        check("%s.status (blank form abstention)" % key,
+              field(blank_result, key)["status"], "blank", blank_failures)
+    check("blank unresolved reader count",
+          blank_result["status_counts"].get("unresolved", 0), 0, blank_failures)
+    check("blank reader_not_implemented count",
+          sum(1 for value in blank_result["fields"].values()
+              if value.get("method") == "reader_not_implemented"),
+          0, blank_failures)
     for f in blank_failures:
         print(f)
     print("RESULT: %s" % ("PASS" if not blank_failures else "FAIL"))
@@ -191,6 +216,69 @@ def main():
     check("item_h1.value", field(cl_result, "item_h1")["normalized_value"],
           "domestic", cl_failures)
     check("item_m.value", field(cl_result, "item_m")["normalized_value"], "no", cl_failures)
+    check("item_a.value", field(cl_result, "item_a")["normalized_value"],
+          "**-**65189", cl_failures)
+    check("item_b.value", field(cl_result, "item_b")["normalized_value"],
+          "COPPERLEAF REAL ESTATE FUND V, L.P.\n"
+          "5255 LAKE CIR\nST LOUIS, MO 63150", cl_failures)
+    check("item_c.status", field(cl_result, "item_c")["status"],
+          "blank", cl_failures)
+    check("item_e.value", field(cl_result, "item_e")["normalized_value"],
+          "XX-XXX8572", cl_failures)
+    check("item_f.value", field(cl_result, "item_f")["normalized_value"],
+          "MERIDIAN REAL ASSETS AGGREGATOR, L.P.\n"
+          "5981 JUNIPER RD\nROCHESTER, NY 14633", cl_failures)
+    check("item_h2.status", field(cl_result, "item_h2")["status"],
+          "blank", cl_failures)
+    check("item_i1.raw_text", field(cl_result, "item_i1")["raw_text"],
+          "PARTNERSHIP (LIMITED)", cl_failures)
+    check("item_i1.value", field(cl_result, "item_i1")["normalized_value"],
+          "partnership", cl_failures)
+    check("item_i1.method", field(cl_result, "item_i1")["method"],
+          "overlay_font_bounded_text+value_alias", cl_failures)
+    check("box_11 coded rows", coded_signature(cl_result, "box_11"),
+          [("A", 600700.0, False), ("*", None, True)], cl_failures)
+    check("box_13 coded rows", coded_signature(cl_result, "box_13"),
+          [
+              ("A", 29400.0, False),
+              ("B", 56300.0, False),
+              ("*", None, True),
+          ], cl_failures)
+    check("box_14 coded rows", coded_signature(cl_result, "box_14"),
+          [("A", 104600.0, False), ("*", None, True)], cl_failures)
+    check("box_15 coded rows", coded_signature(cl_result, "box_15"),
+          [("A", 1800.0, False), ("*", None, True)], cl_failures)
+    check("box_17 coded rows", coded_signature(cl_result, "box_17"),
+          [
+              ("A", 79000.0, False),
+              ("B", 17200.0, False),
+              ("*", None, True),
+          ], cl_failures)
+    check("box_18 coded rows", coded_signature(cl_result, "box_18"),
+          [("A", 118800.0, False), ("C", 41200.0, False)],
+          cl_failures)
+    check("box_19 coded rows", coded_signature(cl_result, "box_19"),
+          [("A", 27000.0, False)], cl_failures)
+    check("box_20 coded rows", coded_signature(cl_result, "box_20"),
+          [
+              ("A", 2317700.0, False),
+              ("B", -112600.0, False),
+              ("C", 104300.0, False),
+              ("*", None, True),
+          ], cl_failures)
+    check("synthetic unresolved reader count",
+          cl_result["status_counts"].get("unresolved", 0), 0, cl_failures)
+    check("synthetic reader_not_implemented count",
+          sum(1 for value in cl_result["fields"].values()
+              if value.get("method") == "reader_not_implemented"),
+          0, cl_failures)
+    check("backfilled present fields have bounding boxes",
+          all(
+              field(cl_result, key).get("bbox")
+              for key in backfilled_fields
+              if field(cl_result, key)["status"] == "present"
+          ),
+          True, cl_failures)
     check("box_1.value", field(cl_result, "box_1")["normalized_value"], 556000.0, cl_failures)
     check("box_2.value", field(cl_result, "box_2")["normalized_value"], 28800.0, cl_failures)
     # CORRECTED 2026-07-29. This assertion previously expected 17200.0 -- the

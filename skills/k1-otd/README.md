@@ -16,8 +16,8 @@ This directory contains the K-1-specific operational layer of the [Open Tax Docu
 | Overflow and footnotes | Agent-guided extraction with deterministic validation |
 | Assembly | Five named JSON fragments into OTD YAML |
 | Validation | Fail-closed, taxonomy-driven validator |
-| Contract evidence | 33 blocking validator cases; no deferred cases |
-| PDF regression corpus | Two machine-local 2025 fixtures |
+| Contract evidence | 34 blocking validator cases; no deferred cases |
+| PDF regression corpus | Two repository-local 2025 fixtures |
 | Standard maturity | Public draft; not universal conformance certification |
 
 The toolkit is useful for controlled, evidence-backed K-1 work. It is not a claim of broad support across all vendors, years, scanned documents, rotations, or K-3 packages.
@@ -87,7 +87,7 @@ The examples below use `work/` as the artifact directory.
 Record the source PDF's SHA-256 before extraction. Then run:
 
 ```bash
-python skills/k1-otd/scripts/phase1_extract_text.py \
+python skills/k1-otd/scripts/extract_pdf_text.py \
   --pdf path/to/package.pdf \
   --out work
 ```
@@ -121,33 +121,33 @@ Do not rely on the process return code as the fit decision. Proceed only when th
 ### 3. Classify logical sections
 
 ```bash
-python skills/k1-otd/scripts/phase2_classify.py \
+python skills/k1-otd/scripts/build_section_manifests.py \
   --index work/text_blocks/page_index.json \
   --text-dir work/text_blocks \
   --out work/fragments/page_manifest.json \
   --section-out work/fragments/section_manifest.json
 ```
 
-The normal path uses deterministic section-level classification. Do not use `--legacy-heuristics` except to reproduce historical behavior. Any unresolved section requires review before extraction continues.
+Section manifests are built by deterministic logical-section classification. Review every unresolved section before continuing.
 
-### 4. Build extraction fragments
+### 4. Build extraction evidence
 
-Read the face page:
+Read the face page into an evidence envelope:
 
 ```bash
 python skills/k1-otd/scripts/face_reader.py \
   path/to/package.pdf \
   skills/k1-otd/grammars/k1-1065-2025.grammar.yaml \
-  > work/fragments/face_page.json
+  --out work/evidence/face-page.json
 ```
 
-Extract state grids when present:
+Attempt state-grid extraction when state sections are present:
 
 ```bash
 python skills/k1-otd/scripts/extract_state_grids.py \
   --input-dir work/text_blocks \
   --manifest work/fragments/page_manifest.json \
-  --out work/fragments/state_schedules.json
+  --out work/evidence/state-grid-attempt.json
 ```
 
 Build line-item details when the package contains printed detail tables:
@@ -156,14 +156,17 @@ Build line-item details when the package contains printed detail tables:
 python skills/k1-otd/scripts/build_line_item_details.py \
   --pages work/text_blocks \
   --grammar skills/k1-otd/grammars/k1-1065-2025.grammar.yaml \
-  --out work/fragments/line_item_details.json
+  --out work/evidence/line-item-details.json
 ```
 
-Overflow statements and footnotes are not fully automated. Extract them from the classified source sections with explicit evidence and preserve source text. Never infer a value solely because it is plausible.
+These files are extraction evidence, not assembler fragments. Preserve every
+unresolved reader, unresolved section, and escalation. Overflow statements and
+footnotes are not fully automated; extract them from classified sections with
+explicit evidence and never infer a plausible value.
 
 ### 5. Satisfy the assembler fragment contract
 
-`phase4_assemble.py` reads these five files from the fragment directory:
+`assemble_otd.py` reads these five files from the fragment directory:
 
 ```text
 face_page.json
@@ -178,7 +181,7 @@ Use empty lists or empty structured objects only where the fragment contract per
 ### 6. Assemble OTD YAML
 
 ```bash
-python skills/k1-otd/scripts/phase4_assemble.py \
+python skills/k1-otd/scripts/assemble_otd.py \
   --fragments work/fragments \
   --out work/output.otd.yaml \
   --sha256 SOURCE_PDF_SHA256
@@ -245,27 +248,49 @@ python -B tests/test_face_reader.py
 python -B tests/check_mirrors.py
 ```
 
-At the current repository revision, the validator contract matrix contains 33 blocking cases and no deferred cases.
+At the current repository revision, the validator contract matrix contains 34
+blocking cases and no deferred cases.
 
-`tests/test_face_reader.py` is intentionally not portable: it depends on two machine-local PDFs, a blank IRS 2025 form and one flattened preparer document. That suite is a regression net for confirmed examples, not proof of general vendor or form-year support.
+`tests/test_face_reader.py` runs against two repository-local PDFs: the official
+blank 2025 IRS Schedule K-1 fixture and the approved synthetic preparer package.
+This portable corpus is a regression net for confirmed examples, not proof of
+general vendor or form-year support.
 
 ## Important scripts
 
 | Script | Role |
 |---|---|
-| `phase1_extract_text.py` | Per-page text extraction and page index |
-| `phase2_classify.py` | Logical-section classification and manifests |
+| `extract_pdf_text.py` | Per-page text extraction and page index |
+| `build_section_manifests.py` | Logical-section classification and manifests |
 | `grammar_validator.py` | Grammar structure and reader validation |
 | `template_match.py` | Standalone grammar-fit evidence gate |
 | `face_reader.py` | Grammar-driven face-page extraction |
+| `render_extraction_diagnostics.py` | Color-coded page images and portable diagnostic index |
 | `extract_state_grids.py` | State schedule grid extraction |
 | `build_line_item_details.py` | Printed line-item detail fragment |
 | `reconcile_line_item_details.py` | Face-versus-detail reconciliation |
-| `phase4_assemble.py` | Five-fragment OTD assembly |
+| `assemble_otd.py` | Five-fragment OTD assembly |
 | `constraint_engine.py` | Taxonomy compilation and generic constraints |
 | `validate_otd.py` | Document and taxonomy validation |
 
-Additional scripts support diagnostics, section analysis, mini-taxonomy generation, and reviewed patch application. Inspect each script's `--help` or source contract before use.
+Additional scripts support section segmentation, structural classification, state-grid parsing, and diagnostic rendering. Inspect each script's `--help` or source contract before use.
+
+## Portable examples and focused tests
+
+| Asset | Purpose |
+|---|---|
+| `../../examples/k1-1065-2025-synthetic/source/synthetic-k1.pdf` | Approved fictitious 27-page package used for current-source extraction evidence |
+| `../../tests/fixtures/pdf/irs-k1-1065-2025-blank.pdf` | Official blank 2025 IRS form used to prove abstention and verified absence |
+| `../../tests/test_workflow_contract.py` | Renamed-tool, portable-manifest, alias, and raw-evidence boundary contracts |
+| `../../tests/test_diagnostic_renderer.py` | Box, label, sidebar, color, and portable-index renderer contracts |
+
+Run the focused checks from the repository root:
+
+```bash
+python -B tests/test_workflow_contract.py
+python -B tests/test_diagnostic_renderer.py
+python -B tests/test_face_reader.py
+```
 
 ## Review and delivery checklist
 
@@ -287,7 +312,7 @@ Before delivering an OTD document:
 
 The highest-value next steps are:
 
-- build portable, redistributable PDF fixtures;
+- broaden the portable fixture corpus across preparers, years, scans, and layout variants;
 - add grammars for additional form years and preparer layouts;
 - integrate the template-fit gate into an explicit orchestrator;
 - add OCR and rotation/skew handling with provenance;

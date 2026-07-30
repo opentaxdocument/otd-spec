@@ -61,14 +61,20 @@ footnote_extensions:
 ## 3. Using Extension Types in OTD Documents
 
 ```yaml
-footnotes:
-  - type: footnote
-    id: "fn-007"
-    classification: "rsm_basis_roll_forward"
-    extension_ref: "otd-rsm-extensions-2025.1.0.yaml"  # REQUIRED for extension types
-    structured:
-      opening_basis: 1000000.00
-      closing_basis: 1025000.00
+statements:
+  - type: statement
+    semantic:
+      id: "fn-007"
+      label: "Partner Tax Basis Roll-Forward"
+      classification: "rsm_basis_roll_forward"
+      role: investor_footnote
+    form:
+      attachment: true
+    content:
+      extension_ref: "otd-rsm-extensions-2025.1.0.yaml"  # REQUIRED
+      structured:
+        opening_basis: 1000000.00
+        closing_basis: 1025000.00
     source_text: |
       Partner Tax Basis Roll-Forward Schedule ...
 ```

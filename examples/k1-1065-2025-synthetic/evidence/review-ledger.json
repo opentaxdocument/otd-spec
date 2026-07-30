@@ -1,0 +1,71 @@
+{
+  "schema_version": "otd-review-ledger/1.0",
+  "overall_disposition": "accepted_as_incomplete_aware_extraction_evidence",
+  "entries": [
+    {
+      "id": "section-page-10-index-4",
+      "kind": "unresolved_section",
+      "page": 10,
+      "section_index": 4,
+      "rows": 5,
+      "dominant_shape": "GRID_ROW",
+      "reason": "no structural signal met its minimum",
+      "disposition": "requires_human_review"
+    },
+    {
+      "id": "section-page-27-index-1",
+      "kind": "unresolved_section",
+      "page": 27,
+      "section_index": 1,
+      "rows": 1,
+      "dominant_shape": "LABEL_AMOUNT",
+      "reason": "no structural signal met its minimum",
+      "disposition": "requires_human_review"
+    },
+    {
+      "id": "section-page-27-index-5",
+      "kind": "unresolved_section",
+      "page": 27,
+      "section_index": 5,
+      "rows": 2,
+      "dominant_shape": "LABEL_AMOUNT",
+      "reason": "uncorroborated label/amount list scored 0.45 below minimum role confidence 0.50",
+      "disposition": "requires_human_review"
+    },
+    {
+      "id": "section-page-27-index-8",
+      "kind": "unresolved_section",
+      "page": 27,
+      "section_index": 8,
+      "rows": 4,
+      "dominant_shape": "LABEL_AMOUNT",
+      "reason": "uncorroborated label/amount list scored 0.45 below minimum role confidence 0.50",
+      "disposition": "requires_human_review"
+    },
+    {
+      "id": "state-grid-escalation",
+      "kind": "capability_escalation",
+      "reason": "No state values were emitted; deterministic state-grid extraction requires pdfplumber bounding-box layout evidence.",
+      "disposition": "explicitly_unresolved_no_values_fabricated"
+    },
+    {
+      "id": "item-l-basis-method",
+      "kind": "missing_face_field",
+      "field": "item_l.basis_method",
+      "method": "verified_absent_from_form_revision",
+      "disposition": "intentional_warning_sidebar_item"
+    },
+    {
+      "id": "assembly-boundary",
+      "kind": "claim_boundary",
+      "reason": "Face-reader evidence envelopes are not normalized assembler fragments.",
+      "disposition": "no_otd_assembly_or_conformance_claim"
+    },
+    {
+      "id": "reconciliation-boundary",
+      "kind": "claim_boundary",
+      "reason": "The reconciliation tool requires an assembled OTD document; no normalized face fragment was created.",
+      "disposition": "face_detail_reconciliation_not_run"
+    }
+  ]
+}

@@ -1,0 +1,1464 @@
+{
+  "source_pdf": "synthetic-k1.pdf",
+  "source_pdf_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
+  "extraction_timestamp_utc": "2026-07-30T03:15:25.715314Z",
+  "grammar_id": "K-1 (Form 1065)-2025",
+  "grammar_version": "k1-face-grammar/1.0",
+  "posture": "hard_error",
+  "region_bounds": {
+    "header": {
+      "top": 48.403999999999996,
+      "bottom": 145.31899999999996,
+      "status": "resolved",
+      "lane": "left"
+    },
+    "part_i": {
+      "top": 145.31899999999996,
+      "bottom": 252.7065,
+      "status": "resolved",
+      "lane": "any"
+    },
+    "part_ii": {
+      "top": 252.7065,
+      "bottom": 792,
+      "status": "resolved",
+      "lane": "left"
+    },
+    "part_iii": {
+      "top": 48.403999999999996,
+      "bottom": 792,
+      "status": "resolved",
+      "lane": "right"
+    }
+  },
+  "checkbox_frame_count": 18,
+  "font_summary": {
+    "template_font_count": 7,
+    "data_font_count": 1
+  },
+  "status_counts": {
+    "verified_absent": 9,
+    "present": 39,
+    "blank": 4,
+    "missing": 1
+  },
+  "fields": {
+    "header.final_k1": {
+      "semantic_id": "form.final",
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        324.0,
+        37.999000000000024,
+        332.0,
+        45.999000000000024
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "label_match_outside_region+interior_verified_empty",
+      "rule_id": "header.final_k1",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "header.amended_k1": {
+      "semantic_id": "form.amended",
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        403.2,
+        37.999000000000024,
+        411.2,
+        45.999000000000024
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "label_match_adjacent_outside_region+interior_verified_empty",
+      "rule_id": "header.amended_k1",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "header.tax_year_begin": {
+      "semantic_id": "form.fiscal_year_begin",
+      "raw_text": "1/1/2025",
+      "normalized_value": "1/1/2025",
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        71.03500000000005,
+        97.42999999999995,
+        441.189,
+        107.4960000000001
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "beginning_ending_row_parsed",
+      "rule_id": "header.tax_year_begin",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "header.tax_year_end": {
+      "semantic_id": "form.fiscal_year_end",
+      "raw_text": "12/31/2025",
+      "normalized_value": "12/31/2025",
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        71.03500000000005,
+        97.42999999999995,
+        441.189,
+        107.4960000000001
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "beginning_ending_row_parsed",
+      "rule_id": "header.tax_year_end",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "item_a": {
+      "semantic_id": "partnership.ein",
+      "raw_text": "**-**65189",
+      "normalized_value": "**-**65189",
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        38.0,
+        169.7065,
+        82.35549999999999,
+        179.2065
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "overlay_font_bounded_identity",
+      "rule_id": "item_a",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Value derived only from data-font words inside grammar-bounded anchors."
+    },
+    "item_b": {
+      "semantic_id": "partnership.name_address",
+      "raw_text": "COPPERLEAF REAL ESTATE FUND V, L.P.\n5255 LAKE CIR\nST LOUIS, MO 63150",
+      "normalized_value": "COPPERLEAF REAL ESTATE FUND V, L.P.\n5255 LAKE CIR\nST LOUIS, MO 63150",
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        40.0,
+        196.8265,
+        234.24649999999997,
+        227.60649999999998
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "overlay_font_address_block",
+      "rule_id": "item_b",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Value derived only from data-font words inside grammar-bounded anchors."
+    },
+    "item_c": {
+      "semantic_id": "partnership.irs_center",
+      "raw_text": null,
+      "normalized_value": null,
+      "status": "blank",
+      "page": 1,
+      "bbox": [
+        0.0,
+        224.50650000000002,
+        306.0,
+        242.49700000000007
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "overlay_font_window_verified_empty",
+      "rule_id": "item_c",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "The printed field window was located and contains no data-font words."
+    },
+    "item_d": {
+      "semantic_id": "partnership.publicly_traded",
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        57.6,
+        241.75,
+        65.6,
+        249.75
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "label_match+interior_verified_empty",
+      "rule_id": "item_d",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "item_e": {
+      "semantic_id": "partner.identifying_number",
+      "raw_text": "XX-XXX8572",
+      "normalized_value": "XX-XXX8572",
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        38.0,
+        277.7065,
+        93.97399999999999,
+        287.2065
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "overlay_font_bounded_identity",
+      "rule_id": "item_e",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Value derived only from data-font words inside grammar-bounded anchors."
+    },
+    "item_f": {
+      "semantic_id": "partner.name_address",
+      "raw_text": "MERIDIAN REAL ASSETS AGGREGATOR, L.P.\n5981 JUNIPER RD\nROCHESTER, NY 14633",
+      "normalized_value": "MERIDIAN REAL ASSETS AGGREGATOR, L.P.\n5981 JUNIPER RD\nROCHESTER, NY 14633",
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        40.0,
+        304.8265,
+        250.60549999999995,
+        335.6065
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "overlay_font_address_block",
+      "rule_id": "item_f",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Value derived only from data-font words inside grammar-bounded anchors."
+    },
+    "item_g": {
+      "semantic_id": "partner.general_or_limited",
+      "raw_text": null,
+      "normalized_value": "limited_or_other_member",
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        57.6,
+        337.998,
+        188.0,
+        345.998
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "interior_vector",
+      "rule_id": "item_g",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "item_h1": {
+      "semantic_id": "partner.domestic_or_foreign",
+      "raw_text": null,
+      "normalized_value": "domestic",
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        57.6,
+        361.999,
+        188.0,
+        369.999
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "interior_vector",
+      "rule_id": "item_h1",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "item_h2": {
+      "semantic_id": "partner.disregarded_entity_info",
+      "raw_text": "interior_verified_empty",
+      "normalized_value": null,
+      "status": "blank",
+      "page": 1,
+      "bbox": [
+        57.6,
+        373.998,
+        65.6,
+        381.998
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "conditional_record_governing_checkbox_unchecked",
+      "rule_id": "item_h2",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Governing checkbox was located and verified unchecked."
+    },
+    "item_i1": {
+      "semantic_id": "partner.entity_type",
+      "raw_text": "PARTNERSHIP (LIMITED)",
+      "normalized_value": "partnership",
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        175.25,
+        397.7065,
+        290.3045,
+        407.2065
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "overlay_font_bounded_text+value_alias",
+      "rule_id": "item_i1",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Value derived only from data-font words inside grammar-bounded anchors. Printed text was normalized through grammar-declared value_aliases."
+    },
+    "item_i2": {
+      "semantic_id": "partner.retirement_plan",
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        294.4,
+        410.998,
+        302.4,
+        418.998
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "label_match+interior_verified_empty",
+      "rule_id": "item_i2",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "item_j": {
+      "semantic_id": "partner.share_percentages",
+      "raw_text": null,
+      "normalized_value": {
+        "profit": {
+          "beginning": {
+            "status": "present",
+            "value": 100.0,
+            "raw_text": "100.000000"
+          },
+          "ending": {
+            "status": "present",
+            "value": 100.0,
+            "raw_text": "100.000000"
+          }
+        },
+        "loss": {
+          "beginning": {
+            "status": "present",
+            "value": 100.0,
+            "raw_text": "100.000000"
+          },
+          "ending": {
+            "status": "present",
+            "value": 100.0,
+            "raw_text": "100.000000"
+          }
+        },
+        "capital": {
+          "beginning": {
+            "status": "present",
+            "value": 100.0,
+            "raw_text": "100.000000"
+          },
+          "ending": {
+            "status": "present",
+            "value": 100.0,
+            "raw_text": "100.000000"
+          }
+        }
+      },
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        57.6,
+        444.7065,
+        394.75,
+        479.492
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "two_column_grid",
+      "rule_id": "item_j",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "item_j.decrease_reason": {
+      "semantic_id": null,
+      "raw_text": null,
+      "normalized_value": {
+        "sale": {
+          "status": "verified_absent",
+          "value": false
+        },
+        "exchange": {
+          "status": "verified_absent",
+          "value": false
+        }
+      },
+      "status": "blank",
+      "page": 1,
+      "bbox": [
+        57.6,
+        494.0,
+        108.8,
+        502.0
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "multi_checkbox_set",
+      "rule_id": "item_j.decrease_reason",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "taxonomy_gap",
+      "taxonomy_gap": true
+    },
+    "item_k1": {
+      "semantic_id": "partner.share_of_liabilities",
+      "raw_text": null,
+      "normalized_value": {
+        "nonrecourse": {
+          "beginning": {
+            "status": "present",
+            "value": 39700.0,
+            "raw_text": "39,700"
+          },
+          "ending": {
+            "status": "present",
+            "value": 51600.0,
+            "raw_text": "51,600"
+          }
+        },
+        "qualified_nonrecourse_financing": {
+          "beginning": {
+            "status": "present",
+            "value": 10000.0,
+            "raw_text": "10,000"
+          },
+          "ending": {
+            "status": "present",
+            "value": 52600.0,
+            "raw_text": "52,600"
+          }
+        },
+        "recourse": {
+          "beginning": {
+            "status": "present",
+            "value": 80000.0,
+            "raw_text": "80,000"
+          },
+          "ending": {
+            "status": "present",
+            "value": 5100.0,
+            "raw_text": "5,100"
+          }
+        }
+      },
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        57.6,
+        529.7065,
+        388.534,
+        575.2065
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "two_column_grid",
+      "rule_id": "item_k1",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "item_k2": {
+      "semantic_id": "partner.liabilities_from_lower_tier_partnerships",
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        294.4,
+        578.499,
+        302.4,
+        586.499
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "label_match+interior_verified_empty",
+      "rule_id": "item_k2",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "item_k3": {
+      "semantic_id": "partner.liabilities_subject_to_guarantees_or_payment_obligations",
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        294.4,
+        600.249,
+        302.4,
+        608.249
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "label_match_adjacent_wrapped+interior_verified_empty",
+      "rule_id": "item_k3",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "item_l": {
+      "semantic_id": "partner.capital_account_analysis",
+      "raw_text": null,
+      "normalized_value": {
+        "beginning": {
+          "status": "present",
+          "value": 113000.0,
+          "raw_text": "113,000"
+        },
+        "contributions": {
+          "status": "present",
+          "value": 168000.0,
+          "raw_text": "168,000"
+        },
+        "current_year_net_income_loss": {
+          "status": "present",
+          "value": 7206200.0,
+          "raw_text": "7,206,200"
+        },
+        "other_increase_decrease": {
+          "status": "blank",
+          "value": null
+        },
+        "withdrawals_distributions": {
+          "status": "present",
+          "value": -27000.0,
+          "raw_text": "(27,000)"
+        },
+        "ending": {
+          "status": "present",
+          "value": 7460200.0,
+          "raw_text": "7,460,200"
+        }
+      },
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        57.597999999999985,
+        625.7065,
+        522.664,
+        695.889
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "ledger",
+      "rule_id": "item_l",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "item_l.basis_method": {
+      "semantic_id": null,
+      "raw_text": null,
+      "normalized_value": null,
+      "status": "missing",
+      "page": 1,
+      "bbox": null,
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "verified_absent_from_form_revision",
+      "rule_id": "item_l.basis_method",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Verified: none of the 4 declared probe token(s) appear on this page, confirming the field is not printed on this form revision. Absence observed, not assumed.",
+      "taxonomy_gap": true
+    },
+    "item_m": {
+      "semantic_id": "partner.contributed_property_built_in_gain_loss",
+      "raw_text": null,
+      "normalized_value": "no",
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        57.6,
+        710.0,
+        108.8,
+        718.0
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "interior_vector",
+      "rule_id": "item_m",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "item_n": {
+      "semantic_id": "partner.net_unrecognized_section_704c_gain_loss",
+      "raw_text": null,
+      "normalized_value": {
+        "beginning": {
+          "status": "present",
+          "value": 30900.0,
+          "raw_text": "30,900"
+        },
+        "ending": {
+          "status": "present",
+          "value": 11800.0,
+          "raw_text": "11,800"
+        }
+      },
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        57.6,
+        733.7065,
+        300.391,
+        755.2065
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "ledger",
+      "rule_id": "item_n",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_1": {
+      "semantic_id": "ordinary_business_income",
+      "raw_text": "556,000",
+      "normalized_value": 556000.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        318.454,
+        73.02300000000002,
+        571.2189999999999,
+        81.524
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "rule_id": "box_1",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_2": {
+      "semantic_id": "net_rental_real_estate_income",
+      "raw_text": "28,800",
+      "normalized_value": 28800.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        71.03500000000005,
+        97.42999999999995,
+        441.189,
+        107.4960000000001
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_2",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_3": {
+      "semantic_id": "other_net_rental_income",
+      "raw_text": "4,800",
+      "normalized_value": 4800.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        318.454,
+        122.418,
+        493.554,
+        129.5229999999999
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "rule_id": "box_3",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_4a": {
+      "semantic_id": "guaranteed_payments_services",
+      "raw_text": "500",
+      "normalized_value": 500.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        48.425,
+        145.31899999999996,
+        441.678,
+        155.31899999999996
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_4a",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_4b": {
+      "semantic_id": "guaranteed_payments_capital",
+      "raw_text": "500",
+      "normalized_value": 500.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        316.316,
+        169.7065,
+        556.539,
+        177.52499999999998
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "rule_id": "box_4b",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_4c": {
+      "semantic_id": "guaranteed_payments_total",
+      "raw_text": "4c Total guaranteed payments 17 Alternative minimum tax (AMT) items",
+      "normalized_value": null,
+      "status": "blank",
+      "page": 1,
+      "bbox": [
+        316.445,
+        194.495,
+        574.0491,
+        201.5229999999999
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_located_no_numeric_token(segment_bounded_no_value)",
+      "rule_id": "box_4c",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_5": {
+      "semantic_id": "interest_income",
+      "raw_text": "434,000",
+      "normalized_value": 434000.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        318.454,
+        218.10649999999998,
+        382.563,
+        225.524
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_5",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_6a": {
+      "semantic_id": "ordinary_dividends",
+      "raw_text": "253,000",
+      "normalized_value": 253000.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        316.445,
+        242.49700000000007,
+        393.196,
+        249.52499999999998
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_6a",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_6b": {
+      "semantic_id": "qualified_dividends",
+      "raw_text": "123,500",
+      "normalized_value": 123500.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        40.932,
+        266.495,
+        547.244,
+        275.52199999999993
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "rule_id": "box_6b",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_6c": {
+      "semantic_id": "dividend_equivalents",
+      "raw_text": "52,700",
+      "normalized_value": 52700.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        41.125,
+        289.6965,
+        571.993,
+        299.523
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_6c",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_7": {
+      "semantic_id": "royalties",
+      "raw_text": "800",
+      "normalized_value": 800.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        318.454,
+        314.497,
+        362.844,
+        321.52500000000003
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_7",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_8": {
+      "semantic_id": "net_short_term_capital_gain",
+      "raw_text": "94,000",
+      "normalized_value": 94000.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        40.544,
+        338.495,
+        436.099,
+        346.855
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_8",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_9a": {
+      "semantic_id": "net_long_term_capital_gain",
+      "raw_text": "897,700",
+      "normalized_value": 897700.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        38.661,
+        360.7065,
+        460.62899999999996,
+        371.495
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_9a",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_9b": {
+      "semantic_id": "collectibles_gain",
+      "raw_text": "394,600",
+      "normalized_value": 394600.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        316.316,
+        386.497,
+        424.28999999999996,
+        393.52500000000003
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_9b",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_9c": {
+      "semantic_id": "unrecaptured_section_1250_gain",
+      "raw_text": "95,300",
+      "normalized_value": 95300.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        40.222,
+        410.495,
+        434.559,
+        419.523
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_9c",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_10": {
+      "semantic_id": "net_section_1231_gain",
+      "raw_text": "16,100",
+      "normalized_value": 16100.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        229.79899999999998,
+        434.02400000000006,
+        420.678,
+        441.524
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
+      "rule_id": "box_10",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_11": {
+      "semantic_id": "other_income",
+      "raw_text": "A 600,700\n* STMT",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 600700.0,
+          "statement_reference": false,
+          "raw_text": "A 600,700",
+          "bbox": [
+            316.97,
+            468.7065,
+            443.643,
+            478.2065
+          ]
+        },
+        {
+          "code": "*",
+          "value": null,
+          "statement_reference": true,
+          "raw_text": "* STMT",
+          "bbox": [
+            318.55,
+            487.6965,
+            443.639,
+            497.1965
+          ]
+        }
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        316.97,
+        468.7065,
+        443.643,
+        497.1965
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_11",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Parsed 2 face row(s) from overlay-font evidence."
+    },
+    "box_12": {
+      "semantic_id": "section_179_deduction",
+      "raw_text": "75,000",
+      "normalized_value": 75000.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        316.508,
+        506.496,
+        564.597,
+        513.524
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
+      "rule_id": "box_12",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_13": {
+      "semantic_id": "other_deductions",
+      "raw_text": "A 29,400\nB 56,300\n* STMT",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 29400.0,
+          "statement_reference": false,
+          "raw_text": "A 29,400",
+          "bbox": [
+            316.97,
+            540.7065,
+            443.64099999999996,
+            550.2065
+          ]
+        },
+        {
+          "code": "B",
+          "value": 56300.0,
+          "statement_reference": false,
+          "raw_text": "B 56,300",
+          "bbox": [
+            316.97,
+            559.6965,
+            443.64099999999996,
+            569.1965
+          ]
+        },
+        {
+          "code": "*",
+          "value": null,
+          "statement_reference": true,
+          "raw_text": "* STMT",
+          "bbox": [
+            318.55,
+            583.7065,
+            443.639,
+            593.2065
+          ]
+        }
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        316.97,
+        540.7065,
+        443.64099999999996,
+        593.2065
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_13",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Parsed 3 face row(s) from overlay-font evidence."
+    },
+    "box_14": {
+      "semantic_id": "self_employment",
+      "raw_text": "A 104,600\n* STMT",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 104600.0,
+          "statement_reference": false,
+          "raw_text": "A 104,600",
+          "bbox": [
+            453.77,
+            84.7065,
+            571.993,
+            94.2065
+          ]
+        },
+        {
+          "code": "*",
+          "value": null,
+          "statement_reference": true,
+          "raw_text": "* STMT",
+          "bbox": [
+            455.34999999999997,
+            103.7065,
+            571.9989999999999,
+            113.2065
+          ]
+        }
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        453.77,
+        84.7065,
+        571.9989999999999,
+        113.2065
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_14",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Parsed 2 face row(s) from overlay-font evidence."
+    },
+    "box_15": {
+      "semantic_id": "credits",
+      "raw_text": "A 1,800\n* STMT",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 1800.0,
+          "statement_reference": false,
+          "raw_text": "A 1,800",
+          "bbox": [
+            453.77,
+            132.69650000000001,
+            571.999,
+            142.19650000000001
+          ]
+        },
+        {
+          "code": "*",
+          "value": null,
+          "statement_reference": true,
+          "raw_text": "* STMT",
+          "bbox": [
+            455.34999999999997,
+            151.7065,
+            571.9989999999999,
+            161.2065
+          ]
+        }
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        453.77,
+        132.69650000000001,
+        571.999,
+        161.2065
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_15",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Parsed 2 face row(s) from overlay-font evidence."
+    },
+    "box_16": {
+      "semantic_id": "international_transactions",
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        562.0,
+        180.49900000000002,
+        570.0,
+        188.49900000000002
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "attachment_reference+interior_verified_empty",
+      "rule_id": "box_16",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Box 16 checkbox: checked=False target_form=irs-k3-1065-2025"
+    },
+    "box_17": {
+      "semantic_id": "amt_items",
+      "raw_text": "A 79,000\nB 17,200\n* STMT",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 79000.0,
+          "statement_reference": false,
+          "raw_text": "A 79,000",
+          "bbox": [
+            453.77,
+            204.69650000000001,
+            571.9910000000001,
+            214.19650000000001
+          ]
+        },
+        {
+          "code": "B",
+          "value": 17200.0,
+          "statement_reference": false,
+          "raw_text": "B 17,200",
+          "bbox": [
+            453.77,
+            223.7065,
+            571.9910000000001,
+            233.2065
+          ]
+        },
+        {
+          "code": "*",
+          "value": null,
+          "statement_reference": true,
+          "raw_text": "* STMT",
+          "bbox": [
+            455.34999999999997,
+            247.7065,
+            571.9989999999999,
+            257.2065
+          ]
+        }
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        453.77,
+        204.69650000000001,
+        571.9989999999999,
+        257.2065
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_17",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Parsed 3 face row(s) from overlay-font evidence."
+    },
+    "box_18": {
+      "semantic_id": "tax_exempt_nondeductible",
+      "raw_text": "A 118,800\nC 41,200",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 118800.0,
+          "statement_reference": false,
+          "raw_text": "A 118,800",
+          "bbox": [
+            453.77,
+            289.6965,
+            571.993,
+            299.2065
+          ]
+        },
+        {
+          "code": "C",
+          "value": 41200.0,
+          "statement_reference": false,
+          "raw_text": "C 41,200",
+          "bbox": [
+            453.77,
+            307.6965,
+            571.9910000000001,
+            317.1965
+          ]
+        }
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        453.77,
+        289.6965,
+        571.993,
+        317.1965
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_18",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Parsed 2 face row(s) from overlay-font evidence."
+    },
+    "box_19": {
+      "semantic_id": "distributions",
+      "raw_text": "A 27,000",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 27000.0,
+          "statement_reference": false,
+          "raw_text": "A 27,000",
+          "bbox": [
+            453.77,
+            360.7065,
+            571.9910000000001,
+            370.2065
+          ]
+        }
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        453.77,
+        360.7065,
+        571.9910000000001,
+        370.2065
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_19",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Parsed 1 face row(s) from overlay-font evidence."
+    },
+    "box_20": {
+      "semantic_id": "other_information",
+      "raw_text": "A 2,317,700\nB (112,600)\nC 104,300\n* STMT",
+      "normalized_value": [
+        {
+          "code": "A",
+          "value": 2317700.0,
+          "statement_reference": false,
+          "raw_text": "A 2,317,700",
+          "bbox": [
+            453.77,
+            414.6965,
+            571.9960000000001,
+            424.1965
+          ]
+        },
+        {
+          "code": "B",
+          "value": -112600.0,
+          "statement_reference": false,
+          "raw_text": "B (112,600)",
+          "bbox": [
+            453.77,
+            439.7065,
+            571.99,
+            449.2065
+          ]
+        },
+        {
+          "code": "C",
+          "value": 104300.0,
+          "statement_reference": false,
+          "raw_text": "C 104,300",
+          "bbox": [
+            453.77,
+            463.7065,
+            571.993,
+            473.2065
+          ]
+        },
+        {
+          "code": "*",
+          "value": null,
+          "statement_reference": true,
+          "raw_text": "* STMT",
+          "bbox": [
+            455.34999999999997,
+            487.6965,
+            571.9989999999999,
+            497.1965
+          ]
+        }
+      ],
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        453.77,
+        414.6965,
+        571.9989999999999,
+        497.1965
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "overlay_font_coded_rows",
+      "rule_id": "box_20",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": "Parsed 4 face row(s) from overlay-font evidence."
+    },
+    "box_21": {
+      "semantic_id": "foreign_taxes_paid_accrued",
+      "raw_text": "267,500",
+      "normalized_value": 267500.0,
+      "status": "present",
+      "page": 1,
+      "bbox": [
+        316.508,
+        506.496,
+        564.597,
+        513.524
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "row_label_anchor(segment_bounded_next_line(edge=region_edge))",
+      "rule_id": "box_21",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_22": {
+      "semantic_id": "at_risk_activities",
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        331.2,
+        602.0,
+        339.2,
+        610.0
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "label_match_adjacent+interior_verified_empty",
+      "rule_id": "box_22",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    },
+    "box_23": {
+      "semantic_id": "passive_activities",
+      "raw_text": "interior_verified_empty",
+      "normalized_value": false,
+      "status": "verified_absent",
+      "page": 1,
+      "bbox": [
+        331.2,
+        613.999,
+        339.2,
+        621.999
+      ],
+      "coordinate_frame": "pdf_top_left_origin_points",
+      "method": "label_match+interior_verified_empty",
+      "rule_id": "box_23",
+      "confidence": null,
+      "grammar_id": "k1-1065-2025",
+      "grammar_version": "k1-face-grammar/1.0",
+      "notes": null
+    }
+  }
+}

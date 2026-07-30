@@ -4,7 +4,7 @@
 Exercises the full acceptance-gate matrix from the two adversarial NO-GO
 reviews (2026-07-28), including the residual malformed-input counterexamples
 from the second review. Each case runs the actual production assembler
-(phase4_assemble.py) and standalone validator (validate_otd.py) as
+(assemble_otd.py) and standalone validator (validate_otd.py) as
 subprocesses -- never a private/proof-only code path -- so a pass here means
 the shipping pipeline behaves correctly, not just an isolated unit.
 
@@ -26,7 +26,7 @@ from pathlib import Path
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-ASSEMBLER = REPO_ROOT / "skills/k1-otd/scripts/phase4_assemble.py"
+ASSEMBLER = REPO_ROOT / "skills/k1-otd/scripts/assemble_otd.py"
 VALIDATOR = REPO_ROOT / "skills/k1-otd/scripts/validate_otd.py"
 TAXONOMY = REPO_ROOT / "taxonomies/irs-k1-1065-2025.yaml"
 
@@ -36,7 +36,7 @@ BASE_FACE = {
     "part_i": {"partnership_ein": "12-3456789", "partnership_name": "Test LP, 1 Main St",
                "irs_center": "Ogden, UT", "publicly_traded": False},
     "part_ii": {"partner_tin": "123-45-6789", "partner_name": "Test Partner, 2 Elm St",
-                "general_or_limited": "limited_partner", "domestic_or_foreign": "domestic",
+                "general_or_limited": "limited_or_other_member", "domestic_or_foreign": "domestic",
                 "entity_type": "individual", "retirement_plan": False,
                 "share_percentages": {"profit_beginning": 0.1, "profit_ending": 0.1,
                                        "loss_beginning": 0.1, "loss_ending": 0.1,
