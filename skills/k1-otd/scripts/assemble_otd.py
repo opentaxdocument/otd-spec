@@ -17,6 +17,7 @@ try:
     _yaml = YAML()
     _yaml.indent(mapping=2, sequence=4, offset=2)
     _yaml.default_flow_style = False
+    _yaml.width = 4096
 except ImportError:
     print("ERROR: pip install ruamel.yaml", file=sys.stderr)
     sys.exit(1)
