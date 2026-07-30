@@ -210,6 +210,7 @@ operand values:
 | **Absent** (not in document) | Treated as **0.00** | Constraint is **SKIPPED** | **FAILS** if `required: true` |
 | **Null** (present, value: null) | Treated as **0.00** | Treated as **0.00** (may fail range) | Passes (node is present) |
 | **Zero** (value: 0.00) | Treated as **0.00** | Treated as **0.00** | Passes |
+| **Quarantined** (`value: null` plus `_unverified`) | Constraint is **SKIPPED** | Constraint is **SKIPPED** | Passes presence; emits a review warning |
 
 **Rationale:**
 - An absent operand in a sum constraint is treated as 0 so that partial
@@ -219,6 +220,9 @@ operand values:
   the range is meaningless if the value wasn't reported.
 - A null operand is treated as 0 in arithmetic (it was reported as
   having no value, which is arithmetically zero).
+- A quarantined null is different: `_unverified` says the value was not
+  observed, so coercing it to zero would turn uncertainty into a factual
+  assertion. Constraints requiring that value abstain until review resolves it.
 - Required constraint failures for absent nodes are always errors
   regardless of the above.
 
