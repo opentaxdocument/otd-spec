@@ -618,7 +618,10 @@ def main(argv=None):
         run_manifest = {
             "schema_version": "otd-bounded-demo-run/1.0",
             "profile_id": PROFILE_ID,
-            "repository": repository,
+            "repository": {
+                "source_closure_sha256": canonical_sha256(initial_source_closure),
+                "clean_tree_required": bool(args.require_clean),
+            },
             "orchestrator_sha256": sha256_file(Path(__file__)),
             "grammar_sha256": sha256_file(GRAMMAR),
             "taxonomy_sha256": sha256_file(TAXONOMY),
