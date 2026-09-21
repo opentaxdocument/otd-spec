@@ -107,6 +107,14 @@ exists for that node.
 - If source data is absent AND the node IS `required` → emit with `value: null`
 - If source data is present with a zero value → **EMIT** the node (zero is semantically different from absent)
 
+**Reference K-1 profile:** the current validator additionally checks physical
+completeness for declared form fields. The assembler emits those fields even
+when unobserved, using `null` plus a non-empty `_unverified` reason rather than
+omission or a plausible default. This profile-specific rule does not turn
+unknown values into zero or unchecked boxes; see the parser guide §7.1.
+Likewise, administrative defaults above apply only when established by source
+data or explicit configuration, not when an extraction failed to observe them.
+
 **Node Structure:**
 Every emitted node MUST include:
 - `type` — the TaxNode primitive type
@@ -144,7 +152,9 @@ box_11:
 When emitting a Code ZZ entry, the `classification` field in `semantic`
 is REQUIRED. The emitter must either:
 1. Map the source data to a known classification, or
-2. Use classification `"unclassified"` and attach the raw data as a statement
+2. In the reference profile, use `"unclassified_requires_review"` with a
+   non-empty `_unverified` reason and preserve the source for human review.
+   Do not invent a known classification to make validation pass.
 
 #### Grid
 ```yaml
@@ -166,9 +176,12 @@ grid_node:
 
 **Grid Emission Rules:**
 - Column definitions are always emitted in full (from taxonomy)
-- Rows are emitted only if at least one cell has a non-null value
-- Null cells within an emitted row are represented as `0` (not omitted)
-  because grid position is semantically meaningful
+- Retain rows with reported values or meaningful evidence/metadata.
+- Preserve null cells as `null`, not `0`. Retain their column keys so grid
+  position remains meaningful without asserting an unreported amount.
+- An unobserved cell uses the core spec's typed-cell form with `value: null`
+  and a non-empty `_unverified` explanation. Emit `0.00` only for an observed
+  monetary zero. Constraint-time null algebra does not rewrite source values.
 - Country-specific grids repeat the grid structure with a `country_code` field
 
 #### RecordSet
@@ -197,6 +210,7 @@ statement_node:
     id: "..."
     label: "..."
     classification: "..."            # REQUIRED — what kind of statement
+    role: investor_footnote           # Reference profile: role is required
   form:
     attachment: true
   parent_ref: "..."                  # Semantic path to the parent node
@@ -205,8 +219,9 @@ statement_node:
 ```
 
 **Statement Emission Rules:**
-- `classification` is REQUIRED and must be a recognized category
-  or a custom string
+- `classification` is REQUIRED. Use a recognized category, a supported
+  namespaced extension, or `custom` with non-empty `content.custom_classification`
+  in the reference profile.
 - `content` may contain any valid TaxNode tree
 - Statements referenced from a coded entry (e.g., Box 20 Code ZZ)
   are emitted inline under that entry
@@ -214,6 +229,9 @@ statement_node:
   top-level `statements` array
 - For complex attachments (Form 926, state grids, K-3), the
   emitter should use the appropriate taxonomy to structure the content
+- Investor-footnote statements also preserve non-empty verbatim `source_text`
+  and the structured layer described in the footnote catalog. Catalog rules
+  are not all enforced by the current validator; inspect the source as well.
 
 #### Reference
 ```yaml
@@ -264,7 +282,9 @@ Before writing the final document, the emitter SHOULD:
 - **Encoding:** UTF-8 (no BOM)
 - **Line endings:** LF (`\n`)
 - **Indentation:** 2 spaces (YAML standard)
-- **Decimal precision:** At least 2 decimal places for currency values
+- **Decimal precision:** Exactly 2 decimal places for currency values;
+  preserve the reported precision of percentages and non-currency quantities.
+  Use configured Decimal-aware parsing and serialization, not library defaults.
 - **Date format:** ISO 8601 (`YYYY-MM-DD`)
 - **DateTime format:** ISO 8601 with timezone (`YYYY-MM-DDTHH:MM:SSZ`)
 

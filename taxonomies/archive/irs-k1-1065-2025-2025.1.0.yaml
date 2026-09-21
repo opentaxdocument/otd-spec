@@ -11,7 +11,6 @@
 # Authors:       Tom O'Sullivan, Second Wind
 # Date:          2026-04-02
 # Status:        DRAFT
-# Last correction: 2026-09-21, version 2025.1.1 (labels only)
 # ============================================================================
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -20,7 +19,7 @@
 
 taxonomy:
   id: "irs-k1-1065-2025"
-  version: "2025.1.1"
+  version: "2025.1.0"
   form_id: "k1-1065"
   form_number: "Schedule K-1"
   parent_form: "Form 1065"
@@ -52,14 +51,6 @@ taxonomy:
 # Implementers should consult the MeF schema directly.
 
 change_log:
-  - version: "2025.1.1"
-    date: "2026-09-21"
-    changes:
-      - "Correct Box 15 Codes C and D labels to post-2007 buildings."
-      - "Correct Box 20 Codes F and G labels to distinguish partnership types without a building-year restriction."
-      - "No changes to codes, semantic identifiers, data types, or constraints."
-    source: "https://www.irs.gov/instructions/i1065sk1"
-    prior_version: "archive/irs-k1-1065-2025-2025.1.0.yaml"
   - version: "2025.1.0"
     date: "2025-01-01"
     changes:
@@ -956,11 +947,11 @@ nodes:
             value_type: decimal
           C:
             semantic_id: "credits.low_income_housing_current"
-            label: "Low-income housing credit (section 42(j)(5)) from post-2007 buildings"
+            label: "Low-income housing credit (section 42(j)(5)) from pre-2008 buildings"
             value_type: decimal
           D:
             semantic_id: "credits.low_income_housing_other"
-            label: "Low-income housing credit (other) from post-2007 buildings"
+            label: "Low-income housing credit (other) from pre-2008 buildings"
             value_type: decimal
           E:
             semantic_id: "credits.rehab_rental_real_estate"
@@ -1373,11 +1364,11 @@ nodes:
             value_type: decimal
           F:
             semantic_id: "other_information.low_income_housing_recapture_current"
-            label: "Recapture of low-income housing credit for section 42(j)(5) partnerships"
+            label: "Recapture of low-income housing credit (section 42(j)(5)) from pre-2008 buildings"
             value_type: decimal
           G:
             semantic_id: "other_information.low_income_housing_recapture_other"
-            label: "Recapture of low-income housing credit for other partnerships"
+            label: "Recapture of low-income housing credit (other) from pre-2008 buildings"
             value_type: decimal
           H:
             semantic_id: "other_information.investment_credit_recapture"

@@ -15,7 +15,11 @@ new field was patched individually. This module exists to close that
 pattern structurally rather than field-by-field.
 """
 from __future__ import annotations
+import ast
 import re
+from decimal import Decimal, InvalidOperation
+
+from otd_values import as_decimal, decimal_delta, decimal_sum, is_numeric, tree_problem
 
 _BOX_RE = re.compile(r"^box_\d+[a-z]?$")
 _ITEM_RE = re.compile(r"^item_[a-z0-9]+$")
@@ -39,6 +43,8 @@ def resolve_path(body, path):
     Returns (found: bool, value, is_wildcard: bool).
     """
     parts = path.split(".")
+    if parts and parts[0] == "body":
+        parts = parts[1:]
     if not parts:
         return False, None, False
     node = body.get(parts[0])
@@ -98,8 +104,8 @@ def _literal(token):
     if (token.startswith("'") and token.endswith("'")) or (token.startswith('"') and token.endswith('"')):
         return token[1:-1]
     try:
-        return float(token) if "." in token else int(token)
-    except ValueError:
+        return as_decimal(Decimal(token))
+    except (ValueError, InvalidOperation):
         return token
 
 
@@ -181,40 +187,18 @@ _STRUCTURAL_KEYS = {"semantic", "form", "value"}
 
 
 def _numeric(value):
-    return isinstance(value, (int, float)) and not isinstance(value, bool)
+    return is_numeric(value)
 
 
 def _eval_range_rule(rule, value, body, taxonomy):
-    """Evaluate a restricted range rule, e.g. 'value >= 0 and value <= 1'
-    or 'value <= part_iii.box_6a.value'.
-
-    Substitution order matters. Dotted path references are resolved FIRST,
-    because substituting the bare `value` token first also rewrites the
-    `value` suffix inside a right-hand-side path -- turning
-    `value <= part_iii.box_6a.value` into `500.0 <= part_iii.box_6a.500.0`,
-    which cannot be parsed. Paired with a bare `except: return True`, that
-    let `box_6b_lte_6a` certify documents where qualified dividends
-    exceeded ordinary dividends.
-
-    The path itself is now resolved whole. Previously `.value` was stripped
-    before resolution, which returned the enclosing TaxNode dictionary
-    rather than the number -- a second, independently fatal defect in the
-    same three lines.
-    """
-    def _sub(match):
-        path = match.group(0)
+    """Interpret a validated comparison tree without executing Python code."""
+    tree, paths = _parse_range_rule(rule)
+    resolved = {}
+    for path in paths:
         if _path_is_quarantined(body, path):
             raise RangeRuleSkip(path)
         found, val, _ = resolve_path(body, path)
         if not found:
-            # 4.7: an absent operand skips the constraint rather than
-            # failing it -- but only when the taxonomy actually declares
-            # the path. An undeclared path (e.g. a typo'd box reference)
-            # is a malformed rule, not a legitimately-missing value, and
-            # must be a hard error rather than a silent skip. A
-            # misspelled cross-path reference previously disabled the
-            # rule for every document (Adversary's fourth review,
-            # box_6a -> box_6a_typo).
             if taxonomy_declares_path(taxonomy, path):
                 raise RangeRuleSkip(path)
             raise RangeRuleError(
@@ -222,18 +206,112 @@ def _eval_range_rule(rule, value, body, taxonomy):
                 f"not declare (possible typo)")
         val = _unwrap_value(val)
         if val is None:
-            # 4.7: a null operand is arithmetically 0.00.
-            val = 0.0
+            val = Decimal(0)
         if not _numeric(val):
             raise RangeRuleError(f"{rule!r}: {path} is not numeric ({val!r})")
-        return repr(val)
+        resolved[path] = as_decimal(val)
 
-    expr = re.sub(r"[A-Za-z_][A-Za-z0-9_.]*\.value", _sub, rule)
-    expr = re.sub(r"\bvalue\b", repr(value), expr)
+    def evaluate(node):
+        if isinstance(node, ast.Name):
+            return as_decimal(value)
+        if isinstance(node, ast.Attribute):
+            return resolved[_range_path(node)]
+        if isinstance(node, ast.Constant):
+            return as_decimal(Decimal(ast.get_source_segment(rule, node).replace("_", "")))
+        if isinstance(node, ast.UnaryOp):
+            result = evaluate(node.operand)
+            return result.copy_negate() if isinstance(node.op, ast.USub) else result
+        if isinstance(node, ast.BoolOp):
+            values = (evaluate(child) for child in node.values)
+            return all(values) if isinstance(node.op, ast.And) else any(values)
+        left = evaluate(node.left)
+        for operator, right_node in zip(node.ops, node.comparators):
+            right = evaluate(right_node)
+            if not _COMPARATORS[_RANGE_OPERATORS[type(operator)]](left, right):
+                return False
+            left = right
+        return True
+
     try:
-        return bool(eval(expr, {"__builtins__": {}}, {}))
+        return evaluate(tree.body)
     except Exception as exc:
         raise RangeRuleError(f"{rule!r}: {exc}") from exc
+
+
+_RANGE_OPERATORS = {
+    ast.Eq: "==", ast.NotEq: "!=", ast.GtE: ">=",
+    ast.LtE: "<=", ast.Gt: ">", ast.Lt: "<",
+}
+
+
+def _range_path(node):
+    parts = []
+    while isinstance(node, ast.Attribute):
+        parts.append(node.attr)
+        node = node.value
+    if not isinstance(node, ast.Name):
+        raise RangeRuleError("range paths must start with a physical part name")
+    parts.append(node.id)
+    parts.reverse()
+    if (
+        len(parts) < 2
+        or not re.fullmatch(r"part_[a-z0-9_]+", parts[0])
+        or any(not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_]*", part)
+               for part in parts[1:])
+    ):
+        raise RangeRuleError("unsupported range path")
+    return ".".join(parts)
+
+
+def _parse_range_rule(rule):
+    """Allow numeric comparisons, signed literals, declared paths, and and/or.
+
+    Calls, indexing, comprehensions, lambdas, arbitrary attribute access,
+    arithmetic operators, and Python truthiness shortcuts are not this DSL.
+    """
+    if not isinstance(rule, str) or not rule.strip() or len(rule) > 4096:
+        raise RangeRuleError("range rule must be a non-empty bounded string")
+    try:
+        tree = ast.parse(rule, mode="eval")
+    except (SyntaxError, ValueError, RecursionError) as exc:
+        raise RangeRuleError("invalid range syntax: %s" % exc) from exc
+    if sum(1 for _ in ast.walk(tree)) > 128:
+        raise RangeRuleError("range rule exceeds the expression node limit")
+    paths = set()
+
+    def numeric(node):
+        if isinstance(node, ast.Name) and node.id == "value":
+            return
+        if isinstance(node, ast.Attribute):
+            paths.add(_range_path(node))
+            return
+        if isinstance(node, ast.Constant) and type(node.value) in (int, float):
+            try:
+                as_decimal(Decimal(ast.get_source_segment(rule, node).replace("_", "")))
+                return
+            except Exception as exc:
+                raise RangeRuleError("invalid numeric range literal") from exc
+        if isinstance(node, ast.UnaryOp) and isinstance(node.op, (ast.UAdd, ast.USub)):
+            numeric(node.operand)
+            return
+        raise RangeRuleError("range operand is not value, a number, or a declared path")
+
+    def predicate(node):
+        if isinstance(node, ast.BoolOp) and isinstance(node.op, (ast.And, ast.Or)):
+            for child in node.values:
+                predicate(child)
+            return
+        if isinstance(node, ast.Compare):
+            numeric(node.left)
+            for operator, right in zip(node.ops, node.comparators):
+                if type(operator) not in _RANGE_OPERATORS:
+                    raise RangeRuleError("unsupported range comparison")
+                numeric(right)
+            return
+        raise RangeRuleError("range rules must contain comparisons joined by and/or")
+
+    predicate(tree.body)
+    return tree, sorted(paths)
 
 
 # ---------------------------------------------------------------------------
@@ -297,7 +375,7 @@ def run_constraints(body, constraints, taxonomy):
             if (_path_is_quarantined(body, target)
                     or any(_path_is_quarantined(body, op) for op in operands)):
                 continue
-            tolerance = c.get("tolerance", 0.0)
+            tolerance = as_decimal(c.get("tolerance", 0))
             t_found, t_val, _ = resolve_path(body, target)
             t_val = _unwrap_value(t_val) if t_found else None
             # otd-parser-spec.md 4.7: a null target is arithmetically 0.00.
@@ -315,8 +393,8 @@ def run_constraints(body, constraints, taxonomy):
                 # 4.7: absent and null operands each contribute 0.00, so a
                 # partial K-1 does not raise spurious arithmetic failures.
                 op_values.append(val if _numeric(val) else 0.0)
-            computed = sum(op_values)
-            delta = abs(computed - t_val)
+            computed = decimal_sum(op_values)
+            delta = decimal_delta(computed, t_val)
             if delta > tolerance:
                 findings.append((severity, cid,
                     f"{cid}: {target} ({t_val}) does not equal sum of operands "
@@ -509,7 +587,9 @@ def validate_statement_requirements(body, requirements):
                 f"{out_path} statement is not a structured object"))
             continue
 
-        semantic = stmt.get("semantic") or {}
+        semantic = stmt.get("semantic")
+        if not isinstance(semantic, dict):
+            semantic = {}
         if semantic.get("role") != "investor_footnote":
             findings.append(("error", f"statement_role:{out_path}",
                 f"{out_path} statement is missing semantic.role: investor_footnote"))
@@ -539,6 +619,15 @@ def validate_statement_requirements(body, requirements):
                     findings.append(("error", f"statement_field:{out_path}.{fname}",
                         f"{out_path} statement content field '{fname}' is null but taxonomy "
                         f"marks it non-nullable"))
+                elif fname in content:
+                    declaration = dict(field_def)
+                    declaration["value_type"] = field_def.get(
+                        "value_type", field_def.get("type")
+                    )
+                    findings.extend(_validate_declared_payload(
+                        f"{out_path}.statement.content.{fname}",
+                        declaration, content[fname],
+                    ))
     return findings
 
 
@@ -584,6 +673,11 @@ def validate_primitive_contracts(body, root_path="body"):
                 ))
 
             if "_unverified" in node:
+                if not isinstance(node["_unverified"], str) or not node["_unverified"].strip():
+                    findings.append((
+                        "error", f"review_marker:{path}",
+                        f"{path} requires a non-empty _unverified explanation",
+                    ))
                 for factual_key in ("value", "checked"):
                     if factual_key in node and node.get(factual_key) is not None:
                         findings.append((
@@ -594,9 +688,18 @@ def validate_primitive_contracts(body, root_path="body"):
                             "unobserved facts must be null",
                         ))
 
-            if ntype in _VALID_TYPES:
+            if "type" in node and not isinstance(ntype, str):
+                findings.append((
+                    "error", f"primitive_type:{path}",
+                    f"{path}.type must be a string",
+                ))
+            if isinstance(ntype, str) and ntype in _VALID_TYPES:
                 semantic = node.get("semantic")
-                if not isinstance(semantic, dict) or not semantic.get("id"):
+                if (
+                    not isinstance(semantic, dict)
+                    or not isinstance(semantic.get("id"), str)
+                    or not semantic["id"].strip()
+                ):
                     findings.append((
                         "error",
                         f"primitive_semantic:{path}",
@@ -635,7 +738,7 @@ def validate_primitive_contracts(body, root_path="body"):
                             f"primitive_role:{path}",
                             f"{path} (statement) is missing semantic.role",
                         ))
-                    elif role not in _VALID_STATEMENT_ROLES:
+                    elif not isinstance(role, str) or role not in _VALID_STATEMENT_ROLES:
                         findings.append((
                             "error",
                             f"primitive_role:{path}",
@@ -643,8 +746,29 @@ def validate_primitive_contracts(body, root_path="body"):
                             f"{role!r}",
                         ))
 
+                if ntype == "coded" and not isinstance(node.get("entries"), list):
+                    findings.append((
+                        "error", f"primitive_entries:{path}",
+                        f"{path}.entries must be a sequence",
+                    ))
+                if ntype == "statement" and not isinstance(node.get("content"), (dict, list)):
+                    findings.append((
+                        "error", f"primitive_content:{path}",
+                        f"{path}.content must be a mapping or sequence",
+                    ))
                 if ntype == "reference":
                     checked = node.get("checked")
+                    if checked is not None and not isinstance(checked, bool):
+                        findings.append((
+                            "error", f"reference_checked:{path}",
+                            f"{path}.checked must be boolean or null",
+                        ))
+                    for key in ("target", "notification"):
+                        if node.get(key) is not None and not isinstance(node[key], dict):
+                            findings.append((
+                                "error", f"reference_payload:{path}.{key}",
+                                f"{path}.{key} must be a mapping",
+                            ))
                     if checked is False and node.get("target") is not None:
                         findings.append((
                             "error",
@@ -780,8 +904,8 @@ def validate_capital_account(body):
         components = [normalized.get(f) for f in _CAPITAL_COMPONENTS[:-1]]
         ending = normalized.get("ending")
         if all(_numeric(c) for c in components) and _numeric(ending):
-            delta = abs(sum(components) - ending)
-            if delta > 1.0:
+            delta = decimal_delta(decimal_sum(components), ending)
+            if delta > Decimal("1.00"):
                 findings.append(("warning", "capital_continuity",
                     f"part_ii.item_l ending balance differs from computed "
                     f"continuity by ${delta:,.2f}"))
@@ -823,6 +947,10 @@ def validate_coded_entry_uniqueness(body):
                             f"{path}.entries[{i}] is not a structured coded entry"))
                         continue
                     code = str(entry.get("code", "")).strip().upper()
+                    if "value" not in entry:
+                        findings.append(("error", f"coded_entry_value:{path}",
+                            f"{path}.entries[{i}] must carry an explicit value, "
+                            "including null when appropriate"))
                     if not code:
                         findings.append(("error", f"coded_entry_code:{path}",
                             f"{path}.entries[{i}] carries no code and cannot be "
@@ -1007,6 +1135,9 @@ def compile_taxonomy(taxonomy):
         _require_declared_path(taxonomy, target, cid, "target", errors)
 
         if kind == "sum":
+            tolerance = constraint.get("tolerance", 0)
+            if not _numeric(tolerance) or as_decimal(tolerance) < 0:
+                errors.append(f"{cid}: tolerance must be finite and non-negative")
             operands = constraint.get("operands")
             if not isinstance(operands, list) or not operands:
                 errors.append(f"{cid}: sum operands must be a non-empty sequence")
@@ -1025,14 +1156,15 @@ def compile_taxonomy(taxonomy):
             if not isinstance(rule, str) or not rule.strip():
                 errors.append(f"{cid}: range rule must be a non-empty string")
             else:
-                for referenced_path in _RULE_PATH_RE.findall(rule):
-                    _require_declared_path(
-                        taxonomy,
-                        referenced_path,
-                        cid,
-                        "range expression",
-                        errors,
-                    )
+                try:
+                    _, referenced_paths = _parse_range_rule(rule)
+                except RangeRuleError as exc:
+                    errors.append(f"{cid}: {exc}")
+                else:
+                    for referenced_path in referenced_paths:
+                        _require_declared_path(
+                            taxonomy, referenced_path, cid, "range expression", errors,
+                        )
 
         elif kind == "conditional_required":
             condition = constraint.get("condition")
@@ -1060,9 +1192,9 @@ def compile_taxonomy(taxonomy):
 
 
 _BINDING_VALUE_TYPES = {
-    "decimal": (int, float),
+    "decimal": (int, float, Decimal),
     "integer": (int,),
-    "percentage": (int, float),
+    "percentage": (int, float, Decimal),
     "string": (str,),
     "enum": (str,),
     "date": (str,),
@@ -1082,7 +1214,7 @@ def _payload_conforms(value_type, value):
     if expected is None:
         return True
     if value_type in ("decimal", "integer", "percentage"):
-        return isinstance(value, expected) and not isinstance(value, bool)
+        return isinstance(value, expected) and _numeric(value)
     return isinstance(value, expected)
 
 
@@ -1091,6 +1223,12 @@ def _validate_declared_payload(path, declaration, value):
     findings = []
     value_type = _bind_norm(declaration.get("value_type"))
     if value is None:
+        return findings
+    if "value_type" in declaration and declaration["value_type"] is None:
+        findings.append((
+            "error", f"binding_value_type:{path}",
+            f"{path} declares a null face value; detail belongs in its statement",
+        ))
         return findings
 
     if value_type == "object":
@@ -1265,6 +1403,14 @@ def validate_taxonomy_binding(body, taxonomy):
                 ))
 
             form = node.get("form")
+            expected_form_id = (taxonomy.get("taxonomy") or {}).get("form_id")
+            actual_form_id = form.get("form_id") if isinstance(form, dict) else None
+            if expected_form_id and actual_form_id != expected_form_id:
+                findings.append((
+                    "error", f"binding_form_id:{path}",
+                    f"{path}.form.form_id {actual_form_id!r} does not match "
+                    f"the governing form {expected_form_id!r}",
+                ))
             wanted_location = _bind_norm(declaration.get("form_location"))
             actual_location = (
                 _bind_norm(form.get("location")) if isinstance(form, dict) else None
@@ -1410,6 +1556,15 @@ def run_taxonomy_driven_validation(body, taxonomy, statements=None):
     """Compile the taxonomy, then validate one assembled document."""
     compile_taxonomy(taxonomy)
     errors, warnings = [], []
+    for root, label in ((body, "body"), (statements, "statements")):
+        problem = tree_problem(root)
+        if problem:
+            errors.append(f"{label}: {problem}")
+            continue
+        for severity, _, message in validate_primitive_contracts(root, label):
+            (errors if severity == "error" else warnings).append(message)
+    if errors:
+        return errors, warnings
 
     for severity, _, message in run_constraints(
         body,
@@ -1423,7 +1578,6 @@ def run_taxonomy_driven_validation(body, taxonomy, statements=None):
         (errors if severity == "error" else warnings).append(message)
 
     for validator in (
-        lambda: validate_primitive_contracts(body),
         lambda: validate_physical_completeness(body, taxonomy),
         lambda: validate_taxonomy_binding(body, taxonomy),
         lambda: validate_capital_account(body),
@@ -1431,13 +1585,6 @@ def run_taxonomy_driven_validation(body, taxonomy, statements=None):
         lambda: validate_statement_catalog(body, taxonomy, statements),
     ):
         for severity, _, message in validator():
-            (errors if severity == "error" else warnings).append(message)
-
-    if statements:
-        for severity, _, message in validate_primitive_contracts(
-            statements,
-            "statements",
-        ):
             (errors if severity == "error" else warnings).append(message)
 
     return errors, warnings

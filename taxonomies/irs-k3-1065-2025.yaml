@@ -8,8 +8,11 @@
 # Date: 2026-04-02
 # ════════════════════════════════════════════════════════════════════════════
 #
-# This taxonomy defines the complete structural blueprint for Schedule K-3
-# (Form 1065) — the international supplement to Schedule K-1.
+# This taxonomy is a draft structural representation of Schedule K-3
+# (Form 1065), the international supplement to Schedule K-1.
+# It has no K-3 proof, extraction fixture, or implementation exercise.
+# Its declaration layout differs from K-1 and is not operative in the
+# reference K-1 validator. Completeness and tax accuracy require review.
 #
 # K-3 is the most structurally complex form in the U.S. partnership tax
 # system. It contains 13 Parts spanning:
@@ -22,7 +25,7 @@
 #   - Covered partnership and QDD data (Parts XI, XII)
 #   - Deemed sale character tables (Part XIII)
 #
-# OTD Primitives Exercised:
+# OTD Primitives Modelled (not demonstrated by executable K-3 tests):
 #   scalar    → Part I boxes, Part IV DEI lines, Part IX applicability
 #   coded     → Part I (boxes with attachments and code qualifiers)
 #   grid      → Parts II, III, IV, VIII, IX, X, XIII

@@ -6,19 +6,19 @@
     "sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac"
   },
   "source_artifacts": {
-    "evidence_receipt_sha256": "584fe210da648cf97225f7ac85a55f444d22d1793f5f57e7a0281c068f05294a",
-    "face_evidence_canonical_sha256": "542042e6005ccb2ed631e03d4083ae5c0096270a9c258a474c3a8ee7582bcc10",
-    "line_details_sha256": "f6ae17c8aa337d760c8c9404c508b17815f3d30128ffbd8b7b84cc332519f892",
+    "evidence_receipt_sha256": "f408f8aaa7e92d8b8c2d13bba290a3fef8462bda7471388c1d2bfced9d1f0030",
+    "face_evidence_canonical_sha256": "e31b311aee1aedbd91e72dd42361200fa4842cd2f4721e506f5dfd16bdc3ffbc",
+    "line_details_sha256": "a26d5202145a0da6de97c4e1029dc40cfc6383204e4eda844eeb013db6e9c49c",
     "page_manifest_sha256": "c438201996fffcbdfcb25504431c1f31b3986d2dc21d6c9e74791e7406888c6f",
     "section_manifest_sha256": "42310f24955b7873e155fd1be08a4a226c14939941d8f75322e40ff493af292b",
     "state_attempt_sha256": "ca748007696958efe0891a73ac446fa91773d9573018346c94cefeabeb6bebbf"
   },
   "fragment_sha256": {
-    "face_page.json": "562d366510932f1d9be8532e83fa84094586dc200b28c04764b89bdb9249916f",
-    "footnotes_a.json": "f426eaadddd093673b152975e5890365abd3e0dd80fd09903b7ce295b44bbea8",
-    "footnotes_b.json": "f426eaadddd093673b152975e5890365abd3e0dd80fd09903b7ce295b44bbea8",
-    "overflow_statements.json": "0f1ff2405508012444d25ac0510e5d2d2e4015e2d0fd9d470c1ef43c72b17b8b",
-    "state_schedules.json": "4cca31969948262e2b9e4be29ba9d5080c011489c0acb480cdca3439a7585d31"
+    "face_page.json": "7190ee24f0709dd4cb094d7927fb44127a92417f30932fd3746c3f35b2fb5297",
+    "footnotes_a.json": "c57734df0bd47a56fb21999ca966978a4afbd466496ed34bf7ec9795f59ea60c",
+    "footnotes_b.json": "c57734df0bd47a56fb21999ca966978a4afbd466496ed34bf7ec9795f59ea60c",
+    "overflow_statements.json": "1a71c4f7ce1d0f1e9a1031d8b68ea117377a4dde5984968d4a78fe8771702d3d",
+    "state_schedules.json": "1104cd1886b7adbab8a29661a534c1b09da3c51460ffa2ab4e0de4cc290ce87c"
   },
   "scope": {
     "face_fields": true,
@@ -396,36 +396,36 @@
         "profit": {
           "beginning": {
             "status": "present",
-            "value": 100.0,
+            "value": 100.000000,
             "raw_text": "100.000000"
           },
           "ending": {
             "status": "present",
-            "value": 100.0,
+            "value": 100.000000,
             "raw_text": "100.000000"
           }
         },
         "loss": {
           "beginning": {
             "status": "present",
-            "value": 100.0,
+            "value": 100.000000,
             "raw_text": "100.000000"
           },
           "ending": {
             "status": "present",
-            "value": 100.0,
+            "value": 100.000000,
             "raw_text": "100.000000"
           }
         },
         "capital": {
           "beginning": {
             "status": "present",
-            "value": 100.0,
+            "value": 100.000000,
             "raw_text": "100.000000"
           },
           "ending": {
             "status": "present",
-            "value": 100.0,
+            "value": 100.000000,
             "raw_text": "100.000000"
           }
         }
@@ -486,36 +486,36 @@
         "nonrecourse": {
           "beginning": {
             "status": "present",
-            "value": 39700.0,
+            "value": 39700,
             "raw_text": "39,700"
           },
           "ending": {
             "status": "present",
-            "value": 51600.0,
+            "value": 51600,
             "raw_text": "51,600"
           }
         },
         "qualified_nonrecourse_financing": {
           "beginning": {
             "status": "present",
-            "value": 10000.0,
+            "value": 10000,
             "raw_text": "10,000"
           },
           "ending": {
             "status": "present",
-            "value": 52600.0,
+            "value": 52600,
             "raw_text": "52,600"
           }
         },
         "recourse": {
           "beginning": {
             "status": "present",
-            "value": 80000.0,
+            "value": 80000,
             "raw_text": "80,000"
           },
           "ending": {
             "status": "present",
-            "value": 5100.0,
+            "value": 5100,
             "raw_text": "5,100"
           }
         }
@@ -523,7 +523,8 @@
       "method": "two_column_grid",
       "rule_id": "item_k1",
       "transformations": [
-        "nested evidence cells flattened"
+        "nested evidence cells flattened",
+        "qualified_nonrecourse_financing mapped to canonical qualified_nonrecourse fields"
       ]
     },
     {
@@ -543,17 +544,17 @@
       "normalized_value": {
         "beginning": {
           "status": "present",
-          "value": 113000.0,
+          "value": 113000,
           "raw_text": "113,000"
         },
         "contributions": {
           "status": "present",
-          "value": 168000.0,
+          "value": 168000,
           "raw_text": "168,000"
         },
         "current_year_net_income_loss": {
           "status": "present",
-          "value": 7206200.0,
+          "value": 7206200,
           "raw_text": "7,206,200"
         },
         "other_increase_decrease": {
@@ -562,12 +563,12 @@
         },
         "withdrawals_distributions": {
           "status": "present",
-          "value": -27000.0,
+          "value": -27000,
           "raw_text": "(27,000)"
         },
         "ending": {
           "status": "present",
-          "value": 7460200.0,
+          "value": 7460200,
           "raw_text": "7,460,200"
         }
       },
@@ -616,12 +617,12 @@
       "normalized_value": {
         "beginning": {
           "status": "present",
-          "value": 30900.0,
+          "value": 30900,
           "raw_text": "30,900"
         },
         "ending": {
           "status": "present",
-          "value": 11800.0,
+          "value": 11800,
           "raw_text": "11,800"
         }
       },
@@ -645,7 +646,7 @@
         94.2065
       ],
       "raw_text": "556,000",
-      "normalized_value": 556000.0,
+      "normalized_value": 556000,
       "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
       "rule_id": "box_1",
       "transformations": []
@@ -664,7 +665,7 @@
         118.2065
       ],
       "raw_text": "28,800",
-      "normalized_value": 28800.0,
+      "normalized_value": 28800,
       "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
       "rule_id": "box_2",
       "transformations": []
@@ -683,7 +684,7 @@
         142.16650000000004
       ],
       "raw_text": "4,800",
-      "normalized_value": 4800.0,
+      "normalized_value": 4800,
       "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
       "rule_id": "box_3",
       "transformations": []
@@ -702,7 +703,7 @@
         166.2065
       ],
       "raw_text": "500",
-      "normalized_value": 500.0,
+      "normalized_value": 500,
       "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
       "rule_id": "box_4a",
       "transformations": []
@@ -721,7 +722,7 @@
         190.2065
       ],
       "raw_text": "500",
-      "normalized_value": 500.0,
+      "normalized_value": 500,
       "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
       "rule_id": "box_4b",
       "transformations": []
@@ -762,7 +763,7 @@
         238.2065
       ],
       "raw_text": "434,000",
-      "normalized_value": 434000.0,
+      "normalized_value": 434000,
       "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
       "rule_id": "box_5",
       "transformations": []
@@ -781,7 +782,7 @@
         262.2065
       ],
       "raw_text": "253,000",
-      "normalized_value": 253000.0,
+      "normalized_value": 253000,
       "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
       "rule_id": "box_6a",
       "transformations": []
@@ -800,7 +801,7 @@
         286.1965
       ],
       "raw_text": "123,500",
-      "normalized_value": 123500.0,
+      "normalized_value": 123500,
       "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
       "rule_id": "box_6b",
       "transformations": []
@@ -819,7 +820,7 @@
         310.2065
       ],
       "raw_text": "52,700",
-      "normalized_value": 52700.0,
+      "normalized_value": 52700,
       "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
       "rule_id": "box_6c",
       "transformations": []
@@ -838,7 +839,7 @@
         334.2065
       ],
       "raw_text": "800",
-      "normalized_value": 800.0,
+      "normalized_value": 800,
       "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
       "rule_id": "box_7",
       "transformations": []
@@ -857,7 +858,7 @@
         358.1965
       ],
       "raw_text": "94,000",
-      "normalized_value": 94000.0,
+      "normalized_value": 94000,
       "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
       "rule_id": "box_8",
       "transformations": []
@@ -876,7 +877,7 @@
         382.2065
       ],
       "raw_text": "897,700",
-      "normalized_value": 897700.0,
+      "normalized_value": 897700,
       "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
       "rule_id": "box_9a",
       "transformations": []
@@ -895,7 +896,7 @@
         406.2065
       ],
       "raw_text": "394,600",
-      "normalized_value": 394600.0,
+      "normalized_value": 394600,
       "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
       "rule_id": "box_9b",
       "transformations": []
@@ -914,7 +915,7 @@
         430.1965
       ],
       "raw_text": "95,300",
-      "normalized_value": 95300.0,
+      "normalized_value": 95300,
       "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
       "rule_id": "box_9c",
       "transformations": []
@@ -933,7 +934,7 @@
         454.2065
       ],
       "raw_text": "16,100",
-      "normalized_value": 16100.0,
+      "normalized_value": 16100,
       "method": "row_label_anchor(segment_bounded_next_line(edge=derived_next_column))",
       "rule_id": "box_10",
       "transformations": []
@@ -952,7 +953,7 @@
         526.2065
       ],
       "raw_text": "75,000",
-      "normalized_value": 75000.0,
+      "normalized_value": 75000,
       "method": "row_label_anchor(segment_bounded_next_line(edge=band_token))",
       "rule_id": "box_12",
       "transformations": []
@@ -971,7 +972,7 @@
         526.2065
       ],
       "raw_text": "267,500",
-      "normalized_value": 267500.0,
+      "normalized_value": 267500,
       "method": "row_label_anchor(segment_bounded_next_line(edge=region_edge))",
       "rule_id": "box_21",
       "transformations": []
@@ -1052,7 +1053,7 @@
       "normalized_value": [
         {
           "code": "A",
-          "value": 600700.0,
+          "value": 600700,
           "statement_reference": false,
           "raw_text": "A 600,700",
           "bbox": [
@@ -1096,7 +1097,7 @@
       "normalized_value": [
         {
           "code": "A",
-          "value": 29400.0,
+          "value": 29400,
           "statement_reference": false,
           "raw_text": "A 29,400",
           "bbox": [
@@ -1108,7 +1109,7 @@
         },
         {
           "code": "B",
-          "value": 56300.0,
+          "value": 56300,
           "statement_reference": false,
           "raw_text": "B 56,300",
           "bbox": [
@@ -1152,7 +1153,7 @@
       "normalized_value": [
         {
           "code": "A",
-          "value": 104600.0,
+          "value": 104600,
           "statement_reference": false,
           "raw_text": "A 104,600",
           "bbox": [
@@ -1196,7 +1197,7 @@
       "normalized_value": [
         {
           "code": "A",
-          "value": 1800.0,
+          "value": 1800,
           "statement_reference": false,
           "raw_text": "A 1,800",
           "bbox": [
@@ -1240,7 +1241,7 @@
       "normalized_value": [
         {
           "code": "A",
-          "value": 79000.0,
+          "value": 79000,
           "statement_reference": false,
           "raw_text": "A 79,000",
           "bbox": [
@@ -1252,7 +1253,7 @@
         },
         {
           "code": "B",
-          "value": 17200.0,
+          "value": 17200,
           "statement_reference": false,
           "raw_text": "B 17,200",
           "bbox": [
@@ -1296,7 +1297,7 @@
       "normalized_value": [
         {
           "code": "A",
-          "value": 118800.0,
+          "value": 118800,
           "statement_reference": false,
           "raw_text": "A 118,800",
           "bbox": [
@@ -1308,7 +1309,7 @@
         },
         {
           "code": "C",
-          "value": 41200.0,
+          "value": 41200,
           "statement_reference": false,
           "raw_text": "C 41,200",
           "bbox": [
@@ -1340,7 +1341,7 @@
       "normalized_value": [
         {
           "code": "A",
-          "value": 27000.0,
+          "value": 27000,
           "statement_reference": false,
           "raw_text": "A 27,000",
           "bbox": [
@@ -1372,7 +1373,7 @@
       "normalized_value": [
         {
           "code": "A",
-          "value": 2317700.0,
+          "value": 2317700,
           "statement_reference": false,
           "raw_text": "A 2,317,700",
           "bbox": [
@@ -1384,7 +1385,7 @@
         },
         {
           "code": "B",
-          "value": -112600.0,
+          "value": -112600,
           "statement_reference": false,
           "raw_text": "B (112,600)",
           "bbox": [
@@ -1396,7 +1397,7 @@
         },
         {
           "code": "C",
-          "value": 104300.0,
+          "value": 104300,
           "statement_reference": false,
           "raw_text": "C 104,300",
           "bbox": [
@@ -1433,7 +1434,7 @@
       "line_token": "11C",
       "box_key": "box_11",
       "code": "C",
-      "printed_total": 218800.0,
+      "printed_total": 218800,
       "disposition": "projected_overflow",
       "output_path": "part_iii_overflow.box_11[C]",
       "reason_code": "taxonomy_safe_numeric_total"
@@ -1446,7 +1447,7 @@
       "line_token": "11S",
       "box_key": "box_11",
       "code": "S",
-      "printed_total": 738700.0,
+      "printed_total": 738700,
       "disposition": "projected_overflow",
       "output_path": "part_iii_overflow.box_11[S]",
       "reason_code": "taxonomy_safe_numeric_total"
@@ -1459,7 +1460,7 @@
       "line_token": "13AE",
       "box_key": "box_13",
       "code": "AE",
-      "printed_total": -290600.0,
+      "printed_total": -290600,
       "disposition": "projected_overflow",
       "output_path": "part_iii_overflow.box_13[AE]",
       "reason_code": "taxonomy_safe_numeric_total"
@@ -1472,7 +1473,7 @@
       "line_token": "13H",
       "box_key": "box_13",
       "code": "H",
-      "printed_total": -313000.0,
+      "printed_total": -313000,
       "disposition": "projected_overflow",
       "output_path": "part_iii_overflow.box_13[H]",
       "reason_code": "taxonomy_safe_numeric_total"
@@ -1485,7 +1486,7 @@
       "line_token": "13R",
       "box_key": "box_13",
       "code": "R",
-      "printed_total": -52200.0,
+      "printed_total": -52200,
       "disposition": "projected_overflow",
       "output_path": "part_iii_overflow.box_13[R]",
       "reason_code": "taxonomy_safe_numeric_total"
@@ -1498,7 +1499,7 @@
       "line_token": "20AG",
       "box_key": "box_20",
       "code": "AG",
-      "printed_total": 390500.0,
+      "printed_total": 390500,
       "disposition": "projected_overflow",
       "output_path": "part_iii_overflow.box_20[AG]",
       "reason_code": "taxonomy_safe_numeric_total"
@@ -1510,10 +1511,10 @@
       "operation": "sum",
       "taxonomy_constraint": "box_4c_equals_4a_plus_4b",
       "operands": {
-        "part_iii_face.box_4a": 500.0,
-        "part_iii_face.box_4b": 500.0
+        "part_iii_face.box_4a": 500,
+        "part_iii_face.box_4b": 500
       },
-      "result": 1000.0
+      "result": 1000
     }
   ]
 }

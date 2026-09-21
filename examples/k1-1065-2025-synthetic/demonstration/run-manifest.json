@@ -2,43 +2,48 @@
   "schema_version": "otd-bounded-demo-run/1.0",
   "profile_id": "k1-1065-2025-face-and-numeric-details/1.0",
   "repository": {
-    "source_closure_sha256": "4eae4af2646bb1917cadb3b7311ea2905928e06f9e0e485ab91754564e5933d2"
+    "source_closure_sha256": "d0de09dce8a7274793cfde34b95d82e769bb0a38b1701cc6d2fd3688f29cb523"
   },
-  "orchestrator_sha256": "a29aff2260ad25aa9e734b0a4d30386eb0544be8c5b511bc138fb63db77accff",
-  "grammar_sha256": "54f54377a3165a88fca74b3cdf6e8d45cbb49ca2127b9fcd851c34f4ff431547",
-  "taxonomy_sha256": "ed8b25ad44cc7128370a507d2a8595b7b809ca2a84dc10287795363fe7b7fed8",
+  "orchestrator_sha256": "f93f83f564a3ec2df0018847665224a009edda092a2c7a8403b6b03429e65dee",
+  "grammar_sha256": "cf7925d56b5eadbf550d56ef37e324d88a9942748aea07dcfce9d6819c289e2d",
+  "taxonomy_sha256": "ac4fe376b1fbabbac9bb16fcb381d625f178a7f324e1f8333b216da81b6514db",
   "source_closure": {
-    "examples/k1-1065-2025-synthetic/run_demo.py": "a29aff2260ad25aa9e734b0a4d30386eb0544be8c5b511bc138fb63db77accff",
-    "skills/k1-otd/grammars/k1-1065-2025.grammar.yaml": "54f54377a3165a88fca74b3cdf6e8d45cbb49ca2127b9fcd851c34f4ff431547",
-    "taxonomies/irs-k1-1065-2025.yaml": "ed8b25ad44cc7128370a507d2a8595b7b809ca2a84dc10287795363fe7b7fed8",
-    "examples/k1-1065-2025-synthetic/requirements-demo.txt": "aa98ee0570f59b8c9726d047f9265989338dd3882f294438bbc655cad9159d35",
-    "skills/k1-otd/scripts/assemble_otd.py": "11e672ec12508d602ed86fe024392995e5b81cce8c5ca5872048351b83c16eda",
-    "skills/k1-otd/scripts/build_line_item_details.py": "b0a74ac07e11d34e0a335c9a78f1110234aa5e0d7e6b1bf21a890784df94e4e3",
+    "examples/k1-1065-2025-synthetic/run_demo.py": "f93f83f564a3ec2df0018847665224a009edda092a2c7a8403b6b03429e65dee",
+    "skills/k1-otd/grammars/k1-1065-2025.grammar.yaml": "cf7925d56b5eadbf550d56ef37e324d88a9942748aea07dcfce9d6819c289e2d",
+    "taxonomies/irs-k1-1065-2025.yaml": "ac4fe376b1fbabbac9bb16fcb381d625f178a7f324e1f8333b216da81b6514db",
+    "examples/k1-1065-2025-synthetic/requirements-demo.txt": "df21306f208aca00aa446960aa8865c930aaf1ae1b34f82aa0edde9e22c97f80",
+    "requirements.txt": "d4ed3980a6b2f75b4c31e370649af8eeeece09c0ff4deb7f2c398337db5efd11",
+    "skills/k1-otd/reference/irs-k1-1065-2025.yaml": "ac4fe376b1fbabbac9bb16fcb381d625f178a7f324e1f8333b216da81b6514db",
+    "skills/k1-otd/signatures/page-signatures.yaml": "79380daccbbea1a7bf116df9a4d07b7075946c988d79f8f3d6a43f747ac36657",
+    "skills/k1-otd/scripts/assemble_otd.py": "d48199bf43d8ca878ed6147db78736df4a89d0581fbc2f1bb291fec98ccf4138",
+    "skills/k1-otd/scripts/build_line_item_details.py": "1b34d918bb04e54b7a363b6a5ebd9b6d7304a5d1f7e64204eac9c60b98263b6b",
     "skills/k1-otd/scripts/build_section_manifests.py": "b8527072790d6938349e96dff61c47727128b90c0217930a56e04235d751c28f",
-    "skills/k1-otd/scripts/constraint_engine.py": "8be9dcc82e68012ffa1b2d761f5307933cb1c0ed690f3f439ff28083e4e14fe9",
+    "skills/k1-otd/scripts/constraint_engine.py": "30f42dd33502c4dc791005480d7ba7e4bef6eebbaa4cbeb90a70484b09474c93",
     "skills/k1-otd/scripts/elastic_geometry.py": "cde0edf80e9e68197e70bf0dfc5b4d3311e2a41fea936b414c0ef8d892794994",
     "skills/k1-otd/scripts/extract_pdf_text.py": "8f8963b329fcf1d3d48a208ff14f09311a21a5f4b01e79f2b491a7fbb827a7c6",
     "skills/k1-otd/scripts/extract_state_grids.py": "62bd75ae22f7bfc9df4e728199ffc87444b0855111059c3784e87b7afef65c3b",
-    "skills/k1-otd/scripts/face_reader.py": "5c1245c83b268c35969c1b6590bfd314ed6f2a3112a2bcf4a2e34515214134f4",
+    "skills/k1-otd/scripts/face_reader.py": "b3acbec809c1e056f9c80bbc40c44067dc19ce776c3a90cff05ad29325f2d868",
     "skills/k1-otd/scripts/grammar_validator.py": "063d79e2ac1fd6cffd84fe903a9da471c44cf75dbeaec25de94e3967aec2a4f3",
+    "skills/k1-otd/scripts/otd_values.py": "13fdb7e8f4032e5b11b6524e61f4bd9a632f89ac7832a0e40934c138a4a89788",
     "skills/k1-otd/scripts/page_classifier.py": "ec6c9e6aa66f3e39efa1b9156901303bb8b05d8bcb2d05a765f1bc53f2f56fbe",
-    "skills/k1-otd/scripts/project_extraction_evidence.py": "71e8b91d0bfd0e45f73cef1517843780a94458c751b512377e3c5144ec45041b",
-    "skills/k1-otd/scripts/reconcile_line_item_details.py": "6ae034a327b6bc39ca87bdfcfb627b32188d15f03bb9bf5beeeff2677bffc832",
+    "skills/k1-otd/scripts/project_extraction_evidence.py": "7d11de4605382f462b61004cdaa70bc535ed0027fbb1160e03d98e0faf36ffd7",
+    "skills/k1-otd/scripts/reconcile_line_item_details.py": "ea6573b2a1137335d403523c6b50660474ee049a8c0abbec6f14abf91230d031",
     "skills/k1-otd/scripts/render_extraction_diagnostics.py": "4ce34269dbc427705caed788327f4643ec81c1e28a5425ab0a6ec38de6303500",
     "skills/k1-otd/scripts/section_classifier.py": "dc12daa99a0612f4c39cb35c98e50922726214252ddb82951f10d441733d6762",
     "skills/k1-otd/scripts/section_segmenter.py": "a7b7c64ca5e895507cb0ca2ebd40fe18c28ad5647b572b7a20631ef961e35b8d",
-    "skills/k1-otd/scripts/state_grid_parsers.py": "bdfd49d8a5ce287645c364cdfb4a5b23fab08441e22580e8d330674e4a6fefc0",
+    "skills/k1-otd/scripts/state_grid_parsers.py": "8e52fb25edc922980af985efc5de72bbcadf943e366707f6a32547807a74a75e",
     "skills/k1-otd/scripts/template_match.py": "abea0be6c056224cd533baa1b5050d7d9d8593f95240c5fddfbc03b27040baaa",
-    "skills/k1-otd/scripts/validate_otd.py": "18771c07b0c5a21568d5b478b1bf524891932399ae6e3071c40e727f6fd51c47"
+    "skills/k1-otd/scripts/validate_otd.py": "0e2f8eb77ff6b8f38f22ac267db6b1cf61a05fc8524237ddaaa523b0eb2dd189"
   },
-  "source_closure_sha256": "4eae4af2646bb1917cadb3b7311ea2905928e06f9e0e485ab91754564e5933d2",
+  "source_closure_sha256": "d0de09dce8a7274793cfde34b95d82e769bb0a38b1701cc6d2fd3688f29cb523",
   "dependencies": {
     "python": "3.13.3",
     "implementation": "CPython",
     "PyYAML": "6.0.3",
     "ruamel.yaml": "0.19.1",
     "pdfplumber": "0.11.7",
-    "pypdf": "6.1.1"
+    "pypdf": "6.1.1",
+    "simplejson": "4.1.2"
   },
   "source": {
     "pdf_name": "source.pdf",
@@ -62,9 +67,9 @@
         "skills/k1-otd/grammars/k1-1065-2025.grammar.yaml"
       ],
       "exit_code": 0,
-      "stdout_sha256": "e0edbffc3c77828afd2941fb2adcda3879159d77fd5b2648dbb08e2e739a2364",
+      "stdout_sha256": "158b7d0b61e02e3d88d95cb11626a1d0cf8bc02cb62db4a77b74f762dc9bbf21",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "log_sha256": "80cc25b25e387d8e7d0d0398bdb21d845aca7b7f6e7363d1995a2b020ad0b949"
+      "log_sha256": "75bbb30540869b5352517356d16a842b44ba3f75b6ae1a49533cd2f52887ab53"
     },
     {
       "name": "pdf-text-extraction",
@@ -77,9 +82,9 @@
         "<WORK_ROOT>/."
       ],
       "exit_code": 0,
-      "stdout_sha256": "d59d58b4416bf34d83307f7709cf75416680945fd98700f2126f1b27a3150ad5",
+      "stdout_sha256": "b2b1aa5d6fefa33782df6fc7fddc463ec464c6429ac353675f0850873d9a4802",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "log_sha256": "89431dac6cc931b9e1752b129bc1561e1c0c1d4eb51da85c5ae2cbed24bad2af"
+      "log_sha256": "b3ac2d6bdb0ab449b8329312ab9fcc76376c20dbf6170258897af8ef77b92cb0"
     },
     {
       "name": "template-fit",
@@ -94,9 +99,9 @@
         "<WORK_ROOT>/evidence/template-fit"
       ],
       "exit_code": 0,
-      "stdout_sha256": "1bd06bded8b76687a92bebbbc109e3069f1851956376263362dcf964752a8c09",
+      "stdout_sha256": "1635a41907ea870768c68865a6396617be2821e5452822e793622ade6ecbf20d",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "log_sha256": "c0d7463ff42819878cc2a34b11f150e13deb9f4c693966fc43a799e002e5c878"
+      "log_sha256": "7316fb9037511fc9f8fa325701cd45c8846caab24c7a7c91d3c1ebdfff3ffb0b"
     },
     {
       "name": "section-manifests",
@@ -113,14 +118,14 @@
         "<WORK_ROOT>/evidence/section-manifest.json"
       ],
       "exit_code": 0,
-      "stdout_sha256": "e469ad90094d86fd4f96123c5f0db34c884b74b0f305f7ddb1990bbbd95d306d",
+      "stdout_sha256": "fb3979ea12c2af539421f42b44a9bf3cfc011044cd30024e1de55605d1098bb0",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "log_sha256": "047db378a4d88757fc5275d58a2ee5bfc9a93677e651ae9d7e323434b7ed1d6a"
+      "log_sha256": "07781e8fa2007e766335ae95a39704918f22425fb997d40d06019615872548be"
     },
     {
       "name": "face-evidence",
       "tool": "skills/k1-otd/scripts/face_reader.py",
-      "tool_sha256": "5c1245c83b268c35969c1b6590bfd314ed6f2a3112a2bcf4a2e34515214134f4",
+      "tool_sha256": "b3acbec809c1e056f9c80bbc40c44067dc19ce776c3a90cff05ad29325f2d868",
       "arguments": [
         "<WORK_ROOT>/source.pdf",
         "skills/k1-otd/grammars/k1-1065-2025.grammar.yaml",
@@ -130,9 +135,9 @@
         "2026-07-30T00:00:00Z"
       ],
       "exit_code": 0,
-      "stdout_sha256": "84fd4c9828156ec0e20257a37119c9adf6cea3029fda2dd70d92db846ee00666",
+      "stdout_sha256": "f6684e0fd831d2a16cfc1922348acad83e37d6338279139d9614820751148181",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "log_sha256": "0109f478de26f559d5bdc9b80bd3da4ba53338784459458afb53127ca74ff983"
+      "log_sha256": "053dda09e13c6cbd11adbd678bce3ffcda03559e73eaecf2bbea3edf21ceeb63"
     },
     {
       "name": "state-grid-attempt",
@@ -147,14 +152,14 @@
         "<WORK_ROOT>/evidence/state-grid-attempt.json"
       ],
       "exit_code": 0,
-      "stdout_sha256": "1d5b7f2603d5e15a390a5e9a951ad90de5645b80b4de7debe9684d0a8aa1eb09",
+      "stdout_sha256": "13305c41e59537ed93b8df523bd506532e57d33558886ab5c3dca09193fd4350",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "log_sha256": "ef605e3abe0115ad06eb8ac054de783bef035c09d58f00de72dbc4c9a9d10906"
+      "log_sha256": "30e3eb0720438257f82d45bfe70bac4906f817294dff15defc93b1f654eef9eb"
     },
     {
       "name": "line-item-details",
       "tool": "skills/k1-otd/scripts/build_line_item_details.py",
-      "tool_sha256": "b0a74ac07e11d34e0a335c9a78f1110234aa5e0d7e6b1bf21a890784df94e4e3",
+      "tool_sha256": "1b34d918bb04e54b7a363b6a5ebd9b6d7304a5d1f7e64204eac9c60b98263b6b",
       "arguments": [
         "--pages",
         "<WORK_ROOT>/text_blocks",
@@ -164,14 +169,14 @@
         "<WORK_ROOT>/evidence/line-item-details.json"
       ],
       "exit_code": 0,
-      "stdout_sha256": "f255169164b2d2f1714e1ec70db82d03f3fe5b64e7bccd5c72d9ecf34073ea91",
+      "stdout_sha256": "be4781c7feb362db24fa719d748aa6d50cd9cc881d5e8046fb148168ed4bb626",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "log_sha256": "46a5b8d495d7a7265888821098796193aa094b591b156ef7bb27f7d13b87f4e4"
+      "log_sha256": "ab98f1add75ddd637532d0eb507e67fd552fab47d055135122d1c478584ec555"
     },
     {
       "name": "evidence-projection",
       "tool": "skills/k1-otd/scripts/project_extraction_evidence.py",
-      "tool_sha256": "71e8b91d0bfd0e45f73cef1517843780a94458c751b512377e3c5144ec45041b",
+      "tool_sha256": "7d11de4605382f462b61004cdaa70bc535ed0027fbb1160e03d98e0faf36ffd7",
       "arguments": [
         "--face-evidence",
         "<WORK_ROOT>/evidence/face-page.json",
@@ -197,14 +202,14 @@
         "<WORK_ROOT>/reports/disposition-ledger.json"
       ],
       "exit_code": 0,
-      "stdout_sha256": "153638dbc568d4abe584e12a3d4af692564c22503b4ece53e68cc7e1e65e0bbf",
+      "stdout_sha256": "d8d996e4453dc41041c6a715ac914cf1fdc68fe2a1de625e20d830508efd6ec7",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "log_sha256": "8c39b9c569196329e4203ac1f5ed4ca5658d300ec9dc2c4a6859dd404b3947b4"
+      "log_sha256": "28f9c064eef14bae76c217ba349c4708003411baf5a646428cb4014a4e2dcb82"
     },
     {
       "name": "assembly",
       "tool": "skills/k1-otd/scripts/assemble_otd.py",
-      "tool_sha256": "11e672ec12508d602ed86fe024392995e5b81cce8c5ca5872048351b83c16eda",
+      "tool_sha256": "d48199bf43d8ca878ed6147db78736df4a89d0581fbc2f1bb291fec98ccf4138",
       "arguments": [
         "--fragments",
         "<WORK_ROOT>/fragments",
@@ -226,29 +231,31 @@
         "<WORK_ROOT>/reports/disposition-ledger.json"
       ],
       "exit_code": 0,
-      "stdout_sha256": "7f6410aba1d8bab8642fc7df9ad6d25488621c03a6624294dc67c7b0f5b4d485",
+      "stdout_sha256": "d9efca7b070bb5651cd100161a534c3ccc7545595ce722dc702fde99e13ab26a",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "log_sha256": "a14a16cc080007b5edfacf6058b0c2c431f2ca736732c9ea9da31fb59c72f079"
+      "log_sha256": "61fe5b900df0a803bbd05ee50287692f1a51437834d12b1b680f3cc7a53bf52c"
     },
     {
       "name": "validation",
       "tool": "skills/k1-otd/scripts/validate_otd.py",
-      "tool_sha256": "18771c07b0c5a21568d5b478b1bf524891932399ae6e3071c40e727f6fd51c47",
+      "tool_sha256": "0e2f8eb77ff6b8f38f22ac267db6b1cf61a05fc8524237ddaaa523b0eb2dd189",
       "arguments": [
         "--input",
         "<WORK_ROOT>/staging/output.otd.yaml",
         "--taxonomy",
-        "taxonomies/irs-k1-1065-2025.yaml"
+        "taxonomies/irs-k1-1065-2025.yaml",
+        "--update-confidence",
+        "<WORK_ROOT>/staging/output.confidence.json"
       ],
       "exit_code": 0,
-      "stdout_sha256": "954e868bd6d551e6f2e9d4afae089c6233ba45988db9ac5c5636a7471ee3c6c9",
+      "stdout_sha256": "3a6649516a9b45ec341adcbf3ad32f3d10c5c137b09cb8c2665375ee90b7cb48",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "log_sha256": "337306bdc87dfb88b2df964fc19f33ca2983fa76e887f15c8b14a37447847b72"
+      "log_sha256": "6736425c84b3c0cc1d0bf3103fdb57f93bd4bc5dd8609f8f8267ad4d7496fce9"
     },
     {
       "name": "reconciliation",
       "tool": "skills/k1-otd/scripts/reconcile_line_item_details.py",
-      "tool_sha256": "6ae034a327b6bc39ca87bdfcfb627b32188d15f03bb9bf5beeeff2677bffc832",
+      "tool_sha256": "ea6573b2a1137335d403523c6b50660474ee049a8c0abbec6f14abf91230d031",
       "arguments": [
         "--otd",
         "<WORK_ROOT>/staging/output.otd.yaml",
@@ -260,24 +267,24 @@
         "hard_error"
       ],
       "exit_code": 0,
-      "stdout_sha256": "59cc062a369a65d4cc94f04964a435a834d20b53172639be359bbcedd28c6b43",
+      "stdout_sha256": "53216565a362e00febbfa085456d2c9546f79827ef11e3917e74a3af69882084",
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "log_sha256": "f42b0a89a37f51f6750bae006bf3b60ae5b3ea03536628c4e98e317adc5c09fd"
+      "log_sha256": "f15a101737a5d17cdc024ee3e0cb5727ddc77936da6909e5d457cf9a1970e24d"
     }
   ],
   "artifacts": {
-    "disposition-ledger.json": "1a5cc17b124cd1429d40de9ac3547d9b963733894b49759a3f944bddc9928c11",
-    "evidence-receipt.json": "584fe210da648cf97225f7ac85a55f444d22d1793f5f57e7a0281c068f05294a",
+    "disposition-ledger.json": "3e85246d2596e82a670d7e81379e788f0f0a76a7b8f8e7bbf93878e0d26feb14",
+    "evidence-receipt.json": "f408f8aaa7e92d8b8c2d13bba290a3fef8462bda7471388c1d2bfced9d1f0030",
     "extraction-status.json": "70a96d6164c38314cadbf1a811a71921ad3de5ea2a6200894b9f1f2f78d4b3a5",
-    "fragments/face_page.json": "562d366510932f1d9be8532e83fa84094586dc200b28c04764b89bdb9249916f",
-    "fragments/footnotes_a.json": "f426eaadddd093673b152975e5890365abd3e0dd80fd09903b7ce295b44bbea8",
-    "fragments/footnotes_b.json": "f426eaadddd093673b152975e5890365abd3e0dd80fd09903b7ce295b44bbea8",
-    "fragments/overflow_statements.json": "0f1ff2405508012444d25ac0510e5d2d2e4015e2d0fd9d470c1ef43c72b17b8b",
-    "fragments/state_schedules.json": "4cca31969948262e2b9e4be29ba9d5080c011489c0acb480cdca3439a7585d31",
-    "output.confidence.json": "f2c828b7a59d92c01c45e60967d562570de31ecd5946cd48ee143c7e3d367d34",
-    "output.otd.yaml": "5f92b71b690ccff030ff6bc1eea31d572f7e2b5a3b175142b0798c3013df8663",
-    "projection-manifest.json": "174371af469594177ef0eb004e38c62fa7cb7a747e9a15e8aee73a1e6f76ab7d",
-    "reconciliation.json": "8257964b9e0938664bad2e9355af8659bc9c7b3d4cfd560237c0351c3ab882e1"
+    "fragments/face_page.json": "7190ee24f0709dd4cb094d7927fb44127a92417f30932fd3746c3f35b2fb5297",
+    "fragments/footnotes_a.json": "c57734df0bd47a56fb21999ca966978a4afbd466496ed34bf7ec9795f59ea60c",
+    "fragments/footnotes_b.json": "c57734df0bd47a56fb21999ca966978a4afbd466496ed34bf7ec9795f59ea60c",
+    "fragments/overflow_statements.json": "1a71c4f7ce1d0f1e9a1031d8b68ea117377a4dde5984968d4a78fe8771702d3d",
+    "fragments/state_schedules.json": "1104cd1886b7adbab8a29661a534c1b09da3c51460ffa2ab4e0de4cc290ce87c",
+    "output.confidence.json": "e2f04ed6bb81c130ca12598ff0d5ec5687e3a3b3530772ccef3a20a1576cc87d",
+    "output.otd.yaml": "6ecc6b1938f80f33191402fc76b99895310c72fdf369970a66bfc44fe2514081",
+    "projection-manifest.json": "86af8fc74f00f376f0135e2f34100f4ad73abba17d2743376f5ef52219314174",
+    "reconciliation.json": "4ecfd4158518af546f8266c73f40b0e3862378830594d0ea8b70e573a4f97a39"
   },
   "claim": "Starting from the identified PDF bytes, this command generated and validated an OTD document for the declared supported profile while explicitly ledgering all excluded source evidence."
 }

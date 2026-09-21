@@ -1,6 +1,6 @@
 # Open Tax Document — Extension Registry Specification v0.2 (RC-1)
 
-**Status:** RELEASE CANDIDATE
+**Status:** Public draft proposal (RC-1); registry implementation not demonstrated
 **License:** Creative Commons Attribution 4.0 International (CC BY 4.0)
 **Authors:** Tom O'Sullivan, Second Wind
 **Date:** 2026-04-02
@@ -18,6 +18,11 @@ Without governance, `custom_fields` becomes an unvalidated garbage dump.
 The Extension Registry allows organizations to publish **named schema
 extensions** — formal definitions of firm-specific footnote types that
 parsers can load and validate against.
+
+This document specifies a proposed contract, not an operating registry.
+The reference K-1 validator does not yet implement the complete extension
+loading and promotion workflow. Organization names and namespaces in the
+examples are illustrative, not claims of adoption, participation, or endorsement.
 
 ---
 
@@ -110,7 +115,8 @@ validation without warning.
 
 ### 4.2 Extension Registry URL (Reference Only)
 
-For convenience in development and non-production environments:
+Proposed URL shape for development and non-production environments.
+This is not a verified live endpoint:
 ```
 https://opentaxdocument.org/extensions/{org-slug}/{version}/{filename}
 ```

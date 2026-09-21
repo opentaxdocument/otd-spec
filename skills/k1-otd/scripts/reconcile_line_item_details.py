@@ -20,17 +20,18 @@ DESIGN RULES (consistent with the project's established posture):
     per-document line-number table.
 """
 import argparse
-import json
+import simplejson as json
 import sys
+from decimal import Decimal
 from pathlib import Path
 
 try:
-    import yaml
+    from otd_values import as_decimal, decimal_delta, decimal_yaml, is_numeric
 except ImportError as exc:  # pragma: no cover
     print("ERROR: missing dependency: %s" % exc, file=sys.stderr)
     raise
 
-TOLERANCE = 0.01
+TOLERANCE = Decimal("0.01")
 
 
 def _get(d, *path):
@@ -44,18 +45,25 @@ def _get(d, *path):
 
 def load_otd(otd_path):
     with open(otd_path, "r", encoding="utf-8") as fh:
-        return yaml.safe_load(fh)
+        return decimal_yaml().load(fh)
 
 
 def reconcile(otd, details, tolerance=TOLERANCE):
     """Returns (results, posture). results is a list of per-record dicts:
       status in {match, mismatch, not_applicable, face_missing}
     """
+    if not isinstance(otd, dict) or not isinstance(details, list):
+        raise ValueError("reconciliation requires an OTD mapping and a detail sequence")
+    tolerance = as_decimal(tolerance)
+    if tolerance < 0:
+        raise ValueError("reconciliation tolerance must be non-negative")
     body = otd.get("body") or {}
     part_iii = _get(body, "part_iii") or {}
     results = []
 
     for rec in details:
+        if not isinstance(rec, dict):
+            raise ValueError("each detail record must be a mapping")
         entry = {
             "source_page": rec.get("source_page"),
             "line_token": rec.get("line_token"),
@@ -107,16 +115,18 @@ def reconcile(otd, details, tolerance=TOLERANCE):
             results.append(entry)
             continue
 
-        delta = abs(float(face_value) - float(rec["total"]))
+        if not is_numeric(face_value) or not is_numeric(rec["total"]):
+            raise ValueError("reconciliation amounts must be finite numbers")
+        delta = decimal_delta(face_value, rec["total"])
         entry["delta"] = delta
         if delta <= tolerance:
             entry["status"] = "match"
         else:
             entry["status"] = "mismatch"
             entry["reason"] = (
-                "Face value %.2f does not equal document-printed detail "
-                "total %.2f (delta %.2f exceeds tolerance %.2f)."
-                % (face_value, rec["total"], delta, tolerance))
+                f"Face value {as_decimal(face_value):.2f} does not equal "
+                f"document-printed detail total {as_decimal(rec['total']):.2f} "
+                f"(delta {delta:.2f} exceeds tolerance {tolerance:.2f}).")
         results.append(entry)
 
     return results
@@ -138,7 +148,7 @@ def main():
 
     otd = load_otd(args.otd)
     with open(args.details, "r", encoding="utf-8") as fh:
-        details = json.load(fh)
+        details = json.load(fh, use_decimal=True, allow_nan=False)
 
     results = reconcile(otd, details)
 
@@ -155,8 +165,10 @@ def main():
 
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(report, indent=2, default=str),
-                        encoding="utf-8")
+    out_path.write_text(
+        json.dumps(report, indent=2, use_decimal=True, allow_nan=False) + "\n",
+        encoding="utf-8", newline="\n",
+    )
     print("WROTE %s" % out_path)
     print("RECONCILIATION: %s" % counts)
 
@@ -180,4 +192,8 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except (OSError, ValueError, TypeError) as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        sys.exit(2)

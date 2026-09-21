@@ -14,10 +14,11 @@ instructions. A taxonomy is the structural blueprint that defines which
 TaxNodes exist for a given form, their types, their relationships, and
 their validation constraints.
 
-**The goal is zero-curation derivation.** Given the text of an IRS
-instruction document (PDF or HTML), a reasonably capable AI coding agent
-should be able to produce a complete, correct OTD taxonomy without human
-intervention. Human review is recommended but not required.
+**The goal is reviewable, AI-assisted derivation.** An AI coding agent can
+help draft a taxonomy from IRS instructions and the corresponding form.
+The result requires source reconciliation, automated checks, and qualified
+tax-professional review before authoritative publication (§8). Neither an
+AI-generated draft nor a green structural test establishes tax-law accuracy.
 
 ---
 
@@ -114,11 +115,11 @@ structure:
     title: "Information About the Partnership"
     items:
       - item: "A"
-        label: "Partnership's name, address, city, state, and ZIP code"
-        type_hint: "identity"
-      - item: "B"
         label: "Partnership's employer identification number"
         type_hint: "identifier"
+      - item: "B"
+        label: "Partnership's name, address, city, state, and ZIP code"
+        type_hint: "identity"
   - part: "III"
     title: "Partner's Share of Current Year Income, Deductions, Credits, and Other Items"
     boxes:
@@ -167,8 +168,9 @@ box_11_codes:
 
 **Rules:**
 - Codes appear in instruction text as "Code A.", "Code B.", etc.
-- Some codes are reserved/placeholder ("Codes T through X" means T, U, V, W, X are reserved for future use or are intentionally grouped).
-- Code ZZ is always the catch-all. It MUST be flagged as `requires_classification: true`.
+- A grouped range does not itself mean "reserved." Mark codes reserved only
+  when the source explicitly says so; otherwise capture each defined meaning.
+- Where Code ZZ is declared as a catch-all, flag it as `requires_classification: true`.
 - The description following each code defines the `label` and `description` fields.
 - Value types are inferred from context:
   - Dollar amounts → `decimal` with `currency: USD`
@@ -286,12 +288,12 @@ nodes:
   part_i:
     title: "Information About the Partnership"
     children:
-      partnership_name:
+      item_b:
         type: scalar
-        semantic_id: "partnership.name"
-        label: "Partnership's Name"
+        semantic_id: "partnership.name_address"
+        label: "Partnership's Name and Address"
         value_type: string
-        form_location: "Part I, Item A"
+        form_location: "Part I, Item B"
         required: true
       # ...
 
@@ -359,7 +361,7 @@ change_log:
     changes:
       - "Box 13, Code X: expanded to include sound recording production expenses"
       - "Box 19: distribution codes separated by category"
-      - "Box 20, Code ZZ: added section 1062 farmland gain installment"
+      - "Box 20, Code ZZ: added section 1062 qualified farmland gain information; the installment election concerns tax payments"
 ```
 
 ---
@@ -400,9 +402,10 @@ When deriving a new tax year's taxonomy from the prior year:
 4. Diff the result against the baseline
 5. Produce a `change_log` entry documenting additions, removals, and modifications
 
-This process should be deterministic: two agents running the same
-derivation against the same instructions should produce structurally
-identical taxonomies (though `description` text may vary).
+Independent derivations can disagree in structure as well as descriptions.
+Compare those differences against the source and resolve them in review.
+Deterministic downstream use comes from adopting the same published version,
+not from assuming an AI drafting process produces identical taxonomies.
 
 ---
 
@@ -423,12 +426,15 @@ of federal amounts (e.g., "State Column A = Federal Box 1 × Apportionment %").
 ## 8. Governance and Canonical Authority
 
 **CRITICAL PRINCIPLE:** The published taxonomy YAML file in the official
-OTD repository is the **sole, immutable, canonical source of truth** for
-any given form and tax year. It is NOT acceptable for individual firms
+OTD repository is the **canonical validation artifact for its taxonomy ID
+and version**. Released versions are immutable; corrections receive a new
+version and prior versions remain available. It is NOT acceptable for individual firms
 to independently derive taxonomies using the AI pipeline and treat the
 output as authoritative.
 
 **The derivation pipeline is a toolchain, not a governance model.**
+An OTD taxonomy governs OTD validation; it does not supersede tax law or IRS
+instructions. The current repository taxonomies are public drafts.
 
 ### 8.1 Taxonomy Lifecycle
 
@@ -480,6 +486,5 @@ The agent should be able to produce a complete taxonomy YAML file as a
 5. Report coverage metrics
 6. Submit for human review and publication
 
-Expected time for a capable agent: 15-30 minutes for a K-1 taxonomy,
-45-90 minutes for a K-3 taxonomy (due to the grid complexity in Parts II-III
-and the recordset complexity in Parts V-VII).
+Drafting and review time depend on the form, source quality, and scope.
+Do not trade source reconciliation or professional review for a time target.

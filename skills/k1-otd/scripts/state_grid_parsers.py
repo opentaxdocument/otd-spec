@@ -3,6 +3,10 @@ state_grid_parsers.py — Reusable State Grid Parsing Strategies
 
 Part of the OTD K-1 Extraction Skill Pack.
 
+EXPERIMENTAL: these strategies use positional assumptions, not verified
+column geometry. They are not wired into extract_state_grids.py and must
+not be treated as validated tax facts without independent source review.
+
 PURPOSE
 -------
 State schedule grids on K-1s vary dramatically by issuer and OCR engine.
@@ -46,7 +50,10 @@ ubti         : Unrelated Business Taxable Income
 """
 
 import re
+from decimal import Decimal, InvalidOperation
 from typing import Optional
+
+from otd_values import as_decimal
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -65,7 +72,7 @@ def _is_state(token: str) -> bool:
     return token.strip().upper() in _STATE_CODES
 
 
-def _parse_number(s: str) -> Optional[float]:
+def _parse_number(s: str) -> Optional[Decimal]:
     """Parse a numeric string with optional commas, parens for negatives."""
     s = s.strip().replace(",", "").replace(" ", "")
     if not s or s in ("-", "—", "–"):
@@ -73,9 +80,9 @@ def _parse_number(s: str) -> Optional[float]:
     negative = s.startswith("(") and s.endswith(")")
     s = s.strip("()")
     try:
-        val = float(s)
-        return -val if negative else val
-    except ValueError:
+        val = as_decimal(Decimal(s))
+        return val.copy_abs().copy_negate() if negative else val
+    except (ValueError, InvalidOperation):
         return None
 
 

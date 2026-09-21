@@ -74,7 +74,7 @@ common implementation error.
 
 | Phase | Disposition | Governs |
 |---|---|---|
-| **Parse** | Lenient. MUST NOT reject. | Structural readability. Unknown nodes are preserved, not errors. |
+| **Parse** | Lenient toward unknown nodes. | Structurally readable unknown nodes are preserved; malformed YAML may fail. |
 | **Validate** | Strict. SHOULD reject. | Conformance of *declared* nodes to the taxonomy. |
 
 The distinction that matters:
@@ -124,9 +124,10 @@ The parser MUST distinguish:
   tree contains the node with a null value. Queries return "reported as
   having no value."
 
-This distinction is critical for compliance (e.g., a zero-value Box 2
-means no rental activity; an absent Box 2 means rental activity was
-not applicable).
+This distinction is critical for compliance. A reported zero is an amount,
+not proof that no activity occurred; omission is not an affirmative statement
+about tax treatment. Extraction uncertainty is separately marked `_unverified`
+under the reference profile (§7.1.4).
 
 ### 4.4 Node Traversal
 
@@ -282,6 +283,13 @@ YAML → JSON is a direct structural mapping. The only transformations:
 - YAML anchors/aliases are resolved to concrete values
 - Comments are stripped (JSON has no comment syntax)
 - File extension: `.otd.json`
+
+JSON numbers must be read and written with decimal-preserving codecs. Do not
+convert money through a binary float or stringify it as an undocumented type
+change. The Python reference tools use `simplejson` with Decimal support.
+JSON object order is not a universal interchange guarantee; reconstruct
+canonical YAML order from the taxonomy and preserve unknown-key order where
+the implementation supports it.
 
 ### 6.2 XML Projection
 
@@ -441,12 +449,12 @@ A parser implementation is considered complete when it can:
 | TypeScript | `yaml` (npm)        | Good for web-based parsers |
 | C#         | `YamlDotNet`        | .NET ecosystem integration |
 | Go         | `gopkg.in/yaml.v3`  | Performance-oriented |
-| Rust       | `serde_yaml`        | Zero-copy parsing |
+| Rust       | A maintained YAML parser | Verify Decimal-compatible scalar handling and preservation requirements |
 
 ### 10.2 Testing Strategy
 
 1. **Golden file tests:** Parse known-good OTD documents, verify tree structure
-2. **Round-trip tests:** Parse → emit → compare byte-for-byte
+2. **Round-trip tests:** Parse → emit → compare after the declared §8 normalization
 3. **Stress tests:** K-3 Part II (full 54-row × 6-column grid), K-3 Part VII (10+ PFIC records)
 4. **Edge cases:**
    - Document with only Part I (no income data)
@@ -455,3 +463,8 @@ A parser implementation is considered complete when it can:
    - Redacted document with all PII masked
 5. **Cross-parser tests:** Verify that documents produced by one emitter are
    correctly parsed by a different parser implementation
+
+Library choice alone does not establish decimal safety. The reference
+`otd_values.py` installs private Decimal constructors and representers for
+`ruamel.yaml`. Test large amounts, negative values, long percentages, explicit
+zero, null, unknown content, and non-finite values at the actual I/O boundary.

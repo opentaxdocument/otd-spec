@@ -7,11 +7,14 @@
 # License:  Creative Commons Attribution 4.0 International (CC BY 4.0)
 # Authors:  Tom O'Sullivan, Second Wind
 # Date:     2026-04-02
-# Status:   DRAFT — seeking multi-firm review (RSM, Alvarez & Marsal, others)
+# Status:   DRAFT, seeking multi-firm review
+# Editorial corrections: 2026-09-21
+# Examples illustrate node shapes, not independently complete tax documents.
+# Executable K-1 examples live in proof/ and examples/. K-3 remains declarative.
 #
 
 # Design Principles:
-#   1. The document IS the schema — every node carries its own context
+#   1. Self-describing nodes carry context; versioned taxonomies govern validation
 #   2. Ontology-derivable — taxonomies are generated from IRS instructions,
 #      not hardcoded into the spec
 #   3. Semantic & structural fidelity — every node carries sufficient metadata
@@ -20,10 +23,10 @@
 #      not typographic fidelity (PDF coordinates, font scaling, page breaks).
 #      A rendering engine that knows the IRS form layout can produce a
 #      print-ready form from OTD data; OTD does not embed that layout.
-#   4. Round-trip guarantee — emit → parse → emit produces identical output
+#   4. Round-trip requirement: normalized equivalence within a supported profile
 #   5. Statement-first — footnotes, overflow, and attachments are first-class
 #      structured citizens, not text blobs
-# Projections to JSON, XML, and other formats are trivial by design.
+# Projections must preserve exact numbers, nulls, structure, and unknown content.
 # ============================================================================
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -145,7 +148,7 @@ coded_zz_example:
   semantic:
     id: "other_information.section_1062_farmland"
     label: "Gain from Sale of Qualified Farmland Property"
-    description: "Section 1062 election for 4-installment gain recognition on qualified farmland sale to qualified farmers."
+    description: "Section 1062 permits eligible taxpayers to elect four equal installments of applicable net income tax on qualified farmland gain, not installment recognition of the gain."
     classification: "section_1062_farmland_gain"    # REQUIRED for ZZ codes
   form:
     form_id: "k1-1065"
@@ -157,21 +160,20 @@ coded_zz_example:
   statement:                                # Structured overflow, not a text blob
     type: statement
     semantic:
-      id: "section_1062_installment_schedule"
-      label: "Section 1062 Installment Payment Schedule"
-    entries:
-      - year: 2026
-        installment: 1
-        amount: 125000.00
-      - year: 2027
-        installment: 2
-        amount: 125000.00
-      - year: 2028
-        installment: 3
-        amount: 125000.00
-      - year: 2029
-        installment: 4
-        amount: 125000.00
+      id: "section_1062_gain_information"
+      label: "Section 1062 Qualified Farmland Gain Information"
+      classification: "section_1062_farmland_gain"
+      role: investor_footnote
+    form:
+      attachment: true
+    # Illustrative disclosure, not a defined installment-calculation schema.
+    # The gain does not establish the partner's tax, election, or payment dates.
+    content:
+      reported_gain: 500000.00
+      note: "An eligible taxpayer may elect to pay the applicable net income tax in four equal installments."
+    source_text: "Illustrative source disclosure: qualified farmland gain of $500,000."
+# See the IRS partner instructions, Box 20 Code ZZ, Section 1062:
+# https://www.irs.gov/instructions/i1065sk1
 
 # §2.4  GRID — Named matrix with fixed axes
 # ──────────────────────────────────────────
@@ -352,7 +354,7 @@ recordset_example:
 # ─────────────────────────────────────────────────────────────
 # Statements are the bridge between "data on the form" and "everything
 # that overflows off the form." In the PDF world, these are the pages
-# of supplemental information that cause 90% of ingestion failures.
+# of supplemental information that are difficult to ingest reliably.
 #
 # In OTD, a Statement is itself a tree of TaxNodes. It can contain
 # scalars, coded values, grids, recordsets, and even other statements.
@@ -766,9 +768,9 @@ body:
 # -------------|--------------------------|-------------------------------
 # decimal      | 150000.00                | MUST use exactly 2 decimal places for
 #              |                          | currency; emitters MUST use decimal-
-#              |                          | preserving YAML libraries (e.g.,
-#              |                          | ruamel.yaml, not PyYAML) to prevent
-#              |                          | IEEE 754 floating-point drift.
+#              |                          | safe constructors and representers
+#              |                          | configured to avoid conversion through
+#              |                          | IEEE 754 binary floating point.
 #              |                          | Parsers MUST load decimal values into
 #              |                          | native Decimal/BigDecimal types, NOT
 #              |                          | IEEE 754 floats.
@@ -784,14 +786,19 @@ body:
 # null         | null                     | Explicit absence (not the same as omission)
 #
 # DECIMAL PRECISION RULE (MANDATORY):
-#   All currency/financial values MUST be serialized with exactly 2 decimal
+#   Currency amounts MUST be serialized with exactly 2 decimal
 #   places (e.g., 150000.00, not 150000 or 150000.0).
 #   Emitters MUST NOT rely on language-default float serialization.
 #   Parsers MUST NOT load financial values as IEEE 754 doubles.
-#   The reference implementation uses Python's ruamel.yaml with native
-#   decimal preservation. Implementations in other languages MUST use
-#   equivalent decimal-safe serialization (e.g., BigDecimal in Java/C#,
-#   decimal.js in JavaScript, rust_decimal in Rust).
+#   Installing ruamel.yaml alone does not provide native Decimal loading.
+#   The reference implementation configures Decimal constructors/representers
+#   in skills/k1-otd/scripts/otd_values.py and uses simplejson for exact JSON
+#   numbers. Percentages and non-currency quantities retain reported precision.
+#   Fractional-cent currency requires an explicit upstream rounding policy;
+#   the reference emitter rejects it rather than silently rounding.
+#   Other implementations need equivalent decimal-safe parsing/serialization:
+#   e.g., BigDecimal in Java, decimal in C#, decimal.js in JavaScript, or
+#   rust_decimal in Rust. Respect each type's precision and range limits.
 #
 # Omission vs. null:
 #   - A node OMITTED from the document means "not applicable" or "not reported"

@@ -15,6 +15,13 @@ unsupported layouts, and ambiguous evidence still require agent judgment.
 
 Read [README.md](README.md) for architecture, setup, script descriptions, evidence, and limitations.
 
+Run from a repository checkout with Python 3.10 or later. Install the complete
+toolkit with:
+
+```bash
+python -m pip install -r examples/k1-1065-2025-synthetic/requirements-demo.txt
+```
+
 ## Scope
 
 ### Use this skill when
@@ -154,13 +161,15 @@ assembly unless a supported profile or separately reviewed normalized
 projection exists. Never feed the raw envelope directly to the assembler; its
 hard rejection of that shape is an intentional no-silent-data-loss boundary.
 
-State schedules, when present:
+State schedules, when present, are currently an explicit escalation boundary.
+The command below records an attempt, not a normalized assembler fragment.
+The experimental `state_grid_parsers.py` strategies are not wired into it:
 
 ```bash
 python skills/k1-otd/scripts/extract_state_grids.py \
   --input-dir artifact-root/text_blocks \
   --manifest artifact-root/fragments/page_manifest.json \
-  --out artifact-root/fragments/state_schedules.json
+  --out artifact-root/evidence/state-grid-attempt.json
 ```
 
 Line-item details, when present:
@@ -169,7 +178,7 @@ Line-item details, when present:
 python skills/k1-otd/scripts/build_line_item_details.py \
   --pages artifact-root/text_blocks \
   --grammar skills/k1-otd/grammars/k1-1065-2025.grammar.yaml \
-  --out artifact-root/fragments/line_item_details.json
+  --out artifact-root/evidence/line-item-details.json
 ```
 
 Produce overflow and footnote fragments through evidence-backed review of the classified source sections. Preserve source text, form location, classifications, and uncertainty.
@@ -200,8 +209,15 @@ Require both the OTD YAML and confidence manifest.
 ```bash
 python skills/k1-otd/scripts/validate_otd.py \
   --input artifact-root/output.otd.yaml \
-  --taxonomy taxonomies/irs-k1-1065-2025.yaml
+  --taxonomy taxonomies/irs-k1-1065-2025.yaml \
+  --update-confidence artifact-root/output.confidence.json
 ```
+
+The explicit update binds the existing confidence manifest to this document
+and the SHA-256 of its validated bytes. For read-only inspection, omit
+`--update-confidence`. Never infer a fresh validation receipt from an
+unchanged older confidence file. For older documents, omit `--taxonomy` to
+resolve their named bundled version, or supply that exact historical file.
 
 Interpret exit codes exactly:
 
@@ -213,12 +229,12 @@ Never report RC `2` as a document failure or success. Repair configuration/taxon
 
 ### 8. Reconcile details
 
-If `line_item_details.json` exists:
+If `evidence/line-item-details.json` exists:
 
 ```bash
 python skills/k1-otd/scripts/reconcile_line_item_details.py \
   --otd artifact-root/output.otd.yaml \
-  --details artifact-root/fragments/line_item_details.json \
+  --details artifact-root/evidence/line-item-details.json \
   --out artifact-root/reports/line-item-reconciliation.json \
   --posture hard_error
 ```
@@ -272,11 +288,17 @@ For a document delivery:
 For repository changes, run:
 
 ```bash
+python -B tests/test_release_contract.py
+python -B tests/test_numeric_contract.py
+python -B tests/test_taxonomy_versions.py
 python -B tests/test_validator_contract.py
 python -B tests/test_constraint_engine.py
 python -B tests/test_direct_documents.py
 python -B tests/test_rectification.py
 python -B tests/test_face_reader.py
+python -B tests/test_workflow_contract.py
+python -B tests/test_diagnostic_renderer.py
+python -B tests/test_synthetic_pdf_to_otd.py
 python -B tests/check_mirrors.py
 ```
 
@@ -299,7 +321,9 @@ The current contract matrix has 34 blocking cases and zero deferred cases.
 ## Portable example and diagnostics
 
 - [Synthetic 2025 K-1 example](../../examples/k1-1065-2025-synthetic/README.md)
-  contains the approved fictitious source and its reproducible extraction claim.
+  contains the approved fictitious stress fixture and its reproducible extraction
+  claim. Mixed-year supplements and inconsistent figures are test material,
+  not tax advice or a model return.
 - [Blank IRS K-1 fixture](../../tests/fixtures/pdf/irs-k1-1065-2025-blank.pdf)
   proves abstention and verified absence without machine-local dependencies.
 - `scripts/render_extraction_diagnostics.py` renders labeled, color-coded page

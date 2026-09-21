@@ -4,6 +4,12 @@ This directory contains an approved, fictitious Schedule K-1 package for
 portable extraction tests, human-review diagnostics, and a source-dependent
 bounded OTD demonstration.
 
+**This is test material, not a model tax return or tax advice.** The 2025
+face form is combined with varied supplemental layouts, including older-year
+examples and intentionally inconsistent figures. For example, page 20 includes
+a 2019 Form 926 disclosure and page 27 a 2022 state schedule. Successful
+extraction does not establish that the package is a coherent 2025 return.
+
 ## Source
 
 - File: [`source/synthetic-k1.pdf`](source/synthetic-k1.pdf)
@@ -44,13 +50,19 @@ fail-closed behavior, not fabricated completion.
 
 ## Run the bounded demonstration
 
-Run from the repository root:
+Use Python 3.10 or later. Install the pinned direct dependencies and run from
+the repository root:
 
 ```bash
+python -m pip install -r examples/k1-1065-2025-synthetic/requirements-demo.txt
 python -B examples/k1-1065-2025-synthetic/run_demo.py \
   --out artifact-root/synthetic-demo \
   --created 2026-07-30T00:00:00Z
 ```
+
+Choose a new, nonexistent output directory for each run. The runner refuses
+to overwrite an existing bundle. Add `--work-dir path/to/new-work-directory`
+to retain intermediate evidence and stage logs for inspection.
 
 The runner reads the PDF, grammar, taxonomy, and repository tools. It does not
 read the committed `evidence/`, `expected/`, `diagnostics/`, or prior
@@ -61,14 +73,27 @@ demonstration output. Successful publication produces:
 - `reconciliation.json`;
 - five explicit assembler fragments under `fragments/`;
 - `extraction-status.json`, with the bounded claim boundary;
-- `run-manifest.json`, with source, grammar, taxonomy, orchestrator, and
-  executed-tool hashes.
+- `run-manifest.json`, with source, grammar, taxonomy, requirements,
+  classification-signature, assembler-mirror, and tool hashes, plus the
+  actual Python and direct-dependency versions.
 
 The committed [`demonstration/`](demonstration/) directory is a reproducible
 snapshot generated with the pinned creation time above. The contract test runs
-twice from renamed PDF copies, compares deterministic outputs, and verifies
+from two renamed PDF copies and the canonical source, compares deterministic
+tax artifacts byte-for-byte, and verifies
 that a different PDF renamed `synthetic-k1.pdf` cannot bypass source-byte
 identity.
+
+The manifest is run evidence, not a frozen description of another machine:
+Python implementation/version and diagnostic stream hashes can differ.
+The test verifies fresh environment and log evidence independently while
+requiring the same source hashes, pinned direct dependencies, stage commands,
+and public artifact hashes. Transitive dependencies are not fully locked, so
+this is not a claim of hermetic reproducibility across arbitrary environments.
+
+Validation within the runner explicitly updates the document-matched
+confidence manifest. Standalone validation is read-only unless the caller
+supplies `--update-confidence`.
 
 ## Reproduce extraction evidence
 

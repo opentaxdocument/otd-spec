@@ -2,7 +2,7 @@
 # Open Tax Document — Roadmap
 
 **Status:** Draft — public, actively changing
-**Updated:** 2026-07-29
+**Updated:** 2026-09-21
 **Authors:** Tom O'Sullivan, Crimson Tree Software
 
 > This project is built in the open. This roadmap states what is actually
@@ -48,7 +48,7 @@ evidence, each remediated:
 | 1 | Production assembler emitted IRS-nonconforming Box 16, Item M, Item K3 | Remediated |
 | 2 | Validation was presence-only; content never checked | Remediated |
 | 3 | Range rules failed open; shipped sum rules were inert; mirror staleness | Remediated |
-| 4 | No taxonomy-schema binding; a misspelled rule path silently disabled its rule | Trust-boundary binding remediated; recursive binding and path preflight **open** |
+| 4 | No taxonomy-schema binding; a misspelled rule path silently disabled its rule | Binding and path preflight now have blocking regressions; broader interoperability remains open |
 
 Earlier rounds against v0.2 were conducted by a different reviewer. The
 attribution in the previous version of this roadmap was out of date.
@@ -71,23 +71,26 @@ Taxonomy constraint paths are preflighted, document/taxonomy identity is bound,
 and required/null behavior is exercised by the blocking contract matrix. The
 matrix currently has 34 passing cases and no deferred cases.
 
-The remaining validation gap is breadth rather than a known fail-open seam:
-cross-implementation parity, extension-registry interoperability, additional
-nested taxonomy shapes, and wider third-party document corpora still need
-independent exercise.
+The release review added counterexamples for malformed payloads, non-finite
+financial values, rule preflight, exact arithmetic, and confidence-file
+isolation. These now have blocking regressions in `test_release_contract.py`
+and `test_numeric_contract.py`. Passing known counterexamples does not prove
+that no fail-open paths remain. Cross-implementation parity, extension
+interoperability, additional nested taxonomy shapes, and wider third-party
+document corpora still need independent exercise.
 
-### Deferred validator contracts are executable, not hidden
+### Current validator contracts are blocking
 
-`tests/test_validator_contract.py` preserves 12 unresolved behaviors as strict
-expected failures: four rule-path cases, nested enum/type/placement checks,
-unknown-extension forward compatibility, three statement/reference truth
-rules, and related schema debt. An unexpected pass fails the suite until the
-case is reviewed and promoted.
+`tests/test_validator_contract.py` has 34 blocking cases and no deferred
+cases. The earlier roadmap's reference to 12 unresolved expected failures
+was stale. The release-boundary, numeric, and taxonomy-version suites add
+separate regression coverage; they are not a universal conformance certificate.
 
 ### The extraction fit gate and corpus remain bounded
 
-`template_match.py` is not yet wired into one fail-closed extraction
-orchestrator. Face-reader regression coverage uses one 2025 grammar, an official
+The bounded synthetic runner enforces a unique template match. General
+extraction remains staged, so standalone callers must inspect the fit report.
+Face-reader regression coverage uses one 2025 grammar, an official
 blank IRS form, and one approved synthetic 27-page package stored in the
 repository. `render_extraction_diagnostics.py` makes evidence boxes,
 classifications, missing geometry, and errors reviewable page by page.
@@ -146,7 +149,7 @@ in supplements we haven't modelled?*
 | `form_metadata.amendment_type` | **Resolved by removal** — `delta` scope dropped; `full_replacement` only |
 | `source_text` array form | **Done** — single string or array of rows, preserving table structure |
 | `mef_tag` node annotations | **Partial** — the convention is documented in the taxonomy header, but individual nodes are not yet annotated |
-| Confidence scoring heuristics | **Open** — no standard rules defined for the [0-1] range |
+| Confidence scoring | **Draft heuristics only**: the footnote guide proposes scores, but they are not calibrated probabilities or a substitute for evidence and review |
 
 ### Extension Registry
 
@@ -190,8 +193,8 @@ slip is worse than one that states its order honestly.
 
 | # | Milestone | Gate |
 |---|---|---|
-| 1 | Close the constraint-path preflight gap | A misspelled rule path fails loudly |
-| 2 | Reconcile §4.7 `required` / null semantics | Spec and implementation agree |
+| 1 | Constraint-path preflight | **Implemented for the current profile**; misspelled paths and unsupported range expressions fail loudly |
+| 2 | Required/null behavior | **Blocking cases in the current profile**; broader schema-shape conformance remains to be exercised |
 | 3 | Practitioner review of footnote field sufficiency | Feedback from firms handling complex packages |
 | 4 | Promote the §7.1 validation profile to normative | Or document why each rule stays implementation-specific |
 | 5 | K-3 proof and validation coverage | K-3 exercised, not merely declared |

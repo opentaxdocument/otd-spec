@@ -5,7 +5,7 @@ Open Tax Document (OTD) — Round-Trip Proof of Concept
 EMIT: structured document
 ----------------------------------------
   Emitted: proof/generated/proof-emitted.otd.yaml
-  Size: 18,908 bytes
+  Size: 18,975 bytes
   Redacted fields: ['body.part_i.item_a', 'body.part_ii.item_e']
 
 PARSE: structured document
@@ -18,9 +18,9 @@ PARSE: structured document
 
 VALIDATE: selected constraints
 ----------------------------------------
-  ✓ [ERROR] box_4c_equals_4a_plus_4b: Box 4c (100000.0) == Box 4a (75000.0) + Box 4b (25000.0) = 100000.0
-  ✓ [ERROR] box_6b_lte_6a: Qualified dividends (28000.0) <= Ordinary dividends (32000.0)
-  ✓ [WARNING] capital_account_continuity: Ending (1300000.0) == computed (1300000.0) [tol=$1]
+  ✓ [ERROR] box_4c_equals_4a_plus_4b: Box 4c (100000.00) == Box 4a (75000.00) + Box 4b (25000.00) = 100000.00
+  ✓ [ERROR] box_6b_lte_6a: Qualified dividends (28000.00) <= Ordinary dividends (32000.00)
+  ✓ [WARNING] capital_account_continuity: Ending (1300000.00) == computed (1300000.00) [tol=$1]
   ✓ [ERROR] percentages_valid_range: All share percentages in [0,1]: True
   ✓ [ERROR] box_20_zz_requires_classification: Box 20 Code ZZ classification present: True
 
@@ -29,7 +29,7 @@ VALIDATE: selected constraints
 QUERY: demonstration
 ----------------------------------------
   4a. Semantic lookup: 'ordinary_business_income'
-      → TaxNode(scalar, id=ordinary_business_income, value=150000.0)
+      → TaxNode(scalar, id=ordinary_business_income, value=150000.00)
       Value: $150,000.00
 
   4b. Value shortcut: 'guaranteed_payments_total'
@@ -131,14 +131,14 @@ ROUND-TRIP: normalized equivalence
 ----------------------------------------
   PASS — Normalized serialization equivalent
   Re-emitted: proof/generated/proof-re-emitted.otd.yaml
-  SHA256 (original, normalized):   3dc90089738f3cf2
-  SHA256 (re-emitted, normalized): 3dc90089738f3cf2
+  SHA256 (original, normalized):   d59beaae388687cc
+  SHA256 (re-emitted, normalized): d59beaae388687cc
   Match: True
 
 ========================================================================
 SUMMARY
 ========================================================================
-  Emit:       ✓ (18,908 bytes)
+  Emit:       ✓ (18,975 bytes)
   Parse:      ✓ (70 nodes indexed)
   Validate:   ✓ All passed
   Query:      ✓ (semantic, value, type, statement, reference)

@@ -1,0 +1,60 @@
+name: Validate draft
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Python ${{ matrix.python }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: "3.10"
+          - os: windows-latest
+            python: "3.13"
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install direct dependencies
+        run: python -m pip install -r examples/k1-1065-2025-synthetic/requirements-demo.txt
+      - name: Run blocking contracts and demonstrations
+        shell: bash
+        env:
+          PYTHONUTF8: "1"
+          PYTHONIOENCODING: utf-8
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -euo pipefail
+          python -B proof/otd_round_trip_proof.py
+          python -B skills/k1-otd/scripts/validate_otd.py --input proof/proof-emitted.otd.yaml
+          python -B tests/test_release_contract.py
+          python -B tests/test_numeric_contract.py
+          python -B tests/test_taxonomy_versions.py
+          python -B tests/test_validator_contract.py
+          python -B tests/test_constraint_engine.py
+          python -B tests/test_rectification.py
+          python -B tests/test_direct_documents.py
+          python -B tests/test_face_reader.py
+          python -B tests/test_workflow_contract.py
+          python -B tests/test_diagnostic_renderer.py
+          python -B tests/test_synthetic_pdf_to_otd.py
+          python -B tests/check_mirrors.py
+          python -B skills/k1-otd/scripts/grammar_validator.py skills/k1-otd/grammars/k1-1065-2025.grammar.yaml
+          git diff --check
+          git diff --exit-code

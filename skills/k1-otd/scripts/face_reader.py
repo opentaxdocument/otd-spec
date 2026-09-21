@@ -26,9 +26,10 @@ assumed.
 import argparse
 import sys
 import re
-import json
+import simplejson as json
 import hashlib
 import datetime
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -41,6 +42,7 @@ except ImportError as e:
     sys.exit(2)
 
 sys.path.insert(0, str(Path(__file__).parent))
+from otd_values import as_decimal
 from elastic_geometry import (
     compute_row_tolerance, build_row_bands, derive_region_bounds,
     detect_checkbox_frames, evaluate_checkbox, find_frame_near,
@@ -151,11 +153,11 @@ def parse_numeric(token, signed_hint=False):
     t = t.strip("()")
     t = t.replace("$", "").replace(",", "").replace("%", "")
     try:
-        val = float(t)
-    except ValueError:
+        val = as_decimal(Decimal(t))
+    except (ValueError, InvalidOperation):
         return None
     if negative:
-        val = -abs(val)
+        val = val.copy_abs().copy_negate()
     return val
 
 
@@ -1608,10 +1610,10 @@ def _parse_overlay_number(text):
     if negative:
         value = value[1:-1]
     try:
-        number = float(value)
-    except ValueError:
+        number = as_decimal(Decimal(value))
+    except (ValueError, InvalidOperation):
         return None
-    return -number if negative else number
+    return number.copy_abs().copy_negate() if negative else number
 
 
 def read_coded_rows(field_key, field_def, ctx):
@@ -1910,7 +1912,7 @@ def main(argv=None):
     )
     args = parser.parse_args(argv)
     result = read_face(args.pdf, args.grammar, args.extraction_timestamp)
-    payload = json.dumps(result, indent=2, default=str)
+    payload = json.dumps(result, indent=2, use_decimal=True, allow_nan=False)
 
     if args.out:
         out_path = Path(args.out)

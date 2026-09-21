@@ -19,10 +19,13 @@ GENERIC BY DESIGN, NOT VENDOR-SPECIFIC:
     silently guessed.
 """
 import argparse
-import json
+import simplejson as json
 import re
 import sys
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
+
+from otd_values import as_decimal
 
 try:
     import yaml
@@ -32,7 +35,7 @@ except ImportError as exc:  # pragma: no cover
 
 HEADING_RE = re.compile(
     r"^LINE\s+([0-9]{1,2}[A-Z]{0,3})\s*-\s*(.+?)\s+DETAIL\s*$", re.MULTILINE)
-ROW_RE = re.compile(r"^(.+?)\s{1,}(\(?[\d,]+\.?\d*\)?)?\s*$")
+ROW_RE = re.compile(r"^(.+?)\s{1,}(\(?\$?[+-]?[\d,]+\.?\d*\)?)?\s*$")
 
 
 def build_box_maps(grammar_path):
@@ -42,7 +45,8 @@ def build_box_maps(grammar_path):
     so a different form year's grammar produces a different, correct map
     with no code change here.
     """
-    grammar = yaml.safe_load(open(grammar_path, encoding="utf-8"))
+    with open(grammar_path, encoding="utf-8") as stream:
+        grammar = yaml.safe_load(stream)
     scalar_map, coded_map = {}, {}
     for key, fdef in (grammar.get("fields") or {}).items():
         if not isinstance(fdef, dict):
@@ -86,10 +90,10 @@ def parse_amount(text):
     if not text:
         return None
     try:
-        val = float(text)
-    except ValueError:
+        val = as_decimal(Decimal(text))
+    except (ValueError, InvalidOperation):
         return None
-    return -val if neg else val
+    return val.copy_abs().copy_negate() if neg else val
 
 
 def parse_page(text):
@@ -172,7 +176,10 @@ def main():
 
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(records, indent=2), encoding="utf-8")
+    out_path.write_text(
+        json.dumps(records, indent=2, use_decimal=True, allow_nan=False) + "\n",
+        encoding="utf-8", newline="\n",
+    )
     print("WROTE %s" % out_path)
     matched = sum(1 for r in records if r["mode"] != "unmatched")
     print("Blocks: %d total, %d matched (%d scalar, %d coded), %d unmatched"

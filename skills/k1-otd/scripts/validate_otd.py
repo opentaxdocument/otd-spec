@@ -2,8 +2,11 @@
 """K-1 OTD validation with explicit document and taxonomy trust boundaries."""
 
 import argparse
-import json
+import hashlib
+import os
+import re
 import sys
+import tempfile
 from datetime import date, datetime
 from pathlib import Path
 
@@ -12,20 +15,20 @@ EXIT_INVALID_DOCUMENT = 1
 EXIT_VALIDATOR_ERROR = 2
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from constraint_engine import (
-    TaxonomyCompilationError,
-    compile_taxonomy,
-    run_taxonomy_driven_validation,
-)  # noqa: E402
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 try:
-    from ruamel.yaml import YAML
-
-    _yaml = YAML()
+    import simplejson as json
+    from otd_values import decimal_yaml, tree_problem
+    from constraint_engine import (
+        TaxonomyCompilationError,
+        compile_taxonomy,
+        run_taxonomy_driven_validation,
+    )
+    _yaml = decimal_yaml()
 except ImportError:
-    print("ERROR: validator dependency unavailable: install ruamel.yaml", file=sys.stderr)
+    print("ERROR: validator dependency unavailable: install ruamel.yaml and simplejson", file=sys.stderr)
     sys.exit(EXIT_VALIDATOR_ERROR)
 
 
@@ -105,7 +108,7 @@ def check_types(obj, path, warnings):
     """Preserve unknown extension node types and report them informationally."""
     if isinstance(obj, dict):
         node_type = obj.get("type")
-        if node_type and node_type not in VALID_TYPES:
+        if isinstance(node_type, str) and node_type not in VALID_TYPES:
             warnings.append(
                 f"Preserved undeclared extension node type {node_type!r} at {path}"
             )
@@ -128,9 +131,9 @@ def _require_nonempty_string(mapping, key, path, errors):
 
 def _validate_optional_iso_date(mapping, key, path, errors):
     value = mapping.get(key)
-    if value is None or isinstance(value, date):
+    if value is None or type(value) is date:
         return
-    if not isinstance(value, str):
+    if not isinstance(value, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
         errors.append(f"{path}.{key} must be an ISO date string or null")
         return
     try:
@@ -142,12 +145,20 @@ def _validate_optional_iso_date(mapping, key, path, errors):
 def _validate_iso_datetime(mapping, key, path, errors):
     value = mapping.get(key)
     if isinstance(value, datetime):
+        if value.tzinfo is None or value.utcoffset() is None:
+            errors.append(f"{path}.{key} must include a timezone")
         return
     if not isinstance(value, str) or not value.strip():
         errors.append(f"{path}.{key} must be an ISO 8601 datetime")
         return
 
     normalized = value.strip()
+    if not re.fullmatch(
+        r"\d{4}-\d{2}-\d{2}[Tt]\d{2}:\d{2}:\d{2}(?:\.\d+)?"
+        r"(?:[Zz]|[+-]\d{2}:\d{2})", normalized
+    ):
+        errors.append(f"{path}.{key} must be an ISO 8601 datetime with timezone")
+        return
     if normalized.endswith(("Z", "z")):
         normalized = normalized[:-1] + "+00:00"
     try:
@@ -171,6 +182,14 @@ def validate_document_contract(doc, errors):
         return
 
     sections = {}
+    if "statements" in doc:
+        statements = doc["statements"]
+        if not isinstance(statements, list):
+            errors.append("statements must be a sequence")
+        else:
+            for index, node in enumerate(statements):
+                if not isinstance(node, dict) or node.get("type") != "statement":
+                    errors.append(f"statements[{index}] must be a statement node")
     for section_name, required_keys in REQUIRED.items():
         section = doc.get(section_name)
         if not isinstance(section, dict):
@@ -243,27 +262,42 @@ def validate_document_contract(doc, errors):
                 errors.append(f"body.{key} must be a mapping")
 
 
-def resolve_taxonomy_path(input_path, taxonomy_path=None):
-    """Resolve the governing taxonomy without silently changing validation scope."""
+def resolve_taxonomy_path(input_path, taxonomy_path=None, *, taxonomy_claim=None):
+    """Resolve an exact bundled version; explicit files still require identity binding."""
     if taxonomy_path is not None:
         return Path(taxonomy_path)
 
-    candidate = Path(input_path).resolve()
-    for ancestor in [candidate.parent] + list(candidate.parents):
-        probe = ancestor / "taxonomies" / "irs-k1-1065-2025.yaml"
-        if probe.exists():
+    # Document strings never become arbitrary filesystem paths.
+    bundled = {
+        ("irs-k1-1065-2025", "2025.1.0"):
+            ("archive", "irs-k1-1065-2025-2025.1.0.yaml"),
+        ("irs-k1-1065-2025", "2025.1.1"):
+            ("irs-k1-1065-2025.yaml",),
+    }
+    relative = ("irs-k1-1065-2025.yaml",)
+    if isinstance(taxonomy_claim, dict):
+        tax_id, version = taxonomy_claim.get("id"), taxonomy_claim.get("version")
+        if isinstance(tax_id, str) and isinstance(version, str):
+            relative = bundled.get((tax_id, version))
+            if relative is None:
+                raise ValidatorConfigurationError(
+                    f"No bundled taxonomy for {tax_id!r} version {version!r}; "
+                    "pass --taxonomy for that exact version"
+                )
+
+    module = Path(__file__).resolve()
+    roots = [
+        *(ancestor / "taxonomies" for ancestor in Path(input_path).resolve().parents),
+        module.parents[3] / "taxonomies",
+        module.parent.parent / "reference",
+    ]
+    for root in dict.fromkeys(roots):
+        probe = root.joinpath(*relative)
+        if probe.is_file():
             return probe
 
-    mirror = (
-        Path(__file__).resolve().parent.parent
-        / "reference"
-        / "irs-k1-1065-2025.yaml"
-    )
-    if mirror.exists():
-        return mirror
-
     raise ValidatorConfigurationError(
-        "Taxonomy could not be resolved; pass --taxonomy explicitly"
+        "Named taxonomy version could not be resolved; pass --taxonomy explicitly"
     )
 
 
@@ -290,6 +324,9 @@ def load_taxonomy(taxonomy_path):
         raise ValidatorConfigurationError(
             f"Taxonomy document must be a non-empty mapping: {path}"
         )
+    problem = tree_problem(taxonomy)
+    if problem:
+        raise ValidatorConfigurationError(f"Taxonomy is not a bounded tree: {problem}")
 
     identity = taxonomy.get("taxonomy")
     if not isinstance(identity, dict):
@@ -382,13 +419,16 @@ def _build_result(doc, errors, warnings):
 
     statements = find_statements(doc)
     for statement in statements:
+        semantic = statement.get("semantic")
+        if not isinstance(semantic, dict):
+            continue
         if (
-            statement.get("semantic", {}).get("classification")
+            semantic.get("classification")
             == "unclassified_requires_review"
         ):
             warnings.append(
                 "⚠️ Unclassified statement: "
-                + statement.get("semantic", {}).get("id", "unknown")
+                + str(semantic.get("id", "unknown"))
             )
 
     return {
@@ -417,29 +457,69 @@ def _print_result(result):
         print(f"  ... +{len(result['warnings']) - 15} more warnings")
 
 
-def _update_confidence_manifest(input_path, result):
-    conf_path = Path(input_path).parent / "output.confidence.json"
-    if not conf_path.exists():
-        return
-    with conf_path.open(encoding="utf-8") as stream:
-        confidence = json.load(stream)
+def _update_confidence_manifest(input_path, doc, result, confidence_path, input_sha256):
+    """Update only an explicitly named companion for the same document."""
+    conf_path = Path(confidence_path)
+    if conf_path.resolve() == Path(input_path).resolve():
+        raise ValidatorConfigurationError("confidence output must not overwrite the OTD input")
+    envelope = doc.get("otd") if isinstance(doc, dict) else None
+    document_id = envelope.get("document_id") if isinstance(envelope, dict) else None
+    if not isinstance(document_id, str) or not document_id.strip():
+        raise ValidatorConfigurationError("cannot bind confidence without a document ID")
+    try:
+        original = conf_path.read_bytes()
+        confidence = json.loads(original.decode("utf-8-sig"), use_decimal=True, allow_nan=False)
+    except (OSError, ValueError, UnicodeError) as exc:
+        raise ValidatorConfigurationError(f"confidence manifest could not be read: {exc}") from exc
+    if not isinstance(confidence, dict) or confidence.get("document_id") != document_id:
+        raise ValidatorConfigurationError("confidence manifest document_id does not match OTD input")
     confidence["validation_passes"] = result["passes"]
     confidence["validation_errors"] = result["errors"]
-    with conf_path.open("w", encoding="utf-8") as stream:
-        json.dump(confidence, stream, indent=2)
+    if not input_sha256:
+        raise ValidatorConfigurationError("cannot bind confidence without captured input bytes")
+    confidence["validated_document_sha256"] = input_sha256
+    payload = json.dumps(
+        confidence, indent=2, ensure_ascii=False, use_decimal=True, allow_nan=False,
+    ) + "\n"
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", newline="\n",
+            dir=conf_path.parent, prefix="." + conf_path.name + ".", suffix=".tmp",
+            delete=False,
+        ) as stream:
+            temporary = Path(stream.name)
+            stream.write(payload)
+        if conf_path.read_bytes() != original:
+            raise ValidatorConfigurationError("confidence manifest changed during validation")
+        if hashlib.sha256(Path(input_path).read_bytes()).hexdigest() != input_sha256:
+            raise ValidatorConfigurationError("OTD input changed during validation")
+        os.replace(temporary, conf_path)
+        temporary = None
+    except OSError as exc:
+        raise ValidatorConfigurationError(f"confidence manifest could not be updated: {exc}") from exc
+    finally:
+        if temporary is not None:
+            temporary.unlink(missing_ok=True)
+    print(f"WROTE {conf_path.resolve().as_posix()}")
 
 
-def _finish(input_path, doc, errors, warnings):
+def _finish(input_path, doc, errors, warnings, confidence_path=None, input_sha256=None):
     result = _build_result(doc, errors, warnings)
+    result["validated_document_sha256"] = input_sha256
+    if confidence_path is not None:
+        _update_confidence_manifest(input_path, doc, result, confidence_path, input_sha256)
     _print_result(result)
-    _update_confidence_manifest(input_path, result)
     return result
 
 
-def validate(input_path, taxonomy_path=None):
+def validate(input_path, taxonomy_path=None, *, confidence_path=None):
+    """Validate without writes unless an explicit confidence companion is supplied."""
+    input_sha256 = None
     try:
-        with open(input_path, encoding="utf-8") as stream:
-            doc = _yaml.load(stream)
+        input_bytes = Path(input_path).read_bytes()
+        input_sha256 = hashlib.sha256(input_bytes).hexdigest()
+        doc = _yaml.load(input_bytes.decode("utf-8-sig"))
     except OSError as exc:
         raise ValidatorConfigurationError(
             f"Input document could not be read: {input_path}: {exc}"
@@ -450,12 +530,21 @@ def validate(input_path, taxonomy_path=None):
             {},
             [f"Invalid YAML syntax in input document: {exc}"],
             [],
+            confidence_path,
+            input_sha256,
         )
 
+    problem = tree_problem(doc)
+    if problem:
+        return _finish(input_path, {}, [problem], [], confidence_path, input_sha256)
     errors, warnings = [], []
     validate_document_contract(doc, errors)
 
-    resolved_taxonomy_path = resolve_taxonomy_path(input_path, taxonomy_path)
+    envelope = doc.get("otd") if isinstance(doc, dict) else None
+    taxonomy_claim = envelope.get("taxonomy") if isinstance(envelope, dict) else None
+    resolved_taxonomy_path = resolve_taxonomy_path(
+        input_path, taxonomy_path, taxonomy_claim=taxonomy_claim,
+    )
     taxonomy = load_taxonomy(resolved_taxonomy_path)
     validate_taxonomy_identity(doc, taxonomy, errors)
 
@@ -465,7 +554,7 @@ def validate(input_path, taxonomy_path=None):
     validate_filing_status(form_metadata, errors, warnings)
 
     if errors:
-        return _finish(input_path, doc, errors, warnings)
+        return _finish(input_path, doc, errors, warnings, confidence_path, input_sha256)
 
     try:
         tax_errors, tax_warnings = run_taxonomy_driven_validation(
@@ -480,7 +569,7 @@ def validate(input_path, taxonomy_path=None):
 
     errors.extend(tax_errors)
     warnings.extend(tax_warnings)
-    return _finish(input_path, doc, errors, warnings)
+    return _finish(input_path, doc, errors, warnings, confidence_path, input_sha256)
 
 
 def main(argv=None):
@@ -491,10 +580,19 @@ def main(argv=None):
         default=None,
         help="Path to governing taxonomy YAML (auto-detected if omitted)",
     )
+    parser.add_argument(
+        "--update-confidence",
+        default=None,
+        metavar="PATH",
+        help="Opt in to updating an existing confidence manifest with a matching document_id",
+    )
     args = parser.parse_args(argv)
 
     try:
-        result = validate(args.input, taxonomy_path=args.taxonomy)
+        result = validate(
+            args.input, taxonomy_path=args.taxonomy,
+            confidence_path=args.update_confidence,
+        )
     except ValidatorConfigurationError as exc:
         print("\n=== OTD Validation: VALIDATOR ERROR ===", file=sys.stderr)
         print(f"  ERROR: {exc}", file=sys.stderr)
