@@ -2,7 +2,7 @@
   "schema_version": "otd-bounded-demo-run/1.0",
   "profile_id": "k1-1065-2025-face-and-numeric-details/1.0",
   "repository": {
-    "source_closure_sha256": "d0de09dce8a7274793cfde34b95d82e769bb0a38b1701cc6d2fd3688f29cb523"
+    "source_closure_sha256": "8f25d74b2c2ba54c8738c14f5ee8f764652a2b618822dd86c36f9c43413481a9"
   },
   "orchestrator_sha256": "f93f83f564a3ec2df0018847665224a009edda092a2c7a8403b6b03429e65dee",
   "grammar_sha256": "cf7925d56b5eadbf550d56ef37e324d88a9942748aea07dcfce9d6819c289e2d",
@@ -17,11 +17,11 @@
     "skills/k1-otd/signatures/page-signatures.yaml": "79380daccbbea1a7bf116df9a4d07b7075946c988d79f8f3d6a43f747ac36657",
     "skills/k1-otd/scripts/assemble_otd.py": "d48199bf43d8ca878ed6147db78736df4a89d0581fbc2f1bb291fec98ccf4138",
     "skills/k1-otd/scripts/build_line_item_details.py": "1b34d918bb04e54b7a363b6a5ebd9b6d7304a5d1f7e64204eac9c60b98263b6b",
-    "skills/k1-otd/scripts/build_section_manifests.py": "b8527072790d6938349e96dff61c47727128b90c0217930a56e04235d751c28f",
+    "skills/k1-otd/scripts/build_section_manifests.py": "993b7a2b5d6ccae035168b356ab1985758053da76d5898a65dda09b837de5885",
     "skills/k1-otd/scripts/constraint_engine.py": "30f42dd33502c4dc791005480d7ba7e4bef6eebbaa4cbeb90a70484b09474c93",
     "skills/k1-otd/scripts/elastic_geometry.py": "cde0edf80e9e68197e70bf0dfc5b4d3311e2a41fea936b414c0ef8d892794994",
     "skills/k1-otd/scripts/extract_pdf_text.py": "8f8963b329fcf1d3d48a208ff14f09311a21a5f4b01e79f2b491a7fbb827a7c6",
-    "skills/k1-otd/scripts/extract_state_grids.py": "62bd75ae22f7bfc9df4e728199ffc87444b0855111059c3784e87b7afef65c3b",
+    "skills/k1-otd/scripts/extract_state_grids.py": "c77eb69a3b770f1f503629da78079eab8c76a11ed1bfd74b266b3ca3268a06eb",
     "skills/k1-otd/scripts/face_reader.py": "b3acbec809c1e056f9c80bbc40c44067dc19ce776c3a90cff05ad29325f2d868",
     "skills/k1-otd/scripts/grammar_validator.py": "063d79e2ac1fd6cffd84fe903a9da471c44cf75dbeaec25de94e3967aec2a4f3",
     "skills/k1-otd/scripts/otd_values.py": "13fdb7e8f4032e5b11b6524e61f4bd9a632f89ac7832a0e40934c138a4a89788",
@@ -35,7 +35,7 @@
     "skills/k1-otd/scripts/template_match.py": "abea0be6c056224cd533baa1b5050d7d9d8593f95240c5fddfbc03b27040baaa",
     "skills/k1-otd/scripts/validate_otd.py": "0e2f8eb77ff6b8f38f22ac267db6b1cf61a05fc8524237ddaaa523b0eb2dd189"
   },
-  "source_closure_sha256": "d0de09dce8a7274793cfde34b95d82e769bb0a38b1701cc6d2fd3688f29cb523",
+  "source_closure_sha256": "8f25d74b2c2ba54c8738c14f5ee8f764652a2b618822dd86c36f9c43413481a9",
   "dependencies": {
     "python": "3.13.3",
     "implementation": "CPython",
@@ -106,7 +106,7 @@
     {
       "name": "section-manifests",
       "tool": "skills/k1-otd/scripts/build_section_manifests.py",
-      "tool_sha256": "b8527072790d6938349e96dff61c47727128b90c0217930a56e04235d751c28f",
+      "tool_sha256": "993b7a2b5d6ccae035168b356ab1985758053da76d5898a65dda09b837de5885",
       "arguments": [
         "--index",
         "<WORK_ROOT>/text_blocks/page_index.json",
@@ -142,7 +142,7 @@
     {
       "name": "state-grid-attempt",
       "tool": "skills/k1-otd/scripts/extract_state_grids.py",
-      "tool_sha256": "62bd75ae22f7bfc9df4e728199ffc87444b0855111059c3784e87b7afef65c3b",
+      "tool_sha256": "c77eb69a3b770f1f503629da78079eab8c76a11ed1bfd74b266b3ca3268a06eb",
       "arguments": [
         "--input-dir",
         "<WORK_ROOT>/text_blocks",
@@ -273,17 +273,17 @@
     }
   ],
   "artifacts": {
-    "disposition-ledger.json": "3e85246d2596e82a670d7e81379e788f0f0a76a7b8f8e7bbf93878e0d26feb14",
-    "evidence-receipt.json": "f408f8aaa7e92d8b8c2d13bba290a3fef8462bda7471388c1d2bfced9d1f0030",
+    "disposition-ledger.json": "540f0e485c14cdac5308e0244b4b052d7b4d1d042e5c0f7ed5b23424897e12cc",
+    "evidence-receipt.json": "2c069e54828e1fdb2da4701f90a6abdc883ae615b73eb3ac9324412a356ca516",
     "extraction-status.json": "70a96d6164c38314cadbf1a811a71921ad3de5ea2a6200894b9f1f2f78d4b3a5",
-    "fragments/face_page.json": "7190ee24f0709dd4cb094d7927fb44127a92417f30932fd3746c3f35b2fb5297",
-    "fragments/footnotes_a.json": "c57734df0bd47a56fb21999ca966978a4afbd466496ed34bf7ec9795f59ea60c",
-    "fragments/footnotes_b.json": "c57734df0bd47a56fb21999ca966978a4afbd466496ed34bf7ec9795f59ea60c",
-    "fragments/overflow_statements.json": "1a71c4f7ce1d0f1e9a1031d8b68ea117377a4dde5984968d4a78fe8771702d3d",
-    "fragments/state_schedules.json": "1104cd1886b7adbab8a29661a534c1b09da3c51460ffa2ab4e0de4cc290ce87c",
-    "output.confidence.json": "e2f04ed6bb81c130ca12598ff0d5ec5687e3a3b3530772ccef3a20a1576cc87d",
-    "output.otd.yaml": "6ecc6b1938f80f33191402fc76b99895310c72fdf369970a66bfc44fe2514081",
-    "projection-manifest.json": "86af8fc74f00f376f0135e2f34100f4ad73abba17d2743376f5ef52219314174",
+    "fragments/face_page.json": "76e3728d90f5e66ecf4962b3002907a3346bd1b216131add63b18ecb55f9657f",
+    "fragments/footnotes_a.json": "2a63707052e7bf33b91faea532d9ddd82179b7d76d288608830234dea3a9bae4",
+    "fragments/footnotes_b.json": "2a63707052e7bf33b91faea532d9ddd82179b7d76d288608830234dea3a9bae4",
+    "fragments/overflow_statements.json": "5bfcbb647ac58a075e452e1fbce3fdbde8ae4971b96f530444454989a9e9c738",
+    "fragments/state_schedules.json": "b5ce5e891beb8c946682cc488aa6be21be9085d6e03f22853b2f1652e40ef81a",
+    "output.confidence.json": "b1e008b0b3fab2eb334dc1cbb33389d1f4d93c83a9e951c8c6272656f145fd03",
+    "output.otd.yaml": "2df0cd1e859c64a48a4d548db14de6f762210ef569db93604110b7fb8ec3c663",
+    "projection-manifest.json": "89928a5c0cad647b06cc1c9c06b5c23eb1faf089b528452a1e2fe0cadfbf19cc",
     "reconciliation.json": "4ecfd4158518af546f8266c73f40b0e3862378830594d0ea8b70e573a4f97a39"
   },
   "claim": "Starting from the identified PDF bytes, this command generated and validated an OTD document for the declared supported profile while explicitly ledgering all excluded source evidence."

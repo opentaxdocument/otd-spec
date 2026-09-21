@@ -21,7 +21,7 @@ def main():
 
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    with open(out_path, 'w', encoding='utf-8') as f:
+    with open(out_path, 'w', encoding='utf-8', newline='\n') as f:
         json.dump(result, f, indent=2)
 
     print(f"WROTE {out_path.absolute()} (Escalate: {result['_escalate']})")

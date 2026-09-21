@@ -159,7 +159,7 @@ def main():
         "multi_role_pages": multi,
         "unresolved_sections": unresolved,
     }
-    out.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    out.write_text(json.dumps(manifest, indent=2), encoding="utf-8", newline="\n")
 
     sec_out = Path(args.section_out) if args.section_out else \
         out.parent / "section_manifest.json"
@@ -190,7 +190,7 @@ def main():
             "title_effect": s.get("title_effect"),
             "reasons": s.get("reasons"),
         } for s in secs],
-    }, indent=2), encoding="utf-8")
+    }, indent=2), encoding="utf-8", newline="\n")
 
     print("WROTE %s" % out)
     print("WROTE %s" % sec_out)

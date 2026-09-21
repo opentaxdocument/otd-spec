@@ -1,7 +1,7 @@
 {
   "_profile_id": "k1-1065-2025-face-and-numeric-details/1.0",
   "_source_pdf_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
-  "_evidence_receipt_sha256": "f408f8aaa7e92d8b8c2d13bba290a3fef8462bda7471388c1d2bfced9d1f0030",
+  "_evidence_receipt_sha256": "2c069e54828e1fdb2da4701f90a6abdc883ae615b73eb3ac9324412a356ca516",
   "footnotes": [],
   "_reviewed_exclusion": "No deterministic statement parser is in this profile."
 }

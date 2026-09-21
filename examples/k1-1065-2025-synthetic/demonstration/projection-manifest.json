@@ -6,19 +6,19 @@
     "sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac"
   },
   "source_artifacts": {
-    "evidence_receipt_sha256": "f408f8aaa7e92d8b8c2d13bba290a3fef8462bda7471388c1d2bfced9d1f0030",
+    "evidence_receipt_sha256": "2c069e54828e1fdb2da4701f90a6abdc883ae615b73eb3ac9324412a356ca516",
     "face_evidence_canonical_sha256": "e31b311aee1aedbd91e72dd42361200fa4842cd2f4721e506f5dfd16bdc3ffbc",
     "line_details_sha256": "a26d5202145a0da6de97c4e1029dc40cfc6383204e4eda844eeb013db6e9c49c",
-    "page_manifest_sha256": "c438201996fffcbdfcb25504431c1f31b3986d2dc21d6c9e74791e7406888c6f",
-    "section_manifest_sha256": "42310f24955b7873e155fd1be08a4a226c14939941d8f75322e40ff493af292b",
-    "state_attempt_sha256": "ca748007696958efe0891a73ac446fa91773d9573018346c94cefeabeb6bebbf"
+    "page_manifest_sha256": "e550a210bfce27df095e7358a6456e761c50ef0931bc3037b279829456d875c5",
+    "section_manifest_sha256": "2e8e24e2752c5b97f4e4f86df701567e7b42a2cb7ac84fe5e535ef751017352e",
+    "state_attempt_sha256": "3dcecf6ca1769d5ee69d4db25daad52f46325061ff918cffaef099855c25f944"
   },
   "fragment_sha256": {
-    "face_page.json": "7190ee24f0709dd4cb094d7927fb44127a92417f30932fd3746c3f35b2fb5297",
-    "footnotes_a.json": "c57734df0bd47a56fb21999ca966978a4afbd466496ed34bf7ec9795f59ea60c",
-    "footnotes_b.json": "c57734df0bd47a56fb21999ca966978a4afbd466496ed34bf7ec9795f59ea60c",
-    "overflow_statements.json": "1a71c4f7ce1d0f1e9a1031d8b68ea117377a4dde5984968d4a78fe8771702d3d",
-    "state_schedules.json": "1104cd1886b7adbab8a29661a534c1b09da3c51460ffa2ab4e0de4cc290ce87c"
+    "face_page.json": "76e3728d90f5e66ecf4962b3002907a3346bd1b216131add63b18ecb55f9657f",
+    "footnotes_a.json": "2a63707052e7bf33b91faea532d9ddd82179b7d76d288608830234dea3a9bae4",
+    "footnotes_b.json": "2a63707052e7bf33b91faea532d9ddd82179b7d76d288608830234dea3a9bae4",
+    "overflow_statements.json": "5bfcbb647ac58a075e452e1fbce3fdbde8ae4971b96f530444454989a9e9c738",
+    "state_schedules.json": "b5ce5e891beb8c946682cc488aa6be21be9085d6e03f22853b2f1652e40ef81a"
   },
   "scope": {
     "face_fields": true,

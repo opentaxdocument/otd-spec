@@ -25,13 +25,13 @@ otd:
     companion_artifacts:
       evidence_receipt:
         path: evidence-receipt.json
-        sha256: f408f8aaa7e92d8b8c2d13bba290a3fef8462bda7471388c1d2bfced9d1f0030
+        sha256: 2c069e54828e1fdb2da4701f90a6abdc883ae615b73eb3ac9324412a356ca516
       projection_manifest:
         path: projection-manifest.json
-        sha256: 86af8fc74f00f376f0135e2f34100f4ad73abba17d2743376f5ef52219314174
+        sha256: 89928a5c0cad647b06cc1c9c06b5c23eb1faf089b528452a1e2fe0cadfbf19cc
       disposition_ledger:
         path: disposition-ledger.json
-        sha256: 3e85246d2596e82a670d7e81379e788f0f0a76a7b8f8e7bbf93878e0d26feb14
+        sha256: 540f0e485c14cdac5308e0244b4b052d7b4d1d042e5c0f7ed5b23424897e12cc
 form_metadata:
   tax_year: 2025
   fiscal_year: false
