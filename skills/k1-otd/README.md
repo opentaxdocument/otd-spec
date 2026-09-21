@@ -30,7 +30,8 @@ The toolkit is useful for controlled, evidence-backed K-1 work. It is not a clai
 - Checks whether a grammar fits a candidate PDF before face values are trusted.
 - Reads face-page fields and checkboxes into evidence envelopes.
 - Projects supported evidence into five fragments with an evidence disposition ledger.
-- Extracts selected state grids and line-item detail tables.
+- Extracts selected line-item detail tables and records explicit state-grid
+  escalation when layout-aware extraction is unavailable.
 - Supports agent-reviewed overflow statements and footnotes.
 - Assembles five canonical fragments into OTD YAML plus a confidence manifest.
 - Validates document structure, taxonomy identity, constraint paths, nested types, closed enums, statement classifications, references, and no-fabrication rules.
@@ -84,15 +85,16 @@ The governing K-1 taxonomy is `taxonomies/irs-k1-1065-2025.yaml`.
 
 ## Requirements
 
-- Python 3.9 or later
+- Python 3.10 or later
 - `pdfplumber`
 - `PyYAML`
 - `ruamel.yaml`
+- `simplejson` for exact financial JSON numbers
 
-Install the observed third-party dependencies:
+Install the pinned direct dependencies:
 
 ```bash
-python -m pip install pdfplumber PyYAML ruamel.yaml
+python -m pip install -r examples/k1-1065-2025-synthetic/requirements-demo.txt
 ```
 
 Run commands from the repository root. Keep the source PDF immutable and put generated files under a dedicated artifact directory.
@@ -169,6 +171,10 @@ python skills/k1-otd/scripts/extract_state_grids.py \
   --out work/evidence/state-grid-attempt.json
 ```
 
+This command currently records an escalation rather than extracting state
+amounts. `state_grid_parsers.py` contains experimental strategies, but they are
+not integrated into that command and do not establish general state support.
+
 Build line-item details when the package contains printed detail tables:
 
 ```bash
@@ -217,7 +223,8 @@ The assembler writes `work/output.otd.yaml` and a sibling confidence manifest, n
 ```bash
 python skills/k1-otd/scripts/validate_otd.py \
   --input work/output.otd.yaml \
-  --taxonomy taxonomies/irs-k1-1065-2025.yaml
+  --taxonomy taxonomies/irs-k1-1065-2025.yaml \
+  --update-confidence work/output.confidence.json
 ```
 
 Exit codes are stable:
@@ -230,14 +237,22 @@ Exit codes are stable:
 
 A missing, malformed, empty, non-operative, or identity-mismatched taxonomy is a validator/configuration failure, not a successful validation.
 
+Validation is read-only unless `--update-confidence` is supplied. That option
+requires an existing companion with a matching `document_id` and records the
+validated input hash. The source and companion are checked for changes before
+the atomic companion replacement. This is not a lock against arbitrary
+concurrent writers; the hash identifies the bytes that were validated.
+For a document naming an older taxonomy, allow automatic exact-version
+resolution or pass its archived taxonomy, not the current file.
+
 ### 8. Reconcile face and detail values
 
-When `line_item_details.json` exists, run the hard-error reconciliation gate:
+When `work/evidence/line-item-details.json` exists, run the hard-error reconciliation gate:
 
 ```bash
 python skills/k1-otd/scripts/reconcile_line_item_details.py \
   --otd work/output.otd.yaml \
-  --details work/fragments/line_item_details.json \
+  --details work/evidence/line-item-details.json \
   --out work/line-item-reconciliation.json \
   --posture hard_error
 ```
@@ -263,6 +278,9 @@ These rules are non-negotiable:
 Run the repository test programs from the repository root:
 
 ```bash
+python -B tests/test_release_contract.py
+python -B tests/test_numeric_contract.py
+python -B tests/test_taxonomy_versions.py
 python -B tests/test_validator_contract.py
 python -B tests/test_constraint_engine.py
 python -B tests/test_direct_documents.py
@@ -289,7 +307,7 @@ general vendor or form-year support.
 | `template_match.py` | Standalone grammar-fit evidence gate |
 | `face_reader.py` | Grammar-driven face-page extraction |
 | `render_extraction_diagnostics.py` | Color-coded page images and portable diagnostic index |
-| `extract_state_grids.py` | State schedule grid extraction |
+| `extract_state_grids.py` | State-grid attempt with explicit escalation, not completed extraction |
 | `build_line_item_details.py` | Printed line-item detail fragment |
 | `reconcile_line_item_details.py` | Face-versus-detail reconciliation |
 | `assemble_otd.py` | Five-fragment OTD assembly |

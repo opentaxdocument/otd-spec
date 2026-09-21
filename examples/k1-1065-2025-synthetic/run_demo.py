@@ -11,9 +11,10 @@ import argparse
 import datetime
 import hashlib
 import importlib.metadata
-import json
+import simplejson as json
 import os
 import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -70,8 +71,9 @@ def canonical_sha256(value):
 
 
 def portable_text(value, source_pdf, work_root, output_root):
-    text = str(value)
+    text = str(value).replace("\r\n", "\n").replace("\r", "\n")
     replacements = (
+        (Path(sys.executable), "<PYTHON>"),
         (source_pdf, "<SOURCE_PDF>"),
         (work_root, "<WORK_ROOT>"),
         (output_root, "<OUTPUT_ROOT>"),
@@ -79,12 +81,21 @@ def portable_text(value, source_pdf, work_root, output_root):
     )
     for path, token in replacements:
         resolved = Path(path).resolve()
-        for candidate in {str(resolved), resolved.as_posix()}:
+        for candidate in dict.fromkeys((str(resolved), resolved.as_posix())):
             text = text.replace(candidate, token)
+    # These are diagnostic logs, not source evidence. Normalize the path
+    # suffix after a substituted root without rewriting the input document.
+    text = re.sub(
+        r"(<(?:PYTHON|SOURCE_PDF|WORK_ROOT|OUTPUT_ROOT|REPO_ROOT)>[^\r\n]*)",
+        lambda match: match.group(0).replace("\\", "/"),
+        text,
+    )
     return text
 
 
 def portable_argument(value, source_pdf, work_root, output_root):
+    if str(value) == sys.executable:
+        return "<PYTHON>"
     path = Path(value) if isinstance(value, (str, os.PathLike)) else None
     if path is not None:
         try:
@@ -142,7 +153,7 @@ def dependency_versions():
         "python": platform.python_version(),
         "implementation": platform.python_implementation(),
     }
-    for distribution in ("PyYAML", "ruamel.yaml", "pdfplumber", "pypdf"):
+    for distribution in ("PyYAML", "ruamel.yaml", "pdfplumber", "pypdf", "simplejson"):
         try:
             versions[distribution] = importlib.metadata.version(distribution)
         except importlib.metadata.PackageNotFoundError:
@@ -156,6 +167,9 @@ def source_closure():
         GRAMMAR,
         TAXONOMY,
         DEMO_REQUIREMENTS,
+        REPO_ROOT / "requirements.txt",
+        SCRIPTS.parent / "reference" / "irs-k1-1065-2025.yaml",
+        SCRIPTS.parent / "signatures" / "page-signatures.yaml",
         *sorted(SCRIPTS.rglob("*.py")),
     ]
     return {
@@ -271,6 +285,7 @@ def main(argv=None):
             text=True,
             encoding="utf-8",
             errors="replace",
+            timeout=90,
         )
         portable_stdout = portable_text(
             result.stdout, source_pdf, work_root, output_root
@@ -334,7 +349,7 @@ def main(argv=None):
         )
 
         page_index_path = work_root / "text_blocks" / "page_index.json"
-        page_index = json.loads(page_index_path.read_text(encoding="utf-8"))
+        page_index = json.loads(page_index_path.read_text(encoding="utf-8"), use_decimal=True)
         if page_index.get("sha256") != source_sha:
             raise DemoError("page index source hash disagrees with PDF")
         if page_index.get("total_pages") != 27:
@@ -347,7 +362,7 @@ def main(argv=None):
             ["--pdf", processing_pdf, "--grammar", GRAMMAR, "--outdir", fit_dir],
         )
         fit_report_path = fit_dir / "template_fit_report.json"
-        fit_reports = json.loads(fit_report_path.read_text(encoding="utf-8"))
+        fit_reports = json.loads(fit_report_path.read_text(encoding="utf-8"), use_decimal=True)
         if (
             not isinstance(fit_reports, list)
             or len(fit_reports) != 1
@@ -382,7 +397,7 @@ def main(argv=None):
                 "--extraction-timestamp", created,
             ],
         )
-        face = json.loads(face_evidence_path.read_text(encoding="utf-8"))
+        face = json.loads(face_evidence_path.read_text(encoding="utf-8"), use_decimal=True)
         if face.get("source_pdf_sha256") != source_sha:
             raise DemoError("face evidence source hash disagrees with PDF")
 
@@ -455,7 +470,8 @@ def main(argv=None):
             "state_schedules.json",
         ):
             fragment = json.loads(
-                (fragments / fragment_name).read_text(encoding="utf-8")
+                (fragments / fragment_name).read_text(encoding="utf-8"),
+                use_decimal=True,
             )
             if fragment.get("_source_pdf_sha256") != source_sha:
                 raise DemoError(
@@ -481,7 +497,10 @@ def main(argv=None):
         run_stage(
             "validation",
             SCRIPTS / "validate_otd.py",
-            ["--input", staged_otd, "--taxonomy", TAXONOMY],
+            [
+                "--input", staged_otd, "--taxonomy", TAXONOMY,
+                "--update-confidence", staging / "output.confidence.json",
+            ],
         )
 
         reconciliation_path = reports / "reconciliation.json"
@@ -502,16 +521,16 @@ def main(argv=None):
             raise DemoError("assembled OTD source hash disagrees with PDF")
 
         confidence_path = staging / "output.confidence.json"
-        confidence = json.loads(confidence_path.read_text(encoding="utf-8"))
+        confidence = json.loads(confidence_path.read_text(encoding="utf-8"), use_decimal=True)
         if confidence.get("validation_passes") is not True:
             raise DemoError("validator did not mark confidence manifest as passing")
 
-        disposition = json.loads(disposition_ledger_path.read_text(encoding="utf-8"))
+        disposition = json.loads(disposition_ledger_path.read_text(encoding="utf-8"), use_decimal=True)
         projection = json.loads(
-            projection_manifest_path.read_text(encoding="utf-8")
+            projection_manifest_path.read_text(encoding="utf-8"), use_decimal=True,
         )
         reconciliation = json.loads(
-            reconciliation_path.read_text(encoding="utf-8")
+            reconciliation_path.read_text(encoding="utf-8"), use_decimal=True,
         )
         if reconciliation.get("counts", {}).get("mismatch", 0) != 0:
             raise DemoError("face/detail reconciliation contains mismatches")

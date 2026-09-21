@@ -4,7 +4,6 @@
 Merges 5 extraction fragments into a compliant OTD YAML document + confidence manifest.
 """
 import sys
-import json
 import uuid
 import argparse
 import datetime
@@ -12,14 +11,22 @@ from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
+# Support CLI execution and filename-based imports used by integrations.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
 try:
-    from ruamel.yaml import YAML
-    _yaml = YAML()
+    import simplejson as json
+    from otd_values import decimal_yaml, normalize_k1_numbers
+    _yaml = decimal_yaml(round_trip=True)
     _yaml.indent(mapping=2, sequence=4, offset=2)
     _yaml.default_flow_style = False
     _yaml.width = 4096
-except ImportError:
-    print("ERROR: pip install ruamel.yaml", file=sys.stderr)
+except ImportError as exc:
+    print(
+        f"ERROR: assembler dependency unavailable ({exc}); "
+        "install the repository requirements.txt",
+        file=sys.stderr,
+    )
     sys.exit(1)
 
 
@@ -28,7 +35,7 @@ def load(path):
         print(f"WARNING: missing fragment: {path}", file=sys.stderr)
         return {}
     with open(path, encoding="utf-8") as f:
-        return json.load(f)
+        return json.load(f, use_decimal=True, allow_nan=False)
 
 
 def is_sha256(value):
@@ -254,13 +261,27 @@ def load_taxonomy():
     """Load the canonical taxonomy mirror shipped beside this skill."""
     global _TAXONOMY_CACHE
     if _TAXONOMY_CACHE is None:
-        if not _TAXONOMY_PATH.exists():
-            print(f"WARNING: taxonomy not found at {_TAXONOMY_PATH}",
-                  file=sys.stderr)
-            _TAXONOMY_CACHE = {}
-        else:
+        try:
             with open(_TAXONOMY_PATH, encoding="utf-8") as f:
-                _TAXONOMY_CACHE = _yaml.load(f) or {}
+                loaded = _yaml.load(f)
+        except Exception as exc:
+            raise SystemExit(f"ERROR: assembler taxonomy could not be loaded: {exc}") from exc
+        identity = loaded.get("taxonomy") if isinstance(loaded, dict) else None
+        if (
+            not isinstance(identity, dict)
+            or identity.get("id") != "irs-k1-1065-2025"
+            or identity.get("form_id") != "k1-1065"
+            or identity.get("tax_year") != 2025
+            or not isinstance(identity.get("version"), str)
+            or not identity["version"].strip()
+            or not isinstance(identity.get("source"), dict)
+            or not isinstance(identity["source"].get("title"), str)
+            or not identity["source"]["title"].strip()
+            or not isinstance(loaded.get("nodes"), dict)
+            or not loaded["nodes"]
+        ):
+            raise SystemExit("ERROR: assembler taxonomy identity or declarations are invalid")
+        _TAXONOMY_CACHE = loaded
     return _TAXONOMY_CACHE
 
 
@@ -689,7 +710,7 @@ def main():
                 continue
             code = str(raw_entry.get("code", "")).upper()
             raw_value = raw_entry["value"] if "value" in raw_entry else raw_entry.get("amount")
-            dedupe_value = json.dumps(raw_value, sort_keys=True, default=str)
+            dedupe_value = json.dumps(raw_value, sort_keys=True, use_decimal=True, allow_nan=False)
             key = (code, dedupe_value)
             if key not in merged_dict or len(raw_entry) > len(merged_dict[key]):
                 merged_dict[key] = dict(raw_entry)
@@ -760,7 +781,10 @@ def main():
     box_16_checked = fb.get("box_16_checked")
     if evidence_path.exists():
         try:
-            ev = json.loads(evidence_path.read_text(encoding="utf-8-sig"))
+            ev = json.loads(
+                evidence_path.read_text(encoding="utf-8-sig"),
+                use_decimal=True, allow_nan=False,
+            )
             b16_ev = (ev.get("fields") or {}).get("box_16", {})
             b16_status = b16_ev.get("status")
             if b16_status == "present":
@@ -815,16 +839,17 @@ def main():
 
     part_iii = {key: part_iii[key] for key in PART_III_ORDER if key in part_iii}
 
+    taxonomy_identity = load_taxonomy()["taxonomy"]
     doc = {
         "otd": {
             "version": "0.1",
             "document_id": run_id,
             "created": now,
-            "producer": {"name": "SecondWind K-1 OTD Extractor", "version": "1.1.0"},
+            "producer": {"name": "SecondWind K-1 OTD Extractor", "version": "1.1.1"},
             "taxonomy": {
-                "id": "irs-k1-1065-2025",
-                "version": "2025.1.0",
-                "source": "IRS Instructions for Schedule K-1 (Form 1065), 2025"
+                "id": taxonomy_identity["id"],
+                "version": taxonomy_identity["version"],
+                "source": taxonomy_identity["source"]["title"]
             },
             "source_document": {
                 "sha256": args.sha256,
@@ -978,7 +1003,8 @@ def main():
                 "extraction_method": "ai_structured"
             })
 
-    # ── Write OTD YAML ────────────────────────────────────────────────────
+    normalize_k1_numbers(doc, load_taxonomy())
+
     # ── Write OTD YAML ────────────────────────────────────────────────────
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -990,7 +1016,7 @@ def main():
     uv_count, uv_paths = count_unverified(doc)
     total = count_leaves(doc)
     conf = out.parent / "output.confidence.json"
-    with open(conf, "w", encoding="utf-8") as f:
+    with open(conf, "w", encoding="utf-8", newline="\n") as f:
         json.dump({
             "document_id": run_id,
             "extraction_date": now,
@@ -999,10 +1025,15 @@ def main():
             "unverified_fields": uv_paths[:50],
             "confidence_overall": round(max(0.0, 1.0 - uv_count / max(1, total)), 3),
             "adversary_recommendation": "PENDING"
-        }, f, indent=2)
+        }, f, indent=2, use_decimal=True, allow_nan=False)
+        f.write("\n")
     print(f"WROTE {conf}")
     print(f"\nAssembly complete: {total} fields | {uv_count} unverified markers")
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except (OSError, ValueError, TypeError) as exc:
+        print("ERROR: %s" % exc, file=sys.stderr)
+        sys.exit(2)

@@ -2,7 +2,7 @@
   "schema_version": "otd-evidence-disposition-ledger/1.0",
   "profile_id": "k1-1065-2025-face-and-numeric-details/1.0",
   "source_sha256": "db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac",
-  "evidence_receipt_sha256": "584fe210da648cf97225f7ac85a55f444d22d1793f5f57e7a0281c068f05294a",
+  "evidence_receipt_sha256": "2c069e54828e1fdb2da4701f90a6abdc883ae615b73eb3ac9324412a356ca516",
   "claim_boundary": {
     "full_source_document_extraction": false,
     "unsupported_sections_inferred_or_defaulted": false,
@@ -109,7 +109,7 @@
       "page": 1,
       "raw_text": "C 104,300",
       "code": "C",
-      "value": 104300.0,
+      "value": 104300,
       "reason_code": "statement_not_parsed",
       "required_classification": "fuel_tax_credit",
       "disposition": "excluded_requires_statement",
@@ -164,7 +164,7 @@
       "line_token": "13ZZ",
       "box_key": "box_13",
       "code": "ZZ",
-      "printed_total": -509100.0,
+      "printed_total": -509100,
       "disposition": "excluded_requires_classification",
       "reason_code": "classification_not_parsed"
     },
@@ -176,7 +176,7 @@
       "line_token": "20P",
       "box_key": "box_20",
       "code": "P",
-      "printed_total": 312900.0,
+      "printed_total": 312900,
       "disposition": "excluded_requires_statement",
       "reason_code": "statement_not_parsed"
     },
@@ -188,7 +188,7 @@
       "line_token": "20T",
       "box_key": "box_20",
       "code": "T",
-      "printed_total": 647600.0,
+      "printed_total": 647600,
       "disposition": "excluded_requires_statement",
       "reason_code": "statement_not_parsed"
     },
@@ -1004,7 +1004,7 @@
       "line_token": "01",
       "box_key": "box_1",
       "code": null,
-      "printed_total": 556000.0,
+      "printed_total": 556000,
       "disposition": "reconciliation_only",
       "reason_code": "face_scalar_is_canonical_otd_fact"
     },
@@ -1016,7 +1016,7 @@
       "line_token": "05",
       "box_key": "box_5",
       "code": null,
-      "printed_total": 434000.0,
+      "printed_total": 434000,
       "disposition": "reconciliation_only",
       "reason_code": "face_scalar_is_canonical_otd_fact"
     },
@@ -1028,7 +1028,7 @@
       "line_token": "06A",
       "box_key": "box_6a",
       "code": null,
-      "printed_total": 253000.0,
+      "printed_total": 253000,
       "disposition": "reconciliation_only",
       "reason_code": "face_scalar_is_canonical_otd_fact"
     },
@@ -1040,7 +1040,7 @@
       "line_token": "06B",
       "box_key": "box_6b",
       "code": null,
-      "printed_total": 123500.0,
+      "printed_total": 123500,
       "disposition": "reconciliation_only",
       "reason_code": "face_scalar_is_canonical_otd_fact"
     },
@@ -1052,7 +1052,7 @@
       "line_token": "08",
       "box_key": "box_8",
       "code": null,
-      "printed_total": 94000.0,
+      "printed_total": 94000,
       "disposition": "reconciliation_only",
       "reason_code": "face_scalar_is_canonical_otd_fact"
     },
@@ -1064,7 +1064,7 @@
       "line_token": "09A",
       "box_key": "box_9a",
       "code": null,
-      "printed_total": 897700.0,
+      "printed_total": 897700,
       "disposition": "reconciliation_only",
       "reason_code": "face_scalar_is_canonical_otd_fact"
     },
@@ -1076,7 +1076,7 @@
       "line_token": "09C",
       "box_key": "box_9c",
       "code": null,
-      "printed_total": 95300.0,
+      "printed_total": 95300,
       "disposition": "reconciliation_only",
       "reason_code": "face_scalar_is_canonical_otd_fact"
     },
@@ -1088,7 +1088,7 @@
       "line_token": "11A",
       "box_key": "box_11",
       "code": "A",
-      "printed_total": 600700.0,
+      "printed_total": 600700,
       "disposition": "reconciliation_only",
       "reason_code": "already_projected_from_face"
     },
@@ -1100,7 +1100,7 @@
       "line_token": "11C",
       "box_key": "box_11",
       "code": "C",
-      "printed_total": 218800.0,
+      "printed_total": 218800,
       "disposition": "projected_overflow",
       "output_path": "part_iii_overflow.box_11[C]",
       "reason_code": "taxonomy_safe_numeric_total"
@@ -1113,7 +1113,7 @@
       "line_token": "11S",
       "box_key": "box_11",
       "code": "S",
-      "printed_total": 738700.0,
+      "printed_total": 738700,
       "disposition": "projected_overflow",
       "output_path": "part_iii_overflow.box_11[S]",
       "reason_code": "taxonomy_safe_numeric_total"
@@ -1126,7 +1126,7 @@
       "line_token": "13AE",
       "box_key": "box_13",
       "code": "AE",
-      "printed_total": -290600.0,
+      "printed_total": -290600,
       "disposition": "projected_overflow",
       "output_path": "part_iii_overflow.box_13[AE]",
       "reason_code": "taxonomy_safe_numeric_total"
@@ -1139,7 +1139,7 @@
       "line_token": "13H",
       "box_key": "box_13",
       "code": "H",
-      "printed_total": -313000.0,
+      "printed_total": -313000,
       "disposition": "projected_overflow",
       "output_path": "part_iii_overflow.box_13[H]",
       "reason_code": "taxonomy_safe_numeric_total"
@@ -1152,7 +1152,7 @@
       "line_token": "13R",
       "box_key": "box_13",
       "code": "R",
-      "printed_total": -52200.0,
+      "printed_total": -52200,
       "disposition": "projected_overflow",
       "output_path": "part_iii_overflow.box_13[R]",
       "reason_code": "taxonomy_safe_numeric_total"
@@ -1165,7 +1165,7 @@
       "line_token": "20AG",
       "box_key": "box_20",
       "code": "AG",
-      "printed_total": 390500.0,
+      "printed_total": 390500,
       "disposition": "projected_overflow",
       "output_path": "part_iii_overflow.box_20[AG]",
       "reason_code": "taxonomy_safe_numeric_total"
@@ -1178,7 +1178,7 @@
       "line_token": "21",
       "box_key": "box_21",
       "code": null,
-      "printed_total": 267500.0,
+      "printed_total": 267500,
       "disposition": "reconciliation_only",
       "reason_code": "face_scalar_is_canonical_otd_fact"
     },

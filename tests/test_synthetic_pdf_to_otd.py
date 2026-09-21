@@ -1,8 +1,12 @@
 #!/usr/bin/env python
 """End-to-end contract for the bounded synthetic PDF-to-OTD demonstration."""
 
+import copy
 import hashlib
+import importlib.metadata
 import json
+import platform
+import re
 import shutil
 import subprocess
 import sys
@@ -92,6 +96,114 @@ def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def verify_run_manifest(bundle, work=None):
+    """Validate provenance before excluding only run-specific diagnostic fields."""
+    manifest = load_json(bundle / "run-manifest.json")
+    scripts = REPO_ROOT / "skills/k1-otd/scripts"
+    grammar = scripts.parent / "grammars/k1-1065-2025.grammar.yaml"
+    taxonomy = REPO_ROOT / "taxonomies/irs-k1-1065-2025.yaml"
+    closure_paths = [
+        RUNNER, grammar, taxonomy,
+        RUNNER.parent / "requirements-demo.txt",
+        REPO_ROOT / "requirements.txt",
+        scripts.parent / "reference/irs-k1-1065-2025.yaml",
+        scripts.parent / "signatures/page-signatures.yaml",
+        *sorted(scripts.rglob("*.py")),
+    ]
+    expected_closure = {
+        path.relative_to(REPO_ROOT).as_posix(): digest(path)
+        for path in closure_paths
+    }
+    require(manifest.get("source_closure") == expected_closure,
+            "manifest source closure does not match the current tools and inputs")
+    closure_hash = hashlib.sha256(json.dumps(
+        expected_closure, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+    ).encode("utf-8")).hexdigest()
+    require(manifest.get("source_closure_sha256") == closure_hash,
+            "manifest source closure hash is incorrect")
+    require(manifest.get("repository", {}).get("source_closure_sha256") == closure_hash,
+            "repository source closure hash is incorrect")
+    for field, path in (
+        ("orchestrator_sha256", RUNNER),
+        ("grammar_sha256", grammar),
+        ("taxonomy_sha256", taxonomy),
+    ):
+        require(manifest.get(field) == digest(path), field + " is incorrect")
+    require(manifest.get("source", {}).get("sha256") == EXPECTED_SHA,
+            "manifest source PDF hash is incorrect")
+    artifacts = {
+        path.relative_to(bundle).as_posix(): digest(path)
+        for path in bundle.rglob("*")
+        if path.is_file() and path.name != "run-manifest.json"
+    }
+    require(manifest.get("artifacts") == artifacts,
+            "manifest artifact inventory or hashes are incorrect")
+
+    dependencies = manifest.get("dependencies")
+    packages = ("PyYAML", "ruamel.yaml", "pdfplumber", "pypdf", "simplejson")
+    require(isinstance(dependencies, dict)
+            and set(dependencies) == {*packages, "python", "implementation"},
+            "manifest dependency inventory is incomplete")
+    require(all(isinstance(value, str) and value and value != "not-installed"
+                for value in dependencies.values()),
+            "manifest contains missing dependency provenance")
+    if work is not None:
+        expected_dependencies = {
+            "python": platform.python_version(),
+            "implementation": platform.python_implementation(),
+            **{name: importlib.metadata.version(name) for name in packages},
+        }
+        require(dependencies == expected_dependencies,
+                "fresh manifest does not report the actual Python environment")
+
+    stages = manifest.get("stages")
+    require(isinstance(stages, list) and stages,
+            "manifest has no executed stage evidence")
+    stage_names = set()
+    for stage in stages:
+        require(isinstance(stage, dict), "stage evidence is not an object")
+        name = stage.get("name")
+        require(isinstance(name, str) and re.fullmatch(r"[a-z0-9-]+", name),
+                "stage has an invalid name")
+        require(name not in stage_names, "duplicate stage evidence")
+        stage_names.add(name)
+        tool = stage.get("tool")
+        require(tool in expected_closure
+                and stage.get("tool_sha256") == expected_closure[tool],
+                "executed tool is not bound to the source closure")
+        require(stage.get("exit_code") == 0, "published stage did not succeed")
+        require(isinstance(stage.get("arguments"), list)
+                and all(isinstance(item, str) for item in stage["arguments"]),
+                "stage arguments are malformed")
+        for field in ("stdout_sha256", "stderr_sha256", "log_sha256"):
+            require(isinstance(stage.get(field), str)
+                    and re.fullmatch(r"[0-9a-f]{64}", stage[field]),
+                    "stage diagnostic hash is malformed: " + field)
+        if work is not None:
+            log_path = work / "logs" / (name + ".log")
+            require(log_path.is_file() and digest(log_path) == stage["log_sha256"],
+                    "stage log hash does not identify the actual log")
+            log_text = log_path.read_text(encoding="utf-8")
+            _, stdout_marker, streams = log_text.partition("\n\nSTDOUT:\n")
+            stdout, stderr_marker, stderr = streams.partition("\n\nSTDERR:\n")
+            require(stdout_marker and stderr_marker and stderr.endswith("\n"),
+                    "stage log stream framing is malformed")
+            for field, value in (("stdout_sha256", stdout),
+                                 ("stderr_sha256", stderr[:-1])):
+                require(stage[field] == hashlib.sha256(value.encode("utf-8")).hexdigest(),
+                        "stage stream hash does not match the actual log: " + field)
+
+    stable = copy.deepcopy(manifest)
+    # A snapshot records the environment that actually produced it. Python
+    # versions and diagnostic output may differ without changing tax artifacts.
+    stable["dependencies"].pop("python")
+    stable["dependencies"].pop("implementation")
+    for stage in stable["stages"]:
+        for field in ("stdout_sha256", "stderr_sha256", "log_sha256"):
+            stage.pop(field)
+    return stable
+
+
 def main():
     require(RUNNER.is_file(), "demonstration runner is missing")
     require(SOURCE.is_file(), "synthetic PDF fixture is missing")
@@ -156,11 +268,24 @@ def main():
             actual_snapshot_paths == expected_snapshot_paths,
             "canonical run published an unexpected artifact set",
         )
+        committed_manifest = verify_run_manifest(DEMONSTRATION)
+        for out, work in ((out_a, work_a), (out_b, work_b),
+                          (snapshot_out, snapshot_work)):
+            require(verify_run_manifest(out, work) == committed_manifest,
+                    "stable manifest provenance differs from the committed snapshot")
         for relative_name in sorted(expected_snapshot_paths):
+            if relative_name == "run-manifest.json":
+                continue
             require(
                 (snapshot_out / relative_name).read_bytes()
                 == (DEMONSTRATION / relative_name).read_bytes(),
                 "committed snapshot differs for " + relative_name,
+            )
+            require(
+                (out_a / relative_name).read_bytes()
+                == (out_b / relative_name).read_bytes()
+                == (snapshot_out / relative_name).read_bytes(),
+                "pinned reruns changed public artifact " + relative_name,
             )
 
         document = load_yaml(out_a / "output.otd.yaml")
@@ -200,6 +325,25 @@ def main():
                 "Box 16 verified absence changed")
         require(document["body"]["part_ii"]["item_m"]["value"] is False,
                 "Item M choice was not normalized to boolean false")
+
+        # Independently transcribed from the immutable source face. Reader
+        # categories are not necessarily canonical taxonomy field names.
+        expected_liabilities = {
+            "nonrecourse_beginning": 39700,
+            "nonrecourse_ending": 51600,
+            "qualified_nonrecourse_beginning": 10000,
+            "qualified_nonrecourse_ending": 52600,
+            "recourse_beginning": 80000,
+            "recourse_ending": 5100,
+        }
+        require(document["body"]["part_ii"]["item_k1"]["value"] == expected_liabilities,
+                "Item K1 amounts are missing or bound to noncanonical field names")
+        emitted_text = (out_a / "output.otd.yaml").read_text(encoding="utf-8")
+        for field, amount in expected_liabilities.items():
+            require(re.search(
+                r"(?m)^\s+" + re.escape(field) + r": " + str(amount) + r"\.00$",
+                emitted_text,
+            ), "Item K1 amount is not emitted with exact cents: " + field)
 
         shares = document["body"]["part_ii"]["item_j"]["value"]
         require(
@@ -346,6 +490,8 @@ def main():
                 "production validator did not pass")
         require(confidence.get("validation_errors") == [],
                 "production validator reported errors")
+        require(confidence.get("validated_document_sha256") == digest(out_a / "output.otd.yaml"),
+                "confidence receipt does not identify the validated document bytes")
         require(status["claims"]["started_from_pdf_bytes"] is True,
                 "status does not claim a PDF-byte start")
         require(
@@ -389,11 +535,14 @@ def main():
 
     print("PASS: starts from copied PDF bytes, independent of filename")
     print("PASS: source hash is bound through fragments and final OTD")
+    print("PASS: all six liability amounts use canonical fields and exact cents")
+    print("PASS: confidence receipt identifies the actual validated document bytes")
     print("PASS: 53 face fields partition into 52 projected and 1 omitted")
     print("PASS: unsupported statements, sections, and state grids stay explicit")
     print("PASS: production assembler, validator, and reconciliation gates pass")
     print("PASS: pinned reruns emit byte-identical OTD and fragments")
-    print("PASS: complete committed public snapshot matches a canonical fresh run")
+    print("PASS: committed tax artifacts match fresh runs byte-for-byte")
+    print("PASS: source, artifact, environment, and stage-log provenance are verified")
     print("PASS: misleading filename cannot bypass source-byte identity")
     return 0
 

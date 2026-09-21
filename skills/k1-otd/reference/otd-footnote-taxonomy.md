@@ -1,6 +1,6 @@
 # Open Tax Document — Investor-Level Footnote Taxonomy v0.3 (RC-1)
 
-**Status:** RELEASE CANDIDATE
+**Status:** Public draft catalog (RC-1); practitioner review required
 **License:** Creative Commons Attribution 4.0 International (CC BY 4.0)
 **Authors:** Tom O'Sullivan, Second Wind
 **Date:** 2026-04-02
@@ -16,6 +16,11 @@
 ---
 
 ## 1. Purpose and Scope
+
+This catalog describes intended representation and validation requirements.
+The reference K-1 validator does not enforce every catalog rule or nested
+field. A passing validator result therefore does not certify source-text
+completeness, tax-law accuracy, or all cross-document relationships.
 
 ### 1.1 The Footnote Problem
 
@@ -428,7 +433,10 @@ structured:
 **Purpose:** Previously Taxed Earnings and Profits (PTEP) distributions.
 **Cross-references:** K-3 Part V; Box 6a; Box 20
 
-**§959(c) Group Enum** (matches IRS official groups):
+**Draft PTEP group labels:** these OTD labels require practitioner
+reconciliation to the applicable IRS form, year, and PTEP reporting groups.
+An exact mapping to the official reporting categories has not been
+demonstrated; do not treat this list as an IRS-certified enumeration.
 `section_959c1_previously_taxed` |
 `section_965a_ptep` |
 `section_965b_ptep` |
@@ -657,13 +665,19 @@ structured:
 
 ### 4.2 Confidence Scoring Heuristics
 
+These are illustrative review-priority scores, not calibrated probabilities
+of correctness. Even an exact text match can bind to the wrong field.
+Every unresolved or unobserved fact remains `null` with an `_unverified`
+explanation; a score never authorizes guessing. Tax conclusions and source
+fidelity require review independently of the score.
+
 | Score | Method | Criteria |
 |-------|--------|----------|
 | 1.00 | `rule_based` | Exact regex/pattern match |
 | 0.90 | `ai_structured` | Schema validates; all required fields populated |
 | 0.80 | `ai_structured` | Schema validates; some optional fields null |
 | 0.70 | `ai_structured` | Schema validates; aggregate totals only |
-| 0.60 | `ai_structured` | Schema validates; significant fields inferred |
+| 0.60 | `ai_structured` | Significant fields unresolved and explicitly quarantined; human review required |
 | < 0.60 | `ai_structured` | Schema fails or critical fields missing — human review required |
 
 ---

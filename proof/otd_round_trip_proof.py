@@ -15,28 +15,33 @@ This proof does not ingest a PDF, invoke page/face extraction, or exercise the
 production assembler. It is evidence for this fixture, not universal OTD
 conformance.
 
-This script is self-contained and requires only:
-  - Python 3.9+
-  - ruamel.yaml (pip install ruamel.yaml)
+Run from a repository checkout with Python 3.10 or later:
+  python -m pip install -r requirements.txt
+The proof shares the repository's exact-number codec and governing taxonomy.
 
 License: CC BY 4.0 | Authors: Tom O'Sullivan, Second Wind | 2026-04-02
 """
 
 import sys
-import json
+import copy
 import hashlib
 import uuid
 import io
 import difflib
 from pathlib import Path
 from collections import OrderedDict
+from decimal import Decimal
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "skills/k1-otd/scripts"))
 
 # ── Dependency check ────────────────────────────────────────────────────────
 try:
-    from ruamel.yaml import YAML
+    from otd_values import (
+        decimal_delta, decimal_sum, decimal_yaml, is_numeric, normalize_k1_numbers,
+    )
     from ruamel.yaml.comments import CommentedMap, CommentedSeq
-except ImportError:
-    print("ERROR: ruamel.yaml is required. Install with: pip install ruamel.yaml")
+except ImportError as exc:
+    print(f"ERROR: proof dependency unavailable ({exc}); install requirements.txt")
     sys.exit(1)
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -152,15 +157,15 @@ SOURCE_DATA = {
         "general_or_limited": "limited_or_other_member",
         "domestic_or_foreign": "domestic",
         "share_percentages": {
-            "profit_beginning": 0.15, "profit_ending": 0.15,
-            "loss_beginning": 0.15, "loss_ending": 0.15,
-            "capital_beginning": 0.12, "capital_ending": 0.12,
+            "profit_beginning": Decimal("0.15"), "profit_ending": Decimal("0.15"),
+            "loss_beginning": Decimal("0.15"), "loss_ending": Decimal("0.15"),
+            "capital_beginning": Decimal("0.12"), "capital_ending": Decimal("0.12"),
             "decrease_due_to_sale": False, "decrease_due_to_exchange": False,
         },
         "liabilities": {
-            "nonrecourse_beginning": 500000.00, "nonrecourse_ending": 480000.00,
-            "qualified_nonrecourse_beginning": 0.00, "qualified_nonrecourse_ending": 0.00,
-            "recourse_beginning": 100000.00, "recourse_ending": 95000.00,
+            "nonrecourse_beginning": Decimal("500000.00"), "nonrecourse_ending": Decimal("480000.00"),
+            "qualified_nonrecourse_beginning": Decimal("0.00"), "qualified_nonrecourse_ending": Decimal("0.00"),
+            "recourse_beginning": Decimal("100000.00"), "recourse_ending": Decimal("95000.00"),
         },
         "item_k2": False,
         "item_k3": True,
@@ -171,107 +176,107 @@ SOURCE_DATA = {
                 "content": {
                     "property_description": "Contributed partnership interest",
                     "contribution_date": "2025-01-15",
-                    "built_in_gain": 125000.00,
+                    "built_in_gain": Decimal("125000.00"),
                     "built_in_loss": None,
                 },
             },
         },
-        "item_n": {"beginning": 0.00, "ending": 0.00},
+        "item_n": {"beginning": Decimal("0.00"), "ending": Decimal("0.00")},
         "capital_account": {
-            "beginning": 1000000.00,
-            "contributions": 250000.00,
-            "current_year_increase_decrease": 150000.00,
-            "other_increase_decrease": 0.00,
-            "withdrawals": -100000.00,
-            "ending": 1300000.00,
+            "beginning": Decimal("1000000.00"),
+            "contributions": Decimal("250000.00"),
+            "current_year_increase_decrease": Decimal("150000.00"),
+            "other_increase_decrease": Decimal("0.00"),
+            "withdrawals": -Decimal("100000.00"),
+            "ending": Decimal("1300000.00"),
             "basis_method": "tax",
         },
     },
     "international": {"box_16_checked": False},
     "income": {
-        "box_1": 150000.00,
-        "box_2": -25000.00,
-        "box_3": 0.00,
-        "box_4a": 75000.00,
-        "box_4b": 25000.00,
-        "box_4c": 100000.00,
-        "box_5": 18500.00,
-        "box_6a": 32000.00,
-        "box_6b": 28000.00,
-        "box_6c": 0.00,
-        "box_7": 5000.00,
-        "box_8": -3200.00,
-        "box_9a": 45000.00,
-        "box_9b": 0.00,
-        "box_9c": 12000.00,
-        "box_10": 8500.00,
+        "box_1": Decimal("150000.00"),
+        "box_2": -Decimal("25000.00"),
+        "box_3": Decimal("0.00"),
+        "box_4a": Decimal("75000.00"),
+        "box_4b": Decimal("25000.00"),
+        "box_4c": Decimal("100000.00"),
+        "box_5": Decimal("18500.00"),
+        "box_6a": Decimal("32000.00"),
+        "box_6b": Decimal("28000.00"),
+        "box_6c": Decimal("0.00"),
+        "box_7": Decimal("5000.00"),
+        "box_8": -Decimal("3200.00"),
+        "box_9a": Decimal("45000.00"),
+        "box_9b": Decimal("0.00"),
+        "box_9c": Decimal("12000.00"),
+        "box_10": Decimal("8500.00"),
         "box_11": {
-            "A": 12500.00,
-            "F": 35000.00,
+            "A": Decimal("12500.00"),
+            "F": Decimal("35000.00"),
         },
     },
     "deductions": {
-        "box_12": 50000.00,
+        "box_12": Decimal("50000.00"),
         "box_13": {
-            "A": 15000.00,
-            "H": 8200.00,
-            "K": 22000.00,
+            "A": Decimal("15000.00"),
+            "H": Decimal("8200.00"),
+            "K": Decimal("22000.00"),
         },
     },
     "self_employment": {
         "box_14": {
-            "A": 0.00,
-            "B": 0.00,
-            "C": 0.00,
+            "A": Decimal("0.00"),
+            "B": Decimal("0.00"),
+            "C": Decimal("0.00"),
         },
     },
     "credits": {
         "box_15": {
-            "M": 7500.00,
-            "AW": 12000.00,
+            "M": Decimal("7500.00"),
+            "AW": Decimal("12000.00"),
         },
     },
     "amt": {
         "box_17": {
-            "A": 3200.00,
+            "A": Decimal("3200.00"),
         },
     },
     "tax_exempt": {
         "box_18": {
-            "A": 4500.00,
-            "C": 1200.00,
+            "A": Decimal("4500.00"),
+            "C": Decimal("1200.00"),
         },
     },
     "distributions": {
         "box_19": {
-            "A": 100000.00,
+            "A": Decimal("100000.00"),
         },
     },
     "other_information": {
         "box_20": {
-            "A": 50500.00,
-            "B": 8200.00,
-            "N": 22000.00,
+            "A": Decimal("50500.00"),
+            "B": Decimal("8200.00"),
+            "N": Decimal("22000.00"),
             "X": {
-                "value": 25000.00,
+                "value": Decimal("25000.00"),
                 "classification": "payment_obligation",
                 "statement": {
                     "classification": "payment_obligation",
                     "content": {
                         "obligation_type": "recognized_guarantee",
-                        "ending_balance": 25000.00,
+                        "ending_balance": Decimal("25000.00"),
                     },
                 },
             },
-            "Y": 195300.00,
+            "Y": Decimal("195300.00"),
             "Z": {
                 "value": None,
                 "statement": {
                     "classification": "section_199a",
                     "content": {
-                        "qbi": 150000.00,
-                        "w2_wages": 80000.00,
-                        "ubia": 500000.00,
+                        "qbi": Decimal("150000.00"),
+                        "w2_wages": Decimal("80000.00"),
+                        "ubia": Decimal("500000.00"),
                         "sstb": False,
                         "business_name": "Greenfield Operations LLC",
                         "section_199a_dividends": None,
@@ -288,15 +293,15 @@ SOURCE_DATA = {
                         "transferee": "XYZ Holdings GmbH",
                         "transferee_country": "DE",
                         "transfer_date": "2025-06-15",
-                        "total_fmv": 5000000.00,
-                        "total_adjusted_basis": 500000.00,
-                        "total_gain_recognized": 4500000.00,
+                        "total_fmv": Decimal("5000000.00"),
+                        "total_adjusted_basis": Decimal("500000.00"),
+                        "total_gain_recognized": Decimal("4500000.00"),
                     },
                 },
             },
         },
     },
-    "foreign_taxes": {"box_21": 3200.00},
+    "foreign_taxes": {"box_21": Decimal("3200.00")},
     "at_risk": {"box_22": False},
     "passive_activity": {"box_23": True},
 }
@@ -312,7 +317,10 @@ class OTDEmitter:
     def __init__(self, redaction_policy="partial"):
         self.redaction_policy = redaction_policy
         self.fields_redacted = []
-        self.yaml = YAML()
+        self.yaml = decimal_yaml(round_trip=True)
+        self.taxonomy = decimal_yaml().load(
+            (REPO_ROOT / "taxonomies/irs-k1-1065-2025.yaml").read_text(encoding="utf-8-sig")
+        )
         self.yaml.default_flow_style = False
         self.yaml.width = 120
         self.yaml.indent(mapping=2, sequence=4, offset=2)
@@ -393,6 +401,8 @@ class OTDEmitter:
         return stmt
 
     def emit(self, source: dict) -> CommentedMap:
+        source = copy.deepcopy(source)
+        self.fields_redacted = []
         doc = CommentedMap()
         p = source["partnership"]
         pr = source["partner"]
@@ -402,12 +412,13 @@ class OTDEmitter:
         envelope["version"] = "0.1"
         envelope["document_id"] = str(uuid.uuid5(uuid.NAMESPACE_URL, f"otd-proof-{p['ein']}-{pr['ssn']}"))
         envelope["created"] = source["created"]
-        producer = CommentedMap([("name", "OTD Round-Trip Proof"), ("version", "0.1.0")])
+        producer = CommentedMap([("name", "OTD Round-Trip Proof"), ("version", "0.1.1")])
         envelope["producer"] = producer
         taxonomy = CommentedMap()
-        taxonomy["id"] = "irs-k1-1065-2025"
-        taxonomy["version"] = "2025.1.0"
-        taxonomy["source"] = "Partner's Instructions for Schedule K-1 (Form 1065), 2025"
+        identity = self.taxonomy["taxonomy"]
+        taxonomy["id"] = identity["id"]
+        taxonomy["version"] = identity["version"]
+        taxonomy["source"] = identity["source"]["title"]
         envelope["taxonomy"] = taxonomy
         doc["otd"] = envelope
 
@@ -770,7 +781,7 @@ class OTDEmitter:
         redaction["fields_redacted"] = self.fields_redacted
         doc["redaction"] = redaction
 
-        return doc
+        return normalize_k1_numbers(doc, self.taxonomy)
 
     def emit_to_file(self, source: dict, path: Path) -> str:
         doc = self.emit(source)
@@ -888,8 +899,8 @@ def validate(doc: TaxDocument) -> list:
     v4a = doc.get_value("guaranteed_payments_services") or 0
     v4b = doc.get_value("guaranteed_payments_capital") or 0
     v4c = doc.get_value("guaranteed_payments_total") or 0
-    expected = v4a + v4b
-    passed = abs(v4c - expected) <= 0.01
+    expected = decimal_sum((v4a, v4b))
+    passed = decimal_delta(v4c, expected) <= Decimal("0.01")
     results.append(ValidationResult(
         "box_4c_equals_4a_plus_4b", "error", passed,
         f"Box 4c ({v4c}) {'==' if passed else '!='} Box 4a ({v4a}) + Box 4b ({v4b}) = {expected}",
@@ -913,8 +924,8 @@ def validate(doc: TaxDocument) -> list:
         other = cap.get("other_increase_decrease") or 0
         wd = cap.get("withdrawals") or 0
         ending = cap.get("ending") or 0
-        computed = begin + contrib + inc_dec + other + wd
-        passed = abs(ending - computed) <= 1.00
+        computed = decimal_sum((begin, contrib, inc_dec, other, wd))
+        passed = decimal_delta(ending, computed) <= Decimal("1.00")
         results.append(ValidationResult(
             "capital_account_continuity", "warning", passed,
             f"Ending ({ending}) {'==' if passed else '!='} computed ({computed}) [tol=$1]",
@@ -923,7 +934,7 @@ def validate(doc: TaxDocument) -> list:
     # 4. Share percentages in [0, 1]
     shares = doc.get_value("partner.share_percentages")
     if shares and isinstance(shares, dict):
-        all_valid = all(0 <= v <= 1 for v in shares.values() if isinstance(v, (int, float)))
+        all_valid = all(0 <= v <= 1 for v in shares.values() if is_numeric(v))
         results.append(ValidationResult(
             "percentages_valid_range", "error", all_valid,
             f"All share percentages in [0,1]: {all_valid}"))
@@ -954,7 +965,7 @@ def normalize_yaml(text: str) -> str:
 
 def round_trip_test(original_text: str, re_emit_path: Path) -> tuple:
     """Parse original, re-emit, compare."""
-    yaml = YAML()
+    yaml = decimal_yaml(round_trip=True)
     yaml.default_flow_style = False
     yaml.width = 120
     yaml.indent(mapping=2, sequence=4, offset=2)
@@ -1009,14 +1020,14 @@ def main():
     emitter = OTDEmitter(redaction_policy="partial")
     emitted_text = emitter.emit_to_file(SOURCE_DATA, EMITTED_FILE)
     log(f"  Emitted: {display_path(EMITTED_FILE)}")
-    log(f"  Size: {len(emitted_text):,} bytes")
+    log(f"  Size: {len(emitted_text.encode('utf-8')):,} bytes")
     log(f"  Redacted fields: {emitter.fields_redacted}")
     log("")
 
     # ── Parse: structured document ──────────────────────────────────────────────────
     log("PARSE: structured document")
     log("-" * 40)
-    yaml = YAML()
+    yaml = decimal_yaml(round_trip=True)
     raw = yaml.load(EMITTED_FILE.read_text(encoding="utf-8"))
     doc = TaxDocument(raw)
     log(f"  Envelope version: {doc.envelope.get('version')}")
@@ -1048,7 +1059,7 @@ def main():
     log("  4a. Semantic lookup: 'ordinary_business_income'")
     node = doc.get_node("ordinary_business_income")
     log(f"      → {node}")
-    log(f"      Value: ${node.value:,.2f}" if node and isinstance(node.value, (int, float)) else "      → Not found")
+    log(f"      Value: ${node.value:,.2f}" if node and is_numeric(node.value) else "      → Not found")
 
     # Value shortcut
     log("\n  4b. Value shortcut: 'guaranteed_payments_total'")
@@ -1096,7 +1107,7 @@ def main():
     log("=" * 72)
     log("SUMMARY")
     log("=" * 72)
-    log(f"  Emit:       ✓ ({len(emitted_text):,} bytes)")
+    log(f"  Emit:       ✓ ({len(emitted_text.encode('utf-8')):,} bytes)")
     log(f"  Parse:      ✓ ({len(doc.list_all_ids())} nodes indexed)")
     log(f"  Validate:   {'✓ All passed' if all_passed else '✗ Failures detected'}")
     log(f"  Query:      ✓ (semantic, value, type, statement, reference)")

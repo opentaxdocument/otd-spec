@@ -4,6 +4,11 @@
 Status: draft (Wave 1, 2026-07-28)
 Applies to: `skills/k1-otd/grammars/*.grammar.yaml`
 
+Historical sample counts below describe design observations, not a portable
+test corpus or a guarantee about other preparers. The committed face-reader
+regressions use two 2025 PDFs. Current reader configuration and executable
+tests take precedence over earlier empirical notes.
+
 ## Purpose
 
 A face grammar describes *how to read* a specific tax form face and overflow
@@ -147,9 +152,10 @@ facts and must never be conflated.**
 
 ### Label association rule (confirmed empirically)
 
-The label governing a checkbox is the **word immediately to its right** on
-the same row band, regardless of what word sits to its left. Confirmed
-against 3 independently-checked boxes on real documents:
+Label direction is grammar-declared and verified against page evidence.
+For the paired choices in Items G, H1, and M, the governing label is to the
+right, as illustrated below. Other controls, including I2, K2, and K3,
+have labels to their left; always using the nearest-right word is incorrect.
 
 | Frame | Left neighbor | Right neighbor (= governing label) | Checked |
 |---|---|---|---|
@@ -158,8 +164,8 @@ against 3 independently-checked boxes on real documents:
 | Item M, 2nd box | "Yes" | "No" | yes |
 
 Using the left-nearest word would have inverted the Item M read (reporting
-"Yes" instead of "No"). This rule is a hard requirement in
-`independent_checkbox` and `exclusive_choice_pair` readers.
+"Yes" instead of "No"). Readers must honor `label_association` and retain
+the evidence supporting that association, including multi-line labels.
 
 ## Reader catalog
 
@@ -213,20 +219,17 @@ grammar_version
 
 ## Known tracked gaps (do not silently resolve — flag in the grammar)
 
-- **Item J decrease-reason control has no taxonomy `semantic_id` yet.**
-  2019 face: one checkbox ("Check if decrease is due to sale or exchange").
-  2025 face: two independent checkboxes ("Sale" / "Exchange"). Corroborated
-  independently by Extractium's schema (`J.SaleOrExchange` 2019-only vs
-  `J.Sale`/`J.Exchange` 2025-only). Marked `taxonomy_gap: true` in the 2025
-  grammar pending a taxonomy addition.
+- **Item J decrease reason is a composite reader binding.** The taxonomy
+  already declares `decrease_due_to_sale` and `decrease_due_to_exchange`
+  within `partner.share_percentages`. The reader has no single semantic ID
+  for the composite control and retains a reader-level `taxonomy_gap` flag.
+  The bounded projector explicitly maps the child observations to those
+  existing fields. This is not an absence of the tax fields themselves.
 - **Capital account `basis_method` is not observed on the 2025 face** (all 5
   basis-method tokens absent across 23/23 sampled documents, both years).
-  The pipeline currently emits `"tax"` as an inference from the post-2020
-  mandate. Under OTD's no-fabrication rule this must be marked as *derived*,
-  not *observed*, if retained at all. Flagged for Tom's review, not resolved
-  by this grammar.
-- **Several `box_20.other_information.*` taxonomy entries have no
-  `value_type`** (e.g. `reserved_ba`, `fuel_tax_credit`, `section_199a`).
-  These likely resolve to statement references rather than scalars. The
-  `coded_rows` reader must treat "no value_type declared" as "expect a
-  statement reference," not as a data defect.
+  The bounded projector omits this unobserved value and records the omission.
+  Do not infer `"tax"` from a form year and present it as source evidence.
+- **Explicit null types are not missing declarations.** Several Box 20
+  codes have `value_type: null` because detail belongs in a statement.
+  Inspect `requires_statement`, `statement_schema`, and classification
+  declarations. An actually missing type is not permission to guess one.

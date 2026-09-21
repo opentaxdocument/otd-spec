@@ -4,13 +4,23 @@
 **An Open Standard for AI-Native Structured Tax Data**
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
-[![Status: Draft](https://img.shields.io/badge/Status-Draft-orange.svg)]()
+[![Status: Draft](https://img.shields.io/badge/Status-Draft-orange.svg)](#known-gaps)
 
 > **This project is a public draft.** Specifications, taxonomies, and the
 > reference implementation are all under active development and change
 > without notice. We build in the open, including the parts that are still
 > rough. Open items are listed in [Known Gaps](#known-gaps) rather than
 > quietly omitted.
+
+OTD is a draft interchange format for tax data: reported values, their
+meaning, their position on a form, and their supporting statements travel
+together. The aim is to exchange that data directly between systems instead
+of repeatedly reconstructing it from PDFs. The initial implementation focuses
+on Schedule K-1 (Form 1065), tax year 2025.
+
+**Start here:** [Executive summary](docs/OTD-Executive-Summary.md) ·
+[Working example](examples/k1-1065-2025-synthetic/README.md) ·
+[Quick start](#quick-start) · [Roadmap](docs/OTD-v03-Roadmap.md)
 
 ---
 
@@ -22,8 +32,8 @@ print-first workflow creates massive friction:
 
 - **Ingestion failures** from unstructured overflow statements, footnotes,
   and complex attachments (Form 926, state grids, K-3 cross-references)
-- **No machine-readable standard** — every firm builds proprietary parsers
-  that break when formatting changes
+- **Fragmented interchange**: downstream workflows often need proprietary
+  parsers that break when formatting changes
 - **Round-trip data loss** — emit to PDF, OCR back in, and hope the numbers
   match
 - **No semantic context** — a dollar amount in a PDF carries no information
@@ -37,13 +47,15 @@ broken architecture.
 OTD is an open, YAML-based standard for representing structured tax data. It
 is designed so that:
 
-1. **The document IS the schema** — every data point carries its own semantic
-   identity, form location, and structural context
+1. **The document carries its context**: nodes carry semantic identity,
+   form location, and structure. The separately versioned taxonomy supplies
+   the governing declarations and validation rules.
 2. **Footnotes are first-class citizens** — Form 926, state K-1 grids, §199A
    detail, GILTI, PTEP, and other footnote types are represented as
    structured, queryable objects — not text blobs
-3. **Any AI agent can reason about it** — traverse by *meaning* ("what is the
-   QBI?") or by *form position* ("what's in Box 20, Code Z?")
+3. **Designed for software, people, and AI tools**: traverse by *meaning*
+   ("what is the QBI?") or by *form position* ("what's in Box 20, Code Z?").
+   Structured input does not remove the need to verify tax reasoning.
 4. **Canonical round-trip fidelity is a design requirement** — supported
    implementations must preserve information and reproduce equivalent normalized
    YAML. The current proof demonstrates this for one structured K-1 fixture,
@@ -69,7 +81,7 @@ otd:
   document_id: 77455c78-08dd-5a66-a288-0575d8de0603
   taxonomy:
     id: irs-k1-1065-2025
-    version: 2025.1.0
+    version: 2025.1.1
     source: Partner's Instructions for Schedule K-1 (Form 1065), 2025
 
 form_metadata:
@@ -115,9 +127,9 @@ structured, queryable statement:
     form:
       attachment: true
     content:
-      qbi: 150000.0
-      w2_wages: 80000.0
-      ubia: 500000.0
+      qbi: 150000.00
+      w2_wages: 80000.00
+      ubia: 500000.00
       sstb: false
       business_name: Greenfield Operations LLC
       section_199a_dividends:
@@ -160,7 +172,7 @@ otd-spec/
 │       ├── validate_otd.py               # Validator CLI
 │       ├── extract_state_grids.py        # State schedule extraction
 │       └── state_grid_parsers.py
-├── tests/                                # 33 tracked cases, three suites
+├── tests/                                # Blocking regressions and workflow contracts
 │   ├── test_constraint_engine.py         # Engine-level regressions
 │   ├── test_rectification.py             # End-to-end via production pipeline
 │   ├── test_direct_documents.py          # Hand-mutated documents → validator
@@ -169,15 +181,33 @@ otd-spec/
 ├── docs/
 │   ├── OTD-Executive-Summary.md
 │   └── OTD-v03-Roadmap.md
-└── extensions/                           # Firm-published schema extensions
+└── extensions/                           # Reserved for proposed schema extensions
 ```
 
 ## Quick Start
 
-**Requires Python 3.9 or later.**
+**Requires Python 3.10 or later.** Run from a repository checkout:
 
 ```bash
-pip install ruamel.yaml
+git clone https://github.com/opentaxdocument/otd-spec.git
+cd otd-spec
+python -m venv .venv
+```
+
+Activate the environment with `source .venv/bin/activate` on macOS/Linux,
+or `.venv\Scripts\Activate.ps1` in Windows PowerShell. If activation is
+unavailable, invoke the environment's Python executable directly.
+
+For the proof and validator:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+For PDF tools, the demonstration, and all test suites:
+
+```bash
+python -m pip install -r examples/k1-1065-2025-synthetic/requirements-demo.txt
 ```
 
 ### Run the round-trip proof
@@ -207,9 +237,23 @@ matched to the document, validation fails closed. CLI exit codes are stable:
 | `1` | Document is invalid |
 | `2` | Validator, taxonomy, dependency, or configuration failure |
 
+Validation is **read-only by default**. To update an existing confidence
+manifest, explicitly supply `--update-confidence path/to/output.confidence.json`.
+Its `document_id` must match the input, and the receipt records the SHA-256
+of the bytes actually validated. A passing result covers implemented checks;
+warnings and unverified facts still require review.
+
+New documents use K-1 taxonomy `2025.1.1`, a label-only correction.
+The original `2025.1.0` remains available under `taxonomies/archive/`, and
+automatic resolution honors the document's named version. An explicit
+`--taxonomy` must match that version; it is not a migration option.
+
 ### Run the test suites
 
 ```bash
+python -B tests/test_release_contract.py     # malformed inputs and receipt safety
+python -B tests/test_numeric_contract.py     # exact financial values and arithmetic
+python -B tests/test_taxonomy_versions.py    # historical compatibility and label scope
 python -B tests/test_validator_contract.py   # 34 blocking validator contracts
 python -B tests/test_constraint_engine.py    # engine-level rule regressions
 python -B tests/test_rectification.py        # assembler → validator regression matrix
@@ -250,6 +294,11 @@ state grids, classification-dependent facts, and four unresolved logical
 sections remain excluded and machine-readably ledgered rather than inferred.
 A reproducible snapshot is committed under
 `examples/k1-1065-2025-synthetic/demonstration/`.
+
+The source is a synthetic stress fixture, **not a model tax return**. It
+includes older-year supplemental material and intentionally inconsistent
+figures. The demonstration checks faithful extraction within its declared
+profile, not the package's tax correctness.
 
 ### Render extraction diagnostics
 
@@ -346,9 +395,10 @@ computation and **source text** for legal defensibility.
 
 ### Extension Registry
 
-Firms can publish named schema extensions for custom footnote types.
-Extensions are validated, air-gap safe (local bundling mandatory for
-production), and follow a governed promotion path to the core catalog.
+The extension specification proposes named firm-specific schemas, local
+bundling for production, and a promotion path into the core catalog.
+A hosted registry and interoperable extension-validation implementation
+have not yet been demonstrated.
 
 ## For AI Coding Agents
 
@@ -360,8 +410,10 @@ production), and follow a governed promotion path to the core catalog.
 3. **Build a parser:** Provide `spec/otd-parser-spec.md` +
    `proof/proof-emitted.otd.yaml`. Read §4.1.1 and §7.1 before implementing
    validation — parse leniency and validation strictness are separate.
-4. **Extract footnotes from PDFs:** Give the agent
-   `spec/otd-footnote-taxonomy.md` and a real K-1 PDF package.
+4. **Extract footnotes from PDFs:** Start with `skills/k1-otd/SKILL.md`,
+   the footnote catalog, and a source package you are authorized to process.
+   Follow the fit, evidence, validation, and human-review gates.
+   Never upload taxpayer data to public issues.
 
 ## Known Gaps
 
@@ -370,18 +422,19 @@ Honest status of open items:
 | Gap | Impact |
 |---|---|
 | Validator coverage is broader but still bounded | The blocking contract matrix covers current trust boundaries and known counterexamples; it is not a substitute for cross-implementation conformance testing. |
-| The template-fit checker is not wired into a single extraction orchestrator | Callers can invoke face extraction without first proving form/year fit. |
+| General extraction remains staged | The bounded synthetic runner enforces template fit; callers of standalone tools must run and inspect that gate themselves. |
 | Face extraction ships one 2025 grammar and two repository-local PDF fixtures | The blank IRS form and approved synthetic package make regression portable, but vendor, year, skew/rotation, scan, corruption, and hybrid AcroForm breadth is not established. |
 | K-3 has a taxonomy but no proof, fixture, or implementation exercise | K-3 support is declarative only. |
-| Validation rewrites an adjacent `output.confidence.json` when present | Validation has an implicit write side effect that should become opt-in. |
+| Footnote catalog and extension coverage are incomplete | Not every catalog rule, cross-document relationship, or extension schema is enforced by the K-1 validator. |
 | The §7.1 validation profile is implementation-specific, not yet normative | A conforming third-party validator may be more permissive. |
 
 ## Why Open Standard?
 
 - **No vendor lock-in** — any firm can implement emitters and parsers
-- **AI-agent interoperability** — K-1 data produced by one system can be
-  consumed by any other
-- **Regulatory alignment** — ready for IRS modernization (MeF, API-first filing)
+- **Interoperability by design**: a shared format and pinned taxonomies
+  aim to reduce integration work; independent implementation parity remains a goal.
+- **Structured-data alignment**: OTD can inform future filing integrations,
+  but it is not an IRS filing format and has no IRS approval or certification.
 - **Network effects** — the more firms adopt, the less OCR everyone needs
 
 ## Contributing

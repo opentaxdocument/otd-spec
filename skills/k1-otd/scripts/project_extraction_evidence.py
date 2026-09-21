@@ -12,9 +12,12 @@ No value is sourced from checked-in expected files or historical fragments.
 import argparse
 import datetime
 import hashlib
-import json
+import simplejson as json
 import sys
 from pathlib import Path
+from decimal import Decimal
+
+from otd_values import decimal_delta, decimal_sum, is_numeric, percentage_fraction
 
 try:
     import yaml
@@ -43,7 +46,7 @@ class ProjectionError(RuntimeError):
 
 def load_json(path):
     with Path(path).open(encoding="utf-8-sig") as stream:
-        return json.load(stream)
+        return json.load(stream, use_decimal=True, allow_nan=False)
 
 
 def write_json(path, value):
@@ -416,7 +419,7 @@ def main(argv=None):
     for category in ("profit", "loss", "capital"):
         for period in ("beginning", "ending"):
             value = extract_nested_cell(item_j_raw, category, period)
-            shares["%s_%s" % (category, period)] = float(value) / 100.0
+            shares["%s_%s" % (category, period)] = percentage_fraction(value)
 
     decrease_event = source_event(
         "item_j.decrease_reason",
@@ -439,16 +442,19 @@ def main(argv=None):
 
     k1_event = source_event(
         "item_k1", ["part_ii.liabilities"],
-        ["nested evidence cells flattened"],
+        ["nested evidence cells flattened",
+         "qualified_nonrecourse_financing mapped to canonical qualified_nonrecourse fields"],
     )
     k1_raw = k1_event.get("normalized_value")
     liabilities = {}
-    for category in (
-        "nonrecourse", "qualified_nonrecourse_financing", "recourse"
+    for source_category, target_category in (
+        ("nonrecourse", "nonrecourse"),
+        ("qualified_nonrecourse_financing", "qualified_nonrecourse"),
+        ("recourse", "recourse"),
     ):
         for period in ("beginning", "ending"):
-            liabilities["%s_%s" % (category, period)] = extract_nested_cell(
-                k1_raw, category, period
+            liabilities["%s_%s" % (target_category, period)] = extract_nested_cell(
+                k1_raw, source_category, period
             )
     part_ii["liabilities"] = liabilities
 
@@ -538,16 +544,11 @@ def main(argv=None):
         if box_key == "box_4c" and event.get("status") == "blank":
             left = fields["box_4a"].get("normalized_value")
             right = fields["box_4b"].get("normalized_value")
-            if (
-                isinstance(left, bool)
-                or isinstance(right, bool)
-                or not isinstance(left, (int, float))
-                or not isinstance(right, (int, float))
-            ):
+            if not is_numeric(left) or not is_numeric(right):
                 raise ProjectionError(
                     "Box 4c cannot be derived because Box 4a or 4b is non-numeric"
                 )
-            derived_value = float(left) + float(right)
+            derived_value = decimal_sum((left, right))
             derived_facts.append({
                 "output_path": "part_iii_face.box_4c",
                 "operation": "sum",
@@ -714,7 +715,7 @@ def main(argv=None):
             continue
         if code in existing_face_codes.get(box_key, {}):
             face_value = existing_face_codes[box_key][code]
-            if abs(float(face_value) - float(total)) > 0.01:
+            if decimal_delta(face_value, total) > Decimal("0.01"):
                 raise ProjectionError(
                     "%s %s face/detail mismatch before assembly: %r != %r"
                     % (box_key, code, face_value, total)

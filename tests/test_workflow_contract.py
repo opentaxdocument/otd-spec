@@ -18,6 +18,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = REPO_ROOT / "skills" / "k1-otd" / "scripts"
 EXTRACTOR = SCRIPTS / "extract_pdf_text.py"
 MANIFEST_BUILDER = SCRIPTS / "build_section_manifests.py"
+STATE_EXTRACTOR = SCRIPTS / "extract_state_grids.py"
 ASSEMBLER = SCRIPTS / "assemble_otd.py"
 BLANK_PDF = REPO_ROOT / "tests" / "fixtures" / "pdf" / "irs-k1-1065-2025-blank.pdf"
 WINDOWS_ABSOLUTE_PATH = re.compile(r"\b[A-Za-z]:[\\/]")
@@ -67,6 +68,7 @@ def reject_absolute_paths(value, location="$"):
 def main():
     require(EXTRACTOR.is_file(), "current PDF extractor is missing")
     require(MANIFEST_BUILDER.is_file(), "current manifest builder is missing")
+    require(STATE_EXTRACTOR.is_file(), "state-grid extractor is missing")
     require(BLANK_PDF.is_file(), "repository-local blank PDF fixture is missing")
 
     for obsolete in (
@@ -219,6 +221,33 @@ def main():
         reject_absolute_paths(page_manifest)
         reject_absolute_paths(section_manifest)
 
+        state_attempt_path = root / "state-grid-attempt.json"
+        state_extracted = run_tool(
+            STATE_EXTRACTOR,
+            "--input-dir", text_dir,
+            "--manifest", page_manifest_path,
+            "--out", state_attempt_path,
+        )
+        require_success(state_extracted, "extract_state_grids.py")
+        state_attempt = json.loads(state_attempt_path.read_text(encoding="utf-8"))
+        require(
+            state_attempt.get("_escalate") is True
+            and state_attempt.get("state_grids") == []
+            and state_attempt.get("state_tax_summary") == []
+            and bool(state_attempt.get("_escalation_reason")),
+            "unsupported state-grid extraction must retain explicit abstention",
+        )
+        # read_text() normalizes CRLF, concealing differences in receipt hashes.
+        receipt_paths = (page_manifest_path, section_manifest_path, state_attempt_path)
+        non_lf_reports = [
+            path.name for path in receipt_paths if b"\r" in path.read_bytes()
+        ]
+        require(
+            not non_lf_reports,
+            "receipt-bound JSON must use LF bytes, not platform-default newlines: "
+            + ", ".join(non_lf_reports),
+        )
+
         raw_fragments = root / "raw-face-evidence"
         raw_fragments.mkdir()
         (raw_fragments / "face_page.json").write_text(
@@ -251,6 +280,8 @@ def main():
     print("PASS: logical section builder requires page text")
     print("PASS: legacy heuristic flag rejected")
     print("PASS: page/section manifest shapes preserved")
+    print("PASS: unsupported state-grid extraction retains explicit abstention")
+    print("PASS: receipt-bound manifests and state report use LF bytes")
     print("PASS: generated JSON contains no machine-local paths")
     print("PASS: published classification aliases canonicalize deterministically")
     print("PASS: raw face-reader evidence is rejected at assembly boundary")

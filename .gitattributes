@@ -1,0 +1,7 @@
+* text=auto eol=lf
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+# Published historical taxonomy bytes are immutable, not renormalized.
+taxonomies/archive/** -text

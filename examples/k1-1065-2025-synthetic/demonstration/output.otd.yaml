@@ -4,11 +4,11 @@ otd:
   created: '2026-07-30T00:00:00Z'
   producer:
     name: SecondWind K-1 OTD Extractor
-    version: 1.1.0
+    version: 1.1.1
   taxonomy:
     id: irs-k1-1065-2025
-    version: 2025.1.0
-    source: IRS Instructions for Schedule K-1 (Form 1065), 2025
+    version: 2025.1.1
+    source: Partner's Instructions for Schedule K-1 (Form 1065), 2025
   source_document:
     sha256: db6e9764726d0268e6288774b3ffc508faa829f9b5cee770e26262e26ed75fac
     extraction_method: ai_structured
@@ -25,13 +25,13 @@ otd:
     companion_artifacts:
       evidence_receipt:
         path: evidence-receipt.json
-        sha256: 584fe210da648cf97225f7ac85a55f444d22d1793f5f57e7a0281c068f05294a
+        sha256: 2c069e54828e1fdb2da4701f90a6abdc883ae615b73eb3ac9324412a356ca516
       projection_manifest:
         path: projection-manifest.json
-        sha256: 174371af469594177ef0eb004e38c62fa7cb7a747e9a15e8aee73a1e6f76ab7d
+        sha256: 89928a5c0cad647b06cc1c9c06b5c23eb1faf089b528452a1e2fe0cadfbf19cc
       disposition_ledger:
         path: disposition-ledger.json
-        sha256: 1a5cc17b124cd1429d40de9ac3547d9b963733894b49759a3f944bddc9928c11
+        sha256: 540f0e485c14cdac5308e0244b4b052d7b4d1d042e5c0f7ed5b23424897e12cc
 form_metadata:
   tax_year: 2025
   fiscal_year: false
@@ -169,12 +169,12 @@ body:
         location: Part II, Item J
         box: J
       value:
-        profit_beginning: 1.0
-        profit_ending: 1.0
-        loss_beginning: 1.0
-        loss_ending: 1.0
-        capital_beginning: 1.0
-        capital_ending: 1.0
+        profit_beginning: 1.00000000
+        profit_ending: 1.00000000
+        loss_beginning: 1.00000000
+        loss_ending: 1.00000000
+        capital_beginning: 1.00000000
+        capital_ending: 1.00000000
         decrease_due_to_sale: false
         decrease_due_to_exchange: false
     item_k1:
@@ -187,12 +187,12 @@ body:
         location: Part II, Item K1
         box: K1
       value:
-        nonrecourse_beginning: 39700.0
-        nonrecourse_ending: 51600.0
-        qualified_nonrecourse_financing_beginning: 10000.0
-        qualified_nonrecourse_financing_ending: 52600.0
-        recourse_beginning: 80000.0
-        recourse_ending: 5100.0
+        nonrecourse_beginning: 39700.00
+        nonrecourse_ending: 51600.00
+        qualified_nonrecourse_beginning: 10000.00
+        qualified_nonrecourse_ending: 52600.00
+        recourse_beginning: 80000.00
+        recourse_ending: 5100.00
     item_k2:
       type: scalar
       semantic:
@@ -244,8 +244,8 @@ body:
         location: Part II, Item N
         box: N
       value:
-        beginning: 30900.0
-        ending: 11800.0
+        beginning: 30900.00
+        ending: 11800.00
   part_iii:
     box_1:
       type: scalar
@@ -256,7 +256,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 1
         box: 1
-      value: 556000.0
+      value: 556000.00
     box_2:
       type: scalar
       semantic:
@@ -266,7 +266,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 2
         box: 2
-      value: 28800.0
+      value: 28800.00
     box_3:
       type: scalar
       semantic:
@@ -276,7 +276,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 3
         box: 3
-      value: 4800.0
+      value: 4800.00
     box_4a:
       type: scalar
       semantic:
@@ -286,7 +286,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 4a
         box: 4a
-      value: 500.0
+      value: 500.00
     box_4b:
       type: scalar
       semantic:
@@ -296,7 +296,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 4b
         box: 4b
-      value: 500.0
+      value: 500.00
     box_4c:
       type: scalar
       semantic:
@@ -317,7 +317,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 5
         box: 5
-      value: 434000.0
+      value: 434000.00
     box_6a:
       type: scalar
       semantic:
@@ -327,7 +327,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 6a
         box: 6a
-      value: 253000.0
+      value: 253000.00
     box_6b:
       type: scalar
       semantic:
@@ -337,7 +337,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 6b
         box: 6b
-      value: 123500.0
+      value: 123500.00
     box_6c:
       type: scalar
       semantic:
@@ -347,7 +347,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 6c
         box: 6c
-      value: 52700.0
+      value: 52700.00
     box_7:
       type: scalar
       semantic:
@@ -357,7 +357,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 7
         box: 7
-      value: 800.0
+      value: 800.00
     box_8:
       type: scalar
       semantic:
@@ -367,7 +367,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 8
         box: 8
-      value: 94000.0
+      value: 94000.00
     box_9a:
       type: scalar
       semantic:
@@ -377,7 +377,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 9a
         box: 9a
-      value: 897700.0
+      value: 897700.00
     box_9b:
       type: scalar
       semantic:
@@ -387,7 +387,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 9b
         box: 9b
-      value: 394600.0
+      value: 394600.00
     box_9c:
       type: scalar
       semantic:
@@ -397,7 +397,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 9c
         box: 9c
-      value: 95300.0
+      value: 95300.00
     box_10:
       type: scalar
       semantic:
@@ -407,7 +407,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 10
         box: 10
-      value: 16100.0
+      value: 16100.00
     box_11:
       type: coded
       semantic:
@@ -422,17 +422,17 @@ body:
           semantic:
             id: other_income.portfolio
             label: Other portfolio income (loss)
-          value: 600700.0
+          value: 600700.00
         - code: C
           semantic:
             id: other_income.section_1256_contracts
             label: Section 1256 contracts and straddles
-          value: 218800.0
+          value: 218800.00
         - code: S
           semantic:
             id: other_income.non_portfolio_capital
             label: Non-portfolio capital gain (loss)
-          value: 738700.0
+          value: 738700.00
     box_12:
       type: scalar
       semantic:
@@ -442,7 +442,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 12
         box: 12
-      value: 75000.0
+      value: 75000.00
     box_13:
       type: coded
       semantic:
@@ -457,27 +457,27 @@ body:
           semantic:
             id: other_deductions.cash_contributions_60
             label: Cash contributions (60%)
-          value: 29400.0
+          value: 29400.00
         - code: B
           semantic:
             id: other_deductions.cash_contributions_30
             label: Cash contributions (30%)
-          value: 56300.0
+          value: 56300.00
         - code: AE
           semantic:
             id: other_deductions.portfolio_deductions
             label: Deductions — portfolio income
-          value: -290600.0
+          value: -290600.00
         - code: H
           semantic:
             id: other_deductions.investment_interest
             label: Investment interest expense
-          value: -313000.0
+          value: -313000.00
         - code: R
           semantic:
             id: other_deductions.pensions_iras
             label: Pensions and IRAs
-          value: -52200.0
+          value: -52200.00
     box_14:
       type: coded
       semantic:
@@ -492,7 +492,7 @@ body:
           semantic:
             id: self_employment.net_earnings
             label: Net earnings (loss) from self-employment
-          value: 104600.0
+          value: 104600.00
     box_15:
       type: coded
       semantic:
@@ -507,7 +507,7 @@ body:
           semantic:
             id: credits.zero_emission_nuclear
             label: Zero-emission nuclear power production credit
-          value: 1800.0
+          value: 1800.00
     box_16:
       type: reference
       semantic:
@@ -543,12 +543,12 @@ body:
           semantic:
             id: amt.depreciation_adjustment
             label: Post-1986 depreciation adjustment
-          value: 79000.0
+          value: 79000.00
         - code: B
           semantic:
             id: amt.adjusted_gain_loss
             label: Adjusted gain or loss
-          value: 17200.0
+          value: 17200.00
     box_18:
       type: coded
       semantic:
@@ -563,12 +563,12 @@ body:
           semantic:
             id: tax_exempt.interest
             label: Tax-exempt interest income
-          value: 118800.0
+          value: 118800.00
         - code: C
           semantic:
             id: nondeductible.expenses
             label: Nondeductible expenses
-          value: 41200.0
+          value: 41200.00
     box_19:
       type: coded
       semantic:
@@ -583,7 +583,7 @@ body:
           semantic:
             id: distributions.cash_marketable_securities
             label: Cash and marketable securities other than for services
-          value: 27000.0
+          value: 27000.00
     box_20:
       type: coded
       semantic:
@@ -598,17 +598,17 @@ body:
           semantic:
             id: other_information.investment_income
             label: Investment income
-          value: 2317700.0
+          value: 2317700.00
         - code: B
           semantic:
             id: other_information.investment_expenses
             label: Investment expenses
-          value: -112600.0
+          value: -112600.00
         - code: AG
           semantic:
             id: other_information.gross_receipts_448c
             label: Gross receipts for section 448(c)
-          value: 390500.0
+          value: 390500.00
     box_21:
       type: scalar
       semantic:
@@ -618,7 +618,7 @@ body:
         form_id: k1-1065
         location: Part III, Box 21
         box: 21
-      value: 267500.0
+      value: 267500.00
     box_22:
       type: scalar
       semantic:

@@ -313,15 +313,13 @@ fields:
     cardinality: "0..2"
     taxonomy_gap: true
     notes: >
-      NO TAXONOMY NODE EXISTS for this field (confirmed against the 2025
-      taxonomy inventory -- 245 face nodes enumerated, none present here).
-      2019 face uses ONE checkbox ("Check if decrease is due to sale or
-      exchange"); 2025 face uses TWO independent checkboxes ("Sale",
-      "Exchange"). Corroborated independently by Extractium's schema
-      (J.SaleOrExchange 2019-only vs J.Sale/J.Exchange 2025-only). This
-      field is extracted with full evidence but flagged taxonomy_gap;
-      it must not be silently dropped, and must not be forced into a
-      taxonomy shape that does not exist yet.
+      This composite reader has no single semantic_id. The taxonomy
+      already declares decrease_due_to_sale and decrease_due_to_exchange
+      within partner.share_percentages. The bounded projector explicitly
+      maps its child observations to those existing fields; taxonomy_gap
+      here describes the composite reader binding, not missing tax fields.
+      The 2025 face uses two independent Sale and Exchange checkboxes.
+      Preserve each observation and its evidence separately.
 
   item_k1:
     semantic_id: partner.share_of_liabilities
@@ -424,18 +422,13 @@ fields:
     taxonomy_gap: true
     excluded_not_taxpayer_data: false
     notes: >
-      NOT OBSERVED ON THE 2025 FACE. Empirically confirmed: all 5
-      basis-method tokens ("tax basis", "gaap", "704(b)", "section 704(b)",
-      "other (explain") returned False across 23/23 sampled documents,
-      both 2019 and 2025 form years. The current pipeline emits
-      capital_account.basis_method = "tax" as an INFERENCE from the
-      post-2020 tax-basis reporting mandate, not a face observation. Under
-      OTD's no-fabrication rule this reader should always emit status
-      "missing" (field not printed on this form revision) with the
-      inferred value carried separately as a derived/provenance-marked
-      field, never merged into the observed evidence envelope as if
-      it were read from the page. Flagged for Tom's decision; not
-      resolved unilaterally by this grammar.
+      Not printed on the supported 2025 face. The not_printed reader
+      checks the declared absence probes and emits
+      verified_absent_from_form_revision only when that evidence supports
+      absence. The bounded projector omits basis_method and records the
+      omission. Do not infer a tax-basis value from the form year and
+      present it as observed evidence. Historical sample counts are not
+      a claim of current multi-year or multi-preparer support.
 
   item_m:
     semantic_id: partner.contributed_property_built_in_gain_loss
@@ -747,12 +740,11 @@ fields:
     codes_ref: taxonomy
     value_type: coded
     notes: >
-      Several taxonomy entries under other_information.* have no
-      value_type declared (e.g. reserved_ba, fuel_tax_credit, section_199a,
-      section_453Ac, section_179_dispositions, depletion_oil_gas). The
-      coded_rows reader must treat an undeclared value_type as "expect a
-      statement reference," not as a scalar amount defect -- consistent
-      with the completeness review's Box 20.Z statement-schema finding.
+      Some codes explicitly declare value_type: null. This is distinct
+      from a missing declaration. Inspect their statement requirements,
+      schemas, classifications, and reserved status rather than inferring
+      a scalar amount or inventing a statement reference. The bounded
+      projector excludes unsupported classification-dependent content.
 
   box_21:
     semantic_id: foreign_taxes_paid_accrued
